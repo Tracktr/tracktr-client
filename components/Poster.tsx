@@ -1,15 +1,15 @@
 import Image from 'next/image';
 
-const Poster = () => {
+export interface IPoster {
+  imageSrc: string;
+  name: string;
+}
+
+const Poster = ({ imageSrc, name }: IPoster) => {
   return (
     <div>
-      <Image
-        src="https://image.tmdb.org/t/p/original/wSqAXL1EHVJ3MOnJzMhUngc8gFs.jpg"
-        width="170px"
-        height="240px"
-        className="rounded"
-      />
-      <div className="text-xs">Orphan: First Kill</div>
+      <Image src={imageSrc} width="170px" height="240px" className="rounded" />
+      <div className="text-xs">{name}</div>
     </div>
   );
 };
