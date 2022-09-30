@@ -1,9 +1,5 @@
-import Navbar from "../../components/Navbar";
+import { NextPage } from "next/types";
 
-const Calendar = () => (
-  <div>
-    <Navbar />
-  </div>
-);
+const Calendar: NextPage = () => <div />;
 
 export default Calendar;

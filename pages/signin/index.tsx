@@ -1,9 +1,5 @@
-import Navbar from "../../components/Navbar";
+import { NextPage } from "next/types";
 
-const Signin = () => (
-  <div>
-    <Navbar />
-  </div>
-);
+const Signin: NextPage = () => <div />;
 
 export default Signin;

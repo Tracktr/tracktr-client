@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import Navbar from "../components/Navbar";
 
-const Home: NextPage = () => <Navbar />;
+const Home: NextPage = () => <div />;
 
 export default Home;

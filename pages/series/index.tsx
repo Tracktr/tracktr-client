@@ -1,9 +1,5 @@
-import Navbar from "../../components/Navbar";
+import { NextPage } from "next/types";
 
-const Series = () => (
-  <div>
-    <Navbar />
-  </div>
-);
+const Series: NextPage = () => <div />;
 
 export default Series;

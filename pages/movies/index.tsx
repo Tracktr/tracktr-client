@@ -1,9 +1,5 @@
-import Navbar from "../../components/Navbar";
+import { NextPage } from "next/types";
 
-const Movies = () => (
-  <div>
-    <Navbar />
-  </div>
-);
+const Movies: NextPage = () => <div />;
 
 export default Movies;
