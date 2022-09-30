@@ -1,10 +1,11 @@
+import Link from 'next/link';
 import { HiSearch } from 'react-icons/hi';
 import NavButton from './Navbutton';
 
 const navLinks = [
-  { href: '#', text: 'Movies', active: false },
-  { href: '#', text: ' Series', active: false },
-  { href: '#', text: ' Calendar', active: false },
+  { href: '/movies', text: 'Movies', active: false },
+  { href: '/series', text: ' Series', active: false },
+  { href: '/calendar', text: ' Calendar', active: false },
 ];
 
 const Navbar = () => {
@@ -12,10 +13,14 @@ const Navbar = () => {
     <nav className="fixed top-0 w-screen bg-opacity-25 bg-primaryBackground filter backdrop-blur-md">
       <div className="max-w-6xl px-6 py-4 m-auto">
         <div className="flex justify-between">
-          <h1 className="text-3xl font-black text-white">
-            TRACKTR
-            <span className="text-primary">.</span>
-          </h1>
+          <Link href="/">
+            <a>
+              <h1 className="text-3xl font-black text-white">
+                TRACKTR
+                <span className="text-primary">.</span>
+              </h1>
+            </a>
+          </Link>
           <ul className="flex justify-between">
             {navLinks.map((navItem) => {
               return (
@@ -29,10 +34,12 @@ const Navbar = () => {
             })}
           </ul>
           <div className="flex items-center justify-between">
+            {/*
+            // TODO: Search in navbar
             <button type="button" className="mr-4 text-base text-white">
               <HiSearch />
-            </button>
-            <NavButton href="#" text="Sign in" active={false} />
+            </button> */}
+            <NavButton href="/signin" text="Sign in" active={false} />
           </div>
         </div>
       </div>
