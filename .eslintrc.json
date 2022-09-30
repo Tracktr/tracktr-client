@@ -8,6 +8,7 @@
       "arrow-body-style": ["error", "always"],
       "react/function-component-definition": 0,
       "import/extensions": 0,
-      "linebreak-style": 0
+      "linebreak-style": 0,
+      "jsx-a11y/anchor-is-valid": 0
     }
 }
