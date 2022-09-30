@@ -33,10 +33,12 @@ const Navbar = () => (
               <HiSearch />
             </button> */}
           <NavButton href="/signin" text="Sign in" active={false} />
+          {/* 
+            // TODO: User in navbar if logged in
           <div className="flex items-center text-white">
             <Image src="https://picsum.photos/100" width="36px" height="36px" className="rounded-full" />
             <p className="ml-2">Username</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
