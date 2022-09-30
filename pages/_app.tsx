@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="min-h-screen bg-primaryBackground">
+    <div className="min-h-screen bg-primaryBackground text-white">
       <Navbar />
       <Component {...pageProps} />
     </div>
