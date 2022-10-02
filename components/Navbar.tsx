@@ -20,7 +20,7 @@ const Navbar = () => (
             </h1>
           </a>
         </Link>
-        <ul className="flex items-center justify-center col-span-1">
+        <ul className="flex items-center justify-center">
           {navLinks.map((navItem) => (
             <NavButton key={navItem.text} href={navItem.href} text={navItem.text} active={navItem.active} />
           ))}
@@ -28,12 +28,6 @@ const Navbar = () => (
         <div className="flex items-center justify-end col-span-1">
           <NavSearch />
           <NavButton href="/signin" text="Sign in" active={false} />
-          {/* 
-            // TODO: User in navbar if logged in
-          <div className="flex items-center text-white">
-            <Image src="https://picsum.photos/100" width="36px" height="36px" className="rounded-full" />
-            <p className="ml-2">Username</p>
-          </div> */}
         </div>
       </div>
     </div>
