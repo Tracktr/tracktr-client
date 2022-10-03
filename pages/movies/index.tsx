@@ -1,7 +1,7 @@
 import ContentRow from "../../modules/ContentRow";
 
 const TrendingMoviesPage = () => (
-  <div className="mx-auto max-w-6xl">
+  <div className="mx-auto max-w-6xl pt-20">
     <ContentRow
       type="Trending"
       data={[
