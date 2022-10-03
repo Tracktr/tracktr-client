@@ -1,16 +1,17 @@
 import Poster, { IPoster } from "../components/Poster";
-import SortPill from "../components/SortPill";
+import SortPill, { ISortPillButton } from "../components/SortPill";
 
 interface IContentRow {
   type: string;
   data: IPoster[];
+  buttons: ISortPillButton[];
 }
 
-const ContentRow = ({ type, data }: IContentRow) => (
-  <div>
+const ContentRow = ({ type, data, buttons }: IContentRow) => (
+  <div className="my-5">
     <div className="flex">
       <div className="text-4xl mb-6">{type}</div>
-      <SortPill />
+      <SortPill buttons={buttons} />
     </div>
     <div className="flex flex-wrap gap-6 justify-center">
       {data.map((p) => (

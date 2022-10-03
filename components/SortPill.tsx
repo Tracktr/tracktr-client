@@ -1,8 +1,26 @@
-const SortPill = () => (
+export interface ISortPillButton {
+  title: string;
+  selected?: boolean;
+}
+
+interface ISortPill {
+  buttons: ISortPillButton[];
+}
+
+const SortPill = ({ buttons }: ISortPill) => (
   <div className="my-auto ml-4">
     <div className="flex justify-center rounded-full text-xs border-primary border-2">
-      <div className="text-primaryBackground bg-primary py-2 px-4 rounded-full">Today</div>
-      <div className="text-primary py-2 px-4 rounded-full">This week</div>
+      {buttons.map((b) => (
+        <div
+          className={
+            b.selected
+              ? "text-primaryBackground bg-primary py-2 px-4 rounded-full"
+              : "text-primary py-2 px-4 rounded-full"
+          }
+        >
+          {b.title}
+        </div>
+      ))}
     </div>
   </div>
 );
