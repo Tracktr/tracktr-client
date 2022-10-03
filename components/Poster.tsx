@@ -8,7 +8,7 @@ export interface IPoster {
 const Poster = ({ imageSrc, name }: IPoster) => (
   <div>
     <Image src={imageSrc} width="170px" height="240px" className="rounded" />
-    <div className="text-xs">{name}</div>
+    <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
   </div>
 );
 
@@ -22,7 +22,7 @@ export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
     />
 
     <div className="text-xs bg-black/25 text-center py-2 rounded-b-lg">
-      <div>{name}</div>
+      <div className="max-w-[127px] px-1 truncate">{name}</div>
     </div>
   </div>
 );

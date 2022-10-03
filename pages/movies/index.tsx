@@ -4,7 +4,7 @@ import PosterHeader from "../../modules/PosterHeader";
 const TrendingMoviesPage = () => (
   <div className="pb-5">
     <PosterHeader
-      type="Movies"
+      type="movies"
       backgroundImage="https://www.themoviedb.org/t/p/original/wQxPlS65wgy6Ik7N80bsMpAkjyf.jpg"
       recommendations={[
         {
