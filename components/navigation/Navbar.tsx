@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CgMenuGridO } from "react-icons/cg";
 import NavButton from "./Navbutton";
+import NavProfile from "./NavProfile";
 
 const navLinks = [
   { href: "/movies", text: "Movies", active: false },
@@ -37,7 +38,7 @@ const Navbar = () => {
             <button type="button" className="block cursor-pointer lg:hidden" onClick={openMenu}>
               <CgMenuGridO className="text-2xl" />
             </button>
-            <NavButton href="/signin" text="Sign in" active={false} />
+            <NavProfile />
           </div>
         </div>
       </div>
