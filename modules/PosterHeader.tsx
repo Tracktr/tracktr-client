@@ -1,6 +1,5 @@
 import LargeSort from "../components/LargeSort";
-import { IPoster } from "../components/Poster";
-import Recommendations from "../components/Recommendations";
+import { BackgroundPoster, IPoster } from "../components/Poster";
 
 interface IPosterHeader {
   backgroundImage: string;
@@ -20,7 +19,12 @@ const PosterHeader = ({ backgroundImage, type, recommendations }: IPosterHeader)
       <div className="h-[50vh] flex items-center max-w-6xl mx-auto">
         <LargeSort type={type} />
         <div className="ml-auto">
-          <Recommendations recommendations={recommendations} />
+          <div className="font-bold my-3">Our Recommendations</div>
+          <div className="flex gap-6">
+            {recommendations.map((r) => (
+              <BackgroundPoster imageSrc={r.imageSrc} name={r.name} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

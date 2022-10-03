@@ -12,4 +12,19 @@ const Poster = ({ imageSrc, name }: IPoster) => (
   </div>
 );
 
+export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
+  <div>
+    <div
+      className="h-[240px] w-[170px] bg-cover rounded-t-lg"
+      style={{
+        backgroundImage: `url(${imageSrc})`,
+      }}
+    />
+
+    <div className="text-xs bg-black/25 text-center py-2 rounded-b-lg">
+      <div>{name}</div>
+    </div>
+  </div>
+);
+
 export default Poster;
