@@ -2,7 +2,7 @@ import ContentRow from "../../modules/ContentRow";
 import PosterHeader from "../../modules/PosterHeader";
 
 const TrendingMoviesPage = () => (
-  <>
+  <div className="pb-5">
     <PosterHeader
       type="Movies"
       backgroundImage="https://www.themoviedb.org/t/p/original/wQxPlS65wgy6Ik7N80bsMpAkjyf.jpg"
@@ -84,7 +84,7 @@ const TrendingMoviesPage = () => (
       />
     </div>
 
-    <div className="mx-auto max-w-6xl pb-1 pt-2 border-t-2 border-[#343434]">
+    <div className="mx-auto max-w-6xl pt-2 border-t-2 border-[#343434]">
       <ContentRow
         type="Movies"
         data={[
@@ -162,7 +162,7 @@ const TrendingMoviesPage = () => (
         </div>
       </div>
     </div>
-  </>
+  </div>
 );
 
 export default TrendingMoviesPage;
