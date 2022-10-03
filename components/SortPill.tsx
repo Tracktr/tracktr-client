@@ -12,6 +12,7 @@ const SortPill = ({ buttons }: ISortPill) => (
     <div className="flex justify-center rounded-full text-xs border-primary border-2">
       {buttons.map((b) => (
         <div
+          key={b.title}
           className={
             b.selected
               ? "text-primaryBackground bg-primary py-2 px-4 rounded-full"
