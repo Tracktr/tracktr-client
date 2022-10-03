@@ -12,7 +12,7 @@ const ContentRow = ({ type, data }: IContentRow) => (
       <div className="text-4xl mb-6">{type}</div>
       <SortPill />
     </div>
-    <div className="flex gap-6 justify-center">
+    <div className="flex flex-wrap gap-6 justify-center">
       {data.map((p) => (
         <Poster key={p.name} imageSrc={p.imageSrc} name={p.name} />
       ))}
