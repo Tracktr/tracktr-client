@@ -8,7 +8,7 @@ interface ISortPill {
 }
 
 const SortPill = ({ buttons }: ISortPill) => (
-  <div className="my-auto ml-4">
+  <div className="z-40 my-auto ml-4">
     <div className="flex justify-center rounded-full text-xs border-primary border-2">
       {buttons.map((b) => (
         <div
