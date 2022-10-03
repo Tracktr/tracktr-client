@@ -22,7 +22,7 @@ const PosterHeader = ({ backgroundImage, type, recommendations }: IPosterHeader)
           <div className="font-bold my-3">Our Recommendations</div>
           <div className="flex gap-6">
             {recommendations.map((r) => (
-              <BackgroundPoster imageSrc={r.imageSrc} name={r.name} />
+              <BackgroundPoster key={r.name} imageSrc={r.imageSrc} name={r.name} />
             ))}
           </div>
         </div>

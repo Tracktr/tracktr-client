@@ -15,7 +15,7 @@ const Poster = ({ imageSrc, name }: IPoster) => (
 export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
   <div>
     <div
-      className="h-[240px] w-[170px] bg-cover rounded-t-lg"
+      className="h-[180px] w-[127px] bg-cover rounded-t-lg"
       style={{
         backgroundImage: `url(${imageSrc})`,
       }}
