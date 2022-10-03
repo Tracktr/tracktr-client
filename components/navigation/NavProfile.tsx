@@ -1,6 +1,5 @@
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import NavButton from "./Navbutton";
 
 const NavProfile = () => {
@@ -10,7 +9,7 @@ const NavProfile = () => {
     <div>
       {session ? (
         <div className="relative">
-          <Link href="/profile">
+          <button onClick={() => signOut()} type="button">
             <a className="flex items-center text-white transition duration-150 ease-in-out border-collapse cursor-pointer rounded-t-md">
               <Image
                 unoptimized
@@ -21,10 +20,10 @@ const NavProfile = () => {
               />
               <p className="w-24 ml-2 text-sm truncate">{session.user?.name}</p>
             </a>
-          </Link>
+          </button>
         </div>
       ) : (
-        <NavButton href="/signin" text="Sign in" active={false} />
+        <NavButton href="/api/auth/signin" text="Sign in" active={false} />
       )}
     </div>
   );
