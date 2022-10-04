@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FaHeart, FaStar } from "react-icons/fa";
+import { FaHeart, FaStar, FaPlay } from "react-icons/fa";
 
 interface IContentHeader {
   cover: String;
@@ -13,26 +13,33 @@ interface IContentHeader {
 const ContentHeader = ({ cover, poster, title, date, audienceScore, imdbScore }: IContentHeader) => (
   <>
     <div
-      className="relative w-screen h-[32rem] blur-sm"
+      className="relative w-screen h-[32rem]"
       style={{
         backgroundSize: "cover",
         background: `url("${cover}")`,
       }}
-    />
-    <div className="relative w-screen h-16 bottom-2 bg-primaryBackground" />
+    >
+      <div className="relative w-full h-full bg-gradient-to-t from-primaryBackground" />
+    </div>
 
     <div className="absolute top-0 w-full">
       <div className="flex max-w-6xl m-auto pt-96">
-        <div className="border-4 rounded-md border-primaryBackground">
-          <Image width="208" height="311" src={`${poster}`} />
+        <div>
+          <div className="border-4 rounded-md border-primaryBackground">
+            <Image width="208" height="311" src={`${poster}`} />
+          </div>
+          <button type="button" className="flex items-center justify-between w-full h-12 mt-2 rounded-md bg-primary">
+            <span className="pl-4 font-bold">Watch Now</span>
+            <FaPlay className="mr-4" />
+          </button>
         </div>
 
-        <h1 className="pt-10 pl-6 text-6xl font-black drop-shadow-lg">
+        <h1 className="pt-6 pl-6 text-6xl font-black drop-shadow-lg">
           {title}
           <span className="ml-4 text-4xl opacity-75 drop-shadow-md">{date}</span>
         </h1>
 
-        <div className="flex h-full p-3 mt-8 ml-auto space-x-4 font-medium text-center bg-opacity-50 rounded-md bg-primaryBackground">
+        <div className="flex h-full p-3 mt-4 ml-auto space-x-4 font-medium text-center bg-opacity-50 rounded-md bg-primaryBackground">
           <div>
             <div className="flex items-center">
               <FaHeart className="text-3xl text-red-500" />
