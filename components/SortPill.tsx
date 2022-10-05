@@ -1,5 +1,4 @@
 export interface ISortPillButtons {
-  // eslint-disable-next-line no-unused-vars
   onClick: (value: string) => void;
   currentValue: string;
   data: {
