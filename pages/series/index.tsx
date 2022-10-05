@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import { QueryClient, dehydrate } from "react-query";
 import ContentRow from "../../modules/ContentRow";
-import { fetchMinimizedContent } from "../../utils/fetchQueries";
+import fetchMinimizedContent from "../../utils/fetchQueries";
 
 const SeriesPage = () => (
   <div className="pt-12 pb-5">
