@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import { QueryClient, dehydrate } from "react-query";
 import ContentInfiniteScroll from "../../modules/ContentInfiniteScroll";
-import fetchMinimizedContent from "../../utils/fetchQueries";
+import { fetchMinimizedContent } from "../../utils/fetchQueries";
 
 const MoviesPage = () => (
   <div className="pt-12 pb-5">
