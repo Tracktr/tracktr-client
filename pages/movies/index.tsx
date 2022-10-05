@@ -1,10 +1,11 @@
 import { GetStaticProps } from "next";
+import { useState } from "react";
 import { useQuery, QueryClient, dehydrate } from "react-query";
 import ContentRow from "../../modules/ContentRow";
 import PosterHeader from "../../modules/PosterHeader";
 
-const fetchTrendingMovies = (): any =>
-  fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}`)
+const fetchTrendingMovies = (filter: string): any =>
+  fetch(`https://api.themoviedb.org/3/trending/movie/${filter}?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}`)
     .then((res) => res.json())
     .then((res) => res.results.slice(0, 6))
     .then((res) => {
@@ -18,13 +19,15 @@ const fetchTrendingMovies = (): any =>
     });
 
 const MoviesPage = () => {
+  const [trendingFilter, setTrendingFilter] = useState("day");
+
   const {
     isSuccess,
     data: trendingMovies,
     isLoading,
     isError,
-  } = useQuery("getTrendingMovies", () => fetchTrendingMovies(), {
-    staleTime: 86400000,
+  } = useQuery(["getTrendingMovies", trendingFilter], () => fetchTrendingMovies(trendingFilter), {
+    staleTime: 24 * (60 * (60 * 1000)), // 24 hours
   });
 
   if (isSuccess) {
@@ -49,17 +52,29 @@ const MoviesPage = () => {
           <ContentRow
             type="Trending"
             data={trendingMovies}
-            buttons={[{ title: "Today", selected: true }, { title: "This Week" }]}
+            buttons={{
+              onClick: (value) => setTrendingFilter(value),
+              currentValue: trendingFilter,
+              data: [
+                { title: "Today", value: "day" },
+                { title: "This week", value: "week" },
+              ],
+            }}
           />
-          <ContentRow
-            type="Popular"
-            data={[]}
-            buttons={[{ title: "Streaming", selected: true }, { title: "In Theaters" }]}
-          />
+          <ContentRow type="Popular" data={[]} />
           <ContentRow
             type="Upcoming"
             data={[]}
-            buttons={[{ title: "Streaming", selected: true }, { title: "In Theaters" }]}
+            buttons={{
+              onClick: () => {
+                console.log("upcoming");
+              },
+              currentValue: "day",
+              data: [
+                { title: "Streaming", value: "streaming" },
+                { title: "In Theaters", value: "theaters" },
+              ],
+            }}
           />
         </div>
 
@@ -67,12 +82,18 @@ const MoviesPage = () => {
           <ContentRow
             type="Movies"
             data={[]}
-            buttons={[
-              { title: "Trending", selected: true },
-              { title: "Popular" },
-              { title: "Recommended" },
-              { title: "Box Office" },
-            ]}
+            buttons={{
+              onClick: () => {
+                console.log("movies");
+              },
+              currentValue: "day",
+              data: [
+                { title: "Trending", value: "trending" },
+                { title: "Popular", value: "popular" },
+                { title: "Recommended", value: "recommended" },
+                { title: "Box Office", value: "boxoffice" },
+              ],
+            }}
           />
           <div className="flex items-center justify-center">
             <div className="px-10 py-2 border-2 rounded-full cursor-pointer select-none border-primary text-primary">
@@ -99,7 +120,7 @@ const MoviesPage = () => {
 export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery("getTrendingMovies", () => fetchTrendingMovies());
+  await queryClient.prefetchQuery(["getTrendingMovies", "day"], () => fetchTrendingMovies("day"));
 
   return {
     props: {
