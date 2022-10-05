@@ -10,7 +10,7 @@ interface IContentRow {
 
 const ContentRow = ({ type, buttons, fetchContent }: IContentRow) => {
   const { isSuccess, data, isLoading, isError } = useQuery(
-    [`get${type}Content`, buttons?.currentValue || ""],
+    [`get${type}Content`, "popularity.desc"],
     () => fetchContent(),
     {
       staleTime: 24 * (60 * (60 * 1000)), // 24 hours
