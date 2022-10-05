@@ -12,8 +12,10 @@ interface IMovieContent {
   overview: string;
 }
 
-const MoviePage = () => {
-  const { data, isSuccess } = useQuery<IMovieContent, Error>(["getContent"], { staleTime: 24 * (60 * (60 * 1000)) });
+const MoviePage = ({ props }: any) => {
+  const { data, isSuccess } = useQuery<IMovieContent, Error>(["getContent", props.id], {
+    staleTime: 24 * (60 * (60 * 1000)),
+  });
 
   return (
     isSuccess && (
@@ -33,8 +35,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.invalidateQueries(["getContent"]);
-  await queryClient.prefetchQuery(["getContent"], () =>
+  await queryClient.prefetchQuery(["getContent", id], () =>
     fetchDetailedContent({
       type: "Movie",
       id,
@@ -44,6 +45,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      props: {
+        id,
+      },
     },
   };
 };

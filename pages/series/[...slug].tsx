@@ -12,8 +12,10 @@ interface ITVContent {
   overview: string;
 }
 
-const TVPage = () => {
-  const { data, isSuccess } = useQuery<ITVContent, Error>(["getContent"], { staleTime: 24 * (60 * (60 * 1000)) });
+const TVPage = ({ props }: any) => {
+  const { data, isSuccess } = useQuery<ITVContent, Error>(["getContent", props.id], {
+    staleTime: 24 * (60 * (60 * 1000)),
+  });
 
   return (
     isSuccess && (
@@ -32,7 +34,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const queryClient = new QueryClient();
 
-  queryClient.invalidateQueries(["getContent"]);
   await queryClient.prefetchQuery(["getContent"], () =>
     fetchDetailedContent({
       type: "TV",
@@ -43,6 +44,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
+      props: {
+        id,
+      },
     },
   };
 };
