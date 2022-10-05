@@ -48,6 +48,8 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
             <Poster
               imageSrc={`https://image.tmdb.org/t/p/w185${content.poster_path}`}
               name={content.title || content.name}
+              id={content.id}
+              type={type}
             />
           ))
         )}

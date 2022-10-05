@@ -12,7 +12,7 @@ interface IContentHeader {
 const ContentHeader = ({ cover, poster, title, date, description }: IContentHeader) => (
   <>
     <div
-      className="absolute w-screen h-64 md:h-[32rem] top-0 left-0"
+      className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
       style={{
         background: `url("https://www.themoviedb.org/t/p/original${cover}") no-repeat`,
         backgroundSize: "cover",
