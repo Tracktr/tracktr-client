@@ -7,7 +7,6 @@ import NavProfile from "./NavProfile";
 const navLinks = [
   { href: "/movies", text: "Movies", active: false },
   { href: "/series", text: " Series", active: false },
-  { href: "/calendar", text: " Calendar", active: false },
 ];
 
 const Navbar = () => {
