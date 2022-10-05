@@ -5,7 +5,7 @@ import SortPill, { ISortPillButtons } from "../components/SortPill";
 interface IContentRow {
   type: string;
   buttons?: ISortPillButtons;
-  fetchContent: () => IPoster[];
+  fetchContent: () => any;
 }
 
 const ContentRow = ({ type, buttons, fetchContent }: IContentRow) => {
