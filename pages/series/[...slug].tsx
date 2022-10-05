@@ -4,24 +4,23 @@ import { dehydrate, QueryClient, useQuery } from "react-query";
 import ContentHeader from "../../components/content/ContentHeader";
 import { fetchDetailedContent } from "../../utils/fetchQueries";
 
-interface IMovieContent {
+interface ITVContent {
   backdrop_path: string;
   poster_path: string;
-  title: string;
+  name: string;
   release_date: string;
   overview: string;
 }
 
-const MoviePage = () => {
-  const { data, isSuccess } = useQuery<IMovieContent, Error>(["getContent"], { staleTime: 24 * (60 * (60 * 1000)) });
+const TVPage = () => {
+  const { data, isSuccess } = useQuery<ITVContent, Error>(["getContent"], { staleTime: 24 * (60 * (60 * 1000)) });
 
   return (
     isSuccess && (
       <ContentHeader
         cover={data.backdrop_path}
         poster={data.poster_path}
-        title={data.title}
-        date={data.release_date}
+        title={data.name}
         description={data.overview}
       />
     )
@@ -35,7 +34,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   await queryClient.prefetchQuery(["getContent"], () =>
     fetchDetailedContent({
-      type: "Movie",
+      type: "TV",
       id,
     })
   );
@@ -52,4 +51,4 @@ export const getStaticPaths: GetStaticPaths = async () => ({
   fallback: "blocking",
 });
 
-export default MoviePage;
+export default TVPage;

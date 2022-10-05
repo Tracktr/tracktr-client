@@ -7,7 +7,8 @@ interface IFetchMinimizedContent {
   page?: number;
 }
 
-const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, page }: IFetchMinimizedContent): any => {
+// TODO: Async Await Refactor
+export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, page }: IFetchMinimizedContent): any => {
   const BASE_URL = new URL("https://api.themoviedb.org/3/");
   const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, BASE_URL);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
@@ -38,4 +39,17 @@ const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, page }: I
   return data;
 };
 
-export default fetchMinimizedContent;
+interface IFetchDetailedContent {
+  type: "Movie" | "TV";
+  id: string;
+}
+
+export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) => {
+  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.TMDB_API);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+};

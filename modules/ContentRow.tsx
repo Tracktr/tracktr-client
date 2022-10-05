@@ -3,7 +3,7 @@ import Poster, { IPoster } from "../components/Poster";
 import SortPill, { ISortPillButtons } from "../components/SortPill";
 
 interface IContentRow {
-  type: string;
+  type: "Movies" | "Series";
   buttons?: ISortPillButtons;
   fetchContent: () => any;
 }
@@ -26,7 +26,8 @@ const ContentRow = ({ type, buttons, fetchContent }: IContentRow) => {
       <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
         {isLoading && <div className="z-40">Loading</div>}
         {isError && <div className="z-40">Something went wrong...</div>}
-        {isSuccess && data.map((p: IPoster) => <Poster key={p.name} imageSrc={p.imageSrc} name={p.name} />)}
+        {isSuccess &&
+          data.map((p: IPoster) => <Poster key={p.name} imageSrc={p.imageSrc} name={p.name} id={p.id} type={type} />)}
       </div>
     </div>
   );
