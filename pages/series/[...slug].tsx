@@ -34,7 +34,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(["getContent"], () =>
+  await queryClient.prefetchQuery(["getContent", id], () =>
     fetchDetailedContent({
       type: "TV",
       id,
