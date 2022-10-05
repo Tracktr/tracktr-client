@@ -15,8 +15,4 @@ const NavButton = ({ href, text, active, className }: iNavButton) => (
   </li>
 );
 
-NavButton.defaultProps = {
-  className: "",
-};
-
 export default NavButton;
