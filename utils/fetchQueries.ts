@@ -6,9 +6,8 @@ interface IFetchMinimizedContent {
   slice?: number;
 }
 
-const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
-  const BASE_URL = new URL("https://api.themoviedb.org/3/");
-  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, BASE_URL);
+export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
+  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, process.env.TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
   if (sortBy) url.searchParams.append("sort_by", sortBy || "");
 
@@ -32,4 +31,16 @@ const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchM
   return data;
 };
 
-export default fetchMinimizedContent;
+interface IFetchDetailedContent {
+  type: "Movie" | "TV";
+  id: string;
+}
+
+export const fetchDetailedContent = ({ type, id }: IFetchDetailedContent) => {
+  const url = new URL(`${type}/${id}`, process.env.TMDB_API);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const data = fetch(url).then((res) => res.json());
+
+  return data;
+};
