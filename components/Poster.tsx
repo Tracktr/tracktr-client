@@ -1,15 +1,20 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export interface IPoster {
   imageSrc: string;
   name: string;
+  id: string;
+  type: "Movies" | "Series";
 }
 
-const Poster = ({ imageSrc, name }: IPoster) => (
-  <div>
-    <Image src={imageSrc} width="170px" height="240px" className="rounded" />
-    <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
-  </div>
+const Poster = ({ imageSrc, name, id, type }: IPoster) => (
+  <Link href={`${type.toLowerCase()}/${id}`}>
+    <a>
+      <Image src={imageSrc} width="170px" height="240px" className="rounded" />
+      <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
+    </a>
+  </Link>
 );
 
 export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
@@ -21,7 +26,7 @@ export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
       }}
     />
 
-    <div className="text-xs bg-black/25 text-center py-2 rounded-b-lg">
+    <div className="py-2 text-xs text-center rounded-b-lg bg-black/25">
       <div className="max-w-[127px] px-1 truncate">{name}</div>
     </div>
   </div>
