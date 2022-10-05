@@ -32,6 +32,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const queryClient = new QueryClient();
 
+  queryClient.invalidateQueries(["getContent"]);
   await queryClient.prefetchQuery(["getContent"], () =>
     fetchDetailedContent({
       type: "TV",
