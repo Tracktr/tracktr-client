@@ -45,7 +45,7 @@ const MoviesPage = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-6xl -mt-24 pb-6">
+        <div className="max-w-6xl pb-6 mx-2 md:-mt-24 md:mx-auto">
           <ContentRow
             type="Trending"
             data={trendingMovies}
@@ -63,7 +63,7 @@ const MoviesPage = () => {
           />
         </div>
 
-        <div className="mx-auto max-w-6xl pt-2 border-t-2 border-[#343434]">
+        <div className="mx-2 md:mx-auto max-w-6xl pt-2 border-t-2 border-[#343434]">
           <ContentRow
             type="Movies"
             data={[]}
@@ -74,8 +74,8 @@ const MoviesPage = () => {
               { title: "Box Office" },
             ]}
           />
-          <div className="flex justify-center items-center">
-            <div className="select-none cursor-pointer rounded-full border-primary border-2 py-2 text-primary px-10">
+          <div className="flex items-center justify-center">
+            <div className="px-10 py-2 border-2 rounded-full cursor-pointer select-none border-primary text-primary">
               Load more...
             </div>
           </div>
@@ -85,11 +85,11 @@ const MoviesPage = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Loading</div>;
   }
 
   if (isError) {
-    return <div>Something went wrong...</div>;
+    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Something went wrong...</div>;
   }
 
   // eslint-disable-next-line react/jsx-no-useless-fragment

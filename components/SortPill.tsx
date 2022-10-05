@@ -8,8 +8,8 @@ interface ISortPill {
 }
 
 const SortPill = ({ buttons }: ISortPill) => (
-  <div className="z-40 my-auto ml-4">
-    <div className="flex justify-center rounded-full text-xs border-primary border-2">
+  <div className="z-40">
+    <div className="flex items-center justify-center text-xs border-2 rounded-full border-primary">
       {buttons.map((b) => (
         <div
           key={b.title}

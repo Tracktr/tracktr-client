@@ -9,11 +9,11 @@ interface IContentRow {
 
 const ContentRow = ({ type, data, buttons }: IContentRow) => (
   <div className="mt-1 mb-10 z">
-    <div className="flex">
-      <div className="z-40 text-4xl mb-6">{type}</div>
+    <div className="flex flex-wrap items-center gap-4 py-5">
+      <div className="z-40 text-4xl">{type}</div>
       <SortPill buttons={buttons} />
     </div>
-    <div className="flex flex-wrap gap-x-6 gap-y-10 justify-center">
+    <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
       {data.map((p) => (
         <Poster key={p.name} imageSrc={p.imageSrc} name={p.name} />
       ))}
