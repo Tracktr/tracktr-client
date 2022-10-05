@@ -6,6 +6,7 @@ interface IFetchMinimizedContent {
   slice?: number;
 }
 
+// TODO: Async Await Refactor
 export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
   const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, process.env.TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
@@ -36,11 +37,13 @@ interface IFetchDetailedContent {
   id: string;
 }
 
-export const fetchDetailedContent = ({ type, id }: IFetchDetailedContent) => {
-  const url = new URL(`${type}/${id}`, process.env.TMDB_API);
+export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) => {
+  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-  const data = fetch(url).then((res) => res.json());
+  const response = await fetch(url);
+  console.log(response);
+  const data = await response.json();
 
   return data;
 };
