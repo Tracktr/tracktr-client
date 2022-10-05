@@ -6,11 +6,11 @@ interface IFetchMinimizedContent {
   slice?: number;
 }
 
-export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
+const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
   const BASE_URL = new URL("https://api.themoviedb.org/3/");
   const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, BASE_URL);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-  sortBy ?? url.searchParams.append("sort_by", sortBy || "");
+  if (sortBy) url.searchParams.append("sort_by", sortBy || "");
 
   const data = fetch(url)
     .then((res) => res.json())
@@ -31,3 +31,5 @@ export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: 
 
   return data;
 };
+
+export default fetchMinimizedContent;
