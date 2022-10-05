@@ -2,13 +2,13 @@ import Image from "next/image";
 import { FaHeart, FaStar, FaPlay } from "react-icons/fa";
 
 interface IContentHeader {
-  cover: String;
-  poster: String;
-  title: String;
-  date: String;
-  description: String;
-  audienceScore: String;
-  imdbScore: String;
+  cover: string;
+  poster: string;
+  title: string;
+  date: string;
+  description: string;
+  audienceScore: string;
+  imdbScore: string;
 }
 
 const ContentHeader = ({ cover, poster, title, date, description, audienceScore, imdbScore }: IContentHeader) => (
