@@ -4,12 +4,12 @@ import Link from "next/link";
 export interface IPoster {
   imageSrc: string;
   name: string;
-  id: string;
-  type: "Movies" | "Series";
+  id?: string;
+  type?: "Movies" | "Series";
 }
 
 const Poster = ({ imageSrc, name, id, type }: IPoster) => (
-  <Link href={`${type.toLowerCase()}/${id}`}>
+  <Link href={`${type?.toLowerCase()}/${id}`}>
     <a>
       <Image src={imageSrc} width="170px" height="240px" className="rounded" />
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
