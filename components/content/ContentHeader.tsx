@@ -6,14 +6,15 @@ interface IContentHeader {
   poster: String;
   title: String;
   date: String;
+  description: String;
   audienceScore: String;
   imdbScore: String;
 }
 
-const ContentHeader = ({ cover, poster, title, date, audienceScore, imdbScore }: IContentHeader) => (
+const ContentHeader = ({ cover, poster, title, date, description, audienceScore, imdbScore }: IContentHeader) => (
   <>
     <div
-      className="relative w-screen h-[32rem]"
+      className="absolute w-screen h-64 md:h-[32rem] top-0 left-0"
       style={{
         backgroundSize: "cover",
         background: `url("${cover}")`,
@@ -22,24 +23,30 @@ const ContentHeader = ({ cover, poster, title, date, audienceScore, imdbScore }:
       <div className="relative w-full h-full bg-gradient-to-t from-primaryBackground" />
     </div>
 
-    <div className="absolute top-0 w-full">
-      <div className="flex max-w-6xl m-auto pt-96">
-        <div>
-          <div className="border-4 rounded-md border-primaryBackground">
+    <div className="relative w-full">
+      <div className="grid max-w-6xl grid-cols-4 pt-24 m-auto md:pt-96">
+        <div className="col-span-1 mx-4 text-center">
+          <div className="inline-block border-4 rounded-md border-primaryBackground">
             <Image width="208" height="311" src={`${poster}`} />
           </div>
-          <button type="button" className="flex items-center justify-between w-full h-12 mt-2 rounded-md bg-primary">
+          <button
+            type="button"
+            className="max-w-[208px] m-auto items-center justify-between hidden w-full h-12 mt-2 rounded-md md:flex bg-primary"
+          >
             <span className="pl-4 font-bold">Watch Now</span>
             <FaPlay className="mr-4" />
           </button>
         </div>
 
-        <h1 className="pt-6 pl-6 text-6xl font-black drop-shadow-lg">
-          {title}
-          <span className="ml-4 text-4xl opacity-75 drop-shadow-md">{date}</span>
-        </h1>
+        <div className="col-span-2">
+          <h1 className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
+            {title}
+            <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date}</span>
+          </h1>
+          <p className="pt-8">{description}</p>
+        </div>
 
-        <div className="flex h-full p-3 mt-4 ml-auto space-x-4 font-medium text-center bg-opacity-50 rounded-md bg-primaryBackground">
+        <div className="flex col-span-1 p-3 mt-4 ml-auto space-x-4 font-medium text-center bg-opacity-50 rounded-md h-fit bg-primaryBackground">
           <div>
             <div className="flex items-center">
               <FaHeart className="text-3xl text-red-500" />
