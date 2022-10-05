@@ -6,9 +6,9 @@ interface IFetchMinimizedContent {
   slice?: number;
 }
 
-const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
-  const BASE_URL = new URL("https://api.themoviedb.org/3/");
-  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, BASE_URL);
+// TODO: Async Await Refactor
+export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchMinimizedContent): any => {
+  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, process.env.TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
   if (sortBy) url.searchParams.append("sort_by", sortBy || "");
 
@@ -32,4 +32,18 @@ const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice }: IFetchM
   return data;
 };
 
-export default fetchMinimizedContent;
+interface IFetchDetailedContent {
+  type: "Movie" | "TV";
+  id: string;
+}
+
+export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) => {
+  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.TMDB_API);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const response = await fetch(url);
+  console.log(response);
+  const data = await response.json();
+
+  return data;
+};
