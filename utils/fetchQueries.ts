@@ -42,7 +42,6 @@ export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) 
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
   const response = await fetch(url);
-  console.log(response);
   const data = await response.json();
 
   return data;
