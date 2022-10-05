@@ -20,8 +20,8 @@ const SortPill = ({ buttons }: ISortPill) => (
           key={b.title}
           className={
             b.value === buttons.currentValue
-              ? "text-primaryBackground bg-primary py-2 px-4 rounded-full"
-              : "text-primary py-2 px-4 rounded-full"
+              ? "text-primaryBackground bg-primary py-2 px-4 rounded-full cursor-default select-none"
+              : "text-primary py-2 px-4 rounded-full cursor-pointer select-none"
           }
           onClick={() => buttons.onClick(b.value)}
           onKeyDown={() => buttons.onClick(b.value)}

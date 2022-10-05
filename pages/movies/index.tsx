@@ -18,19 +18,73 @@ const fetchTrendingMovies = (filter: string): any =>
       return newKeys;
     });
 
+const fetchPopularMovies = (): any =>
+  fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=en-US&page=1`)
+    .then((res) => res.json())
+    .then((res) => res.results.slice(0, 6))
+    .then((res) => {
+      const newKeys: any[] = [];
+
+      res.map((m: any) =>
+        newKeys.push({ imageSrc: `https://image.tmdb.org/t/p/original${m.poster_path}`, name: m.title })
+      );
+
+      return newKeys;
+    });
+
+const fetchUpcomingMovies = (): any =>
+  fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.NEXT_PUBLIC_TMDB_KEY}&language=en-US&page=1`)
+    .then((res) => res.json())
+    .then((res) => res.results.slice(0, 6))
+    .then((res) => {
+      const newKeys: any[] = [];
+
+      res.map((m: any) =>
+        newKeys.push({ imageSrc: `https://image.tmdb.org/t/p/original${m.poster_path}`, name: m.title })
+      );
+
+      return newKeys;
+    });
+
 const MoviesPage = () => {
   const [trendingFilter, setTrendingFilter] = useState("day");
 
   const {
-    isSuccess,
+    isSuccess: isTrendingSuccess,
     data: trendingMovies,
-    isLoading,
-    isError,
+    isLoading: isTrendingLoading,
+    isLoading: isTrendingError,
   } = useQuery(["getTrendingMovies", trendingFilter], () => fetchTrendingMovies(trendingFilter), {
     staleTime: 24 * (60 * (60 * 1000)), // 24 hours
   });
 
-  if (isSuccess) {
+  const {
+    isSuccess: isPopularSuccess,
+    data: popularMovies,
+    isLoading: isPopularLoading,
+    isError: isPopularError,
+  } = useQuery("getPopularMovies", () => fetchPopularMovies(), {
+    staleTime: 24 * (60 * (60 * 1000)), // 24 hours
+  });
+
+  const {
+    isSuccess: isUpcomingSuccess,
+    data: upcomingMovies,
+    isLoading: isUpcomingLoading,
+    isError: isUpcomingError,
+  } = useQuery("getUpcomingMovies", () => fetchUpcomingMovies(), {
+    staleTime: 24 * (60 * (60 * 1000)), // 24 hours
+  });
+
+  if (isTrendingLoading || isPopularLoading || isUpcomingLoading) {
+    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Loading</div>;
+  }
+
+  if (isTrendingError || isPopularError || isUpcomingError) {
+    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Something went wrong...</div>;
+  }
+
+  if (isTrendingSuccess && isPopularSuccess && isUpcomingSuccess) {
     return (
       <div className="pb-5">
         <PosterHeader
@@ -61,21 +115,8 @@ const MoviesPage = () => {
               ],
             }}
           />
-          <ContentRow type="Popular" data={[]} />
-          <ContentRow
-            type="Upcoming"
-            data={[]}
-            buttons={{
-              onClick: () => {
-                console.log("upcoming");
-              },
-              currentValue: "day",
-              data: [
-                { title: "Streaming", value: "streaming" },
-                { title: "In Theaters", value: "theaters" },
-              ],
-            }}
-          />
+          <ContentRow type="Popular" data={popularMovies} />
+          <ContentRow type="Upcoming" data={upcomingMovies} />
         </div>
 
         <div className="mx-2 md:mx-auto max-w-6xl pt-2 border-t-2 border-[#343434]">
@@ -105,14 +146,6 @@ const MoviesPage = () => {
     );
   }
 
-  if (isLoading) {
-    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Loading</div>;
-  }
-
-  if (isError) {
-    return <div className="max-w-6xl pt-16 pb-6 mx-6 md:mx-auto">Something went wrong...</div>;
-  }
-
   // eslint-disable-next-line react/jsx-no-useless-fragment
   return <></>;
 };
@@ -121,6 +154,8 @@ export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(["getTrendingMovies", "day"], () => fetchTrendingMovies("day"));
+  await queryClient.prefetchQuery("getPopularMovies", () => fetchPopularMovies());
+  await queryClient.prefetchQuery("getUpcomingMovies", () => fetchUpcomingMovies());
 
   return {
     props: {
