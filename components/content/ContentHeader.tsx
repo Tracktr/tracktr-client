@@ -7,9 +7,10 @@ interface IContentHeader {
   title: string;
   date?: string;
   description: string;
+  children?: any;
 }
 
-const ContentHeader = ({ cover, poster, title, date, description }: IContentHeader) => (
+const ContentHeader = ({ cover, poster, title, date, description, children }: IContentHeader) => (
   <>
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
@@ -41,7 +42,9 @@ const ContentHeader = ({ cover, poster, title, date, description }: IContentHead
             {title}
             {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}
           </h1>
-          <p className="pt-8">{description}</p>
+          <p className="pt-8 pb-12">{description}</p>
+
+          {children || ""}
         </div>
       </div>
     </div>

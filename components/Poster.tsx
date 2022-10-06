@@ -5,13 +5,13 @@ export interface IPoster {
   imageSrc: string;
   name: string;
   id?: string;
-  type?: "Movies" | "Series";
+  type?: "Movies" | "Series" | "Season";
 }
 
 const Poster = ({ imageSrc, name, id, type }: IPoster) => (
   <Link href={`${type?.toLowerCase()}/${id}`}>
     <a>
-      <Image src={imageSrc} width="170px" height="240px" className="rounded" />
+      <Image src={`https://image.tmdb.org/t/p/w185${imageSrc}`} width="170px" height="240px" className="rounded" />
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
     </a>
   </Link>
@@ -22,7 +22,7 @@ export const BackgroundPoster = ({ imageSrc, name }: IPoster) => (
     <div
       className="h-[180px] w-[127px] bg-cover rounded-t-lg"
       style={{
-        backgroundImage: `url(${imageSrc})`,
+        backgroundImage: `url(https://image.tmdb.org/t/p/w185${imageSrc})`,
       }}
     />
 
