@@ -2,6 +2,7 @@ import { getProviders, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
+import Logo from "../../components/Logo";
 
 export default function SignIn({ providers }: any) {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function SignIn({ providers }: any) {
   return (
     <div className="flex flex-row w-full h-screen">
       <div className="flex-col justify-between hidden lg:flex bg-primary text-primaryBackground lg:p-8 xl:p-12 lg:max-w-md xl:max-w-xl">
-        <div className="flex items-center justify-start space-x-3">Tracktr</div>
+        <Logo textColor="text-primaryBackground" dotColor="text-primaryBackground" />
         <div className="space-y-5">
           <h1 className="font-extrabold lg:text-3xl xl:text-5xl xl:leading-snug">
             Sign in and customize your Tracktr experience.
