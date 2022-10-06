@@ -2,14 +2,7 @@ import { useState } from "react";
 import Poster from "../Poster";
 
 interface ISeasons {
-  seasons: {
-    reverse: any;
-    map: any;
-    length: any;
-    poster_path: string;
-    season_number: string;
-    id: string;
-  };
+  seasons: any;
 }
 
 const SeasonsBlock = ({ seasons }: ISeasons) => {
@@ -18,19 +11,23 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
   const toggleshowSeasons = () => {
     setShowSeasons(!showSeasons);
   };
+
   return (
     <div className="relative mb-24">
       <h2 className="pb-4 text-4xl font-bold">Seasons</h2>
       <div className={`grid grid-cols-4 gap-2 ${showSeasons ? "h-auto" : "h-64 overflow-hidden"}`}>
-        {seasons.map((item: any) => (
-          <Poster
-            key={item.id}
-            imageSrc={item.poster_path}
-            name={`Season ${item.season_number}`}
-            type="Season"
-            id={item.id}
-          />
-        ))}
+        {seasons
+          .slice(0)
+          .reverse()
+          .map((item: any) => (
+            <Poster
+              key={item.id}
+              imageSrc={item.poster_path}
+              name={`Season ${item.season_number}`}
+              type="Season"
+              id={item.id}
+            />
+          ))}
       </div>
       {!showSeasons && seasons.length > 4 && (
         <button
