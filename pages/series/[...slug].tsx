@@ -22,7 +22,7 @@ const TVPage = ({ props }: any) => {
   return (
     isSuccess && (
       <ContentHeader cover={data.backdrop_path} poster={data.poster_path} title={data.name} description={data.overview}>
-        <SeasonsBlock seasons={data.seasons.reverse()} />
+        <SeasonsBlock seasons={data.seasons} />
       </ContentHeader>
     )
   );
