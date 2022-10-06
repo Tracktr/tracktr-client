@@ -1,26 +1,22 @@
 import { GetStaticProps } from "next";
 import { QueryClient, dehydrate } from "react-query";
-import ContentRow from "../../modules/ContentRow";
+import ContentInfiniteScroll from "../../modules/ContentInfiniteScroll";
 import { fetchMinimizedContent } from "../../utils/fetchQueries";
 
 const SeriesPage = () => (
   <div className="pt-12 pb-5">
     <div className="mx-2 md:mx-auto max-w-6xl pt-2 border-t-2 border-[#343434]">
-      <ContentRow
+      <ContentInfiniteScroll
         type="Series"
-        fetchContent={() =>
+        fetchContent={(page) =>
           fetchMinimizedContent({
             type: "discover",
             limiter: "tv",
             sortBy: "popularity.desc",
+            page,
           })
         }
       />
-      <div className="flex items-center justify-center">
-        <div className="px-10 py-2 border-2 rounded-full cursor-pointer select-none border-primary text-primary">
-          Load more...
-        </div>
-      </div>
     </div>
   </div>
 );
@@ -33,6 +29,7 @@ export const getStaticProps: GetStaticProps = async () => {
       type: "discover",
       limiter: "tv",
       sortBy: "popularity.desc",
+      page: 1,
     })
   );
 
