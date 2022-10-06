@@ -28,13 +28,6 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
           <div className="inline-block border-4 rounded-md border-primaryBackground">
             <Image width="208" height="311" src={`https://www.themoviedb.org/t/p/original/${poster}`} />
           </div>
-          <button
-            type="button"
-            className="max-w-[208px] m-auto items-center justify-between hidden w-full h-12 mt-2 rounded-md md:flex bg-primary"
-          >
-            <span className="pl-4 font-bold">Watch Now</span>
-            <FaPlay className="mr-4" />
-          </button>
         </div>
 
         <div className="col-span-2">
