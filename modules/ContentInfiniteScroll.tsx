@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { LoadingPoster } from "../components/LoadingPosters";
 import Poster from "../components/Poster";
@@ -10,6 +10,7 @@ interface IContentInfiniteScroll {
 
 const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) => {
   const observerElem = useRef(null);
+  const MAX_PAGES = 5;
 
   const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     [`get${type}Content`, "popularity.desc"],
@@ -17,7 +18,7 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
+        return lastPage.results.length !== 0 && lastPage.page <= MAX_PAGES ? nextPage : undefined;
       },
     }
   );
@@ -53,6 +54,7 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
                 name={content.title || content.name}
                 id={content.id}
                 type={type}
+                key={content.id}
               />
             ))
           )}
