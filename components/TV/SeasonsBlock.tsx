@@ -3,8 +3,9 @@ import Poster from "../Poster";
 
 interface ISeasons {
   seasons: {
-    length: any;
     reverse: any;
+    map: any;
+    length: any;
     poster_path: string;
     season_number: string;
     id: string;
@@ -12,6 +13,7 @@ interface ISeasons {
 }
 
 const SeasonsBlock = ({ seasons }: ISeasons) => {
+  const reversedSeasons = seasons.reverse();
   const [showSeasons, setShowSeasons] = useState(false);
 
   const toggleshowSeasons = () => {
@@ -21,7 +23,7 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
     <div className="relative mb-24">
       <h2 className="pb-4 text-4xl font-bold">Seasons</h2>
       <div className={`grid grid-cols-4 gap-2 ${showSeasons ? "h-auto" : "h-64 overflow-hidden"}`}>
-        {seasons.reverse().map((item: any) => (
+        {reversedSeasons.map((item: any) => (
           <Poster
             key={item.id}
             imageSrc={item.poster_path}
