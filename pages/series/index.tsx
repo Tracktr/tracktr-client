@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import { QueryClient, dehydrate } from "react-query";
-import ContentInfiniteScroll from "../../modules/ContentInfiniteScroll";
+import ContentInfiniteScroll from "../../components/content/ContentInfiniteScroll";
 import { fetchMinimizedContent } from "../../utils/fetchQueries";
 
 const SeriesPage = () => (
