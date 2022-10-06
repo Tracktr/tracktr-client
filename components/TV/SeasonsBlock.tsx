@@ -3,9 +3,10 @@ import Poster from "../Poster";
 
 interface ISeasons {
   seasons: any;
+  seriesID: any;
 }
 
-const SeasonsBlock = ({ seasons }: ISeasons) => {
+const SeasonsBlock = ({ seasons, seriesID }: ISeasons) => {
   const [showSeasons, setShowSeasons] = useState(false);
 
   const toggleshowSeasons = () => {
@@ -24,8 +25,8 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
               key={item.id}
               imageSrc={item.poster_path}
               name={`Season ${item.season_number}`}
-              type="Season"
-              id={item.id}
+              type={`${seriesID}/Season`}
+              id={item.season_number}
             />
           ))}
       </div>

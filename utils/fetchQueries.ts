@@ -53,3 +53,19 @@ export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) 
 
   return data;
 };
+
+interface IFetchSeasonContent {
+  seriesID: string;
+  seasonID: string;
+}
+
+export const fetchSeasonContent = async ({ seriesID, seasonID }: IFetchSeasonContent) => {
+  const url = new URL(`tv/${seriesID}/season/${seasonID}`, process.env.TMDB_API);
+  console.log(url);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+};

@@ -5,7 +5,7 @@ export interface IPoster {
   imageSrc: string;
   name: string;
   id?: string;
-  type?: "Movies" | "Series" | "Season";
+  type?: "Movies" | "Series" | "Season" | string;
 }
 
 const Poster = ({ imageSrc, name, id, type }: IPoster) => (
