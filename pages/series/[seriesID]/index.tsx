@@ -1,9 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Error from "next/error";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import ContentHeader from "../../components/content/ContentHeader";
-import SeasonsBlock from "../../components/TV/SeasonsBlock";
-import { fetchDetailedContent } from "../../utils/fetchQueries";
+import ContentHeader from "../../../components/content/ContentHeader";
+import SeasonsBlock from "../../../components/TV/SeasonsBlock";
+import { fetchDetailedContent } from "../../../utils/fetchQueries";
 
 interface ITVContent {
   backdrop_path: string;
@@ -22,7 +22,7 @@ const TVPage = ({ props }: any) => {
   return (
     isSuccess && (
       <ContentHeader cover={data.backdrop_path} poster={data.poster_path} title={data.name} description={data.overview}>
-        <SeasonsBlock seasons={data.seasons} seriesID={props.id} />
+        <SeasonsBlock seasons={data.seasons} />
       </ContentHeader>
     )
   );
