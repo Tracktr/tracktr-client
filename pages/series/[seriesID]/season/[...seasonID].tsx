@@ -16,7 +16,7 @@ interface ITVContent {
 }
 
 const TVPage = ({ props }: any) => {
-  const { data, isSuccess } = useQuery<ITVContent, Error>(["getSeasonContent", props.seasonID], {
+  const { data, isSuccess } = useQuery<ITVContent, Error>(["getSeasonContent", `${props.seriesID}-${props.seasonID}`], {
     staleTime: 24 * (60 * (60 * 1000)),
   });
 
@@ -35,7 +35,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(["getSeasonContent", seasonID[0]], () =>
+  await queryClient.prefetchQuery(["getSeasonContent", `${seriesID}-${seasonID[0]}`], () =>
     fetchSeasonContent({
       seriesID,
       seasonID: seasonID[0],
