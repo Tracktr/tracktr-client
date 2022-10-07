@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { CgMenuGridO } from "react-icons/cg";
-import Logo from "../Logo";
-import NavButton from "./Navbutton";
+import Logo from "../common/Logo";
+import NavButton from "./NavButton";
 import NavProfile from "./NavProfile";
 
 const navLinks = [

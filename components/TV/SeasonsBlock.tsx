@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Poster from "../Poster";
+import Poster from "../common/poster/Poster";
 
 interface ISeasons {
   seasons: any;

@@ -1,6 +1,6 @@
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import NavButton from "./Navbutton";
+import NavButton from "./NavButton";
 
 const NavProfile = () => {
   const { data: session } = useSession();
