@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "react-query";
-import { LoadingPoster } from "../components/LoadingPosters";
-import Poster from "../components/Poster";
+import { LoadingPoster } from "../common/poster/LoadingPosters";
+import Poster from "../common/poster/Poster";
 
 interface IContentInfiniteScroll {
   fetchContent: (page: number) => any;
