@@ -52,8 +52,7 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
               <Poster
                 imageSrc={`${content.poster_path}`}
                 name={content.title || content.name}
-                id={content.id}
-                type={type}
+                url={`${type.toLowerCase()}/${content.id}`}
                 key={content.id}
               />
             ))

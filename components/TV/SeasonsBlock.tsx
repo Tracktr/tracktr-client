@@ -21,13 +21,7 @@ const SeasonsBlock = ({ seasons, seriesID }: ISeasons) => {
           .slice(0)
           .reverse()
           .map((item: any) => (
-            <Poster
-              key={item.id}
-              imageSrc={item.poster_path}
-              name={`Season ${item.season_number}`}
-              type={`${seriesID}/Season`}
-              id={item.season_number}
-            />
+            <Poster key={item.id} imageSrc={item.poster_path} name={`Season ${item.season_number}`} />
           ))}
       </div>
       {!showSeasons && seasons.length > 4 && (
