@@ -1,9 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Error from "next/error";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import ContentHeader from "../../components/content/ContentHeader";
-import SeasonsBlock from "../../components/TV/SeasonsBlock";
-import { fetchDetailedContent } from "../../utils/fetchQueries";
+import ContentHeader from "../../../components/content/ContentHeader";
+import SeasonsBlock from "../../../components/TV/SeasonsBlock";
+import { fetchDetailedContent } from "../../../utils/fetchQueries";
 
 interface ITVContent {
   backdrop_path: string;
@@ -15,25 +15,25 @@ interface ITVContent {
 }
 
 const TVPage = ({ props }: any) => {
-  const { data, isSuccess } = useQuery<ITVContent, Error>(["getContent", props.id], {
+  const { data, isSuccess } = useQuery<ITVContent, Error>(["getSeriesContent", props.id], {
     staleTime: 24 * (60 * (60 * 1000)),
   });
 
   return (
     isSuccess && (
       <ContentHeader cover={data.backdrop_path} poster={data.poster_path} title={data.name} description={data.overview}>
-        <SeasonsBlock seasons={data.seasons} />
+        <SeasonsBlock seasons={data.seasons} seriesID={props.id} />
       </ContentHeader>
     )
   );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const id = context.params?.slug as string;
+  const id = context.params?.seriesID as string;
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(["getContent", id], () =>
+  await queryClient.prefetchQuery(["getSeriesContent", id], () =>
     fetchDetailedContent({
       type: "TV",
       id,
