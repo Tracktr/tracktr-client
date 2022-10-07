@@ -50,7 +50,7 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
           data.pages?.map((page) =>
             page.results.map((content: any) => (
               <Poster
-                imageSrc={`${content.poster_path}`}
+                imageSrc={content.poster_path}
                 name={content.title || content.name}
                 url={`${type.toLowerCase()}/${content.id}`}
                 key={content.id}

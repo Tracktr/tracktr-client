@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PosterImage } from "../../../utils/generateImages";
 
 export interface IStill {
   imageSrc: string;
@@ -14,11 +15,11 @@ const Still = ({ imageSrc, name, url, overview, season, episode }: IStill) => (
   <Link href={url || "#"}>
     <a className={`flex ${url ? "" : "pointer-events-none"}`}>
       <div className="flex-shrink-0">
-        <Image src={`https://image.tmdb.org/t/p/w300${imageSrc}`} width="300px" height="168px" className="rounded" />
+        <Image src={PosterImage({ path: imageSrc, size: "md" })} width="300px" height="168px" className="rounded" />
       </div>
       <div className="max-w-md pl-2">
-        <p className="text-md pb-2 font-bold">
-          <span className="bg-primary text-primaryBackground px-3 py-1 rounded-full mr-2">
+        <p className="pb-2 font-bold text-md">
+          <span className="px-3 py-1 mr-2 rounded-full bg-primary text-primaryBackground">
             {season}x{episode}
           </span>
           {name}
