@@ -16,12 +16,17 @@ const SeasonsBlock = ({ seasons, seriesID }: ISeasons) => {
   return (
     <div className="relative mb-24">
       <h2 className="pb-4 text-4xl font-bold">Seasons</h2>
-      <div className={`grid grid-cols-4 gap-2 ${showSeasons ? "h-auto" : "h-64 overflow-hidden"}`}>
+      <div className={`grid grid-cols-5 gap-2 ${showSeasons ? "h-auto" : "h-64 overflow-hidden"}`}>
         {seasons
           .slice(0)
           .reverse()
           .map((item: any) => (
-            <Poster key={item.id} imageSrc={item.poster_path} name={`Season ${item.season_number}`} />
+            <Poster
+              key={item.id}
+              imageSrc={item.poster_path}
+              name={`Season ${item.season_number}`}
+              url={`${seriesID}/season/${item.season_number}`}
+            />
           ))}
       </div>
       {!showSeasons && seasons.length > 4 && (

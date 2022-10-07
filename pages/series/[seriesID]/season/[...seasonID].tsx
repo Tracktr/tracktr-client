@@ -3,6 +3,7 @@ import Error from "next/error";
 import { dehydrate, QueryClient, useQuery } from "react-query";
 import ContentHeader from "../../../../components/content/ContentHeader";
 import { fetchSeasonContent } from "../../../../utils/fetchQueries";
+import EpisodesBlock from "../../../../components/TV/EpisodesBlock";
 
 interface ITVContent {
   backdrop_path: string;
@@ -11,6 +12,7 @@ interface ITVContent {
   release_date: string;
   overview: string;
   seasons: any;
+  episodes: any;
 }
 
 const TVPage = ({ props }: any) => {
@@ -20,12 +22,9 @@ const TVPage = ({ props }: any) => {
 
   return (
     isSuccess && (
-      <ContentHeader
-        cover={data.backdrop_path}
-        poster={data.poster_path}
-        title={data.name}
-        description={data.overview}
-      />
+      <ContentHeader cover={data.backdrop_path} poster={data.poster_path} title={data.name} description={data.overview}>
+        <EpisodesBlock episodes={data.episodes} />
+      </ContentHeader>
     )
   );
 };
