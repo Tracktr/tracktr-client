@@ -1,21 +1,15 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import Error from "next/error";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import ContentHeader from "../../components/content/ContentHeader";
 import { fetchDetailedContent } from "../../utils/fetchQueries";
 
-interface IMovieContent {
-  backdrop_path: string;
-  poster_path: string;
-  title: string;
-  release_date: string;
-  overview: string;
-}
-
 const MoviePage = ({ props }: any) => {
-  const { data, isSuccess } = useQuery<IMovieContent, Error>(["getContent", props.id], {
-    staleTime: 24 * (60 * (60 * 1000)),
-  });
+  const { data, isSuccess } = useQuery(["movie"], () =>
+    fetchDetailedContent({
+      id: props.id,
+      type: "Movie",
+    })
+  );
 
   return (
     isSuccess && (
@@ -33,20 +27,10 @@ const MoviePage = ({ props }: any) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params?.slug as string;
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(["getContent", id], () =>
-    fetchDetailedContent({
-      type: "Movie",
-      id,
-    })
-  );
-
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
       props: {
-        id,
+        id: id[0],
       },
     },
   };
