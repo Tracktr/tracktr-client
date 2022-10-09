@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import { useMemo } from "react";
 
 interface ILoadingPageComponents {
@@ -7,12 +8,14 @@ interface ILoadingPageComponents {
 
 const LoadingPageComponents = ({ status, children }: ILoadingPageComponents) =>
   useMemo(() => {
+    // TODO: Error component
     if (status === "error") {
       return <p className="pt-64">Error</p>;
     }
 
+    // TODO: Do something with the loading status
     if (status === "loading") {
-      return <p className="pt-64">Loading...</p>;
+      return <></>;
     }
 
     if (status === "success") {
@@ -21,7 +24,6 @@ const LoadingPageComponents = ({ status, children }: ILoadingPageComponents) =>
       }
     }
 
-    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <></>;
   }, [status, children]);
 
