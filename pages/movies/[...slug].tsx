@@ -5,7 +5,7 @@ import ContentHeader from "../../components/content/ContentHeader";
 import { fetchDetailedContent } from "../../utils/fetchQueries";
 
 const MoviePage = ({ props }: any) => {
-  const { data, status } = useQuery(["movie"], () =>
+  const { data, status } = useQuery(["movie", props.id], () =>
     fetchDetailedContent({
       id: props.id,
       type: "Movie",
