@@ -1,10 +1,11 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
+import LoadingPageComponents from "../../components/common/loading/LoadingPageComponents";
 import ContentHeader from "../../components/content/ContentHeader";
 import { fetchDetailedContent } from "../../utils/fetchQueries";
 
 const MoviePage = ({ props }: any) => {
-  const { data, isSuccess } = useQuery(["movie"], () =>
+  const { data, status } = useQuery(["movie"], () =>
     fetchDetailedContent({
       id: props.id,
       type: "Movie",
@@ -12,15 +13,17 @@ const MoviePage = ({ props }: any) => {
   );
 
   return (
-    isSuccess && (
-      <ContentHeader
-        cover={data.backdrop_path}
-        poster={data.poster_path}
-        title={data.title}
-        date={data.release_date}
-        description={data.overview}
-      />
-    )
+    <LoadingPageComponents status={status}>
+      {() => (
+        <ContentHeader
+          cover={data.backdrop_path}
+          poster={data.poster_path}
+          title={data.title}
+          date={data.release_date}
+          description={data.overview}
+        />
+      )}
+    </LoadingPageComponents>
   );
 };
 
