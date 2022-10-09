@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@next/eslint-plugin-next': ^12.3.1
   '@types/node': 18.7.23
+  '@types/nprogress': ^0.2.0
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@typescript-eslint/eslint-plugin': ^5.39.0
@@ -17,6 +18,7 @@ specifiers:
   eslint-plugin-react: 7.28.0
   next: 12.3.1
   next-auth: ^4.12.2
+  nprogress: ^0.2.0
   postcss: ^8.4.16
   prettier: ^2.7.1
   react: 18.2.0
@@ -29,6 +31,7 @@ specifiers:
 dependencies:
   next: 12.3.1_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.12.2_azq6kxkn3od7qdylwkyksrwopy
+  nprogress: 0.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-icons: 4.4.0_react@18.2.0
@@ -37,6 +40,7 @@ dependencies:
 devDependencies:
   '@next/eslint-plugin-next': 12.3.1
   '@types/node': 18.7.23
+  '@types/nprogress': 0.2.0
   '@types/react': 18.0.21
   '@types/react-dom': 18.0.6
   '@typescript-eslint/eslint-plugin': 5.39.0_y4oltu5bmjd264u7yn6vh3v72u
@@ -306,6 +310,10 @@ packages:
 
   /@types/node/18.7.23:
     resolution: {integrity: sha512-DWNcCHolDq0ZKGizjx2DZjR/PqsYwAcYUJmfMWqtVU2MBMG5Mo+xFZrhGId5r/O5HOuMPyQEcM6KUBp5lBZZBg==}
+    dev: true
+
+  /@types/nprogress/0.2.0:
+    resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
     dev: true
 
   /@types/prop-types/15.7.5:
@@ -1998,6 +2006,10 @@ packages:
     resolution: {integrity: sha512-bdok/XvKII3nUpklnV6P2hxtMNrCboOjAcyBuQnWEhO665FwrSNRxU+AqpsyvO6LgGYPspN+lu5CLtw4jPRKNA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
+    dev: false
 
   /oauth/0.9.15:
     resolution: {integrity: sha512-a5ERWK1kh38ExDEfoO6qUHJb32rd7aYmPHuyCu3Fta/cnICvYmgd2uhuKXvPD+PXB+gCEYYEaQdIRAjCOwAKNA==}
