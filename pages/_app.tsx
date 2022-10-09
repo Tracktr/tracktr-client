@@ -13,6 +13,7 @@ import NProgress from "nprogress";
 
 import Layout from "../components/common/Layout";
 
+NProgress.configure({ showSpinner: false });
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeError", () => NProgress.done());
 Router.events.on("routeChangeComplete", () => NProgress.done());
