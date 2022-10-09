@@ -1,9 +1,9 @@
+import ContentHeader from "@/components/content/ContentHeader";
+import EpisodesBlock from "@/components/TV/EpisodesBlock";
+import { fetchSeasonContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Error from "next/error";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import ContentHeader from "../../../../components/content/ContentHeader";
-import { fetchSeasonContent } from "../../../../utils/fetchQueries";
-import EpisodesBlock from "../../../../components/TV/EpisodesBlock";
 
 interface ITVContent {
   backdrop_path: string;

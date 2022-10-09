@@ -1,8 +1,8 @@
+import ContentHeader from "@/components/content/ContentHeader";
+import { fetchDetailedContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Error from "next/error";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import ContentHeader from "../../components/content/ContentHeader";
-import { fetchDetailedContent } from "../../utils/fetchQueries";
 
 interface IMovieContent {
   backdrop_path: string;

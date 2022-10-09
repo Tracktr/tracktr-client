@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 
-import Layout from "../components/common/Layout";
+import Layout from "@/components/common/Layout";
 
 function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedState; session: Session }>) {
   const [queryClient] = useState(() => new QueryClient());

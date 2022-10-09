@@ -1,8 +1,8 @@
+import Logo from "@/components/common/Logo";
 import { getProviders, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
-import Logo from "../../components/common/Logo";
 
 export default function SignIn({ providers }: any) {
   const router = useRouter();
