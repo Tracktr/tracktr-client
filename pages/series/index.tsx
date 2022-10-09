@@ -1,5 +1,3 @@
-import { GetStaticProps } from "next";
-import { QueryClient, dehydrate } from "react-query";
 import ContentInfiniteScroll from "../../components/content/ContentInfiniteScroll";
 import { fetchMinimizedContent } from "../../utils/fetchQueries";
 
@@ -20,24 +18,5 @@ const SeriesPage = () => (
     </div>
   </div>
 );
-
-export const getStaticProps: GetStaticProps = async () => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(["getSeriesContent", "popularity.desc"], () =>
-    fetchMinimizedContent({
-      type: "discover",
-      limiter: "tv",
-      sortBy: "popularity.desc",
-      page: 1,
-    })
-  );
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};
 
 export default SeriesPage;
