@@ -1,19 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import Error from "next/error";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import LoadingPageComponents from "../../../components/common/loading/LoadingPageComponents";
 import ContentHeader from "../../../components/content/ContentHeader";
 import SeasonsBlock from "../../../components/TV/SeasonsBlock";
 import { fetchDetailedContent } from "../../../utils/fetchQueries";
-
-interface ITVContent {
-  backdrop_path: string;
-  poster_path: string;
-  name: string;
-  release_date: string;
-  overview: string;
-  seasons: any;
-}
 
 const TVPage = ({ props }: any) => {
   const { data, status } = useQuery(["Series", props.id], () =>
