@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useState } from "react";
 
 interface ISearchHeader {
   type: string;
@@ -15,7 +15,7 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
     setSearchInput(value);
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
       router.push(`/search?query=${searchInput}`);
