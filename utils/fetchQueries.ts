@@ -80,6 +80,7 @@ export const fetchSearchRequest = async ({ query, page }: IFetchSearchContent) =
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
   if (query) url.searchParams.append("query", query.toString());
   url.searchParams.append("page", page.toString());
+  url.searchParams.append("adult", "true");
 
   const response = await fetch(url);
   const data = await response.json();
