@@ -1,3 +1,5 @@
+import { PosterImage } from "./generateImages";
+
 interface IFetchMinimizedContent {
   type: "trending" | "movie" | "discover" | "tv";
   limiter: "movie" | "tv" | "popular" | "upcoming";
@@ -23,7 +25,7 @@ export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, pa
 
         res.map((m: any) =>
           newKeys.push({
-            imageSrc: `https://image.tmdb.org/t/p/w185${m.poster_path}`,
+            imageSrc: PosterImage({ path: m.poster_path, size: "md" }),
             name: m.title || m.name,
             id: m.id,
           })
