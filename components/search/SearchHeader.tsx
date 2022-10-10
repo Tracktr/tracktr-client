@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, KeyboardEventHandler, useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { IoSearch } from "react-icons/io5";
 
 interface ISearchHeader {
   type: string;
@@ -22,6 +23,11 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
     }
   };
 
+  const handleOnClick = (e: any) => {
+    e.preventDefault();
+    router.push(`/search?query=${searchInput}`);
+  };
+
   return (
     <div>
       <div
@@ -36,14 +42,19 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
             Find amazing {type}
             <span className="text-primary">.</span>
           </div>
-          <div className="mt-4">
+          <div className="relative mt-4 w-96">
             <input
-              className="h-10 p-4 bg-white rounded-full text-primaryBackground pr-14 md:w-96 text-md focus:outline-none"
+              className="w-full h-10 p-4 bg-white rounded-full text-primaryBackground pr-14 text-md focus:outline-none"
               type="text"
-              placeholder="Search Movie"
+              placeholder="Search..."
               value={searchInput}
               onChange={handleInput}
               onKeyDown={handleKeyDown}
+            />
+            <IoSearch
+              onClick={handleOnClick}
+              size={24}
+              className="absolute top-0 right-0 z-10 h-10 mr-4 cursor-pointer text-primaryBackground"
             />
           </div>
         </div>
