@@ -1,3 +1,4 @@
+import { PosterImage } from "@/utils/generateImages";
 import Image from "next/image";
 
 interface IContentHeader {
@@ -25,7 +26,7 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
       <div className="grid max-w-6xl grid-cols-4 pt-24 m-auto md:pt-96">
         <div className="col-span-1 mx-4 text-center">
           <div className="inline-block border-4 rounded-md border-primaryBackground">
-            <Image width="208" height="311" src={`https://www.themoviedb.org/t/p/original/${poster}`} />
+            <Image width="208" height="311" src={PosterImage({ path: poster, size: "lg" })} />
           </div>
         </div>
 
@@ -34,7 +35,7 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
             {title}
             {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}
           </h1>
-          <p className="pt-8 pb-12 max-w-xl">{description}</p>
+          <p className="max-w-xl pt-8 pb-12">{description}</p>
 
           {children || ""}
         </div>
