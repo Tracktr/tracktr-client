@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
+import LoadingPageComponents from "../common/loading/LoadingPageComponents";
 import { LoadingPoster } from "../common/poster/LoadingPosters";
 import Poster from "../common/poster/Poster";
 
@@ -9,11 +11,11 @@ interface IContentInfiniteScroll {
 }
 
 const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) => {
-  const observerElem = useRef(null);
   const MAX_PAGES = 5;
+  const { ref, inView } = useInView();
 
-  const { data, isSuccess, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    [`get${type}Content`, "popularity.desc"],
+  const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    [`${type}`, "popularity.desc"],
     ({ pageParam = 1 }) => fetchContent(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
@@ -23,44 +25,34 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
     }
   );
 
-  const handleObserver = useCallback(
-    (entries: any) => {
-      const [target] = entries;
-      if (target.isIntersecting && hasNextPage) {
-        fetchNextPage();
-      }
-    },
-    [fetchNextPage, hasNextPage]
-  );
-
   useEffect(() => {
-    const element: any = observerElem.current;
-    const option = { threshold: 0 };
-
-    const observer = new IntersectionObserver(handleObserver, option);
-    observer.observe(element);
-    return () => observer.unobserve(element);
-  }, [fetchNextPage, hasNextPage, handleObserver]);
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
 
   return (
     <div>
       <div className="z-40 text-4xl">{type}</div>
-      <div className="flex flex-wrap items-center gap-4 py-5">
-        {isSuccess &&
-          data.pages?.map((page) =>
-            page.results.map((content: any) => (
-              <Poster
-                imageSrc={content.poster_path}
-                name={content.title || content.name}
-                url={`${type.toLowerCase()}/${content.id}`}
-                key={content.id}
-              />
-            ))
-          )}
-        <div className="loader" ref={observerElem}>
-          {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-        </div>
-      </div>
+      <LoadingPageComponents status={status}>
+        {() => (
+          <div className="flex flex-wrap items-center gap-4 py-5">
+            {data?.pages.map((page) =>
+              page.results.map((content: any) => (
+                <Poster
+                  imageSrc={`${content.poster_path}`}
+                  name={content.title || content.name}
+                  url={`${type.toLowerCase()}/${content.id}`}
+                  key={content.id}
+                />
+              ))
+            )}
+            <div className="loader" ref={ref}>
+              {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+            </div>
+          </div>
+        )}
+      </LoadingPageComponents>
     </div>
   );
 };

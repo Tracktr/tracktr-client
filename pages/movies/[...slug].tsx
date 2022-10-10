@@ -1,52 +1,39 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import Error from "next/error";
-import { dehydrate, QueryClient, useQuery } from "react-query";
+import { useQuery } from "react-query";
+import LoadingPageComponents from "../../components/common/loading/LoadingPageComponents";
 import ContentHeader from "../../components/content/ContentHeader";
 import { fetchDetailedContent } from "../../utils/fetchQueries";
 
-interface IMovieContent {
-  backdrop_path: string;
-  poster_path: string;
-  title: string;
-  release_date: string;
-  overview: string;
-}
-
 const MoviePage = ({ props }: any) => {
-  const { data, isSuccess } = useQuery<IMovieContent, Error>(["getContent", props.id], {
-    staleTime: 24 * (60 * (60 * 1000)),
-  });
+  const { data, status } = useQuery(["movie", props.id], () =>
+    fetchDetailedContent({
+      id: props.id,
+      type: "Movie",
+    })
+  );
 
   return (
-    isSuccess && (
-      <ContentHeader
-        cover={data.backdrop_path}
-        poster={data.poster_path}
-        title={data.title}
-        date={data.release_date}
-        description={data.overview}
-      />
-    )
+    <LoadingPageComponents status={status}>
+      {() => (
+        <ContentHeader
+          cover={data.backdrop_path}
+          poster={data.poster_path}
+          title={data.title}
+          date={data.release_date}
+          description={data.overview}
+        />
+      )}
+    </LoadingPageComponents>
   );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params?.slug as string;
 
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(["getContent", id], () =>
-    fetchDetailedContent({
-      type: "Movie",
-      id,
-    })
-  );
-
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
       props: {
-        id,
+        id: id[0],
       },
     },
   };

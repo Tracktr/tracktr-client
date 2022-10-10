@@ -11,8 +11,7 @@ interface IFetchMinimizedContent {
 
 // TODO: Async Await Refactor
 export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, page }: IFetchMinimizedContent): any => {
-  const BASE_URL = new URL("https://api.themoviedb.org/3/");
-  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, BASE_URL);
+  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, process.env.NEXT_PUBLIC_TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
   if (sortBy) url.searchParams.append("sort_by", sortBy || "");
   if (page) url.searchParams.append("page", page.toString());
@@ -47,7 +46,7 @@ interface IFetchDetailedContent {
 }
 
 export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) => {
-  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.TMDB_API);
+  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.NEXT_PUBLIC_TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
   const response = await fetch(url);
@@ -62,8 +61,7 @@ interface IFetchSeasonContent {
 }
 
 export const fetchSeasonContent = async ({ seriesID, seasonID }: IFetchSeasonContent) => {
-  const url = new URL(`tv/${seriesID}/season/${seasonID}`, process.env.TMDB_API);
-  console.log(url);
+  const url = new URL(`tv/${seriesID}/season/${seasonID}`, process.env.NEXT_PUBLIC_TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
   const response = await fetch(url);
