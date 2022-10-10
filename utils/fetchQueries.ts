@@ -69,3 +69,29 @@ export const fetchSeasonContent = async ({ seriesID, seasonID }: IFetchSeasonCon
 
   return data;
 };
+
+interface IFetchSearchContent {
+  query: string | string[] | undefined;
+  page: number;
+  type: string | string[] | undefined;
+}
+
+export const fetchSearchRequest = async ({ query, page, type }: IFetchSearchContent) => {
+  const url = new URL(
+    `${
+      (type === "Movies" && "search/movie") ||
+      (type === "Series" && "search/tv") ||
+      (type === "Person" && "search/person") ||
+      "search/multi"
+    }`,
+    process.env.NEXT_PUBLIC_TMDB_API
+  );
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+  if (query) url.searchParams.append("query", query.toString());
+  url.searchParams.append("page", page.toString());
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+};
