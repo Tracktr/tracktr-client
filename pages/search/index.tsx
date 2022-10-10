@@ -9,7 +9,7 @@ import { useInfiniteQuery } from "react-query";
 
 const SearchPage = () => {
   const router = useRouter();
-  const { query } = router.query;
+  const { query, type } = router.query;
   const { ref, inView } = useInView();
 
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
@@ -18,6 +18,7 @@ const SearchPage = () => {
       fetchSearchRequest({
         query: query || "",
         page: pageParam,
+        type,
       }),
     {
       getNextPageParam: (lastPage, allPages) => {
@@ -28,10 +29,10 @@ const SearchPage = () => {
   );
 
   useEffect(() => {
-    if (inView) {
+    if (inView && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <LoadingPageComponents status={status}>
@@ -41,10 +42,20 @@ const SearchPage = () => {
           <div className="flex flex-wrap items-center gap-4 py-5">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
-                const mediaTypeTransformer =
-                  (content.media_type === "tv" && "series") ||
-                  (content.media_type === "movie" && "movies") ||
-                  (content.media_type === "person" && "person");
+                let mediaTypeTransformer = "";
+
+                if (content.media_type === "tv" || type === "Series") {
+                  mediaTypeTransformer = "series";
+                }
+
+                if (content.media_type === "movie" || type === "Movies") {
+                  mediaTypeTransformer = "movies";
+                }
+
+                if (content.media_type === "person" || type === "Person") {
+                  mediaTypeTransformer = "person";
+                }
+
                 return (
                   <Poster
                     imageSrc={`${content.poster_path || content.profile_path}`}

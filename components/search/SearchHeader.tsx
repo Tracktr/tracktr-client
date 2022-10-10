@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 
 interface ISearchHeader {
-  type: string;
+  type?: string;
   backgroundImage: string;
 }
 
@@ -19,13 +19,13 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      router.push(`/search?query=${searchInput}`);
+      router.push(`/search?type=${type}&query=${searchInput}`);
     }
   };
 
   const handleOnClick = (e: any) => {
     e.preventDefault();
-    router.push(`/search?query=${searchInput}`);
+    router.push(`/search?type=${type}&query=${searchInput}`);
   };
 
   return (
@@ -34,6 +34,7 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
         className="absolute top-0 w-full h-96 blur-sm"
         style={{
           background: `linear-gradient(0deg, #101010 3.79%, rgba(16, 16, 16, 0) 100%), url(${backgroundImage}) no-repeat center`,
+          backgroundSize: "cover",
         }}
       />
       <div className="relative z-10 flex w-full max-w-6xl m-auto h-96">

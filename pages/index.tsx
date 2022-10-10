@@ -1,5 +1,11 @@
+import SearchHeader from "@/components/search/SearchHeader";
 import type { NextPage } from "next";
 
-const Home: NextPage = () => <div />;
+const Home: NextPage = () => (
+  <SearchHeader
+    type="Content"
+    backgroundImage="https://www.themoviedb.org/t/p/original/xMMrBziwJqrgjerqpNeQvwuwiUp.jpg"
+  />
+);
 
 export default Home;
