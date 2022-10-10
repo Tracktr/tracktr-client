@@ -1,5 +1,5 @@
-import ContentInfiniteScroll from "../../components/content/ContentInfiniteScroll";
-import { fetchMinimizedContent } from "../../utils/fetchQueries";
+import ContentInfiniteScroll from "@/components/content/ContentInfiniteScroll";
+import { fetchMinimizedContent } from "@/utils/fetchQueries";
 
 const SeriesPage = () => (
   <div className="pt-12 pb-5">

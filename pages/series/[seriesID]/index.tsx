@@ -1,9 +1,9 @@
+import ContentHeader from "@/components/content/ContentHeader";
+import SeasonsBlock from "@/components/TV/SeasonsBlock";
+import { fetchDetailedContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
 import LoadingPageComponents from "../../../components/common/loading/LoadingPageComponents";
-import ContentHeader from "../../../components/content/ContentHeader";
-import SeasonsBlock from "../../../components/TV/SeasonsBlock";
-import { fetchDetailedContent } from "../../../utils/fetchQueries";
 
 const TVPage = ({ props }: any) => {
   const { data, status } = useQuery(["Series", props.id], () =>

@@ -11,7 +11,7 @@ import { Session } from "next-auth";
 import Router from "next/router";
 import NProgress from "nprogress";
 
-import Layout from "../components/common/Layout";
+import Layout from "@/components/common/Layout";
 
 NProgress.configure({ showSpinner: false });
 Router.events.on("routeChangeStart", () => NProgress.start());

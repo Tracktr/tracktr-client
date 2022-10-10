@@ -1,5 +1,5 @@
+import { PosterImage } from "@/utils/generateImages";
 import Image from "next/image";
-import { PosterImage } from "../../utils/generateImages";
 
 interface IContentHeader {
   cover: string;

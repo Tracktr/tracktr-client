@@ -1,9 +1,9 @@
+import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
+import ContentHeader from "@/components/content/ContentHeader";
+import EpisodesBlock from "@/components/TV/EpisodesBlock";
+import { fetchSeasonContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
-import ContentHeader from "../../../../components/content/ContentHeader";
-import { fetchSeasonContent } from "../../../../utils/fetchQueries";
-import EpisodesBlock from "../../../../components/TV/EpisodesBlock";
-import LoadingPageComponents from "../../../../components/common/loading/LoadingPageComponents";
 
 const TVPage = ({ props }: any) => {
   const { data, status } = useQuery(["getSeasonContent", `${props.seriesID}-${props.seasonID}`], () =>
