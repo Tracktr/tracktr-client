@@ -15,7 +15,7 @@ const Poster = ({ imageSrc, name, url, type }: IPoster) => (
       {type === "movies" && (
         <Image src={PosterImage({ path: imageSrc, size: "sm" })} width="170px" height="240px" className="rounded" />
       )}
-      {type === "series" && (
+      {type === "tv" && (
         <Image src={PosterImage({ path: imageSrc, size: "sm" })} width="170px" height="240px" className="rounded" />
       )}
       {type === "person" && (
