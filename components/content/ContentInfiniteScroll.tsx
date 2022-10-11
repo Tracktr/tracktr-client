@@ -7,10 +7,11 @@ import Poster from "../common/poster/Poster";
 
 interface IContentInfiniteScroll {
   fetchContent: (page: number) => any;
-  type: "Movies" | "Series";
+  type: "Movies" | "TV";
+  title: string;
 }
 
-const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) => {
+const ContentInfiniteScroll = ({ fetchContent, type, title }: IContentInfiniteScroll) => {
   const MAX_PAGES = 5;
   const { ref, inView } = useInView();
 
@@ -33,7 +34,7 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
 
   return (
     <div>
-      <div className="z-40 text-4xl">{type}</div>
+      <div className="z-40 text-4xl">{title}</div>
       <LoadingPageComponents status={status}>
         {() => (
           <div className="flex flex-wrap items-center gap-4 py-5">

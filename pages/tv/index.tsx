@@ -2,16 +2,18 @@ import ContentInfiniteScroll from "@/components/content/ContentInfiniteScroll";
 import SearchHeader from "@/components/search/SearchHeader";
 import { fetchMinimizedContent } from "@/utils/fetchQueries";
 
-const SeriesPage = () => (
+const TVPage = () => (
   <div>
     <SearchHeader
-      type="Series"
+      title="Series"
+      type="tv"
       backgroundImage="https://www.themoviedb.org/t/p/original/Aa9TLpNpBMyRkD8sPJ7ACKLjt0l.jpg"
     />
     <div className="pt-12 pb-5">
       <div className="max-w-6xl mx-2 md:mx-auto">
         <ContentInfiniteScroll
-          type="Series"
+          title="Series"
+          type="TV"
           fetchContent={(page) =>
             fetchMinimizedContent({
               type: "discover",
@@ -26,4 +28,4 @@ const SeriesPage = () => (
   </div>
 );
 
-export default SeriesPage;
+export default TVPage;

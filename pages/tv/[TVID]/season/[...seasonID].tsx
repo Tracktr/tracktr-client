@@ -1,15 +1,15 @@
+import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ContentHeader from "@/components/content/ContentHeader";
-import SeasonsBlock from "@/components/TV/SeasonsBlock";
-import { fetchDetailedContent } from "@/utils/fetchQueries";
+import EpisodesBlock from "@/components/TV/EpisodesBlock";
+import { fetchSeasonContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
-import LoadingPageComponents from "../../../components/common/loading/LoadingPageComponents";
 
 const TVPage = ({ props }: any) => {
-  const { data, status } = useQuery(["Series", props.id], () =>
-    fetchDetailedContent({
-      id: props.id,
-      type: "TV",
+  const { data, status } = useQuery(["TV_Season", `${props.seriesID}-${props.seasonID}`], () =>
+    fetchSeasonContent({
+      seriesID: props.seriesID,
+      seasonID: props.seasonID,
     })
   );
 
@@ -22,7 +22,7 @@ const TVPage = ({ props }: any) => {
           title={data.name}
           description={data.overview}
         >
-          <SeasonsBlock seasons={data.seasons} seriesID={props.id} />
+          <EpisodesBlock episodes={data.episodes} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
@@ -30,12 +30,14 @@ const TVPage = ({ props }: any) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const id = context.params?.seriesID as string;
+  const seriesID = context.params?.TVID as string;
+  const seasonID = context.params?.seasonID as string;
 
   return {
     props: {
       props: {
-        id,
+        seriesID,
+        seasonID: seasonID[0],
       },
     },
   };

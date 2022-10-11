@@ -3,11 +3,12 @@ import { ChangeEvent, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 
 interface ISearchHeader {
+  title: string;
   type?: string;
   backgroundImage: string;
 }
 
-const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
+const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
 
@@ -40,7 +41,7 @@ const SearchHeader = ({ type, backgroundImage }: ISearchHeader) => {
       <div className="relative z-10 flex w-full max-w-6xl m-auto h-96">
         <div className="w-full h-auto m-auto">
           <div className="text-5xl font-bold">
-            Find amazing {type}
+            Find amazing {title}
             <span className="text-primary">.</span>
           </div>
           <div className="relative mt-4 w-96">
