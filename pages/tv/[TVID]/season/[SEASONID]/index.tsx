@@ -22,7 +22,7 @@ const TVPage = ({ props }: any) => {
           title={data.name}
           description={data.overview}
         >
-          <EpisodesBlock episodes={data.episodes} />
+          <EpisodesBlock episodes={data.episodes} seriesID={props.seriesID} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
@@ -31,7 +31,8 @@ const TVPage = ({ props }: any) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const seriesID = context.params?.TVID as string;
-  const seasonID = context.params?.seasonID as string;
+  const seasonID = context.params?.SEASONID as string;
+  console.log(seriesID, seasonID);
 
   return {
     props: {
