@@ -7,7 +7,7 @@ import Poster from "../common/poster/Poster";
 
 interface IContentInfiniteScroll {
   fetchContent: (page: number) => any;
-  type: "Movies" | "Series";
+  type: "Movies" | "Series" | "Person";
 }
 
 const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) => {
@@ -40,7 +40,8 @@ const ContentInfiniteScroll = ({ fetchContent, type }: IContentInfiniteScroll) =
             {data?.pages.map((page) =>
               page.results.map((content: any) => (
                 <Poster
-                  imageSrc={`${content.poster_path}`}
+                  type={type.toLowerCase()}
+                  imageSrc={`${content.poster_path || content.profile_path}`}
                   name={content.title || content.name}
                   url={`${type.toLowerCase()}/${content.id}`}
                   key={content.id}
