@@ -58,6 +58,7 @@ const SearchPage = () => {
 
                 return (
                   <Poster
+                    type={mediaTypeTransformer}
                     imageSrc={`${content.poster_path || content.profile_path}`}
                     name={content.title || content.name}
                     key={content.id}
