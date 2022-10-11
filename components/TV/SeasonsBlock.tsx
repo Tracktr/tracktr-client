@@ -22,7 +22,7 @@ const SeasonsBlock = ({ seasons, seriesID }: ISeasons) => {
           .reverse()
           .map((item: any) => (
             <Poster
-              type="series"
+              type="tv"
               key={item.id}
               imageSrc={item.poster_path}
               name={`Season ${item.season_number}`}
