@@ -6,6 +6,8 @@ interface IBackdropImage {
 }
 
 export const BackdropImage = ({ path, size }: IBackdropImage): string => {
+  if (path === undefined || path === "null") return "";
+
   switch (size) {
     case "sm":
       return `${BASE_URL}w300${path}`;
@@ -24,6 +26,8 @@ interface IPosterImage {
 }
 
 export const PosterImage = ({ path, size }: IPosterImage): string => {
+  if (path === "undefined" || path === "null") return "/noimage.png";
+
   switch (size) {
     case "sm":
       return `${BASE_URL}w342${path}`;
@@ -42,6 +46,8 @@ interface IPersonImage {
 }
 
 export const PersonImage = ({ path, size }: IPersonImage): string => {
+  if (path === "undefined" || path === "null") return "/noimage.png";
+
   switch (size) {
     case "sm":
       return `${BASE_URL}w185${path}`;

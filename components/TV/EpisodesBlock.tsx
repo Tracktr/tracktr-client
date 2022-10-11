@@ -8,6 +8,7 @@ const EpisodesBlock = ({ episodes }: IEpisodesBlock) => (
   <div className="space-y-4">
     {episodes.map((item: any) => (
       <Still
+        key={item.id}
         imageSrc={item.still_path}
         name={item.name}
         overview={item.overview}

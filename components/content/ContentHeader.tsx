@@ -1,4 +1,4 @@
-import { PosterImage } from "@/utils/generateImages";
+import { BackdropImage, PosterImage } from "@/utils/generateImages";
 import Image from "next/image";
 
 interface IContentHeader {
@@ -15,7 +15,7 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
       style={{
-        background: `url("https://www.themoviedb.org/t/p/original${cover}") no-repeat`,
+        background: `url("${BackdropImage({ path: cover, size: "lg" })}") no-repeat`,
         backgroundSize: "cover",
       }}
     >
