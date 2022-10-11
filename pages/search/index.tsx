@@ -45,7 +45,7 @@ const SearchPage = () => {
                 let mediaTypeTransformer = "";
 
                 if (content.media_type === "tv" || type === "Series") {
-                  mediaTypeTransformer = "series";
+                  mediaTypeTransformer = "tv";
                 }
 
                 if (content.media_type === "movie" || type === "Movies") {

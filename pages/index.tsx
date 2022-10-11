@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => (
   <SearchHeader
+    title="things to watch"
     type="Content"
     backgroundImage="https://www.themoviedb.org/t/p/original/xMMrBziwJqrgjerqpNeQvwuwiUp.jpg"
   />
