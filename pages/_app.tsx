@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 
 import "../styles/globals.css";
 import "../styles/nprogress.css";
+
 import { useState } from "react";
 import { QueryClient, QueryClientProvider, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
