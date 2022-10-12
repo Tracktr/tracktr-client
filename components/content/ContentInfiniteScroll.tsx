@@ -3,7 +3,9 @@ import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 import LoadingPageComponents from "../common/loading/LoadingPageComponents";
 import { LoadingPoster } from "../common/poster/LoadingPosters";
-import Poster from "../common/poster/Poster";
+import MoviePoster from "../common/poster/MoviePoster";
+import PersonPoster from "../common/poster/PersonPoster";
+import TVPoster from "../common/poster/TVPoster";
 
 interface IContentInfiniteScroll {
   fetchContent: (page: number) => any;
@@ -39,15 +41,42 @@ const ContentInfiniteScroll = ({ fetchContent, type, title }: IContentInfiniteSc
         {() => (
           <div className="flex flex-wrap items-center gap-4 py-5">
             {data?.pages.map((page) =>
-              page.results.map((content: any) => (
-                <Poster
-                  type={type.toLowerCase()}
-                  imageSrc={`${content.poster_path || content.profile_path}`}
-                  name={content.title || content.name}
-                  url={`${type.toLowerCase()}/${content.id}`}
-                  key={content.id}
-                />
-              ))
+              page.results.map((content: any) => {
+                if (type === "TV") {
+                  return (
+                    <TVPoster
+                      imageSrc={`${content.poster_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`tv/${content.id}`}
+                    />
+                  );
+                }
+
+                if (type === "Movies") {
+                  return (
+                    <MoviePoster
+                      imageSrc={`${content.poster_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`movies/${content.id}`}
+                    />
+                  );
+                }
+
+                if (type === "Person") {
+                  return (
+                    <PersonPoster
+                      imageSrc={`${content.poster_path || content.profile_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`person/${content.id}`}
+                    />
+                  );
+                }
+
+                return <div />;
+              })
             )}
             <div className="loader" ref={ref}>
               {isFetchingNextPage && hasNextPage && <LoadingPoster />}
