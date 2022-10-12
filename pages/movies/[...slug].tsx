@@ -1,16 +1,11 @@
 import ContentHeader from "@/components/content/ContentHeader";
-import { fetchDetailedContent } from "@/utils/fetchQueries";
+import { fetchMovieContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
 import LoadingPageComponents from "../../components/common/loading/LoadingPageComponents";
 
 const MoviePage = ({ props }: any) => {
-  const { data, status } = useQuery(["movie", props.id], () =>
-    fetchDetailedContent({
-      id: props.id,
-      type: "Movie",
-    })
-  );
+  const { data, status } = useQuery(["movie", props.id], () => fetchMovieContent(props.id));
 
   return (
     <LoadingPageComponents status={status}>
