@@ -1,4 +1,5 @@
 import ContentHeader from "@/components/content/ContentHeader";
+import CastBlock from "@/components/TV/CastBlock";
 import { fetchMovieContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
@@ -16,7 +17,9 @@ const MoviePage = ({ props }: any) => {
           title={data.title}
           date={data.release_date}
           description={data.overview}
-        />
+        >
+          <CastBlock cast={data.cast} />
+        </ContentHeader>
       )}
     </LoadingPageComponents>
   );
