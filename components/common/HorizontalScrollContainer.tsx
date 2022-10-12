@@ -1,8 +1,18 @@
-import ScrollContainer from "react-indiana-drag-scroll";
+import { useScrollContainer } from "react-indiana-drag-scroll";
 import "react-indiana-drag-scroll/dist/style.css";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
-const HorizontalScrollContainer = ({ children }: any) => (
-  <ScrollContainer className="flex space-x-2 cursor-grab">{children}</ScrollContainer>
-);
+const HorizontalScrollContainer = ({ children }: any) => {
+  const { ref } = useScrollContainer();
+
+  return (
+    <div>
+      <SimpleBar scrollableNodeProps={{ ref }} className="flex space-x-2">
+        <div className="flex mb-4 space-x-2">{children}</div>
+      </SimpleBar>
+    </div>
+  );
+};
 
 export default HorizontalScrollContainer;
