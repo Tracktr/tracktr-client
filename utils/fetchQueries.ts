@@ -8,12 +8,12 @@ interface IFetchMoviesContent {
 }
 
 export const fetchMoviesContent = async ({ type, limiter, filter, sortBy, page }: IFetchMoviesContent) => {
-  const url = new URL("movies", process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL}/api/`);
-  url.searchParams.append("type", type.toString());
-  url.searchParams.append("limiter", limiter.toString());
-  if (filter) url.searchParams.append("filter", filter.toString());
-  if (sortBy) url.searchParams.append("sortby", sortBy.toString());
-  if (page) url.searchParams.append("page", page.toString());
+  let url = `/api/movies/`;
+  url += `?type=${type.toString()}`;
+  url += `&limiter=${limiter.toString()}`;
+  if (filter) url += `&filter=${filter.toString()}`;
+  if (sortBy) url += `&sortby=${sortBy.toString()}`;
+  if (page) url += `&page=${page?.toString()}`;
 
   const response = await fetch(url);
   const data = await response.json();
@@ -31,15 +31,12 @@ interface IFetchTVsContent {
 }
 
 export const fetchTVsContent = async ({ type, limiter, filter, sortBy, page }: IFetchTVsContent) => {
-  const url = new URL(
-    "tv",
-    process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL || process.env.VERCEL_URL}/api/`
-  );
-  url.searchParams.append("type", type.toString());
-  url.searchParams.append("limiter", limiter.toString());
-  if (filter) url.searchParams.append("filter", filter.toString());
-  if (sortBy) url.searchParams.append("sortby", sortBy.toString());
-  if (page) url.searchParams.append("page", page.toString());
+  let url = `/api/tv/`;
+  url += `?type=${type.toString()}`;
+  url += `&limiter=${limiter.toString()}`;
+  if (filter) url += `&filter=${filter.toString()}`;
+  if (sortBy) url += `&sortby=${sortBy.toString()}`;
+  if (page) url += `&page=${page?.toString()}`;
 
   const response = await fetch(url);
   const data = await response.json();
