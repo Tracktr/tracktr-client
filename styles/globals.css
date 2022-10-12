@@ -3,3 +3,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Simple bar changes */
+.simplebar-scrollbar::before {
+  background-color: #444 !important;
+}

@@ -7,11 +7,9 @@ const HorizontalScrollContainer = ({ children }: any) => {
   const { ref } = useScrollContainer();
 
   return (
-    <div>
-      <SimpleBar scrollableNodeProps={{ ref }} className="flex space-x-2">
-        <div className="flex mb-4 space-x-2">{children}</div>
-      </SimpleBar>
-    </div>
+    <SimpleBar scrollableNodeProps={{ ref }} className="flex space-x-2">
+      <div className="flex mb-4 space-x-2">{children}</div>
+    </SimpleBar>
   );
 };
 
