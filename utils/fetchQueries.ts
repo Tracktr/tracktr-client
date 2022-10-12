@@ -70,6 +70,22 @@ export const fetchSeasonContent = async ({ seriesID, seasonID }: IFetchSeasonCon
   return data;
 };
 
+interface IFetchEpisodeContent {
+  seriesID: string;
+  seasonID: string;
+  episodeID: string;
+}
+
+export const fetchEpisodeContent = async ({ seriesID, seasonID, episodeID }: IFetchEpisodeContent) => {
+  const url = new URL(`tv/${seriesID}/season/${seasonID}/episode/${episodeID}`, process.env.NEXT_PUBLIC_TMDB_API);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+};
+
 interface IFetchSearchContent {
   query: string | string[] | undefined;
   page: number;
