@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       props: {
         seriesID,
-        seasonID: seasonID[0],
+        seasonID,
       },
     },
   };
