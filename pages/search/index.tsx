@@ -39,9 +39,9 @@ const SearchPage = () => {
   return (
     <LoadingPageComponents status={status}>
       {() => (
-        <div className="max-w-6xl pt-32 m-auto">
+        <div className="max-w-6xl px-4 pt-32 m-auto">
           <div className="z-40 text-4xl">Results for: {query}</div>
-          <div className="flex flex-wrap items-center gap-4 py-5">
+          <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
                 if (content.media_type === "tv" || type === "Series") {

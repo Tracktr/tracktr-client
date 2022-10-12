@@ -23,14 +23,14 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
     </div>
 
     <div className="relative w-full">
-      <div className="grid max-w-6xl grid-cols-4 pt-24 m-auto md:pt-96">
+      <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
         <div className="col-span-1 mx-4 text-center">
           <div className="inline-block border-4 rounded-md border-primaryBackground">
             <Image width="208" height="311" src={PosterImage({ path: poster, size: "lg" })} />
           </div>
         </div>
 
-        <div className="col-span-3">
+        <div className="col-span-3 px-4">
           <h1 className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
             {title}
             {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}

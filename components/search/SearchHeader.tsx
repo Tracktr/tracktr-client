@@ -40,11 +40,11 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
       />
       <div className="relative z-10 flex w-full max-w-6xl m-auto h-96">
         <div className="w-full h-auto m-auto">
-          <div className="text-5xl font-bold">
+          <div className="text-5xl font-bold leading-tight text-center md:text-left">
             Find amazing {title}
             <span className="text-primary">.</span>
           </div>
-          <div className="relative mt-4 w-96">
+          <div className="relative w-full px-4 mt-4 md:px-0 md:w-96">
             <input
               className="w-full h-10 p-4 bg-white rounded-full text-primaryBackground pr-14 text-md focus:outline-none"
               type="text"
@@ -56,7 +56,7 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
             <IoSearch
               onClick={handleOnClick}
               size={24}
-              className="absolute top-0 right-0 z-10 h-10 mr-4 cursor-pointer text-primaryBackground"
+              className="absolute top-0 z-10 h-10 mr-4 cursor-pointer right-4 md:right-0 text-primaryBackground"
             />
           </div>
         </div>
