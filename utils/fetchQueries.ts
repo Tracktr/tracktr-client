@@ -40,6 +40,17 @@ export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, pa
   return data;
 };
 
+interface IFetchMovieContent {
+  id: string;
+}
+
+export const fetchMovieContent = async (id: IFetchMovieContent) => {
+  const response = await fetch(`/api/movie/${id}`);
+  const data = await response.json();
+
+  return data;
+};
+
 interface IFetchDetailedContent {
   type: "Movie" | "TV";
   id: string;
