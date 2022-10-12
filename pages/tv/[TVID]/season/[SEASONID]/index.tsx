@@ -32,7 +32,6 @@ const TVPage = ({ props }: any) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const seriesID = context.params?.TVID as string;
   const seasonID = context.params?.SEASONID as string;
-  console.log(seriesID, seasonID);
 
   return {
     props: {
