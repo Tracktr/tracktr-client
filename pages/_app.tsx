@@ -13,6 +13,7 @@ import Router from "next/router";
 import NProgress from "nprogress";
 
 import Layout from "@/components/common/Layout";
+import Head from "next/head";
 
 NProgress.configure({ showSpinner: false });
 Router.events.on("routeChangeStart", () => NProgress.start());
@@ -26,6 +27,9 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
       <Hydrate state={pageProps.dehydratedState}>
         <SessionProvider session={pageProps.session}>
           <Layout>
+            <Head>
+              <meta name="theme-color" content="#101010" />
+            </Head>
             <Component {...pageProps} />
           </Layout>
           <ReactQueryDevtools initialIsOpen={false} />
