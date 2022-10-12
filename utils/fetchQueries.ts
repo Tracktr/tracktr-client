@@ -13,7 +13,7 @@ export const fetchMoviesContent = async ({ type, limiter, filter, sortBy, page }
   url += `&limiter=${limiter.toString()}`;
   if (filter) url += `&filter=${filter.toString()}`;
   if (sortBy) url += `&sortby=${sortBy.toString()}`;
-  if (page) url += `&page=${page?.toString()}`;
+  if (page) url += `&page=${page.toString()}`;
 
   const response = await fetch(url);
   const data = await response.json();
@@ -36,7 +36,7 @@ export const fetchTVsContent = async ({ type, limiter, filter, sortBy, page }: I
   url += `&limiter=${limiter.toString()}`;
   if (filter) url += `&filter=${filter.toString()}`;
   if (sortBy) url += `&sortby=${sortBy.toString()}`;
-  if (page) url += `&page=${page?.toString()}`;
+  if (page) url += `&page=${page.toString()}`;
 
   const response = await fetch(url);
   const data = await response.json();
