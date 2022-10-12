@@ -31,7 +31,10 @@ interface IFetchTVsContent {
 }
 
 export const fetchTVsContent = async ({ type, limiter, filter, sortBy, page }: IFetchTVsContent) => {
-  const url = new URL("tv", process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL}/api/`);
+  const url = new URL(
+    "tv",
+    process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL || process.env.VERCEL_URL}/api/`
+  );
   url.searchParams.append("type", type.toString());
   url.searchParams.append("limiter", limiter.toString());
   if (filter) url.searchParams.append("filter", filter.toString());
