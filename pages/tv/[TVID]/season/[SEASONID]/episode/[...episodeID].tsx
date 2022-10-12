@@ -1,6 +1,6 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ContentHeader from "@/components/content/ContentHeader";
-import { fetchDetailedContent, fetchEpisodeContent } from "@/utils/fetchQueries";
+import { fetchEpisodeContent, fetchTVContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
 
@@ -16,9 +16,8 @@ const EpisodePage = ({ props }: any) => {
   );
 
   const { data: tvID } = useQuery(["TV", `${props.seriesID}`], () =>
-    fetchDetailedContent({
-      type: "TV",
-      id: props.seriesID,
+    fetchTVContent({
+      seriesID: props.seriesID,
     })
   );
 

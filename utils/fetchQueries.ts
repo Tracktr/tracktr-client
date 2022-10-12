@@ -1,41 +1,45 @@
-import { PosterImage } from "./generateImages";
-
-interface IFetchMinimizedContent {
-  type: "trending" | "movie" | "discover" | "tv";
-  limiter: "movie" | "tv" | "popular" | "upcoming";
+interface IFetchMoviesContent {
+  type: string;
+  limiter: string;
   filter?: string;
   sortBy?: string;
   slice?: number;
   page?: number;
 }
 
-// TODO: Async Await Refactor
-export const fetchMinimizedContent = ({ type, limiter, filter, sortBy, slice, page }: IFetchMinimizedContent): any => {
-  const url = new URL(`${type}/${limiter}${filter ? `/${filter}` : ""}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-  if (sortBy) url.searchParams.append("sort_by", sortBy || "");
+export const fetchMoviesContent = async ({ type, limiter, filter, sortBy, page }: IFetchMoviesContent) => {
+  const url = new URL("movies", process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL}/api/`);
+  url.searchParams.append("type", type.toString());
+  url.searchParams.append("limiter", limiter.toString());
+  if (filter) url.searchParams.append("filter", filter.toString());
+  if (sortBy) url.searchParams.append("sortby", sortBy.toString());
   if (page) url.searchParams.append("page", page.toString());
 
-  const data = fetch(url)
-    .then((res) => res.json())
-    .then((res) => (page ? res : res.results.slice(0, slice)))
-    .then((res) => {
-      if (!page) {
-        const newKeys: any[] = [];
+  const response = await fetch(url);
+  const data = await response.json();
 
-        res.map((m: any) =>
-          newKeys.push({
-            imageSrc: PosterImage({ path: m.poster_path, size: "md" }),
-            name: m.title || m.name,
-            id: m.id,
-          })
-        );
+  return data;
+};
 
-        return newKeys;
-      }
+interface IFetchTVsContent {
+  type: string;
+  limiter: string;
+  filter?: string;
+  sortBy?: string;
+  slice?: number;
+  page?: number;
+}
 
-      return res;
-    });
+export const fetchTVsContent = async ({ type, limiter, filter, sortBy, page }: IFetchTVsContent) => {
+  const url = new URL("tv", process.env.NEXT_PUBLIC_URL && `${process.env.NEXT_PUBLIC_URL}/api/`);
+  url.searchParams.append("type", type.toString());
+  url.searchParams.append("limiter", limiter.toString());
+  if (filter) url.searchParams.append("filter", filter.toString());
+  if (sortBy) url.searchParams.append("sortby", sortBy.toString());
+  if (page) url.searchParams.append("page", page.toString());
+
+  const response = await fetch(url);
+  const data = await response.json();
 
   return data;
 };
@@ -45,22 +49,18 @@ interface IFetchMovieContent {
 }
 
 export const fetchMovieContent = async (id: IFetchMovieContent) => {
-  const response = await fetch(`/api/movie/${id}`);
+  const response = await fetch(`/api/movies/${id}`);
   const data = await response.json();
 
   return data;
 };
 
-interface IFetchDetailedContent {
-  type: "Movie" | "TV";
-  id: string;
+interface IFetchTVContent {
+  seriesID: string;
 }
 
-export const fetchDetailedContent = async ({ type, id }: IFetchDetailedContent) => {
-  const url = new URL(`${type.toLowerCase()}/${id}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-  const response = await fetch(url);
+export const fetchTVContent = async ({ seriesID }: IFetchTVContent) => {
+  const response = await fetch(`/api/tv/${seriesID}`);
   const data = await response.json();
 
   return data;
@@ -72,10 +72,7 @@ interface IFetchSeasonContent {
 }
 
 export const fetchSeasonContent = async ({ seriesID, seasonID }: IFetchSeasonContent) => {
-  const url = new URL(`tv/${seriesID}/season/${seasonID}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-  const response = await fetch(url);
+  const response = await fetch(`/api/tv/${seriesID}/season/${seasonID}`);
   const data = await response.json();
 
   return data;
@@ -88,10 +85,7 @@ interface IFetchEpisodeContent {
 }
 
 export const fetchEpisodeContent = async ({ seriesID, seasonID, episodeID }: IFetchEpisodeContent) => {
-  const url = new URL(`tv/${seriesID}/season/${seasonID}/episode/${episodeID}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-  const response = await fetch(url);
+  const response = await fetch(`/api/tv/${seriesID}/season/${seasonID}/episode/${episodeID}`);
   const data = await response.json();
 
   return data;
@@ -128,10 +122,7 @@ interface IFetchPersonContent {
 }
 
 export const fetchPersonContent = async ({ personID }: IFetchPersonContent) => {
-  const url = new URL(`person/${personID}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-  const response = await fetch(url);
+  const response = await fetch(`/api/person/${personID}`);
   const data = await response.json();
 
   return data;
