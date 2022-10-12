@@ -1,5 +1,6 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ContentHeader from "@/components/content/ContentHeader";
+import CastBlock from "@/components/PageBlocks/CastBlock";
 import EpisodesBlock from "@/components/PageBlocks/EpisodesBlock";
 import { fetchSeasonContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
@@ -23,6 +24,7 @@ const TVPage = ({ props }: any) => {
           description={data.overview}
         >
           <EpisodesBlock episodes={data.episodes} seriesID={props.seriesID} />
+          <CastBlock cast={data.cast} />
         </ContentHeader>
       )}
     </LoadingPageComponents>

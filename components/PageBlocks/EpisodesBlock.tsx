@@ -6,7 +6,7 @@ interface IEpisodesBlock {
 }
 
 const EpisodesBlock = ({ episodes, seriesID }: IEpisodesBlock) => (
-  <div className="space-y-4">
+  <div className="space-y-4 mb-14">
     {episodes.map((item: any) => (
       <Still
         key={item.id}

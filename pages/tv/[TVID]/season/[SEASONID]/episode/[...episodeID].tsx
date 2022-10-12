@@ -1,5 +1,6 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ContentHeader from "@/components/content/ContentHeader";
+import CastBlock from "@/components/PageBlocks/CastBlock";
 import { fetchEpisodeContent, fetchTVContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";
@@ -30,7 +31,9 @@ const EpisodePage = ({ props }: any) => {
           title={episodeData.name}
           description={episodeData.overview}
           date={episodeData.air_date}
-        />
+        >
+          <CastBlock cast={episodeData.cast} />
+        </ContentHeader>
       )}
     </LoadingPageComponents>
   );
