@@ -1,6 +1,8 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import { LoadingPoster } from "@/components/common/poster/LoadingPosters";
-import Poster from "@/components/common/poster/Poster";
+import MoviePoster from "@/components/common/poster/MoviePoster";
+import PersonPoster from "@/components/common/poster/PersonPoster";
+import TVPoster from "@/components/common/poster/TVPoster";
 import { fetchSearchRequest } from "@/utils/fetchQueries";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -42,29 +44,40 @@ const SearchPage = () => {
           <div className="flex flex-wrap items-center gap-4 py-5">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
-                let mediaTypeTransformer = "";
-
                 if (content.media_type === "tv" || type === "Series") {
-                  mediaTypeTransformer = "tv";
+                  return (
+                    <TVPoster
+                      imageSrc={`${content.poster_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`tv/${content.id}`}
+                    />
+                  );
                 }
 
                 if (content.media_type === "movie" || type === "Movies") {
-                  mediaTypeTransformer = "movies";
+                  return (
+                    <MoviePoster
+                      imageSrc={`${content.poster_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`movies/${content.id}`}
+                    />
+                  );
                 }
 
                 if (content.media_type === "person" || type === "Person") {
-                  mediaTypeTransformer = "person";
+                  return (
+                    <PersonPoster
+                      imageSrc={`${content.poster_path || content.profile_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`person/${content.id}`}
+                    />
+                  );
                 }
 
-                return (
-                  <Poster
-                    type={mediaTypeTransformer}
-                    imageSrc={`${content.poster_path || content.profile_path}`}
-                    name={content.title || content.name}
-                    key={content.id}
-                    url={`${mediaTypeTransformer}/${content.id}`}
-                  />
-                );
+                return <div />;
               })
             )}
           </div>

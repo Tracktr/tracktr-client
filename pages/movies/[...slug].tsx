@@ -1,5 +1,5 @@
 import ContentHeader from "@/components/content/ContentHeader";
-import CastBlock from "@/components/TV/CastBlock";
+import CastBlock from "@/components/PageBlocks/CastBlock";
 import { fetchMovieContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";

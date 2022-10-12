@@ -1,6 +1,6 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ContentHeader from "@/components/content/ContentHeader";
-import EpisodesBlock from "@/components/TV/EpisodesBlock";
+import EpisodesBlock from "@/components/PageBlocks/EpisodesBlock";
 import { fetchSeasonContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";

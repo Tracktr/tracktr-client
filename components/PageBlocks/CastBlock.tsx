@@ -1,5 +1,5 @@
 import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
-import Poster from "../common/poster/Poster";
+import PersonPoster from "../common/poster/PersonPoster";
 
 interface ICast {
   cast: any;
@@ -12,8 +12,7 @@ const CastBlock = ({ cast }: ICast) => (
       <HorizontalScrollContainer>
         {cast.slice(0, 12).map((item: any) => (
           <div className="flex-shrink-0">
-            <Poster
-              type="person"
+            <PersonPoster
               key={item.id}
               imageSrc={item.profile_path}
               name={item.original_name}

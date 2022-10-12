@@ -1,5 +1,5 @@
 import ContentHeader from "@/components/content/ContentHeader";
-import SeasonsBlock from "@/components/TV/SeasonsBlock";
+import SeasonsBlock from "@/components/PageBlocks/SeasonsBlock";
 import { fetchDetailedContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useQuery } from "react-query";

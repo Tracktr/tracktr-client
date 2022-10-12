@@ -1,5 +1,5 @@
 import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
-import Poster from "../common/poster/Poster";
+import TVPoster from "../common/poster/TVPoster";
 
 interface ISeasons {
   seasons: any;
@@ -16,8 +16,7 @@ const SeasonsBlock = ({ seasons, seriesID }: ISeasons) => (
           .reverse()
           .map((item: any) => (
             <div className="flex-shrink-0">
-              <Poster
-                type="tv"
+              <TVPoster
                 key={item.id}
                 imageSrc={item.poster_path}
                 name={`Season ${item.season_number}`}
