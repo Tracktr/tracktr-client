@@ -1,6 +1,6 @@
 import ContentInfiniteScroll from "@/components/content/ContentInfiniteScroll";
 import SearchHeader from "@/components/search/SearchHeader";
-import { fetchMinimizedContent } from "@/utils/fetchQueries";
+import { fetchTVsContent } from "@/utils/fetchQueries";
 
 const TVPage = () => (
   <div>
@@ -15,7 +15,7 @@ const TVPage = () => (
           title="Series"
           type="TV"
           fetchContent={(page) =>
-            fetchMinimizedContent({
+            fetchTVsContent({
               type: "discover",
               limiter: "tv",
               sortBy: "popularity.desc",
