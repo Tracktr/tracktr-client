@@ -8,3 +8,10 @@
 .simplebar-scrollbar::before {
   background-color: #444 !important;
 }
+
+/* fixes for Safari */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
