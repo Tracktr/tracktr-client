@@ -9,6 +9,7 @@ interface Props {
 async function retrieveEpisodeData({ TVID, seasonID, episodeID }: Props) {
   const url = new URL(`tv/${TVID}/season/${seasonID}/episode/${episodeID}`, process.env.NEXT_PUBLIC_TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+  url.searchParams.append("append_to_response", "credits");
 
   const res = await fetch(url);
   const json = await res.json();
@@ -16,24 +17,12 @@ async function retrieveEpisodeData({ TVID, seasonID, episodeID }: Props) {
   return json;
 }
 
-async function retrieveEpisodeCastData({ TVID, seasonID, episodeID }: Props) {
-  const url = new URL(`tv/${TVID}/season/${seasonID}/episode/${episodeID}/credits`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-  const res = await fetch(url);
-  const json = await res.json();
-
-  return { cast: json.cast };
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { TVID, seasonID, episodeID } = req.query;
 
-  const episodeData = await retrieveEpisodeData({ TVID, seasonID, episodeID });
-  const episodeCastData = await retrieveEpisodeCastData({ TVID, seasonID, episodeID });
+  const data = await retrieveEpisodeData({ TVID, seasonID, episodeID });
 
   res.status(200).json({
-    ...episodeData,
-    ...episodeCastData,
+    ...data,
   });
 }

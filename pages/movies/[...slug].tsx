@@ -18,7 +18,7 @@ const MoviePage = ({ props }: any) => {
           date={data.release_date}
           description={data.overview}
         >
-          <CastBlock cast={data.cast} />
+          <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
