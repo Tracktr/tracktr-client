@@ -4,6 +4,7 @@ import NavButton from "./NavButton";
 
 const NavProfileMobile = ({ className }: any) => {
   const { data: session } = useSession();
+  console.log(session);
 
   return (
     <div className={`${className} py-4`}>
