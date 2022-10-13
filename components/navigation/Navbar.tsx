@@ -35,9 +35,9 @@ const Navbar = () => {
                 ))}
               </ul>
               <div className="flex items-center justify-end col-span-2 lg:col-span-1">
-                <div className="mr-6 lg:mr-0">
+                <div className="hidden mr-6 lg:mr-0 lg:block">
                   {session ? (
-                    <button onClick={() => signOut()} type="button" className="w-full h-full">
+                    <Link href="/profile" type="button" className="w-full h-full">
                       <a className="flex items-center pl-4">
                         <Image
                           unoptimized
@@ -48,7 +48,7 @@ const Navbar = () => {
                         />
                         <p className="ml-2 text-sm">{session.user?.name}</p>
                       </a>
-                    </button>
+                    </Link>
                   ) : (
                     <NavButton href="/api/auth/signin" text="Sign in" active={false} />
                   )}
@@ -97,7 +97,7 @@ const Navbar = () => {
                   ))}
                   <div className="py-4 mt-auto">
                     {session ? (
-                      <button onClick={() => signOut()} type="button" className="w-full h-full">
+                      <Link href="/profile/" type="button" className="w-full h-full">
                         <a className="flex items-center pl-4">
                           <Image
                             unoptimized
@@ -108,7 +108,7 @@ const Navbar = () => {
                           />
                           <p className="ml-2 text-sm">{session.user?.name}</p>
                         </a>
-                      </button>
+                      </Link>
                     ) : (
                       <NavButton href="/api/auth/signin" text="Sign in" active={false} />
                     )}
