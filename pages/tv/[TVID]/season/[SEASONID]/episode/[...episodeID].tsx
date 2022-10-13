@@ -32,7 +32,7 @@ const EpisodePage = ({ props }: any) => {
           description={episodeData.overview}
           date={episodeData.air_date}
         >
-          <CastBlock cast={episodeData.cast} />
+          <CastBlock cast={episodeData.credits.cast} />
         </ContentHeader>
       )}
     </LoadingPageComponents>

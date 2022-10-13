@@ -23,7 +23,7 @@ const TVPage = ({ props }: any) => {
           description={data.overview}
         >
           <SeasonsBlock seasons={data.seasons} seriesID={props.id} />
-          <CastBlock cast={data.cast} />
+          <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
