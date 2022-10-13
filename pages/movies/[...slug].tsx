@@ -2,14 +2,12 @@ import ContentHeader from "@/components/content/ContentHeader";
 import CastBlock from "@/components/PageBlocks/CastBlock";
 import { fetchMovieContent } from "@/utils/fetchQueries";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useSession } from "next-auth/react";
 import { useQuery } from "react-query";
 import LoadingPageComponents from "../../components/common/loading/LoadingPageComponents";
 
 const MoviePage = ({ props }: any) => {
   const { data, status } = useQuery(["movie", props.id], () => fetchMovieContent(props.id));
-  const { data: session } = useSession();
-  console.log(session);
+
   return (
     <LoadingPageComponents status={status}>
       {() => (
