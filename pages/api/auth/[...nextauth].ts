@@ -5,6 +5,20 @@ import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
 
+const createUserProfile = async ({ user }: any) => {
+  const { id } = user;
+
+  try {
+    await prisma.profile.create({
+      data: {
+        userId: id,
+      },
+    });
+  } catch (error) {
+    console.log(`❌ Unable to create Profile in Database`);
+  }
+};
+
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -14,4 +28,5 @@ export default NextAuth({
     }),
   ],
   secret: process.env.SECRET,
+  events: { createUser: createUserProfile },
 });
