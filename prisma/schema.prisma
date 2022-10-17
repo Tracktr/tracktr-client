@@ -49,7 +49,6 @@ model User {
   sessions      Session[]
   profile       Profile?
   MoviesHistory MoviesHistory[]
-  SeriesHistory SeriesHistory[]
 }
 
 model VerificationToken {
@@ -79,26 +78,6 @@ model Movies {
   MoviesHistory MoviesHistory[]
 }
 
-model Series {
-  id      Int       @id @unique
-  name    String
-  Seasons Seasons[]
-}
-
-model Seasons {
-  id        Int        @id @unique
-  series_id Int
-  series    Series     @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  Episodes  Episodes[]
-}
-
-model Episodes {
-  id            Int             @id @unique
-  season_id     Int
-  seasons       Seasons         @relation(fields: [season_id], references: [id], onDelete: Cascade)
-  SeriesHistory SeriesHistory[]
-}
-
 model MoviesHistory {
   id       String   @id @default(cuid())
   datetime DateTime
@@ -106,13 +85,4 @@ model MoviesHistory {
   movie_id Int
   user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   movies   Movies   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
-}
-
-model SeriesHistory {
-  id         String   @id @default(cuid())
-  datetime   DateTime
-  user_id    String
-  episode_id Int
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  series     Episodes @relation(fields: [episode_id], references: [id], onDelete: Cascade)
 }
