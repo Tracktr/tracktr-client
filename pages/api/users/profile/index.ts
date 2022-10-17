@@ -9,36 +9,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (!session) return res.status(401).json({ unauthorized: true });
 
-  if (req.method === "GET") {
-    const user = await prisma.user.findUnique<Prisma.UserFindUniqueArgs>({
-      where: { email: session.user?.email },
-    });
+  const user = await prisma.user.findFirst<Prisma.UserFindFirstArgs>({
+    where: { email: session.user?.email },
+  });
 
-    return res.status(200).json({
-      user,
-      session,
-    });
-  }
-
-  if (req.method === "POST") {
-    const user = await prisma.user.findUnique<Prisma.UserFindUniqueArgs>({
-      where: { email: session.user?.email },
-    });
-
-    await prisma.profile.upsert({
-      create: {
-        profileId: user?.id,
-      },
-      update: {},
-      where: {
-        profileId: user?.id,
-      },
-    });
-
-    res.status(200).json({
-      user,
-    });
-  }
-
-  return res.status(404);
+  return res.status(200).json({
+    user,
+    session,
+  });
 }
