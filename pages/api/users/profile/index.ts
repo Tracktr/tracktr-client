@@ -26,11 +26,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await prisma.profile.upsert({
       create: {
-        profileId: String(user?.id),
+        userId: String(user?.id),
       },
       update: {},
       where: {
-        profileId: String(user?.id),
+        userId: String(user?.id),
       },
     });
 
