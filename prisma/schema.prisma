@@ -65,3 +65,9 @@ model Profile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Languages {
+  iso_639_1   String @unique
+  englishName String
+  name        String
+}
