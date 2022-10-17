@@ -15,6 +15,7 @@ const createUserProfile = async ({ user }: any) => {
       },
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log(`❌ Unable to create Profile in Database`);
   }
 };

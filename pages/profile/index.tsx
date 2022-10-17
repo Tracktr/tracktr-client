@@ -1,9 +1,6 @@
 import { getSession } from "next-auth/react";
 
-const ProfilePage = ({ session }: any) => {
-  console.log(session);
-  return <p className="pt-64 text-6xl text-center">{session.user.name}</p>;
-};
+const ProfilePage = ({ session }: any) => <p className="pt-64 text-6xl text-center">{session.user.name}</p>;
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context);
