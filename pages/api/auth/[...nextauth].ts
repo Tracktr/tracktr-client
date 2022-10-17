@@ -26,6 +26,14 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_SECRET || "",
     }),
   ],
+  callbacks: {
+    session({ session, user }) {
+      // eslint-disable-next-line no-param-reassign
+      session.user.id = user.id;
+
+      return session;
+    },
+  },
   secret: process.env.SECRET,
   events: { createUser: createUserProfile },
 });
