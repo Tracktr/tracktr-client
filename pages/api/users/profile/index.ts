@@ -1,8 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+import { prisma } from "utils/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-
-const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req });
@@ -11,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     const user = await prisma.user.findUnique<Prisma.UserFindUniqueArgs>({
-      where: { email: session.user?.email },
+      where: { email: String(session.user?.email) },
     });
 
     return res.status(200).json({
@@ -22,16 +21,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "POST") {
     const user = await prisma.user.findUnique<Prisma.UserFindUniqueArgs>({
-      where: { email: session.user?.email },
+      where: { email: String(session.user?.email) },
     });
 
     await prisma.profile.upsert({
       create: {
-        profileId: user?.id,
+        profileId: String(user?.id),
       },
       update: {},
       where: {
-        profileId: user?.id,
+        profileId: String(user?.id),
       },
     });
 

@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "utils/prisma";
 import languages from "./seed/languages.json";
-
-const prisma = new PrismaClient();
 
 async function main() {
   const data: any = await languages;
@@ -12,12 +10,10 @@ async function main() {
     name: item.name,
   }));
 
-  const language = await prisma.languages.createMany({
+  await prisma.languages.createMany({
     skipDuplicates: true,
     data: convertedData,
   });
-
-  console.log({ language });
 }
 
 main()
@@ -25,6 +21,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
+    // eslint-disable-next-line no-console
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
