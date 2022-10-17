@@ -86,10 +86,10 @@ model Series {
 }
 
 model Seasons {
-  id       Int        @id @unique
-  show_id  Int
-  series   Series     @relation(fields: [show_id], references: [id], onDelete: Cascade)
-  Episodes Episodes[]
+  id        Int        @id @unique
+  series_id Int
+  series    Series     @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  Episodes  Episodes[]
 }
 
 model Episodes {
