@@ -28,5 +28,22 @@ export default NextAuth({
     }),
   ],
   secret: process.env.SECRET,
+  callbacks: {
+    async session({ session, user }) {
+      const userFromdb = await prisma.user.findUnique({
+        where: {
+          id: user.id,
+        },
+        include: {
+          profile: true,
+        },
+      });
+
+      // eslint-disable-next-line no-param-reassign
+      session.user.profile = userFromdb?.profile;
+
+      return session;
+    },
+  },
   events: { createUser: createUserProfile },
 });
