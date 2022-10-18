@@ -36,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         profile: {
           update: {
             adult: body.adult,
+            language: body.language,
           },
         },
       },

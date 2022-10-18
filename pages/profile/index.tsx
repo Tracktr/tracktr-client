@@ -11,34 +11,39 @@ const fetchProfile = async () => {
   return res.json();
 };
 
-const ProfilePage = () => {
+const ProfilePage = (props: { languages: any }) => {
+  const { languages } = props;
   const queryClient = useQueryClient();
   const { data, status } = useQuery(["User"], fetchProfile);
+
+  const [adult, setAdult] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("");
 
   const mutation = useMutation(
     (formData: any) =>
       fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/profile`, {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ adult, language: selectedLanguage }),
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(["User"]),
     }
   );
 
-  const [adult, setAdult] = useState(false);
-
   const onSubmit = (event: any) => {
     event.preventDefault();
 
     mutation.mutate({
       adult,
+      language: selectedLanguage,
     });
   };
 
   useEffect(() => {
     if (status === "success") {
       setAdult(data.user.profile.adult);
+
+      setSelectedLanguage(data.user.profile.language);
     }
   }, [data, status]);
 
@@ -60,12 +65,29 @@ const ProfilePage = () => {
                 />
               </label>
 
-              <button
-                className="px-8 py-3 m-auto mt-12 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
-                type="submit"
-              >
-                Save Settings
-              </button>
+              <label className="flex items-center w-full">
+                <span>Language</span>
+                <select
+                  className="ml-auto text-primaryBackground"
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  value={selectedLanguage}
+                >
+                  {languages.map((language: { iso_639_1: any; englishName: any }) => (
+                    <option key={language.iso_639_1} value={language.iso_639_1}>
+                      {language.englishName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <div className="flex items-center mt-12">
+                <button
+                  className="px-8 py-3 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
+                  type="submit"
+                >
+                  Save Settings
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -76,6 +98,8 @@ const ProfilePage = () => {
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context);
+  const languagesReq = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/languages`);
+  const languagesRes = await languagesReq.json();
 
   if (!session) {
     return {
@@ -89,6 +113,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       session,
+      languages: languagesRes.languages,
     },
   };
 }
