@@ -47,7 +47,7 @@ const ProfilePage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data.user.image} name={data.user.name} />
-          <div className="max-w-md p-4 mt-16 text-white rounded-md bg-zinc-900">
+          <div className="p-4 mx-4 mt-16 text-white rounded-md md:max-w-md bg-zinc-900">
             <form onSubmit={onSubmit}>
               <p className="pb-6 text-2xl font-bold">Settings</p>
               <label className="flex items-center w-full">
