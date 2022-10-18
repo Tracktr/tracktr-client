@@ -2,6 +2,7 @@
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import { getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const fetchProfile = async () => {
@@ -13,39 +14,58 @@ const fetchProfile = async () => {
 const ProfilePage = () => {
   const queryClient = useQueryClient();
   const { data, status } = useQuery(["User"], fetchProfile);
+
   const mutation = useMutation(
     (formData: any) =>
       fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/profile`, {
         method: "POST",
-        body: new URLSearchParams(formData),
+        body: JSON.stringify(formData),
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(["User"]),
     }
   );
 
+  const [adult, setAdult] = useState(false);
+
   const onSubmit = (event: any) => {
     event.preventDefault();
 
-    mutation.mutate(new FormData(event.target));
+    mutation.mutate({
+      adult,
+    });
   };
+
+  useEffect(() => {
+    if (status === "success") {
+      setAdult(data.user.profile.adult);
+    }
+  }, [data, status]);
 
   return (
     <LoadingPageComponents status={status}>
       {() => (
-        <div>
+        <div className="max-w-6xl m-auto">
           <ProfileHeader image={data.user.image} name={data.user.name} />
-          <div className="max-w-6xl pt-16 m-auto">
-            <form className="flex flex-col" onSubmit={onSubmit}>
-              <div>
-                <label htmlFor="adult">Adult:</label>
-                <select name="adult" className="text-black">
-                  <option value="true">Show adult 18+ content</option>
-                  <option value="false">Hide adult 18+ content</option>
-                </select>
-              </div>
+          <div className="max-w-md p-4 mt-16 text-white rounded-md bg-zinc-900">
+            <form onSubmit={onSubmit}>
+              <p className="pb-6 text-2xl font-bold">Settings</p>
+              <label className="flex items-center w-full">
+                <span className="">Show adult 18+ content</span>
+                <input
+                  type="checkbox"
+                  className="ml-auto outline-none text-primary"
+                  onChange={() => setAdult(!adult)}
+                  checked={adult}
+                />
+              </label>
 
-              <input type="submit" />
+              <button
+                className="px-8 py-3 m-auto mt-12 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
+                type="submit"
+              >
+                Save Settings
+              </button>
             </form>
           </div>
         </div>

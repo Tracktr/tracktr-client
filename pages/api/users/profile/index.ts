@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === "POST") {
+    const body = JSON.parse(req.body);
     const user = await prisma.user.findFirst<Prisma.UserFindFirstArgs>({
       where: { email: session.user?.email },
     });
@@ -34,8 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: {
         profile: {
           update: {
-            // eslint-disable-next-line no-unneeded-ternary
-            adult: req.body.adult.toLowerCase() === "true" ? true : false,
+            adult: body.adult,
           },
         },
       },
