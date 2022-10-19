@@ -11,7 +11,7 @@ const MoviesPage = () => (
 
     <div className="py-12">
       <div className="max-w-6xl m-auto">
-        <ContentInfiniteScroll title="Movies" type="Movies" />
+        <ContentInfiniteScroll />
       </div>
     </div>
   </>
