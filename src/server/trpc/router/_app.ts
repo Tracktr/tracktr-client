@@ -2,9 +2,11 @@
 import { router } from "../trpc";
 import { movieRouter } from "./movie";
 import { authRouter } from "./auth";
+import { personRouter } from "./person";
 
 export const appRouter = router({
   movie: movieRouter,
+  person: personRouter,
   auth: authRouter,
 });
 
