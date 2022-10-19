@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -30,17 +30,14 @@ export default NextAuth({
   secret: process.env.SECRET,
   callbacks: {
     async session({ session, user }) {
-      const userFromdb = await prisma.user.findUnique({
+      const profileFromDb = await prisma.profile.findUnique<Prisma.ProfileFindUniqueArgs>({
         where: {
-          id: user.id,
-        },
-        include: {
-          profile: true,
+          userId: user.id,
         },
       });
 
       // eslint-disable-next-line no-param-reassign
-      session.user.profile = userFromdb?.profile;
+      if (profileFromDb) session.user.profile = profileFromDb;
 
       return session;
     },
