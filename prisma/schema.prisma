@@ -59,7 +59,8 @@ model VerificationToken {
 }
 
 model Profile {
-  adult Boolean @default(false)
+  adult    Boolean @default(false)
+  language String @default("en")
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
