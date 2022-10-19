@@ -30,6 +30,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   callbacks: {
     async session({ session, user }) {
+      console.log(session);
       const profileFromDb = await prisma.profile.findUnique<Prisma.ProfileFindUniqueArgs>({
         where: {
           userId: user.id,
@@ -37,7 +38,7 @@ export const authOptions: NextAuthOptions = {
       });
 
       // eslint-disable-next-line no-param-reassign
-      if (profileFromDb) session.user.profile = profileFromDb;
+      if (profileFromDb && session.user) session.user.profile = profileFromDb;
 
       return session;
     },
