@@ -18,7 +18,7 @@ const SearchPage = () => {
     ["Search", query],
     ({ pageParam = 1 }) =>
       fetchSearchRequest({
-        query: query || "",
+        query,
         page: pageParam,
         type,
       }),
@@ -44,7 +44,7 @@ const SearchPage = () => {
           <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
-                if (content.media_type === "tv" || type === "Series") {
+                if (content.media_type === "tv" || type === "tv") {
                   return (
                     <TVPoster
                       imageSrc={`${content.poster_path}`}
@@ -55,7 +55,7 @@ const SearchPage = () => {
                   );
                 }
 
-                if (content.media_type === "movie" || type === "Movies") {
+                if (content.media_type === "movie" || type === "movie") {
                   return (
                     <MoviePoster
                       imageSrc={`${content.poster_path}`}
@@ -66,7 +66,7 @@ const SearchPage = () => {
                   );
                 }
 
-                if (content.media_type === "person" || type === "Person") {
+                if (content.media_type === "person" || type === "person") {
                   return (
                     <PersonPoster
                       imageSrc={`${content.poster_path || content.profile_path}`}

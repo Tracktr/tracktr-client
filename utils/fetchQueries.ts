@@ -92,23 +92,15 @@ export const fetchEpisodeContent = async ({ seriesID, seasonID, episodeID }: IFe
 };
 
 interface IFetchSearchContent {
-  query: string | string[] | undefined;
+  query: any;
   page: number;
-  type: string | string[] | undefined;
+  type: any;
 }
 
 export const fetchSearchRequest = async ({ query, page, type }: IFetchSearchContent) => {
-  const url = new URL(
-    `${
-      (type === "Movies" && "search/movie") ||
-      (type === "Series" && "search/tv") ||
-      (type === "Person" && "search/person") ||
-      "search/multi"
-    }`,
-    process.env.NEXT_PUBLIC_TMDB_API
-  );
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-  if (query) url.searchParams.append("query", query.toString());
+  const url = new URL(`/api/search`, process.env.NEXT_PUBLIC_URL);
+  url.searchParams.append("type", type);
+  url.searchParams.append("query", query);
   url.searchParams.append("page", page.toString());
 
   const response = await fetch(url);
