@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { Session, unstable_getServerSession } from "next-auth";
+import { authOptions } from "pages/api/auth/[...nextauth]";
 
 interface Props {
   TVID: string | string[] | undefined;
@@ -22,7 +22,7 @@ async function retrieveEpisodeData({ TVID, seasonID, episodeID, session }: Props
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req });
+  const session = await unstable_getServerSession(req, res, authOptions);
   const { TVID, seasonID, episodeID } = req.query;
 
   const data = await retrieveEpisodeData({ TVID, seasonID, episodeID, session });

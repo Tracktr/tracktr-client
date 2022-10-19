@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { Session, unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 interface Props {
   personID: string | string[] | undefined;
@@ -18,7 +18,7 @@ async function retrievePersonData({ personID, session }: Props) {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req });
+  const session = await unstable_getServerSession(req, res, authOptions);
   const { personID } = req.query;
 
   const personData = await retrievePersonData({ personID, session });

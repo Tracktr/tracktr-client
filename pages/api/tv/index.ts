@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Session } from "next-auth";
-import { getSession } from "next-auth/react";
+import { Session, unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 interface Props {
   type: string | string[] | undefined;
@@ -25,7 +25,7 @@ async function retrieveTVData({ type, limiter, sortby, page, filter, session }: 
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req });
+  const session = await unstable_getServerSession(req, res, authOptions);
   const { type, limiter, sortby, page, filter } = req.query;
 
   const TVData = await retrieveTVData({ type, limiter, sortby, page, filter, session });
