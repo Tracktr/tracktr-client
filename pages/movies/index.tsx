@@ -6,7 +6,7 @@ const MoviesPage = () => (
   <>
     <SearchHeader
       title="Movies"
-      type="movies"
+      type="movie"
       backgroundImage="https://www.themoviedb.org/t/p/original/wQxPlS65wgy6Ik7N80bsMpAkjyf.jpg"
     />
 
