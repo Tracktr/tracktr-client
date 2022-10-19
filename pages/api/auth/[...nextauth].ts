@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Prisma, PrismaClient } from "@prisma/client";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 const prisma = new PrismaClient();
@@ -19,7 +19,7 @@ const createUserProfile = async ({ user }: any) => {
   }
 };
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -43,4 +43,6 @@ export default NextAuth({
     },
   },
   events: { createUser: createUserProfile },
-});
+};
+
+export default NextAuth(authOptions);

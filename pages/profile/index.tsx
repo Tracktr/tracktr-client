@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import LoadingPageComponents from "@/components/common/loading/LoadingPageComponents";
 import ProfileHeader from "@/components/profile/ProfileHeader";
-import { getSession } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "pages/api/auth/[...nextauth]";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
@@ -97,24 +98,12 @@ const ProfilePage = (props: { languages: any }) => {
 };
 
 export async function getServerSideProps(context: any) {
-  const session = await getSession(context);
   const languagesReq = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/languages`);
   const languagesRes = await languagesReq.json();
-  console.log(session ? "there is a session" : "there is no session");
-  console.log(session);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
 
   return {
     props: {
-      session,
+      session: await unstable_getServerSession(context.req, context.res, authOptions),
       languages: languagesRes.languages,
     },
   };
