@@ -98,8 +98,10 @@ const ProfilePage = (props: { languages: any }) => {
 
 export async function getServerSideProps(context: any) {
   const session = await getSession(context);
+  console.log(session);
   const languagesReq = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/languages`);
   const languagesRes = await languagesReq.json();
+  console.log(languagesRes);
 
   if (!session) {
     return {
