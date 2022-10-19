@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../../utils/trpc";
+import LoadingPageComponents from "../common/LoadingPageComponents";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import TVPoster from "../posters/TVPoster";
-import LoadingPageComponents from "./LoadingPageComponents";
 
 const TVInfiniteScroll = () => {
   const MAX_PAGES = 5;

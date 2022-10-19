@@ -1,4 +1,4 @@
-import ContentInfiniteScroll from "../../components/common/MoviesInfiniteScroll";
+import MoviesInfiniteScroll from "../../components/infiniteScroll/MoviesInfiniteScroll";
 import SearchHeader from "../../components/search/SearchHeader";
 
 const MoviesPage = () => (
@@ -11,7 +11,7 @@ const MoviesPage = () => (
 
     <div className="py-12">
       <div className="max-w-6xl m-auto">
-        <ContentInfiniteScroll />
+        <MoviesInfiniteScroll />
       </div>
     </div>
   </>

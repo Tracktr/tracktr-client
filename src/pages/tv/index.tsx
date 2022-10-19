@@ -1,4 +1,4 @@
-import TVInfiniteScroll from "../../components/common/TVInfiniteScroll";
+import TVInfiniteScroll from "../../components/infiniteScroll/TVInfiniteScroll";
 import SearchHeader from "../../components/search/SearchHeader";
 
 const TVPage = () => (

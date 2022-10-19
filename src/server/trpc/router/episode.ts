@@ -10,7 +10,7 @@ export const episodeRouter = router({
         episodeID: z.string().nullish(),
       })
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const url = new URL(
         `tv/${input?.tvID}/season/${input?.seasonID}/episode/${input?.episodeID}`,
         process.env.NEXT_PUBLIC_TMDB_API
