@@ -1,9 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
-async function retrievePersonData(personID: string | string[] | undefined) {
+interface Props {
+  personID: string | string[] | undefined;
+  session: Session | null;
+}
+
+async function retrievePersonData({ personID, session }: Props) {
   const url = new URL(`person/${personID}`, process.env.NEXT_PUBLIC_TMDB_API);
   url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
+  if (session) url.searchParams.append("language", session.user.profile.language);
   const res = await fetch(url);
   const json = await res.json();
 
@@ -11,9 +18,10 @@ async function retrievePersonData(personID: string | string[] | undefined) {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const session = await getSession({ req });
   const { personID } = req.query;
 
-  const personData = await retrievePersonData(personID);
+  const personData = await retrievePersonData({ personID, session });
 
   res.status(200).json({
     ...personData,
