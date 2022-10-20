@@ -55,6 +55,7 @@ export const movieRouter = router({
       url.searchParams.append("query", input?.query || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+      if (ctx) url.searchParams.append("include_adult", ctx.session?.user?.profile?.adult ? "true" : "false");
 
       const res = await fetch(url);
       const json = await res.json();
