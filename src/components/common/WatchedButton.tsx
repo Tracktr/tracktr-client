@@ -103,7 +103,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
 
   if (state === "unwatched") {
     return (
-      <Button onClick={handleOnClick} onKeyDown={handleOnClick}>
+      <Button onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
           <ImCheckmark2 className="w-6 h-6" />
         </div>
