@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CgMenuGridO, CgClose } from "react-icons/cg";
 import { AnimatePresence, motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Logo from "../common/Logo";
 import NavButton from "./NavButton";
