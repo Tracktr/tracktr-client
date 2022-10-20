@@ -45,7 +45,6 @@ export const tvRouter = router({
     .input(
       z.object({
         cursor: z.number().nullish(),
-        query: z.string().nullish(),
       })
     )
     .query(async ({ input }) => {
