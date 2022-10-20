@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   callbacks: {
     async session({ session, user }) {
-      const profileFromDb = await prisma.profile.findUnique<Prisma.ProfileFindUniqueArgs>({
+      const profileFromDb = await prisma.profile.findFirst<Prisma.ProfileFindFirstArgs>({
         where: {
           userId: user.id,
         },
