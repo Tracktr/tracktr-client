@@ -1,4 +1,5 @@
-import { ReactFragment, useState } from "react";
+import { useSession } from "next-auth/react";
+import { ReactFragment, useEffect, useState } from "react";
 import { ImCheckmark2 } from "react-icons/im";
 
 interface IWatchedButtonProps {
@@ -11,26 +12,29 @@ interface IButton {
   children: ReactFragment;
 }
 
-const Button = ({ onClick, onKeyDown, children }: IButton) => {
-  console.log(onClick);
-
-  return (
-    <div
-      className={`flex justify-center gap-2 px-5 py-4 text-center uppercase border-2 border-solid rounded ${
-        onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"
-      } border-primary text-primary`}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      role="button"
-      tabIndex={0}
-    >
-      {children}
-    </div>
-  );
-};
+const Button = ({ onClick, onKeyDown, children }: IButton) => (
+  <div
+    className={`flex justify-center gap-2 px-5 py-4 text-center uppercase border-2 border-solid rounded ${
+      onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"
+    } border-primary text-primary`}
+    onClick={onClick}
+    onKeyDown={onKeyDown}
+    role="button"
+    tabIndex={0}
+  >
+    {children}
+  </div>
+);
 
 const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
-  const [state, setState] = useState<"watched" | "unwatched" | "loading">("unwatched");
+  const { data: session, status } = useSession();
+  const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
+
+  useEffect(() => {
+    if (status !== "loading" && session) {
+      setState("unwatched");
+    }
+  }, [session, status]);
 
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
