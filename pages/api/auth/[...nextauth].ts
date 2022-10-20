@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Prisma, PrismaClient } from "@prisma/client";
 import NextAuth, { NextAuthOptions } from "next-auth";
@@ -31,13 +32,14 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.SECRET,
   callbacks: {
     async session({ session, user }) {
+      session.user.id = user.id;
+
       const profileFromDb = await prisma.profile.findUnique<Prisma.ProfileFindUniqueArgs>({
         where: {
           userId: user.id,
         },
       });
 
-      // eslint-disable-next-line no-param-reassign
       if (profileFromDb) session.user.profile = profileFromDb;
 
       return session;
