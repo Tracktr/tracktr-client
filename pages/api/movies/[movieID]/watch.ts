@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (session == null) {
     res.status(401).end();
-  } else {
+  } else if (req.method === "POST") {
     const movie = await retrieveMovieData(movieID, undefined);
 
     const newMovie = await prisma.movies.upsert({
@@ -30,5 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
       res.status(500).end();
     }
+  } else if (req.method === "GET") {
+    const history = await prisma.moviesHistory.findMany({
+      where: { user_id: session.user.id, movie_id: Number(movieID) },
+    });
+
+    res.status(200).json(history);
   }
 }
