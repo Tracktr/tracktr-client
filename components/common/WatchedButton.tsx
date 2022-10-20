@@ -1,6 +1,7 @@
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { ReactFragment, useEffect, useState } from "react";
-import { ImCheckmark2 } from "react-icons/im";
+import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
+import { useQuery } from "react-query";
 
 interface IWatchedButtonProps {
   movieID: number;
@@ -14,7 +15,7 @@ interface IButton {
 
 const Button = ({ onClick, onKeyDown, children }: IButton) => (
   <div
-    className={`flex justify-center gap-2 px-5 py-4 text-center uppercase border-2 border-solid rounded ${
+    className={`h-16 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded ${
       onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"
     } border-primary text-primary`}
     onClick={onClick}
@@ -27,14 +28,24 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
 );
 
 const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
-  const { data: session, status } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
 
+  const { data, status, refetch } = useQuery(
+    ["watch_history", movieID],
+    () => fetch(`/api/movies/${movieID}/watch`).then((res) => res.json()),
+    { enabled: sessionStatus !== "loading", refetchOnWindowFocus: false }
+  );
+
   useEffect(() => {
-    if (status !== "loading" && session) {
-      setState("unwatched");
+    if (sessionStatus !== "loading" && session && status === "success") {
+      if (data.length > 0) {
+        setState("watched");
+      } else {
+        setState("unwatched");
+      }
     }
-  }, [session, status]);
+  }, [session, sessionStatus, data, status]);
 
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
@@ -43,7 +54,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
       const result = await fetch(`/api/movies/${movieID}/watch`, { method: "POST" }).then((res) => res.json());
 
       if (result) {
-        setState("watched");
+        refetch();
       }
     }
   };
@@ -53,12 +64,26 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   }
 
   if (state === "watched") {
+    const date = new Date(data[data.length - 1]?.datetime).toLocaleDateString(
+      "en-UK", // TODO: get time format from user language
+      {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }
+    );
+
     return (
       <Button onClick={handleOnClick} onKeyDown={handleOnClick}>
         <div>
-          <ImCheckmark2 className="w-6 h-6" />
+          <ImCheckmark className="w-6 h-6" />
         </div>
-        <div>Watched</div>
+        <div>
+          <div className="text-sm font-bold">Watched {data.length > 1 && `${data.length} times`}</div>
+          <div className="text-xs italic normal-case">Last on {date}</div>
+        </div>
       </Button>
     );
   }
@@ -75,11 +100,11 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   }
 
   return (
-    <Button>
+    <Button onClick={signIn} onKeyDown={signIn}>
       <div>
         <ImCheckmark2 className="w-6 h-6" />
       </div>
-      <div>Sign in to track</div>
+      <div>Add to watched</div>
     </Button>
   );
 };
