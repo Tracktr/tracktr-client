@@ -70,7 +70,7 @@ const SearchPage = () => {
                   );
                 }
 
-                return <div />;
+                return <div key={content.id} />;
               })
             )}
           </div>
