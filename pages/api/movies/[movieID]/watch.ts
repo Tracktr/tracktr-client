@@ -2,20 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "pages/api/auth/[...nextauth]";
+import retrieveMovieData from "@/utils/retrieveMovieData";
 
 const prisma = new PrismaClient();
-
-async function retrieveMovieData(movieID: string | string[] | undefined, session: any) {
-  const url = new URL(`movie/${movieID}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-  url.searchParams.append("append_to_response", "credits");
-  if (session) url.searchParams.append("language", session.user.profile.language);
-
-  const res = await fetch(url);
-  const json = await res.json();
-
-  return json;
-}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session: any = await unstable_getServerSession(req, res, authOptions);
