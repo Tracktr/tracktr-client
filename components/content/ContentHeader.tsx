@@ -42,7 +42,7 @@ const ContentHeader = ({ id, cover, poster, title, date, description, children }
           {children || ""}
         </div>
 
-        <div className="col-span-1 pt-2 mt-28">
+        <div className="col-span-1 row-start-2 pt-2 md:row-start-auto md:px-0 md:mt-28">
           <WatchedButton movieID={id} />
         </div>
       </div>

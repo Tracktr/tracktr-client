@@ -6,7 +6,7 @@ interface ICast {
 }
 
 const CastBlock = ({ cast }: ICast) => (
-  <div className="relative mb-24">
+  <div className="relative md:mb-24">
     <h2 className="pb-4 text-4xl font-bold">Cast</h2>
     <div>
       <HorizontalScrollContainer>
