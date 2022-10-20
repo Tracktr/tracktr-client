@@ -87,7 +87,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
     // );
 
     return (
-      <Button onClick={handleOnClick} onKeyDown={handleOnClick}>
+      <Button onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
           <ImCheckmark className="w-6 h-6" />
         </div>
