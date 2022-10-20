@@ -20,13 +20,13 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      router.push(`/search?type=${type}&query=${searchInput}`);
+      router.push(`/search/${type}?query=${searchInput}`);
     }
   };
 
   const handleOnClick = (e: any) => {
     e.preventDefault();
-    router.push(`/search?type=${type}&query=${searchInput}`);
+    router.push(`/search/${type}/?query=${searchInput}`);
   };
 
   return (

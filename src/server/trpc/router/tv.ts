@@ -28,8 +28,32 @@ export const tvRouter = router({
       })
     )
     .query(async ({ input }) => {
+      console.log(input);
       const url = new URL("tv/popular", process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      url.searchParams.append("page", input?.cursor?.toString() || "1");
+
+      const res = await fetch(url);
+      const json = await res.json();
+
+      return {
+        ...json,
+      };
+    }),
+
+  searchTV: publicProcedure
+    .input(
+      z.object({
+        cursor: z.number().nullish(),
+        query: z.string().nullish(),
+      })
+    )
+    .query(async ({ input }) => {
+      console.log(input);
+      const url = new URL("search/tv", process.env.NEXT_PUBLIC_TMDB_API);
+      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      url.searchParams.append("query", "batman");
+      // url.searchParams.append("query", input?.query || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
 
       const res = await fetch(url);
