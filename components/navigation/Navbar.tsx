@@ -83,7 +83,7 @@ const Navbar = () => {
 
                 <div className="flex flex-col w-full h-full">
                   {navLinks.map((navItem) => (
-                    <li className="text-white list-none group">
+                    <li className="text-white list-none group" key={navItem.text}>
                       <Link href={navItem.href}>
                         <a
                           className={`group-hover:text-primary text-2xl px-4 py-2 block ${
