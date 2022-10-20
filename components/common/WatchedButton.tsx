@@ -1,6 +1,6 @@
 import { signIn, useSession } from "next-auth/react";
 import { ReactFragment, useEffect, useState } from "react";
-import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
+import { ImSpinner2, ImCheckmark, ImCheckmark2 } from "react-icons/im";
 import { useQuery } from "react-query";
 
 interface IWatchedButtonProps {
@@ -60,7 +60,14 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   };
 
   if (state === "loading") {
-    return <Button>Loading...</Button>;
+    return (
+      <Button>
+        <div>
+          <ImSpinner2 className="w-6 h-6 animate-spin" />
+        </div>
+        <div>Loading</div>
+      </Button>
+    );
   }
 
   if (state === "watched") {
