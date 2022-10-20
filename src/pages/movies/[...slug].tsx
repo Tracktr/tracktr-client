@@ -13,6 +13,7 @@ const MoviePage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <ContentHeader
+          idForWatchButton={data?.id}
           cover={data.backdrop_path}
           poster={data.poster_path}
           title={data.title}

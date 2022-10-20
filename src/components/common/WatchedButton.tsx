@@ -1,7 +1,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { ReactFragment, useEffect, useState } from "react";
 import { ImSpinner2, ImCheckmark, ImCheckmark2 } from "react-icons/im";
-import { useQuery } from "react-query";
+import { trpc } from "../../utils/trpc";
 
 interface IWatchedButtonProps {
   movieID: number;
@@ -28,35 +28,40 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
 );
 
 const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
-  const { data: session, status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
+  const { data: session, status: sessionStatus } = useSession();
 
-  const { data, status, refetch } = useQuery(
-    ["watch_history", movieID],
-    () => fetch(`/api/movies/${movieID}/watch`).then((res) => res.json()),
-    { enabled: sessionStatus !== "loading", refetchOnWindowFocus: false }
+  const { data, status, refetch } = trpc.movie.watchHistoryByID.useQuery(
+    { movieId: movieID },
+    {
+      enabled: sessionStatus !== "loading",
+      refetchOnWindowFocus: false,
+    }
   );
 
+  const { mutate, status: mutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   useEffect(() => {
+    console.log(mutationStatus);
     if (sessionStatus !== "loading" && session && status === "success") {
-      if (data.length > 0) {
+      if (Object.keys(data).length > 0) {
         setState("watched");
       } else {
         setState("unwatched");
       }
     }
-  }, [session, sessionStatus, data, status]);
+  }, [session, sessionStatus, data, status, mutationStatus]);
 
-  const handleOnClick = async (e?: any) => {
-    if (e?.key === "Enter" || e?.key === undefined) {
-      setState("loading");
+  const handleOnClick = async (e: any) => {
+    setState("loading");
 
-      const result = await fetch(`/api/movies/${movieID}/watch`, { method: "POST" }).then((res) => res.json());
-
-      if (result) {
-        refetch();
-      }
-    }
+    mutate({
+      movieId: movieID,
+    });
   };
 
   if (state === "loading") {
@@ -71,7 +76,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   }
 
   if (state === "watched") {
-    const date = new Date(data[data.length - 1]?.datetime).toLocaleDateString(
+    const date = new Date(Object.values(data).pop()?.datetime).toLocaleDateString(
       "en-UK", // TODO: get time format from user language
       {
         year: "numeric",
@@ -88,7 +93,9 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
           <ImCheckmark className="w-6 h-6" />
         </div>
         <div>
-          <div className="text-sm font-bold">Watched {data.length > 1 && `${data.length} times`}</div>
+          <div className="text-sm font-bold">
+            Watched {Object.keys(data).length > 0 && `${Object.keys(data).length} times`}
+          </div>
           <div className="text-xs italic normal-case">Last on {date}</div>
         </div>
       </Button>

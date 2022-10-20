@@ -32,7 +32,7 @@ const ContentHeader = ({ idForWatchButton, cover, poster, title, date, descripti
           </div>
         </div>
 
-        <div className="col-span-3 px-4">
+        <div className="col-span-2 px-4">
           <h1 className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
             {title}
             {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}

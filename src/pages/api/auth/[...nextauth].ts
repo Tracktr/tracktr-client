@@ -38,6 +38,7 @@ export const authOptions: NextAuthOptions = {
 
       // eslint-disable-next-line no-param-reassign
       if (profileFromDb && session.user) session.user.profile = profileFromDb;
+      if (session.user) session.user.id = user.id;
 
       return session;
     },
