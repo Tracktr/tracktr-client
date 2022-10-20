@@ -11,7 +11,7 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.searchTV.useInfiniteQuery(
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.movie.searchMovie.useInfiniteQuery(
     { query: query as string },
     {
       getNextPageParam: (lastPage: any, allPages: any) => {
