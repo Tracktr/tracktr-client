@@ -24,7 +24,7 @@ const ProfilePage = (props: { languages: any }) => {
     (formData: any) =>
       fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/profile`, {
         method: "POST",
-        body: JSON.stringify({ adult, language: selectedLanguage }),
+        body: JSON.stringify({ adult, language: formData.language }),
       }),
     {
       onSuccess: () => queryClient.invalidateQueries(["User"]),

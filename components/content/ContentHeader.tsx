@@ -3,7 +3,7 @@ import Image from "next/image";
 import WatchedButton from "../common/WatchedButton";
 
 interface IContentHeader {
-  id: number;
+  idForWatchButton?: number;
   cover?: string;
   poster: string;
   title: string;
@@ -12,7 +12,7 @@ interface IContentHeader {
   children?: any;
 }
 
-const ContentHeader = ({ id, cover, poster, title, date, description, children }: IContentHeader) => (
+const ContentHeader = ({ idForWatchButton, cover, poster, title, date, description, children }: IContentHeader) => (
   <>
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
@@ -42,9 +42,11 @@ const ContentHeader = ({ id, cover, poster, title, date, description, children }
           {children || ""}
         </div>
 
-        <div className="col-span-1 row-start-2 pt-2 md:row-start-auto md:px-0 md:mt-28">
-          <WatchedButton movieID={id} />
-        </div>
+        {idForWatchButton && (
+          <div className="col-span-1 row-start-2 pt-2 md:row-start-auto md:px-0 md:mt-28">
+            <WatchedButton movieID={idForWatchButton} />
+          </div>
+        )}
       </div>
     </div>
   </>
