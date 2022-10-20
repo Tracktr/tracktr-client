@@ -1,7 +1,9 @@
 import { BackdropImage, PosterImage } from "@/utils/generateImages";
 import Image from "next/image";
+import WatchedButton from "../common/WatchedButton";
 
 interface IContentHeader {
+  id: number;
   cover?: string;
   poster: string;
   title: string;
@@ -10,7 +12,7 @@ interface IContentHeader {
   children?: any;
 }
 
-const ContentHeader = ({ cover, poster, title, date, description, children }: IContentHeader) => (
+const ContentHeader = ({ id, cover, poster, title, date, description, children }: IContentHeader) => (
   <>
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
@@ -30,7 +32,7 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
           </div>
         </div>
 
-        <div className="col-span-3 px-4">
+        <div className="col-span-2 px-4">
           <h1 className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
             {title}
             {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}
@@ -38,6 +40,10 @@ const ContentHeader = ({ cover, poster, title, date, description, children }: IC
           <p className="max-w-xl pt-8 pb-12">{description}</p>
 
           {children || ""}
+        </div>
+
+        <div className="col-span-1 pt-2 mt-28">
+          <WatchedButton movieID={id} />
         </div>
       </div>
     </div>
