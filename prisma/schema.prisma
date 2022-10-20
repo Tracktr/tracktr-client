@@ -40,14 +40,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   profile       Profile?
+  MoviesHistory MoviesHistory[]
 }
 
 model VerificationToken {
@@ -60,7 +61,7 @@ model VerificationToken {
 
 model Profile {
   adult    Boolean @default(false)
-  language String @default("en")
+  language String  @default("en")
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -70,4 +71,21 @@ model Languages {
   iso_639_1   String @unique
   englishName String
   name        String
+}
+
+model Movies {
+  id            Int             @id
+  title         String
+  poster        String
+  MoviesHistory MoviesHistory[]
+}
+
+model MoviesHistory {
+  id       String   @id @default(cuid())
+  datetime DateTime
+  user_id  String
+  movie_id Int
+
+  user  User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  movie Movies @relation(fields: [movie_id], references: [id], onDelete: Cascade)
 }
