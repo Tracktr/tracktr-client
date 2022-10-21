@@ -80,7 +80,7 @@ export const movieRouter = router({
       const res = await fetch(movie);
       const json = await res.json();
 
-      const newMovie = await prisma?.movies.upsert({
+      const newMovie = await ctx.prisma.movies.upsert({
         where: {
           id: input?.movieId,
         },
@@ -93,7 +93,7 @@ export const movieRouter = router({
       });
 
       if (newMovie !== null) {
-        const result = await prisma?.moviesHistory.create({
+        const result = await ctx.prisma.moviesHistory.create({
           data: {
             datetime: new Date(),
             movie_id: input?.movieId,
@@ -112,7 +112,7 @@ export const movieRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const result = await prisma?.moviesHistory.findMany({
+      const result = await ctx.prisma.moviesHistory.findMany({
         where: {
           user_id: ctx.session.user.id,
           movie_id: input?.movieId,
