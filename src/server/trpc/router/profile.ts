@@ -3,7 +3,7 @@ import { router, protectedProcedure } from "../trpc";
 
 export const profileRouter = router({
   profileBySession: protectedProcedure.query(async ({ ctx }) => {
-    const user = await prisma?.user.findFirst({
+    const user = await ctx.prisma.user.findFirst({
       where: {
         id: ctx.session.user.id,
       },
@@ -30,7 +30,7 @@ export const profileRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const user = await prisma?.user.update({
+      const user = await ctx.prisma.user.update({
         where: {
           id: ctx.session.user.profile.userId,
         },
