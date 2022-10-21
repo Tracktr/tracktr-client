@@ -25,8 +25,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -62,9 +61,8 @@ model VerificationToken {
 model Profile {
   adult    Boolean @default(false)
   language String  @default("en")
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String  @unique
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Languages {
@@ -85,7 +83,6 @@ model MoviesHistory {
   datetime DateTime
   user_id  String
   movie_id Int
-
-  user  User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  movie Movies @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  movie    Movies   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
 }
