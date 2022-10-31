@@ -55,12 +55,14 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
     }
   }, [session, sessionStatus, data, status, mutationStatus]);
 
-  const handleOnClick = async (e: any) => {
-    setState("loading");
+  const handleOnClick = async (e?: any) => {
+    if (e?.key === "Enter" || e?.key === undefined) {
+     setState("loading");
 
-    mutate({
-      movieId: movieID,
-    });
+      mutate({
+        movieId: movieID,
+      });
+    }
   };
 
   if (state === "loading") {
