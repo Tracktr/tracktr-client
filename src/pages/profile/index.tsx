@@ -1,9 +1,13 @@
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
 
 const ProfilePage = () => {
+  const router = useRouter();
+  const session = useSession();
   const { data, status } = trpc.profile.profileBySession.useQuery();
 
   const [adult, setAdult] = useState(false);
@@ -27,6 +31,12 @@ const ProfilePage = () => {
       setSelectedLanguage(data?.profile?.language ?? "en");
     }
   }, [data, status]);
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/");
+    }
+  });
 
   return (
     <LoadingPageComponents status={status}>
