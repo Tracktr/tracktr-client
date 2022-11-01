@@ -16,7 +16,7 @@ const LoadingPageComponents = ({ status, children }: ILoadingPageComponents) =>
 
     // TODO: Do something with the loading status
     if (status === "loading") {
-      return <></>;
+      return <div className="h-screen" />;
     }
 
     if (status === "success") {
