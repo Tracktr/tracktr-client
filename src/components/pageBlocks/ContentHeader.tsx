@@ -26,7 +26,6 @@ const ContentHeader = ({
   genres,
 }: IContentHeader) => {
   const session = useSession();
-  console.log(genres);
 
   return (
     <>
