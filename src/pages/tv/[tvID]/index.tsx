@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../components/pageBlocks/CastBlock";
 import ContentHeader from "../../../components/pageBlocks/ContentHeader";
+import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
 import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
 import { trpc } from "../../../utils/trpc";
 
@@ -21,6 +22,11 @@ const TVPage = () => {
           description={data.overview}
           genres={data.genres}
         >
+          <DetailsBlock
+            status={data.status}
+            numberOfEpisodes={data.number_of_episodes}
+            numberOfSeasons={data.number_of_seasons}
+          />
           <SeasonsBlock seasons={data.seasons} />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
