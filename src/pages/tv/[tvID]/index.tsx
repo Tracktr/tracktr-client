@@ -19,6 +19,7 @@ const TVPage = () => {
           poster={data.poster_path}
           title={data.name}
           description={data.overview}
+          genres={data.genres}
         >
           <SeasonsBlock seasons={data.seasons} />
           <CastBlock cast={data.credits.cast} />
