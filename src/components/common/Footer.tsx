@@ -24,7 +24,7 @@ const Footer = () => {
                     <Link href="/movies">
                       <a className="block pb-2 text-sm">Movies</a>
                     </Link>
-                    <Link href="/series">
+                    <Link href="/tv">
                       <a className="block pb-2 text-sm">Series</a>
                     </Link>
                   </li>
