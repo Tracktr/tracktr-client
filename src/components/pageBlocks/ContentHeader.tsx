@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BackdropImage, PosterImage } from "../../utils/generateImages";
 import WatchedButton from "../common/WatchedButton";
 import GenresBlock from "./GenresBlock";
+import { AiFillStar } from "react-icons/ai";
 
 interface IContentHeader {
   idForWatchButton?: number;
@@ -12,6 +13,7 @@ interface IContentHeader {
   title: string;
   date?: string;
   description: string;
+  score?: number;
   children?: any;
 }
 
@@ -24,6 +26,7 @@ const ContentHeader = ({
   description,
   children,
   genres,
+  score,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -42,17 +45,35 @@ const ContentHeader = ({
       <div className="relative w-full">
         <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
           <div className="col-span-1 mx-4 text-center">
-            <div className="inline-block border-4 rounded-md border-primaryBackground">
-              <Image width="208" height="311" src={PosterImage({ path: poster, size: "lg" })} />
+            <div className="relative inline-block border-4 rounded-md border-primaryBackground">
+              <Image
+                alt={"Poster image for:" + title}
+                width="208"
+                height="311"
+                src={PosterImage({ path: poster, size: "lg" })}
+              />
             </div>
           </div>
 
           <div className="col-span-3 px-4">
-            <h1 className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
-              {title}
-              {date && <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>}
+            <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
+              <div className="items-center justify-between md:flex">
+                <h1 className="max-w-2xl">
+                  {title}
+                  {date && (
+                    <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
+                  )}
+                </h1>
+                {score !== undefined && (
+                  <span className="flex items-center p-2 text-xl">
+                    <AiFillStar className="mr-2 text-primary" size={24} />
+                    {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
+                  </span>
+                )}
+              </div>
+
               <GenresBlock genres={genres} />
-            </h1>
+            </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
               {idForWatchButton && session.status === "authenticated" ? (

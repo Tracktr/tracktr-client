@@ -27,6 +27,7 @@ const EpisodePage = () => {
           title={episodeData.name}
           description={episodeData.overview}
           date={episodeData.air_date}
+          score={episodeData.vote_average}
         >
           <CastBlock cast={episodeData.credits.cast} />
         </ContentHeader>

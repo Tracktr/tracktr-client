@@ -21,6 +21,7 @@ const MoviePage = () => {
           title={data.title}
           date={data.release_date}
           description={data.overview}
+          score={data.vote_average}
         >
           <DetailsBlock
             budget={data.budget}

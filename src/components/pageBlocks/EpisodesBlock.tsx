@@ -20,6 +20,7 @@ const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
           season={item.season_number}
           episode={item.episode_number}
           url={`/tv/${tvID}/season/${item.season_number}/episode/${item.episode_number}`}
+          score={item.vote_average}
         />
       ))}
     </div>

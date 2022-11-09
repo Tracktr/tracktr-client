@@ -39,6 +39,7 @@ const MoviesInfiniteScroll = () => {
                     name={content.title || content.name}
                     key={content.id}
                     url={`movies/${content.id}`}
+                    score={content.vote_average}
                   />
                 );
               })

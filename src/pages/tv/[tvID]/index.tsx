@@ -21,6 +21,7 @@ const TVPage = () => {
           title={data.name}
           description={data.overview}
           genres={data.genres}
+          score={data.vote_average}
         >
           <DetailsBlock
             status={data.status}
