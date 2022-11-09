@@ -44,6 +44,7 @@ const SearchPage = () => {
                       name={content.title || content.name}
                       key={content.id}
                       url={`/tv/${content.id}`}
+                      score={content.vote_average}
                     />
                   );
                 }
@@ -55,6 +56,7 @@ const SearchPage = () => {
                       name={content.title || content.name}
                       key={content.id}
                       url={`/movies/${content.id}`}
+                      score={content.vote_average}
                     />
                   );
                 }
