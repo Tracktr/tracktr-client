@@ -12,7 +12,7 @@ export interface IPoster {
 
 const TVPoster = ({ imageSrc, name, url, score }: IPoster) => (
   <Link href={url || "#"}>
-    <a className={url ? "" : "pointer-events-none"}>
+    <a className={`${url ? "" : "pointer-events-none"} group`}>
       <div className="relative group">
         <Image
           alt={"Poster image for" + name}

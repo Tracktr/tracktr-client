@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { AiFillStar } from "react-icons/ai";
 import { PosterImage } from "../../utils/generateImages";
-
 export interface IPoster {
   imageSrc: string;
   name: string;
@@ -12,8 +11,8 @@ export interface IPoster {
 
 const MoviePoster = ({ imageSrc, name, url, score }: IPoster) => (
   <Link href={url || "#"}>
-    <a className={url ? "" : "pointer-events-none"}>
-      <div className="relative group">
+    <a className={`${url ? "" : "pointer-events-none"} group`}>
+      <div className="relative">
         <Image
           alt={"Poster image for" + name}
           src={PosterImage({ path: imageSrc, size: "sm" })}
@@ -22,7 +21,7 @@ const MoviePoster = ({ imageSrc, name, url, score }: IPoster) => (
           className="rounded"
         />
         {score !== undefined && (
-          <div className="absolute bottom-0 left-0 z-10 flex items-end w-full h-16 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 group-hover:bg-gradient-to-t group-hover:from-primaryBackground">
+          <div className="absolute bottom-0 left-0 z-10 flex items-end w-full h-16 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 bg-gradient-to-t from-primaryBackground">
             <span className="flex items-center p-2 text-sm">
               <AiFillStar className="mr-2 text-primary" size={18} />
               {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
