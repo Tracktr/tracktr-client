@@ -40,6 +40,9 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   );
 
   const { mutate, status: mutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
+    onMutate: async () => {
+      setState("loading");
+    },
     onSuccess: () => {
       refetch();
     },
@@ -57,7 +60,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
 
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
-     setState("loading");
+      setState("loading");
 
       mutate({
         movieId: movieID,
