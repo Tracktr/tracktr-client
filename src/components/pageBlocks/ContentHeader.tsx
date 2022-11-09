@@ -61,7 +61,7 @@ const ContentHeader = ({
           <div className="col-span-3 px-4">
             <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
               <div className="items-center justify-between md:flex">
-                <h1 className="flex max-w-2xl">
+                <h1 className="flex items-end max-w-2xl">
                   {gender === 1 && <IoMdFemale className="mr-2 text-pink-500" />}
                   {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
 
