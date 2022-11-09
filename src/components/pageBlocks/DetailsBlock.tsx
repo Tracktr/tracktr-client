@@ -17,7 +17,6 @@ const DetailsBlock = ({
   numberOfEpisodes,
   numberOfSeasons,
 }: DetailsBlockProps) => {
-  console.log(budget, revenue);
   return (
     <div className="grid grid-cols-1 gap-4 pt-8 mb-12 md:grid-cols-3">
       {releaseDate && (
