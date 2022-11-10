@@ -9,9 +9,11 @@ const ProfilePage = () => {
   const router = useRouter();
   const session = useSession();
   const { data, status } = trpc.profile.profileBySession.useQuery();
+  const { data: watchRegions } = trpc.common.watchProviders.useQuery();
 
   const [adult, setAdult] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const mutation = trpc.profile.updateProfile.useMutation();
 
@@ -21,6 +23,7 @@ const ProfilePage = () => {
     mutation.mutate({
       adult,
       language: selectedLanguage,
+      location: selectedLocation,
     });
   };
 
@@ -29,6 +32,7 @@ const ProfilePage = () => {
       setAdult(data.profile?.adult ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
+      setSelectedLocation(data?.profile?.location ?? "GB");
     }
   }, [data, status]);
 
@@ -67,6 +71,22 @@ const ProfilePage = () => {
                     Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
                       <option key={iso_639_1} value={iso_639_1}>
                         {englishName}
+                      </option>
+                    ))}
+                </select>
+              </label>
+
+              <label className="flex items-center w-full">
+                <span>Streaming Location</span>
+                <select
+                  className="ml-auto text-primaryBackground"
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  value={selectedLocation}
+                >
+                  {data &&
+                    Object.values(watchRegions.results).map(({ english_name, iso_3166_1 }: any) => (
+                      <option key={iso_3166_1} value={iso_3166_1}>
+                        {english_name}
                       </option>
                     ))}
                 </select>
