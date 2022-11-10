@@ -43,6 +43,10 @@ export const episodeRouter = router({
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const show = await fetch(url).then((res) => res.json());
+      const currentSeason = show[`season/${input.seasonNumber}`];
+      // Getting the season ID until the append to response is fixed
+      // (https://www.themoviedb.org/talk/5bf41a1f0e0a26266f09a707?language=pa-IN)
+      currentSeason.id = show.seasons.filter((s: TmdbSeason) => s.season_number === input.seasonNumber)[0].id;
 
       const newSeries = await ctx.prisma.series.upsert({
         where: { id: input.seriesId },
@@ -51,20 +55,34 @@ export const episodeRouter = router({
           id: show.id,
           name: show.name,
           poster: show.poster_path,
+          // Adds only the current season
+          seasons: {
+            connectOrCreate: [
+              {
+                where: { id: currentSeason.id },
+                create: {
+                  id: currentSeason.id,
+                  name: currentSeason.name,
+                  poster: currentSeason.poster_path,
+                  season_number: currentSeason.season_number,
+                },
+              },
+            ],
+          },
         },
       });
 
-      if (newSeries !== null) {
-        const result = await ctx.prisma.episodesHistory.create({
-          data: {
-            datetime: new Date(),
-            user_id: ctx?.session?.user?.id as string,
-            series_id: input.seriesId,
-            season_number: input.seasonNumber,
-            episode_number: input.episodeNumber,
-          },
-        });
-        return result;
-      }
+      // if (newSeries !== null) {
+      //   const result = await ctx.prisma.episodesHistory.create({
+      //     data: {
+      //       datetime: new Date(),
+      //       user_id: ctx?.session?.user?.id as string,
+      //       series_id: input.seriesId,
+      //       season_number: input.seasonNumber,
+      //       episode_number: input.episodeNumber,
+      //     },
+      //   });
+      //   return result;
+      // }
     }),
 });
