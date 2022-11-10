@@ -7,7 +7,7 @@ import Image from "next/image";
 import ReactDOM from "react-dom";
 import Link from "next/link";
 
-const JustWatchButton = ({ justWatch }: any) => {
+const JustWatch = ({ justWatch }: any) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const currentLocation = justWatch.results[session.data?.user?.profile.location.toUpperCase() ?? "GB"];
@@ -127,4 +127,4 @@ const Modal = ({ handleClose, data, session }: any) => {
   );
 };
 
-export default JustWatchButton;
+export default JustWatch;

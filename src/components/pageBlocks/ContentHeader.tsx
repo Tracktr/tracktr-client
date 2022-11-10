@@ -6,6 +6,7 @@ import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import JustWatchButton from "../common/JustWatch";
+import JustWatch from "../common/JustWatch";
 
 interface IContentHeader {
   idForWatchButton?: number;
@@ -57,7 +58,7 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
-              {justWatch && <JustWatchButton justWatch={justWatch} />}
+              {justWatch && <JustWatch justWatch={justWatch} />}
             </div>
           </div>
 
