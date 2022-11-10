@@ -5,6 +5,7 @@ import WatchedButton from "../common/WatchedButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
+import JustWatchButton from "../common/JustWatch";
 
 interface IContentHeader {
   idForWatchButton?: number;
@@ -16,6 +17,7 @@ interface IContentHeader {
   description: string;
   score?: number;
   gender?: number;
+  justWatch?: any;
   children?: any;
 }
 
@@ -30,6 +32,7 @@ const ContentHeader = ({
   genres,
   score,
   gender,
+  justWatch,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -55,6 +58,7 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
+              {justWatch && <JustWatchButton justWatch={justWatch} />}
             </div>
           </div>
 

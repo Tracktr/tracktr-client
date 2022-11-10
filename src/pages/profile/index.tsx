@@ -12,6 +12,7 @@ const ProfilePage = () => {
 
   const [adult, setAdult] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const mutation = trpc.profile.updateProfile.useMutation();
 
@@ -21,6 +22,7 @@ const ProfilePage = () => {
     mutation.mutate({
       adult,
       language: selectedLanguage,
+      location: selectedLocation,
     });
   };
 
@@ -29,6 +31,7 @@ const ProfilePage = () => {
       setAdult(data.profile?.adult ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
+      setSelectedLocation(data?.profile?.location ?? "en");
     }
   }, [data, status]);
 
@@ -62,6 +65,22 @@ const ProfilePage = () => {
                   className="ml-auto text-primaryBackground"
                   onChange={(e) => setSelectedLanguage(e.target.value)}
                   value={selectedLanguage}
+                >
+                  {data &&
+                    Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
+                      <option key={iso_639_1} value={iso_639_1}>
+                        {englishName}
+                      </option>
+                    ))}
+                </select>
+              </label>
+
+              <label className="flex items-center w-full">
+                <span>Streaming Location</span>
+                <select
+                  className="ml-auto text-primaryBackground"
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  value={selectedLocation}
                 >
                   {data &&
                     Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
