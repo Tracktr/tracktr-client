@@ -4,7 +4,7 @@ import { BackdropImage, PosterImage } from "../../utils/generateImages";
 import WatchedButton from "../common/WatchedButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
-import { IoMdFemale, IoMdMale } from "react-icons/Io";
+import { IoMdFemale, IoMdMale } from "react-icons/io";
 
 interface IContentHeader {
   idForWatchButton?: number;
