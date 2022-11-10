@@ -5,6 +5,8 @@ import WatchedButton from "../common/WatchedButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
+import JustWatchButton from "../common/JustWatch";
+import JustWatch from "../common/JustWatch";
 
 interface IContentHeader {
   idForWatchButton?: number;
@@ -16,6 +18,7 @@ interface IContentHeader {
   description: string;
   score?: number;
   gender?: number;
+  justWatch?: any;
   children?: any;
 }
 
@@ -30,9 +33,9 @@ const ContentHeader = ({
   genres,
   score,
   gender,
+  justWatch,
 }: IContentHeader) => {
   const session = useSession();
-
   return (
     <>
       <div
@@ -55,6 +58,7 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
+              {justWatch && <JustWatch justWatch={justWatch} />}
             </div>
           </div>
 
@@ -65,10 +69,12 @@ const ContentHeader = ({
                   {gender === 1 && <IoMdFemale className="mr-2 text-pink-500" />}
                   {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
 
-                  {title}
-                  {date && (
-                    <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
-                  )}
+                  <div>
+                    {title}
+                    {date && (
+                      <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
+                    )}
+                  </div>
                 </h1>
                 {score !== undefined && (
                   <span className="flex items-center p-2 text-xl">

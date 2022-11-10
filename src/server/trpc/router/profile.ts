@@ -27,6 +27,7 @@ export const profileRouter = router({
       z.object({
         adult: z.boolean(),
         language: z.string(),
+        location: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -39,6 +40,7 @@ export const profileRouter = router({
             update: {
               adult: input.adult,
               language: input.language,
+              location: input.location,
             },
           },
         },
