@@ -9,6 +9,7 @@ const ProfilePage = () => {
   const router = useRouter();
   const session = useSession();
   const { data, status } = trpc.profile.profileBySession.useQuery();
+  const { data: watchRegions } = trpc.common.watchProviders.useQuery();
 
   const [adult, setAdult] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -31,7 +32,7 @@ const ProfilePage = () => {
       setAdult(data.profile?.adult ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
-      setSelectedLocation(data?.profile?.location ?? "en");
+      setSelectedLocation(data?.profile?.location ?? "GB");
     }
   }, [data, status]);
 
@@ -83,9 +84,9 @@ const ProfilePage = () => {
                   value={selectedLocation}
                 >
                   {data &&
-                    Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
-                      <option key={iso_639_1} value={iso_639_1}>
-                        {englishName}
+                    Object.values(watchRegions.results).map(({ english_name, iso_3166_1 }: any) => (
+                      <option key={iso_3166_1} value={iso_3166_1}>
+                        {english_name}
                       </option>
                     ))}
                 </select>

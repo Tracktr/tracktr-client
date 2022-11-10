@@ -35,7 +35,6 @@ const ContentHeader = ({
   justWatch,
 }: IContentHeader) => {
   const session = useSession();
-
   return (
     <>
       <div

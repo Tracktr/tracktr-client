@@ -10,7 +10,7 @@ import Link from "next/link";
 const JustWatchButton = ({ justWatch }: any) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
-  const currentLocation = justWatch.results[session.data?.user?.profile.location.toUpperCase() ?? "US"];
+  const currentLocation = justWatch.results[session.data?.user?.profile.location.toUpperCase() ?? "GB"];
 
   const close = () => setModalOpen(false);
   const open = () => setModalOpen(true);
