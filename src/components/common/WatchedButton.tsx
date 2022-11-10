@@ -80,16 +80,16 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
   }
 
   if (state === "watched" && data) {
-    // const date = new Date().toLocaleDateString(
-    //   "en-UK", // TODO: get time format from user language
-    //   {
-    //     year: "numeric",
-    //     month: "short",
-    //     day: "numeric",
-    //     hour: "numeric",
-    //     minute: "numeric",
-    //   }
-    // );
+    const date = new Date().toLocaleDateString(
+      "en-UK", // TODO: get time format from user language
+      {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }
+    );
 
     return (
       <Button onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
@@ -100,7 +100,7 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
           <div className="text-sm font-bold">
             Watched {Object.keys(data).length > 0 && `${Object.keys(data).length} times`}
           </div>
-          {/* <div className="text-xs italic normal-case">Last on {date}</div> */}
+          <div className="text-xs italic normal-case">Last seen on {date}</div>
         </div>
       </Button>
     );
