@@ -65,6 +65,20 @@ export const episodeRouter = router({
                   name: currentSeason.name,
                   poster: currentSeason.poster_path,
                   season_number: currentSeason.season_number,
+                  // Loop over all episodes in the season
+                  episodes: {
+                    connectOrCreate: currentSeason.episodes.map((e: TmdbEpisode) => {
+                      return {
+                        where: { id: e.id },
+                        create: {
+                          id: e.id,
+                          name: e.name,
+                          episode_number: e.episode_number,
+                          season_number: e.season_number,
+                        },
+                      };
+                    }),
+                  },
                 },
               },
             ],
@@ -72,17 +86,17 @@ export const episodeRouter = router({
         },
       });
 
-      // if (newSeries !== null) {
-      //   const result = await ctx.prisma.episodesHistory.create({
-      //     data: {
-      //       datetime: new Date(),
-      //       user_id: ctx?.session?.user?.id as string,
-      //       series_id: input.seriesId,
-      //       season_number: input.seasonNumber,
-      //       episode_number: input.episodeNumber,
-      //     },
-      //   });
-      //   return result;
-      // }
+      if (newSeries !== null) {
+        const result = await ctx.prisma.episodesHistory.create({
+          data: {
+            datetime: new Date(),
+            user_id: ctx?.session?.user?.id as string,
+            series_id: input.seriesId,
+            season_number: input.seasonNumber,
+            episode_number: input.episodeNumber,
+          },
+        });
+        return result;
+      }
     }),
 });
