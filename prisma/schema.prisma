@@ -102,8 +102,8 @@ model Seasons {
   name            String
   poster          String
   season_number   Int?
-  Series          Series?           @relation(fields: [seriesId], references: [id], onDelete: Cascade)
-  seriesId        Int?
+  Series          Series?           @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  series_id       Int?
   episodes        Episodes[]
   EpisodesHistory EpisodesHistory[]
 }
@@ -113,8 +113,8 @@ model Episodes {
   name            String
   episode_number  Int
   season_number   Int?
-  Seasons         Seasons?          @relation(fields: [seasonsId], references: [id], onDelete: Cascade)
-  seasonsId       Int?
+  Seasons         Seasons?          @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
+  seasons_id      Int?
   EpisodesHistory EpisodesHistory[]
 }
 
