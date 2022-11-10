@@ -32,15 +32,49 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
 const WatchedButton = ({ itemID, seasonID, episodeID }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
+  const [data, setData] = useState<any>();
+  const [status, setStatus] = useState<any>();
+  const [refetch, setRefetch] = useState<any>();
 
-  //TODO:
-  const { data, status, refetch } = trpc.movie.watchHistoryByID.useQuery(
+  const {
+    data: movieHistory,
+    status: movieStatus,
+    refetch: movieRefetch,
+  } = trpc.movie.watchHistoryByID.useQuery(
     { movieId: itemID },
     {
       enabled: sessionStatus !== "loading",
       refetchOnWindowFocus: false,
     }
   );
+
+  const {
+    data: tvHistory,
+    status: tvStatus,
+    refetch: tvRefetch,
+  } = trpc.episode.watchHistoryByID.useQuery(
+    {
+      episodeNumber: Number(episodeID),
+      seasonNumber: Number(seasonID),
+      seriesId: itemID,
+    },
+    {
+      enabled: sessionStatus !== "loading",
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  useEffect(() => {
+    setData(movieHistory || tvHistory);
+  }, [movieHistory, tvHistory]);
+
+  useEffect(() => {
+    setStatus(movieStatus || tvStatus);
+  }, [movieStatus, tvStatus]);
+
+  useEffect(() => {
+    setRefetch(movieRefetch || tvRefetch);
+  }, [movieRefetch, tvRefetch]);
 
   const { mutate: tvMutate, status: tvMutationStatus } = trpc.episode.markEpisodeAsWatched.useMutation({
     onMutate: async () => {

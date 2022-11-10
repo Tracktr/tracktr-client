@@ -99,4 +99,27 @@ export const episodeRouter = router({
         return result;
       }
     }),
+
+  watchHistoryByID: protectedProcedure
+    .input(
+      z.object({
+        episodeNumber: z.number(),
+        seasonNumber: z.number(),
+        seriesId: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.prisma.episodesHistory.findMany({
+        where: {
+          user_id: ctx.session.user.id,
+          series_id: input.seriesId,
+          season_number: input.seasonNumber,
+          episode_number: input.episodeNumber,
+        },
+      });
+
+      return {
+        ...result,
+      };
+    }),
 });
