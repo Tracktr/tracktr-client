@@ -25,7 +25,7 @@ const JustWatch = ({ justWatch }: any) => {
         <BiCameraMovie className="text-3xl" />
       </motion.button>
 
-      <AnimatePresence initial={false} exitBeforeEnter={true}>
+      <AnimatePresence initial={false} mode="wait">
         {modalOpen && <Modal handleClose={close} data={currentLocation} session={session} />}
       </AnimatePresence>
     </div>
