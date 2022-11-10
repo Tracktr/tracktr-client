@@ -46,6 +46,7 @@ const Navbar = () => {
                             width="36px"
                             height="36px"
                             className="rounded-full"
+                            alt="User profile image"
                           />
                           <p className="ml-2 text-sm">{session.user?.name}</p>
                         </a>
@@ -107,6 +108,7 @@ const Navbar = () => {
                             width="36px"
                             height="36px"
                             className="rounded-full"
+                            alt="User profile image"
                           />
                           <p className="ml-2 text-sm">{session.user?.name}</p>
                         </a>

@@ -4,7 +4,9 @@ import { ImSpinner2, ImCheckmark, ImCheckmark2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 
 interface IWatchedButtonProps {
-  movieID: number;
+  itemID: number;
+  seasonID?: number;
+  episodeID?: number;
 }
 
 interface IButton {
@@ -27,19 +29,29 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
   </div>
 );
 
-const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
+const WatchedButton = ({ itemID, seasonID, episodeID }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
 
+  //TODO:
   const { data, status, refetch } = trpc.movie.watchHistoryByID.useQuery(
-    { movieId: movieID },
+    { movieId: itemID },
     {
       enabled: sessionStatus !== "loading",
       refetchOnWindowFocus: false,
     }
   );
 
-  const { mutate, status: mutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
+  const { mutate: tvMutate, status: tvMutationStatus } = trpc.episode.markEpisodeAsWatched.useMutation({
+    onMutate: async () => {
+      setState("loading");
+    },
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const { mutate: movieMutate, status: movieMutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: async () => {
       setState("loading");
     },
@@ -56,15 +68,24 @@ const WatchedButton = ({ movieID }: IWatchedButtonProps) => {
         setState("unwatched");
       }
     }
-  }, [session, sessionStatus, data, status, mutationStatus]);
+  }, [session, sessionStatus, data, status, tvMutationStatus, movieMutationStatus]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
       setState("loading");
 
-      mutate({
-        movieId: movieID,
-      });
+      if (episodeID && seasonID) {
+        tvMutate({
+          episodeNumber: episodeID,
+          seasonNumber: seasonID,
+          seriesId: itemID,
+        });
+      } else {
+        movieMutate({
+          movieId: itemID,
+        });
+      }
     }
   };
 

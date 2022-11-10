@@ -46,7 +46,7 @@ const Backdrop = ({ children, onClick }: any) => {
   );
 };
 
-const Modal = ({ handleClose, data, session }: any) => {
+const Modal = ({ handleClose, data }: any) => {
   return ReactDOM.createPortal(
     <Backdrop onClick={handleClose}>
       <div
