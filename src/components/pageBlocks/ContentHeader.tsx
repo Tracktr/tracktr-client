@@ -65,10 +65,12 @@ const ContentHeader = ({
                   {gender === 1 && <IoMdFemale className="mr-2 text-pink-500" />}
                   {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
 
-                  {title}
-                  {date && (
-                    <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
-                  )}
+                  <div>
+                    {title}
+                    {date && (
+                      <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
+                    )}
+                  </div>
                 </h1>
                 {score !== undefined && (
                   <span className="flex items-center p-2 text-xl">
