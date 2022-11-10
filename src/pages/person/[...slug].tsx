@@ -10,7 +10,15 @@ const PersonPage = () => {
 
   return (
     <LoadingPageComponents status={status}>
-      {() => <ContentHeader cover="" poster={data.profile_path} title={data.name} description={data.biography} />}
+      {() => (
+        <ContentHeader
+          cover=""
+          gender={data.gender}
+          poster={data.profile_path}
+          title={data.name}
+          description={data.biography}
+        />
+      )}
     </LoadingPageComponents>
   );
 };
