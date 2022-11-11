@@ -1,9 +1,8 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../../server/db/client";
 
 const createUserProfile = async ({ user }: any) => {
   const { id } = user;

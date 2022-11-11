@@ -95,7 +95,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
           seriesId: itemID,
         });
       } else {
-        markAsWatched.Mutate({
+        markAsWatched.mutate({
           movieId: itemID,
         });
       }
