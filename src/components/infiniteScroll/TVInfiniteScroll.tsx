@@ -32,6 +32,7 @@ const TVInfiniteScroll = () => {
         {() => (
           <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               page.results.map((content: any) => {
                 return (
                   <TVPoster

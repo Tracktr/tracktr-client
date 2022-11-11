@@ -8,7 +8,7 @@ export const commonRouter = router({
       ...data,
     };
   }),
-  watchProviders: publicProcedure.query(async ({ ctx }) => {
+  watchProviders: publicProcedure.query(async () => {
     const url = new URL(`watch/providers/regions`, process.env.NEXT_PUBLIC_TMDB_API);
     url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 

@@ -22,6 +22,7 @@ const EpisodePage = () => {
     <LoadingPageComponents status={episodeStatus}>
       {() => (
         <ContentHeader
+          watchButton={{ itemID: Number(tvID), episodeID: Number(episodeID), seasonID: Number(seasonID) }}
           cover={tvShow.backdrop_path}
           poster={tvShow.poster_path}
           title={episodeData.name}

@@ -5,11 +5,14 @@ import WatchedButton from "../common/WatchedButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
-import JustWatchButton from "../common/JustWatch";
 import JustWatch from "../common/JustWatch";
 
 interface IContentHeader {
-  idForWatchButton?: number;
+  watchButton?: {
+    itemID: number;
+    seasonID?: number;
+    episodeID?: number;
+  };
   cover?: string;
   poster: string;
   genres?: string[];
@@ -18,12 +21,14 @@ interface IContentHeader {
   description: string;
   score?: number;
   gender?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   justWatch?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children?: any;
 }
 
 const ContentHeader = ({
-  idForWatchButton,
+  watchButton,
   cover,
   poster,
   title,
@@ -36,6 +41,7 @@ const ContentHeader = ({
   justWatch,
 }: IContentHeader) => {
   const session = useSession();
+
   return (
     <>
       <div
@@ -88,9 +94,13 @@ const ContentHeader = ({
             </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
-              {idForWatchButton && session.status === "authenticated" ? (
+              {watchButton && session.status === "authenticated" ? (
                 <div className="col-span-2 pt-4 pb-4 lg:ml-6 md:row-start-auto">
-                  <WatchedButton movieID={idForWatchButton} />
+                  <WatchedButton
+                    itemID={watchButton.itemID}
+                    episodeID={Number(watchButton.episodeID)}
+                    seasonID={Number(watchButton.seasonID)}
+                  />
                 </div>
               ) : (
                 ""

@@ -1,10 +1,10 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "../../../server/db/client";
 
-const prisma = new PrismaClient();
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserProfile = async ({ user }: any) => {
   const { id } = user;
 

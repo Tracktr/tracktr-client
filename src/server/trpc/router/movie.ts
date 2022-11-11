@@ -9,7 +9,8 @@ export const movieRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`movie/${input?.slug}`, process.env.NEXT_PUBLIC_TMDB_API);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const url: any = new URL(`movie/${input?.slug}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("append_to_response", "credits,watch/providers");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
@@ -74,7 +75,6 @@ export const movieRouter = router({
     .mutation(async ({ ctx, input }) => {
       const movie = new URL(`movie/${input?.movieId}`, process.env.NEXT_PUBLIC_TMDB_API);
       movie.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-      movie.searchParams.append("append_to_response", "credits");
       if (ctx) movie.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const res = await fetch(movie);

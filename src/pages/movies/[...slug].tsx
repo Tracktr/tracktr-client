@@ -14,7 +14,9 @@ const MoviePage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <ContentHeader
-          idForWatchButton={data?.id}
+          watchButton={{
+            itemID: data.id,
+          }}
           genres={data.genres}
           cover={data.backdrop_path}
           poster={data.poster_path}
