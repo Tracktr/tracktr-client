@@ -76,7 +76,7 @@ model Languages {
 model Movies {
   id            Int             @id
   title         String
-  poster        String
+  poster        String?
   MoviesHistory MoviesHistory[]
 }
 
@@ -92,7 +92,7 @@ model MoviesHistory {
 model Series {
   id              Int               @id
   name            String
-  poster          String
+  poster          String?
   seasons         Seasons[]
   EpisodesHistory EpisodesHistory[]
 }
@@ -100,7 +100,7 @@ model Series {
 model Seasons {
   id              Int               @id
   name            String
-  poster          String
+  poster          String?
   season_number   Int?
   Series          Series?           @relation(fields: [series_id], references: [id], onDelete: Cascade)
   series_id       Int?
