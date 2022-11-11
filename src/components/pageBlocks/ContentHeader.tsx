@@ -40,8 +40,6 @@ const ContentHeader = ({
 }: IContentHeader) => {
   const session = useSession();
 
-  console.log(watchButton);
-
   return (
     <>
       <div
