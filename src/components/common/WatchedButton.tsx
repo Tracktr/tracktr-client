@@ -11,6 +11,7 @@ interface IWatchedButtonProps {
 
 interface IButton {
   onClick?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onKeyDown?: (e: any) => void;
   children: ReactFragment;
 }
@@ -32,7 +33,9 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
 const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let watchHistory: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let markAsWatched: any;
 
   if (episodeID && seasonID) {
@@ -84,6 +87,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
     }
   }, [session, sessionStatus, watchHistory.data, watchHistory.status, markAsWatched.status]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
       setState("loading");

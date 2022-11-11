@@ -21,7 +21,9 @@ interface IContentHeader {
   description: string;
   score?: number;
   gender?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   justWatch?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children?: any;
 }
 
@@ -96,8 +98,8 @@ const ContentHeader = ({
                 <div className="col-span-2 pt-4 pb-4 lg:ml-6 md:row-start-auto">
                   <WatchedButton
                     itemID={watchButton.itemID}
-                    episodeID={watchButton.episodeID}
-                    seasonID={watchButton.seasonID}
+                    episodeID={Number(watchButton.episodeID)}
+                    seasonID={Number(watchButton.seasonID)}
                   />
                 </div>
               ) : (

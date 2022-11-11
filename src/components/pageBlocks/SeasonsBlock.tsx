@@ -3,6 +3,7 @@ import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import TVPoster from "../posters/TVPoster";
 
 interface ISeasons {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   seasons: any;
 }
 
@@ -18,6 +19,7 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
           {seasons
             .slice(0)
             .reverse()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((item: any) => (
               <div key={item.id} className="flex-shrink-0">
                 <TVPoster

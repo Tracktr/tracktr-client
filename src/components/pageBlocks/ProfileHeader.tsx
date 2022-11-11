@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ProfileHeader = ({ image, name }: any) => (
   <div className="max-w-6xl pt-24 m-auto">
     <div className="flex items-center">
