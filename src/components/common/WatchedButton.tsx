@@ -118,7 +118,9 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
   }
 
   if (state === "watched" && watchHistory.data) {
-    const date = new Date().toLocaleDateString(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any[] = Object.values(watchHistory.data);
+    const date = new Date(data[data.length - 1].datetime).toLocaleDateString(
       "en-UK", // TODO: get time format from user language
       {
         year: "numeric",
