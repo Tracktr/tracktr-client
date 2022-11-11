@@ -3,7 +3,6 @@ import "react-indiana-drag-scroll/dist/style.css";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HorizontalScrollContainer = ({ children }: any) => {
   const { ref } = useScrollContainer();
 

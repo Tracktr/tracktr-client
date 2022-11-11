@@ -7,8 +7,12 @@ import Image from "next/image";
 import ReactDOM from "react-dom";
 import Link from "next/link";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const JustWatch = ({ justWatch }: any) => {
+interface JustWatchProps {
+  justWatch: any;
+  themeColor: any;
+}
+
+const JustWatch = ({ justWatch, themeColor }: JustWatchProps) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const currentLocation = justWatch.results[session.data?.user?.profile.location.toUpperCase() ?? "GB"];
@@ -19,7 +23,14 @@ const JustWatch = ({ justWatch }: any) => {
   return (
     <div>
       <motion.button
-        className="flex items-center justify-between w-full px-3 py-2 mt-2 rounded-md text-primaryBackground bg-primary"
+        style={{
+          background: themeColor.hex,
+        }}
+        className={`
+          flex items-center justify-between w-full px-3 py-2 mt-2 rounded-md 
+          ${themeColor.isDark && "text-white"}
+          ${themeColor.isLight && "text-primaryBackground"}
+        `}
         onClick={() => (modalOpen ? close() : open())}
       >
         <span className="text-lg font-bold">Available on</span>
@@ -33,7 +44,6 @@ const JustWatch = ({ justWatch }: any) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Backdrop = ({ children, onClick }: any) => {
   return (
     <motion.div
@@ -48,7 +58,6 @@ const Backdrop = ({ children, onClick }: any) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Modal = ({ handleClose, data }: any) => {
   return ReactDOM.createPortal(
     <Backdrop onClick={handleClose}>
@@ -62,20 +71,17 @@ const Modal = ({ handleClose, data }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Streaming</p>
                 <HorizontalScrollContainer>
-                  {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    data.flatrate.map((item: any) => (
-                      <div key={item.provider_name} className="flex-shrink-0">
-                        <Image
-                          className="rounded-md"
-                          alt={item.provider_name}
-                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                          width={56}
-                          height={56}
-                        />
-                      </div>
-                    ))
-                  }
+                  {data.flatrate.map((item: any) => (
+                    <div key={item.provider_name} className="flex-shrink-0">
+                      <Image
+                        className="rounded-md"
+                        alt={item.provider_name}
+                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                        width={56}
+                        height={56}
+                      />
+                    </div>
+                  ))}
                 </HorizontalScrollContainer>
               </div>
             )}
@@ -84,20 +90,17 @@ const Modal = ({ handleClose, data }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Rent</p>
                 <HorizontalScrollContainer>
-                  {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    data.rent.map((item: any) => (
-                      <div key={item.provider_name} className="flex-shrink-0">
-                        <Image
-                          className="rounded-md"
-                          alt={item.provider_name}
-                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                          width={56}
-                          height={56}
-                        />
-                      </div>
-                    ))
-                  }
+                  {data.rent.map((item: any) => (
+                    <div key={item.provider_name} className="flex-shrink-0">
+                      <Image
+                        className="rounded-md"
+                        alt={item.provider_name}
+                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                        width={56}
+                        height={56}
+                      />
+                    </div>
+                  ))}
                 </HorizontalScrollContainer>
               </div>
             )}
@@ -106,20 +109,17 @@ const Modal = ({ handleClose, data }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Purchase</p>
                 <HorizontalScrollContainer>
-                  {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    data.buy.map((item: any) => (
-                      <div key={item.provider_name} className="flex-shrink-0">
-                        <Image
-                          className="rounded-md"
-                          alt={item.provider_name}
-                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                          width={56}
-                          height={56}
-                        />
-                      </div>
-                    ))
-                  }
+                  {data.buy.map((item: any) => (
+                    <div key={item.provider_name} className="flex-shrink-0">
+                      <Image
+                        className="rounded-md"
+                        alt={item.provider_name}
+                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                        width={56}
+                        height={56}
+                      />
+                    </div>
+                  ))}
                 </HorizontalScrollContainer>
               </div>
             )}

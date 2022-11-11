@@ -22,12 +22,11 @@ interface IContentHeader {
   description: string;
   score?: number;
   gender?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   justWatch?: any;
   seriesProgression?: any;
   amountOfEpisodes?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children?: any;
+  themeColor?: any;
 }
 
 const ContentHeader = ({
@@ -44,6 +43,7 @@ const ContentHeader = ({
   justWatch,
   seriesProgression,
   amountOfEpisodes,
+  themeColor,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -69,7 +69,7 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
-              {justWatch && <JustWatch justWatch={justWatch} />}
+              {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} />}
             </div>
           </div>
 
@@ -95,7 +95,7 @@ const ContentHeader = ({
                 )}
               </div>
 
-              <GenresBlock genres={genres} />
+              <GenresBlock genres={genres} themeColor={themeColor} />
             </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
@@ -111,6 +111,7 @@ const ContentHeader = ({
                     itemID={watchButton.itemID}
                     episodeID={Number(watchButton.episodeID)}
                     seasonID={Number(watchButton.seasonID)}
+                    themeColor={themeColor}
                   />
                 )}
               </div>

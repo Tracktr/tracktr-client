@@ -4,7 +4,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "../../../server/db/client";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createUserProfile = async ({ user }: any) => {
   const { id } = user;
 

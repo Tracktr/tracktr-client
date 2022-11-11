@@ -25,6 +25,7 @@ const TVPage = () => {
           justWatch={data["watch/providers"]}
           seriesProgression={data.number_of_episodes_watched}
           amountOfEpisodes={data.number_of_episodes}
+          themeColor={data.theme_color}
         >
           <DetailsBlock
             status={data.status}

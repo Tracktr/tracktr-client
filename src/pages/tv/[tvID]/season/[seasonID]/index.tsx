@@ -26,6 +26,7 @@ const TVPage = () => {
           poster={data.poster_path}
           title={data.name}
           description={data.overview}
+          themeColor={tvShow.theme_color}
         >
           <EpisodesBlock episodes={data.episodes} />
           <CastBlock cast={data.credits.cast} />
