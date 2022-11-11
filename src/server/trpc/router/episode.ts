@@ -48,42 +48,46 @@ export const episodeRouter = router({
       // (https://www.themoviedb.org/talk/5bf41a1f0e0a26266f09a707?language=pa-IN)
       currentSeason.id = show.seasons.filter((s: TmdbSeason) => s.season_number === input.seasonNumber)[0].id;
 
-      const newSeries = await ctx.prisma.series.upsert({
-        where: { id: input.seriesId },
-        update: {},
-        create: {
-          id: show.id,
-          name: show.name,
-          poster: show.poster_path,
-          // Adds only the current season
-          seasons: {
-            connectOrCreate: [
-              {
-                where: { id: currentSeason.id },
-                create: {
-                  id: currentSeason.id,
-                  name: currentSeason.name,
-                  poster: currentSeason.poster_path,
-                  season_number: currentSeason.season_number,
-                  // Loop over all episodes in the season
-                  episodes: {
-                    connectOrCreate: currentSeason.episodes.map((e: TmdbEpisode) => {
-                      return {
-                        where: { id: e.id },
-                        create: {
-                          id: e.id,
-                          name: e.name,
-                          episode_number: e.episode_number,
-                          season_number: e.season_number,
-                        },
-                      };
-                    }),
-                  },
+      const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
+      const newSeriesCreateUpdate = {
+        id: show.id,
+        name: show.name,
+        poster: seriesPoster,
+        // Adds only the current season
+        seasons: {
+          connectOrCreate: [
+            {
+              where: { id: currentSeason.id },
+              create: {
+                id: currentSeason.id,
+                name: currentSeason.name,
+                poster: currentSeason.poster_path ? currentSeason.poster_path : seriesPoster,
+                season_number: currentSeason.season_number,
+                // Loop over all episodes in the season
+                episodes: {
+                  connectOrCreate: currentSeason.episodes.map((e: TmdbEpisode) => {
+                    return {
+                      where: { id: e.id },
+                      create: {
+                        id: e.id,
+                        name: e.name,
+                        episode_number: e.episode_number,
+                        season_number: e.season_number,
+                      },
+                    };
+                  }),
                 },
               },
-            ],
-          },
+            },
+          ],
         },
+      };
+
+      const newSeries = await ctx.prisma.series.upsert({
+        where: { id: input.seriesId },
+        update: newSeriesCreateUpdate,
+        create: newSeriesCreateUpdate,
       });
 
       if (newSeries !== null) {
