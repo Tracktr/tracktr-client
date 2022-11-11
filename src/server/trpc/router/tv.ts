@@ -1,5 +1,6 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
+import { Prisma } from "@prisma/client";
 
 export const tvRouter = router({
   tvById: publicProcedure
@@ -16,6 +17,23 @@ export const tvRouter = router({
 
       const res = await fetch(url);
       const json = await res.json();
+
+      if (ctx && input?.tvID) {
+        const episodesWatched = await ctx.prisma.$queryRaw`
+          SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_number) as UNSIGNED)
+          as "count"
+          FROM EpisodesHistory 
+          WHERE series_id = ${input?.tvID} 
+          AND user_id = ${ctx.session?.user?.id}
+        `;
+
+        if (episodesWatched) {
+          return {
+            ...json,
+            number_of_episodes_watched: episodesWatched,
+          };
+        }
+      }
 
       return {
         ...json,

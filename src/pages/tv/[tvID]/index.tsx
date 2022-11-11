@@ -23,6 +23,8 @@ const TVPage = () => {
           genres={data.genres}
           score={data.vote_average}
           justWatch={data["watch/providers"]}
+          seriesProgression={data.number_of_episodes_watched}
+          amountOfEpisodes={data.number_of_episodes}
         >
           <DetailsBlock
             status={data.status}

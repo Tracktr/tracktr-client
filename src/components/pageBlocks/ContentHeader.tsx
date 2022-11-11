@@ -6,6 +6,7 @@ import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import JustWatch from "../common/JustWatch";
+import SeriesProgressionBlock from "./SeriesProgressionBlock";
 
 interface IContentHeader {
   watchButton?: {
@@ -23,6 +24,8 @@ interface IContentHeader {
   gender?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   justWatch?: any;
+  seriesProgression?: any;
+  amountOfEpisodes?: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children?: any;
 }
@@ -39,6 +42,8 @@ const ContentHeader = ({
   score,
   gender,
   justWatch,
+  seriesProgression,
+  amountOfEpisodes,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -94,17 +99,21 @@ const ContentHeader = ({
             </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
-              {watchButton && session.status === "authenticated" ? (
-                <div className="col-span-2 pt-4 pb-4 lg:ml-6 md:row-start-auto">
+              <div className="col-span-2 pt-4 pb-4 lg:ml-6 md:row-start-auto">
+                {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
+                  <SeriesProgressionBlock
+                    amountOfEpisodes={amountOfEpisodes}
+                    numberOfEpisodesWatched={seriesProgression}
+                  />
+                )}
+                {watchButton && session.status === "authenticated" && (
                   <WatchedButton
                     itemID={watchButton.itemID}
                     episodeID={Number(watchButton.episodeID)}
                     seasonID={Number(watchButton.seasonID)}
                   />
-                </div>
-              ) : (
-                ""
-              )}
+                )}
+              </div>
             </div>
 
             {children || ""}
