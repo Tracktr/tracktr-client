@@ -5,6 +5,8 @@ import { trpc } from "../../utils/trpc";
 
 interface IWatchedButtonProps {
   itemID: number;
+  episodeID: number;
+  seasonID: number;
 }
 
 interface IButton {
@@ -27,44 +29,76 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
   </div>
 );
 
-const WatchedButton = ({ itemID }: IWatchedButtonProps) => {
+const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
+  let watchHistory: any;
+  let markAsWatched: any;
 
-  const { data, status, refetch } = trpc.movie.watchHistoryByID.useQuery(
-    { movieId: itemID },
-    {
-      enabled: sessionStatus !== "loading",
-      refetchOnWindowFocus: false,
-    }
-  );
+  if (episodeID && seasonID) {
+    watchHistory = trpc.episode.watchHistoryByID.useQuery(
+      {
+        episodeNumber: Number(episodeID),
+        seasonNumber: Number(seasonID),
+        seriesId: itemID,
+      },
+      {
+        enabled: sessionStatus !== "loading",
+        refetchOnWindowFocus: false,
+      }
+    );
+    markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+      onMutate: async () => {
+        setState("loading");
+      },
+      onSuccess: () => {
+        watchHistory.refetch();
+      },
+    });
+  } else {
+    watchHistory = trpc.movie.watchHistoryByID.useQuery(
+      { movieId: itemID },
+      {
+        enabled: sessionStatus !== "loading",
+        refetchOnWindowFocus: false,
+      }
+    );
 
-  const { mutate, status: mutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
-    onMutate: async () => {
-      setState("loading");
-    },
-    onSuccess: () => {
-      refetch();
-    },
-  });
+    markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+      onMutate: async () => {
+        setState("loading");
+      },
+      onSuccess: () => {
+        watchHistory.refetch();
+      },
+    });
+  }
 
   useEffect(() => {
-    if (sessionStatus !== "loading" && session && status === "success") {
-      if (Object.keys(data).length > 0) {
+    if (sessionStatus !== "loading" && session && watchHistory.status === "success") {
+      if (Object.keys(watchHistory.data).length > 0) {
         setState("watched");
       } else {
         setState("unwatched");
       }
     }
-  }, [session, sessionStatus, data, status, mutationStatus]);
+  }, [session, sessionStatus, watchHistory.data, watchHistory.status, markAsWatched.status]);
 
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
       setState("loading");
 
-      mutate({
-        movieId: itemID,
-      });
+      if (episodeID && seasonID) {
+        markAsWatched.mutate({
+          episodeNumber: episodeID,
+          seasonNumber: seasonID,
+          seriesId: itemID,
+        });
+      } else {
+        markAsWatched.Mutate({
+          movieId: itemID,
+        });
+      }
     }
   };
 
@@ -79,7 +113,7 @@ const WatchedButton = ({ itemID }: IWatchedButtonProps) => {
     );
   }
 
-  if (state === "watched" && data) {
+  if (state === "watched" && watchHistory.data) {
     const date = new Date().toLocaleDateString(
       "en-UK", // TODO: get time format from user language
       {
@@ -98,7 +132,7 @@ const WatchedButton = ({ itemID }: IWatchedButtonProps) => {
         </div>
         <div>
           <div className="text-sm font-bold">
-            Watched {Object.keys(data).length > 0 && `${Object.keys(data).length} times`}
+            Watched {Object.keys(watchHistory.data).length > 0 && `${Object.keys(watchHistory.data).length} times`}
           </div>
           <div className="text-xs italic normal-case">Last seen on {date}</div>
         </div>
