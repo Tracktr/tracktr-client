@@ -5,8 +5,6 @@ import { trpc } from "../../utils/trpc";
 
 interface IWatchedButtonProps {
   itemID: number;
-  seasonID?: number;
-  episodeID?: number;
 }
 
 interface IButton {
@@ -29,18 +27,11 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
   </div>
 );
 
-const WatchedButton = ({ itemID, seasonID, episodeID }: IWatchedButtonProps) => {
+const WatchedButton = ({ itemID }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
-  const [data, setData] = useState<any>();
-  const [status, setStatus] = useState<any>();
-  const [refetch, setRefetch] = useState<any>();
 
-  const {
-    data: movieHistory,
-    status: movieStatus,
-    refetch: movieRefetch,
-  } = trpc.movie.watchHistoryByID.useQuery(
+  const { data, status, refetch } = trpc.movie.watchHistoryByID.useQuery(
     { movieId: itemID },
     {
       enabled: sessionStatus !== "loading",
@@ -48,44 +39,7 @@ const WatchedButton = ({ itemID, seasonID, episodeID }: IWatchedButtonProps) => 
     }
   );
 
-  const {
-    data: tvHistory,
-    status: tvStatus,
-    refetch: tvRefetch,
-  } = trpc.episode.watchHistoryByID.useQuery(
-    {
-      episodeNumber: Number(episodeID),
-      seasonNumber: Number(seasonID),
-      seriesId: itemID,
-    },
-    {
-      enabled: sessionStatus !== "loading",
-      refetchOnWindowFocus: false,
-    }
-  );
-
-  useEffect(() => {
-    setData(movieHistory || tvHistory);
-  }, [movieHistory, tvHistory]);
-
-  useEffect(() => {
-    setStatus(movieStatus || tvStatus);
-  }, [movieStatus, tvStatus]);
-
-  useEffect(() => {
-    setRefetch(movieRefetch || tvRefetch);
-  }, [movieRefetch, tvRefetch]);
-
-  const { mutate: tvMutate, status: tvMutationStatus } = trpc.episode.markEpisodeAsWatched.useMutation({
-    onMutate: async () => {
-      setState("loading");
-    },
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
-  const { mutate: movieMutate, status: movieMutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
+  const { mutate, status: mutationStatus } = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: async () => {
       setState("loading");
     },
@@ -102,24 +56,15 @@ const WatchedButton = ({ itemID, seasonID, episodeID }: IWatchedButtonProps) => 
         setState("unwatched");
       }
     }
-  }, [session, sessionStatus, data, status, tvMutationStatus, movieMutationStatus]);
+  }, [session, sessionStatus, data, status, mutationStatus]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
       setState("loading");
 
-      if (episodeID && seasonID) {
-        tvMutate({
-          episodeNumber: episodeID,
-          seasonNumber: seasonID,
-          seriesId: itemID,
-        });
-      } else {
-        movieMutate({
-          movieId: itemID,
-        });
-      }
+      mutate({
+        movieId: itemID,
+      });
     }
   };
 
