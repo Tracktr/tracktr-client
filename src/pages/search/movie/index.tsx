@@ -14,7 +14,6 @@ const SearchPage = () => {
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.movie.searchMovie.useInfiniteQuery(
     { query: query as string },
     {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getNextPageParam: (lastPage: any, allPages: any) => {
         const nextPage = allPages.length + 1;
         return lastPage.results.length !== 0 ? nextPage : undefined;
@@ -35,7 +34,6 @@ const SearchPage = () => {
           <div className="z-40 text-4xl">Results for: {query}</div>
           <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               page.results.map((content: any) => {
                 return (
                   <TVPoster

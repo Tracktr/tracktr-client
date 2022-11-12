@@ -29,6 +29,7 @@ const EpisodePage = () => {
           description={episodeData.overview}
           date={episodeData.air_date}
           score={episodeData.vote_average}
+          themeColor={tvShow.theme_color}
         >
           <CastBlock cast={episodeData.credits.cast} />
         </ContentHeader>

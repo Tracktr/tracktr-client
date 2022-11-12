@@ -17,7 +17,6 @@ const ProfilePage = () => {
 
   const mutation = trpc.profile.updateProfile.useMutation();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (event: any) => {
     event.preventDefault();
 
@@ -69,7 +68,6 @@ const ProfilePage = () => {
                   value={selectedLanguage}
                 >
                   {data &&
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
                       <option key={iso_639_1} value={iso_639_1}>
                         {englishName}
@@ -86,7 +84,6 @@ const ProfilePage = () => {
                   value={selectedLocation}
                 >
                   {data &&
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     Object.values(watchRegions.results).map(({ english_name, iso_3166_1 }: any) => (
                       <option key={iso_3166_1} value={iso_3166_1}>
                         {english_name}

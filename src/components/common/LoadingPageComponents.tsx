@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 interface ILoadingPageComponents {
   status: "loading" | "error" | "success" | "idle";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 

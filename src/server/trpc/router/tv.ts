@@ -1,6 +1,7 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
+import convertImageToPrimaryColor from "../../../utils/colors";
 
 export const tvRouter = router({
   tvById: publicProcedure
@@ -18,6 +19,8 @@ export const tvRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
+
       if (ctx && input?.tvID) {
         const episodesWatched = await ctx.prisma.$queryRaw`
           SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_number) as UNSIGNED)
@@ -31,12 +34,14 @@ export const tvRouter = router({
           return {
             ...json,
             number_of_episodes_watched: episodesWatched,
+            theme_color: color,
           };
         }
       }
 
       return {
         ...json,
+        theme_color: color,
       };
     }),
 

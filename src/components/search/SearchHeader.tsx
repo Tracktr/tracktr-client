@@ -17,7 +17,6 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
     setSearchInput(value);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -25,7 +24,6 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnClick = (e: any) => {
     e.preventDefault();
     router.push(`/search/${type}/?query=${searchInput}`);

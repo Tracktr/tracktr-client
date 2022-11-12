@@ -1,26 +1,32 @@
 import { signIn, useSession } from "next-auth/react";
 import { ReactFragment, useEffect, useState } from "react";
-import { ImSpinner2, ImCheckmark, ImCheckmark2 } from "react-icons/im";
+import { ImSpinner2, ImCheckmark } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 
 interface IWatchedButtonProps {
   itemID: number;
   episodeID: number;
   seasonID: number;
+  themeColor: any;
 }
 
 interface IButton {
   onClick?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onKeyDown?: (e: any) => void;
+  themeColor: any;
   children: ReactFragment;
 }
 
-const Button = ({ onClick, onKeyDown, children }: IButton) => (
+const Button = ({ onClick, onKeyDown, children, themeColor }: IButton) => (
   <div
-    className={`h-16 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded ${
-      onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"
-    } border-primary text-primary`}
+    style={{
+      borderColor: themeColor.hex,
+      color: themeColor.hex,
+    }}
+    className={`
+      h-16 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded font-bold 
+      ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
+    `}
     onClick={onClick}
     onKeyDown={onKeyDown}
     role="button"
@@ -30,12 +36,10 @@ const Button = ({ onClick, onKeyDown, children }: IButton) => (
   </div>
 );
 
-const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => {
+const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let watchHistory: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let markAsWatched: any;
 
   if (episodeID && seasonID) {
@@ -87,7 +91,6 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
     }
   }, [session, sessionStatus, watchHistory.data, watchHistory.status, markAsWatched.status]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOnClick = async (e?: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
       setState("loading");
@@ -108,7 +111,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
 
   if (state === "loading") {
     return (
-      <Button>
+      <Button themeColor={themeColor}>
         <div>
           <ImSpinner2 className="w-6 h-6 animate-spin" />
         </div>
@@ -118,7 +121,6 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
   }
 
   if (state === "watched" && watchHistory.data) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: any[] = Object.values(watchHistory.data);
     const date = new Date(data[data.length - 1].datetime).toLocaleDateString(
       "en-UK", // TODO: get time format from user language
@@ -132,7 +134,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
     );
 
     return (
-      <Button onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
+      <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
           <ImCheckmark className="w-6 h-6" />
         </div>
@@ -148,9 +150,9 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
 
   if (state === "unwatched") {
     return (
-      <Button onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
+      <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
-          <ImCheckmark2 className="w-6 h-6" />
+          <ImCheckmark className="w-6 h-6" />
         </div>
         <div>Add to watched</div>
       </Button>
@@ -158,9 +160,9 @@ const WatchedButton = ({ itemID, episodeID, seasonID }: IWatchedButtonProps) => 
   }
 
   return (
-    <Button onClick={signIn} onKeyDown={signIn}>
+    <Button themeColor={themeColor} onClick={signIn} onKeyDown={signIn}>
       <div>
-        <ImCheckmark2 className="w-6 h-6" />
+        <ImCheckmark className="w-6 h-6" />
       </div>
       <div>Add to watched</div>
     </Button>

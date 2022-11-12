@@ -22,6 +22,7 @@
     "@trpc/next": "10.0.0-proxy-beta.21",
     "@trpc/react-query": "10.0.0-proxy-beta.21",
     "@trpc/server": "10.0.0-proxy-beta.21",
+    "fast-average-color-node": "^2.4.0",
     "framer-motion": "^7.5.3",
     "next": "12.3.1",
     "next-auth": "^4.12.2",
