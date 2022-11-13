@@ -33,8 +33,8 @@ const JustWatch = ({ justWatch, themeColor }: JustWatchProps) => {
         `}
         onClick={() => (modalOpen ? close() : open())}
       >
-        <span className="text-lg font-bold">Available on</span>
-        <BiCameraMovie className="text-3xl" />
+        <span className="font-bold">Available on</span>
+        <BiCameraMovie className="text-2xl" />
       </motion.button>
 
       <AnimatePresence initial={false} mode="wait">

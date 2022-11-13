@@ -1,5 +1,5 @@
 import { signIn, useSession } from "next-auth/react";
-import { ReactFragment, useEffect, useState } from "react";
+import { ReactFragment, ReactNode, useEffect, useState } from "react";
 import { ImSpinner2, ImCheckmark } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 
@@ -14,7 +14,7 @@ interface IButton {
   onClick?: () => void;
   onKeyDown?: (e: any) => void;
   themeColor: any;
-  children: ReactFragment;
+  children: ReactNode;
 }
 
 const Button = ({ onClick, onKeyDown, children, themeColor }: IButton) => (
@@ -24,7 +24,7 @@ const Button = ({ onClick, onKeyDown, children, themeColor }: IButton) => (
       background: themeColor.hex,
     }}
     className={`
-      text-left h-16 my-2 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded font-bold text-white 
+      text-left px-3 my-2 flex justify-between py-2 align-middle items-center gap-2 rounded font-bold text-white 
       ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
       ${themeColor.isDark && "text-white"}
       ${themeColor.isLight && "text-primaryBackground"}
@@ -114,10 +114,10 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
   if (state === "loading") {
     return (
       <Button themeColor={themeColor}>
+        <div>Adding to list</div>
         <div>
           <ImSpinner2 className="w-6 h-6 animate-spin" />
         </div>
-        <div>Loading</div>
       </Button>
     );
   }
@@ -136,9 +136,6 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
     return (
       <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
-          <ImCheckmark className="text-xl" />
-        </div>
-        <div>
           <div className="text-sm font-bold">
             Watched {Object.keys(watchHistory.data).length > 0 && `${Object.keys(watchHistory.data).length} times`}
           </div>
@@ -151,22 +148,15 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
   if (state === "unwatched") {
     return (
       <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
-        <div>
-          <ImCheckmark className="text-xl" />
-        </div>
         <div>Add to watched</div>
+        <div>
+          <ImCheckmark className="mr-1 text-lg" />
+        </div>
       </Button>
     );
   }
 
-  return (
-    <Button themeColor={themeColor} onClick={signIn} onKeyDown={signIn}>
-      <div>
-        <ImCheckmark className="text-xl" />
-      </div>
-      <div>Add to watched</div>
-    </Button>
-  );
+  return <></>;
 };
 
 export default WatchedButton;

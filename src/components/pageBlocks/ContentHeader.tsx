@@ -70,6 +70,14 @@ const ContentHeader = ({
                 src={PosterImage({ path: poster, size: "lg" })}
               />
               {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} />}
+              {session.status === "authenticated" && (
+                <hr
+                  style={{
+                    borderColor: themeColor.hex,
+                  }}
+                  className="w-1/2 m-auto my-4 border-2 rounded-full opacity-75"
+                />
+              )}
               {watchButton && session.status === "authenticated" && (
                 <WatchedButton
                   itemID={watchButton.itemID}
