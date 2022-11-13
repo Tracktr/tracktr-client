@@ -21,11 +21,13 @@ const Button = ({ onClick, onKeyDown, children, themeColor }: IButton) => (
   <div
     style={{
       borderColor: themeColor.hex,
-      color: themeColor.hex,
+      background: themeColor.hex,
     }}
     className={`
-      h-16 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded font-bold 
+      text-left h-16 my-2 flex justify-center align-middle items-center gap-2 uppercase border-2 border-solid rounded font-bold text-white 
       ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
+      ${themeColor.isDark && "text-white"}
+      ${themeColor.isLight && "text-primaryBackground"}
     `}
     onClick={onClick}
     onKeyDown={onKeyDown}
@@ -128,21 +130,19 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
         year: "numeric",
         month: "short",
         day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
       }
     );
 
     return (
       <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
-          <ImCheckmark className="w-6 h-6" />
+          <ImCheckmark className="text-xl" />
         </div>
         <div>
           <div className="text-sm font-bold">
             Watched {Object.keys(watchHistory.data).length > 0 && `${Object.keys(watchHistory.data).length} times`}
           </div>
-          <div className="text-xs italic normal-case">Last seen on {date}</div>
+          <div className="text-xs italic normal-case">Last on {date}</div>
         </div>
       </Button>
     );
@@ -152,7 +152,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
     return (
       <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
         <div>
-          <ImCheckmark className="w-6 h-6" />
+          <ImCheckmark className="text-xl" />
         </div>
         <div>Add to watched</div>
       </Button>
@@ -162,7 +162,7 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
   return (
     <Button themeColor={themeColor} onClick={signIn} onKeyDown={signIn}>
       <div>
-        <ImCheckmark className="w-6 h-6" />
+        <ImCheckmark className="text-xl" />
       </div>
       <div>Add to watched</div>
     </Button>

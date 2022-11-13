@@ -70,6 +70,14 @@ const ContentHeader = ({
                 src={PosterImage({ path: poster, size: "lg" })}
               />
               {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} />}
+              {watchButton && session.status === "authenticated" && (
+                <WatchedButton
+                  itemID={watchButton.itemID}
+                  episodeID={Number(watchButton.episodeID)}
+                  seasonID={Number(watchButton.seasonID)}
+                  themeColor={themeColor}
+                />
+              )}
             </div>
           </div>
 
@@ -104,14 +112,6 @@ const ContentHeader = ({
                   <SeriesProgressionBlock
                     amountOfEpisodes={amountOfEpisodes}
                     numberOfEpisodesWatched={seriesProgression}
-                  />
-                )}
-                {watchButton && session.status === "authenticated" && (
-                  <WatchedButton
-                    itemID={watchButton.itemID}
-                    episodeID={Number(watchButton.episodeID)}
-                    seasonID={Number(watchButton.seasonID)}
-                    themeColor={themeColor}
                   />
                 )}
               </div>
