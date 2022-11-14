@@ -22,7 +22,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <div className="grid justify-center gap-4 py-5 grid-cols-fluid">
+        <div className="grid gap-4 py-5 grid-cols-fluid">
           {history.map((item: any) => {
             const date = new Date(item.datetime).toLocaleString(
               "en-UK", // TODO: get time format from user language
@@ -85,7 +85,7 @@ const HistoryPage = () => {
     data: history,
     status: historyStatus,
     refetch,
-  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 10 }, { keepPreviousData: true });
+  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
