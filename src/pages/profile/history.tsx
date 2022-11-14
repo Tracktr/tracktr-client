@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
-import MoviePoster from "../../components/posters/MoviePoster";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
