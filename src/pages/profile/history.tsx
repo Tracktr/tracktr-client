@@ -3,19 +3,19 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
-interface IHistoryBlock {
+interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
 }
 
-const HistoryBlock = ({ history, status }: IHistoryBlock): JSX.Element => {
-  if (history.length < 1) {
+const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
+  if (history.length < 1 && status !== "loading") {
     return <div>No history found, start watching some shows and movies!</div>;
   }
 
@@ -79,8 +79,13 @@ const HistoryBlock = ({ history, status }: IHistoryBlock): JSX.Element => {
 const HistoryPage = () => {
   const router = useRouter();
   const session = useSession();
+  const [page, setPage] = useState<number>(1);
   const { data, status } = trpc.profile.profileBySession.useQuery();
-  const { data: history, status: historyStatus } = trpc.profile.watchHistory.useQuery();
+  const {
+    data: history,
+    status: historyStatus,
+    refetch,
+  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 10 }, { keepPreviousData: true });
 
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
@@ -88,13 +93,46 @@ const HistoryPage = () => {
     }
   });
 
+  const nextPage = () => {
+    setPage(page + 1);
+    refetch();
+  };
+
+  const previousPage = () => {
+    setPage(page - 1);
+    refetch();
+  };
+
   return (
     <LoadingPageComponents status={status}>
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
-          <h1 className="mt-6 text-3xl">History</h1>
-          <HistoryBlock history={history?.history || []} status={historyStatus} />
+          <div className="flex items-center align-middle">
+            <h1 className="mt-6 text-3xl">History</h1>
+            <div className="flex items-center justify-center gap-4 ml-auto align-middle">
+              <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                Previous page
+              </button>
+              <div className="flex items-center gap-4 mx-6">
+                <button onClick={previousPage} className="text-xs text-gray-200">
+                  {page > 1 && page - 1}
+                </button>
+                <div>{page}</div>
+                <button onClick={nextPage} className="text-xs text-gray-200">
+                  {page < Number(history?.pagesAmount) && page + 1}
+                </button>
+              </div>
+              <button
+                className="text-sm disabled:text-gray-500"
+                onClick={nextPage}
+                disabled={page >= Number(history?.pagesAmount)}
+              >
+                Next page
+              </button>
+            </div>
+          </div>
+          <HistoryGrid history={history?.history || []} status={historyStatus} />
         </div>
       )}
     </LoadingPageComponents>
