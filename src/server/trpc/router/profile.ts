@@ -1,4 +1,5 @@
 import { z } from "zod";
+import resizeArray from "../../../utils/resizeArray";
 import { router, protectedProcedure } from "../trpc";
 
 export const profileRouter = router({
@@ -50,42 +51,28 @@ export const profileRouter = router({
     }),
 
   watchHistory: protectedProcedure.query(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findFirst({
-      where: {
-        id: ctx.session.user.id,
-      },
+    const episodes = await ctx.prisma.episodesHistory.findMany({
+      where: { user_id: ctx.session.user.profile.userId },
       include: {
-        profile: true,
-        EpisodesHistory: {
-          include: {
-            series: true,
-          },
-          orderBy: {
-            datetime: "desc",
-          },
-          skip: 0,
-          take: 50,
-        },
-        MoviesHistory: {
-          include: {
-            movie: true,
-          },
-          orderBy: {
-            datetime: "desc",
-          },
-          skip: 0,
-          take: 50,
-        },
+        series: true,
       },
     });
 
-    const languages = await ctx.prisma.languages.findMany();
-
-    return {
-      ...user,
-      languages: {
-        ...languages,
+    const movies = await ctx.prisma.moviesHistory.findMany({
+      where: { user_id: ctx.session.user.profile.userId },
+      include: {
+        movie: true,
       },
-    };
+    });
+
+    const sortedHistory = [...episodes, ...movies].sort((a, b) => {
+      if (a.datetime < b.datetime) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    return { history: resizeArray(sortedHistory, 50) };
   }),
 });
