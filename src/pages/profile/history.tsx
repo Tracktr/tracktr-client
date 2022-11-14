@@ -33,6 +33,7 @@ const ProfilePage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
+          <h1 className="mt-6 text-3xl">History</h1>
           <div className="grid justify-center gap-2 my-6 text-center md:grid-cols-4 lg:grid-cols-6">
             {history
               .sort((a, b) => {
