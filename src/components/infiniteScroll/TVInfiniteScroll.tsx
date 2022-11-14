@@ -30,7 +30,7 @@ const TVInfiniteScroll = () => {
       <div className="z-40 text-4xl">Series</div>
       <LoadingPageComponents status={status} posters>
         {() => (
-          <div className="flex flex-wrap items-center justify-center gap-4 py-5">
+          <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
                 return (
