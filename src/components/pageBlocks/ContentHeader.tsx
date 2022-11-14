@@ -73,7 +73,7 @@ const ContentHeader = ({
               {session.status === "authenticated" && (
                 <hr
                   style={{
-                    borderColor: themeColor.hex,
+                    borderColor: themeColor?.hex,
                   }}
                   className="w-1/2 m-auto my-4 border-2 rounded-full opacity-75"
                 />
