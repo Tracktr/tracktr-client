@@ -33,7 +33,7 @@ const ProfilePage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
-          <div className="grid grid-cols-6 gap-2 my-6 text-center">
+          <div className="grid justify-center gap-2 my-6 text-center md:grid-cols-4 lg:grid-cols-6">
             {history
               .sort((a, b) => {
                 if (a.datetime < b.datetime) {
@@ -61,31 +61,6 @@ const ProfilePage = () => {
                     key={item.id}
                   >
                     <a>
-                      {/* <div className="relative">
-                        <Image
-                          alt={`Poster image for ${
-                            item?.movie_id
-                              ? item.movie.title
-                              : `${item.season_number}x${item.episode_number} ${item.series.name}`
-                          }`}
-                          src={PosterImage({
-                            path: item.movie_id ? item.movie.poster : item.series.poster,
-                            size: "sm",
-                          })}
-                          width="170px"
-                          height="240px"
-                          className="rounded"
-                        />
-
-                        <div className="absolut">
-                          <span className="text-sm truncate">
-                            {item?.movie_id
-                              ? `${item.movie.title}`
-                              : `${item.season_number}x${item.episode_number} ${item.series.name}`}
-                          </span>
-                          <div className="text-xs">{date}</div>
-                        </div>
-                      </div> */}
                       <div className="relative w-[170px]">
                         <Image
                           alt={`Poster image for ${
@@ -102,7 +77,7 @@ const ProfilePage = () => {
                           className="rounded"
                         />
                         <div className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-black bg-opacity-75">
-                          <span className="text-sm">
+                          <span className="w-full text-sm">
                             {item?.movie_id
                               ? `${item.movie.title}`
                               : `${item.season_number}x${item.episode_number} ${item.series.name}`}
