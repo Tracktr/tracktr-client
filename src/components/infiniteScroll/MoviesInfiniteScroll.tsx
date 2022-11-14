@@ -28,7 +28,7 @@ const MoviesInfiniteScroll = () => {
   return (
     <div className="px-4">
       <div className="z-40 text-4xl">Movies</div>
-      <LoadingPageComponents status={status}>
+      <LoadingPageComponents status={status} posters>
         {() => (
           <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>

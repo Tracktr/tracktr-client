@@ -73,6 +73,6 @@ export const profileRouter = router({
       }
     });
 
-    return { history: resizeArray(sortedHistory, 50) };
+    return { history: resizeArray(sortedHistory, 10) };
   }),
 });

@@ -6,14 +6,14 @@ export const LoadingPoster = () => (
 
 const LoadingPosters = () => {
   return (
-    <>
+    <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
       <LoadingPoster />
       <LoadingPoster />
       <LoadingPoster />
       <LoadingPoster />
       <LoadingPoster />
       <LoadingPoster />
-    </>
+    </div>
   );
 };
 
