@@ -48,4 +48,40 @@ export const profileRouter = router({
 
       return user;
     }),
+
+  watchHistory: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      include: {
+        profile: true,
+        EpisodesHistory: {
+          include: {
+            series: true,
+          },
+          orderBy: {
+            datetime: "desc",
+          },
+        },
+        MoviesHistory: {
+          include: {
+            movie: true,
+          },
+          orderBy: {
+            datetime: "desc",
+          },
+        },
+      },
+    });
+
+    const languages = await ctx.prisma.languages.findMany();
+
+    return {
+      ...user,
+      languages: {
+        ...languages,
+      },
+    };
+  }),
 });
