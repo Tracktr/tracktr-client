@@ -1,5 +1,6 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
+import convertImageToPrimaryColor from "../../../utils/colors";
 
 export const personRouter = router({
   personById: publicProcedure
@@ -16,8 +17,11 @@ export const personRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      const color = await convertImageToPrimaryColor({ image: json.profile_path });
+
       return {
         ...json,
+        theme_color: color,
       };
     }),
 });
