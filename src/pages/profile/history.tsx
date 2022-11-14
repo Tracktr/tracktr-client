@@ -78,12 +78,12 @@ const ProfilePage = () => {
                           className="rounded"
                         />
                         <div className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-black bg-opacity-75">
-                          <span className="w-full text-sm">
+                          <span className="w-full text-sm line-clamp-2">
                             {item?.movie_id
                               ? `${item.movie.title}`
                               : `${item.season_number}x${item.episode_number} ${item.series.name}`}
                           </span>
-                          <div className="text-xs">{date}</div>
+                          <div className="text-xs line-clamp-1">{date}</div>
                         </div>
                       </div>
                     </a>
