@@ -32,7 +32,7 @@ const SearchPage = () => {
       {() => (
         <div className="max-w-6xl px-4 pt-32 m-auto">
           <div className="z-40 text-4xl">Results for: {query}</div>
-          <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
+          <div className="flex flex-wrap items-center justify-center gap-4 py-5">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
                 return (
