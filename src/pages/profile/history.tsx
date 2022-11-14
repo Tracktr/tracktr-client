@@ -16,7 +16,7 @@ const ProfilePage = () => {
   const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
-    if (session.status === "unauthenticated") {
+    if (session.status === "unauthenticated" && status !== "loading") {
       router.push("/");
     }
   });
