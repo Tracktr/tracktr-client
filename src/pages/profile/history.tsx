@@ -42,7 +42,7 @@ const ProfilePage = () => {
                 const date = new Date(item.datetime).toLocaleString(
                   "en-UK", // TODO: get time format from user language
                   {
-                    dateStyle: "short",
+                    dateStyle: "medium",
                     timeStyle: "short",
                   }
                 );
