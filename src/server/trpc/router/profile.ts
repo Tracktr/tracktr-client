@@ -63,6 +63,8 @@ export const profileRouter = router({
           orderBy: {
             datetime: "desc",
           },
+          skip: 0,
+          take: 50,
         },
         MoviesHistory: {
           include: {
@@ -71,6 +73,8 @@ export const profileRouter = router({
           orderBy: {
             datetime: "desc",
           },
+          skip: 0,
+          take: 50,
         },
       },
     });
