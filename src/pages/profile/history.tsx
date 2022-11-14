@@ -22,7 +22,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <div className="flex flex-wrap items-center justify-center gap-4 py-5">
+        <div className="grid justify-center gap-4 py-5 grid-cols-fluid">
           {history.map((item: any) => {
             const date = new Date(item.datetime).toLocaleString(
               "en-UK", // TODO: get time format from user language
@@ -85,7 +85,7 @@ const HistoryPage = () => {
     data: history,
     status: historyStatus,
     refetch,
-  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
+  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 10 }, { keepPreviousData: true });
 
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
@@ -108,18 +108,18 @@ const HistoryPage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
-          <div className="flex items-center px-5 mt-6 align-middle">
+          <div className="items-center mt-6 align-middle md:flex">
             <h1 className="text-3xl">History</h1>
-            <div className="flex items-center justify-center gap-4 ml-auto align-middle">
+            <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
               <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
                 Previous page
               </button>
               <div className="flex items-center gap-4 mx-6">
-                <button onClick={previousPage} className="text-xs text-gray-200">
+                <button onClick={previousPage} className="p-2 text-xs text-gray-200">
                   {page > 1 && page - 1}
                 </button>
                 <div>{page}</div>
-                <button onClick={nextPage} className="text-xs text-gray-200">
+                <button onClick={nextPage} className="p-2 text-xs text-gray-200">
                   {page < Number(history?.pagesAmount) && page + 1}
                 </button>
               </div>
