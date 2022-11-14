@@ -8,7 +8,8 @@ import { trpc } from "../../utils/trpc";
 const ProfilePage = () => {
   const router = useRouter();
   const session = useSession();
-  const { data, status } = trpc.profile.profileBySession.useQuery();
+  const { data, status } = trpc.profile.watchHistory.useQuery();
+  const [history, setHistory] = useState<any[]>([]);
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -16,11 +17,64 @@ const ProfilePage = () => {
     }
   });
 
+  useEffect(() => {
+    const episodes = data?.EpisodesHistory || [];
+    const movies = data?.MoviesHistory || [];
+
+    setHistory([...episodes, ...movies]);
+  }, [data]);
+
   return (
     <LoadingPageComponents status={status}>
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
+          <div className="grid grid-cols-6 gap-2 my-6 text-center">
+            {history
+              .sort((a, b) => {
+                if (a.datetime < b.datetime) {
+                  return 1;
+                } else {
+                  return -1;
+                }
+              })
+              .map((item) => {
+                const date = new Date(item.datetime).toLocaleString(
+                  "en-UK", // TODO: get time format from user language
+                  {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  }
+                );
+
+                return (
+                  <div key={item.id}>
+                    <div className="text-sm truncate">
+                      {item?.series
+                        ? `${item.season_number}x${item.episode_number} ${item.series.name}`
+                        : `${item.movie.title}`}
+                    </div>
+                    <div className="text-xs">{date}</div>
+                  </div>
+                );
+              })}
+            {/* {data?.EpisodesHistory?.map((episode) => {
+              const date = new Date(episode.datetime).toLocaleString(
+                "en-UK", // TODO: get time format from user language
+                {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                }
+              );
+
+              return (
+                <div key={episode.id}>
+                  <div>{`${episode.season_number}x${episode.episode_number} ${episode.series.name}`}</div>
+                  <div>{date}</div>
+                </div>
+              );
+            })} */}
+          </div>
         </div>
       )}
     </LoadingPageComponents>
