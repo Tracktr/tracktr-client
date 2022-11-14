@@ -58,22 +58,6 @@ const ProfilePage = () => {
                   </div>
                 );
               })}
-            {/* {data?.EpisodesHistory?.map((episode) => {
-              const date = new Date(episode.datetime).toLocaleString(
-                "en-UK", // TODO: get time format from user language
-                {
-                  dateStyle: "short",
-                  timeStyle: "short",
-                }
-              );
-
-              return (
-                <div key={episode.id}>
-                  <div>{`${episode.season_number}x${episode.episode_number} ${episode.series.name}`}</div>
-                  <div>{date}</div>
-                </div>
-              );
-            })} */}
           </div>
         </div>
       )}
