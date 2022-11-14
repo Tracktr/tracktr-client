@@ -85,7 +85,7 @@ const HistoryPage = () => {
     data: history,
     status: historyStatus,
     refetch,
-  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 10 }, { keepPreviousData: true });
+  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
