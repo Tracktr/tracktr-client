@@ -3,7 +3,7 @@ import { BackdropImage, PosterImage } from "./generateImages";
 
 interface IConvertImageToPrimaryColor {
   image: any;
-  fallback: string | undefined;
+  fallback?: string | undefined;
 }
 
 const convertImageToPrimaryColor = async ({ image, fallback }: IConvertImageToPrimaryColor) => {
