@@ -17,6 +17,7 @@ const PersonPage = () => {
           poster={data.profile_path}
           title={data.name}
           description={data.biography}
+          themeColor={data.theme_color}
         />
       )}
     </LoadingPageComponents>

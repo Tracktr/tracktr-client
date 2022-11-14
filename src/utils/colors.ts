@@ -3,18 +3,30 @@ import { BackdropImage, PosterImage } from "./generateImages";
 
 interface IConvertImageToPrimaryColor {
   image: any;
-  fallback: string | undefined;
+  fallback?: string | undefined;
 }
 
 const convertImageToPrimaryColor = async ({ image, fallback }: IConvertImageToPrimaryColor) => {
-  if (image) return getAverageColor(PosterImage({ path: image, size: "sm" }));
-  if (fallback) return getAverageColor(BackdropImage({ path: fallback, size: "sm" }));
+  const poster = PosterImage({ path: image, size: "sm" });
+  const backdrop = BackdropImage({ path: fallback ? fallback : "null", size: "sm" });
 
-  return {
-    hex: "#FAC42C",
-    isDark: false,
-    isLight: true,
-  };
+  if (poster !== "/noimage.png") {
+    return getAverageColor(poster, {
+      algorithm: "dominant",
+      ignoredColor: [0, 0, 0, 255, 50],
+    });
+  } else if (backdrop !== "/noimage.png") {
+    return getAverageColor(backdrop, {
+      algorithm: "dominant",
+      ignoredColor: [0, 0, 0, 255, 50],
+    });
+  } else {
+    return {
+      hex: "#FAC42C",
+      isDark: false,
+      isLight: true,
+    };
+  }
 };
 
 export default convertImageToPrimaryColor;
