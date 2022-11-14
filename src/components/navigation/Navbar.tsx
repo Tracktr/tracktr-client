@@ -86,6 +86,9 @@ const Navbar = () => {
                           <Link href="/profile">
                             <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">Profile</a>
                           </Link>
+                          <Link href="/profile/history">
+                            <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">History</a>
+                          </Link>
                           <button
                             onClick={() => signOut()}
                             className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"

@@ -30,10 +30,10 @@ const SearchPage = () => {
   }, [inView, fetchNextPage]);
 
   return (
-    <LoadingPageComponents status={status}>
-      {() => (
-        <div className="max-w-6xl px-4 pt-32 m-auto">
-          <div className="z-40 text-4xl">Results for: {query}</div>
+    <div className="max-w-6xl px-4 pt-32 m-auto">
+      <div className="z-40 text-4xl">Results for: {query}</div>
+      <LoadingPageComponents status={status} posters>
+        {() => (
           <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
@@ -75,15 +75,14 @@ const SearchPage = () => {
                 return <div key={content.id} />;
               })
             )}
+            <div className="loader" ref={ref}>
+              {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+            </div>
+            {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
           </div>
-
-          <div className="loader" ref={ref}>
-            {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-          </div>
-          {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
-        </div>
-      )}
-    </LoadingPageComponents>
+        )}
+      </LoadingPageComponents>
+    </div>
   );
 };
 

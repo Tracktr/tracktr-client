@@ -37,7 +37,7 @@ const ProfilePage = () => {
   }, [data, status]);
 
   useEffect(() => {
-    if (session.status === "unauthenticated") {
+    if (session.status === "unauthenticated" && status !== "loading") {
       router.push("/");
     }
   });
@@ -50,8 +50,8 @@ const ProfilePage = () => {
           <div className="p-4 mx-4 mt-16 text-white rounded-md md:max-w-md bg-zinc-900">
             <form onSubmit={onSubmit}>
               <p className="pb-6 text-2xl font-bold">Settings</p>
-              <label className="flex items-center w-full">
-                <span className="">Show adult 18+ content</span>
+              <label className="flex items-center w-full pb-1">
+                <span>Show adult 18+ content</span>
                 <input
                   type="checkbox"
                   className="ml-auto outline-none text-primary"
@@ -60,7 +60,7 @@ const ProfilePage = () => {
                 />
               </label>
 
-              <label className="flex items-center w-full">
+              <label className="flex items-center w-full pb-1">
                 <span>Language</span>
                 <select
                   className="ml-auto text-primaryBackground"

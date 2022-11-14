@@ -1,21 +1,20 @@
-interface ILoadingPosters {
-  amount: number;
-}
-
 export const LoadingPoster = () => (
   <div className="flex flex-col gap-y-[6px]">
     <div className="animate-pulse w-[170px] h-[240px] rounded bg-[#343434]" />
-    <div className="animate-pulse h-4 w-[170px] rounded bg-[#343434]" />
   </div>
 );
 
-const LoadingPosters = ({ amount }: ILoadingPosters) => {
-  const posters = [];
-  for (let i = 0; i < amount; i + 1) {
-    posters.push(<LoadingPoster key={i} />);
-  }
-
-  return <>{posters}</>;
+const LoadingPosters = () => {
+  return (
+    <div className="grid gap-4 py-5 grid-cols-fluid">
+      <LoadingPoster />
+      <LoadingPoster />
+      <LoadingPoster />
+      <LoadingPoster />
+      <LoadingPoster />
+      <LoadingPoster />
+    </div>
+  );
 };
 
 export default LoadingPosters;

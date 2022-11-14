@@ -41,13 +41,13 @@ const DetailsBlock = ({
       {budget !== undefined && (
         <div className="flex flex-col">
           <h2 className="text-base font-bold opacity-75">Budget</h2>
-          {budget >= 1 ? <p className="pt-2">${budget.toLocaleString()}</p> : <p className="pt-2">unknown</p>}
+          {budget >= 1 ? <p className="pt-2">${budget.toLocaleString()}</p> : <p className="pt-2">Unknown</p>}
         </div>
       )}
       {revenue !== undefined && (
         <div className="flex flex-col">
           <h2 className="text-base font-bold opacity-75">Revenue</h2>
-          {revenue > 0 ? <p className="pt-2">${revenue.toLocaleString()}</p> : <p className="pt-2">unknown</p>}
+          {revenue > 0 ? <p className="pt-2">${revenue.toLocaleString()}</p> : <p className="pt-2">Unknown</p>}
         </div>
       )}
       {numberOfEpisodes && numberOfEpisodes !== 0 && (

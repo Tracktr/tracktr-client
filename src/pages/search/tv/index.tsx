@@ -28,11 +28,11 @@ const SearchPage = () => {
   }, [inView, fetchNextPage]);
 
   return (
-    <LoadingPageComponents status={status}>
-      {() => (
-        <div className="max-w-6xl px-4 pt-32 m-auto">
-          <div className="z-40 text-4xl">Results for: {query}</div>
-          <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
+    <div className="max-w-6xl px-4 pt-32 m-auto">
+      <div className="z-40 text-4xl">Results for: {query}</div>
+      <LoadingPageComponents status={status} posters>
+        {() => (
+          <div className="grid gap-4 py-5 grid-cols-fluid">
             {data?.pages.map((page) =>
               page.results.map((content: any) => {
                 return (
@@ -46,15 +46,14 @@ const SearchPage = () => {
                 );
               })
             )}
+            <div className="loader" ref={ref}>
+              {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+            </div>
+            {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
           </div>
-
-          <div className="loader" ref={ref}>
-            {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-          </div>
-          {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
-        </div>
-      )}
-    </LoadingPageComponents>
+        )}
+      </LoadingPageComponents>
+    </div>
   );
 };
 

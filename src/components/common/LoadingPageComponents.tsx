@@ -1,13 +1,15 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import LoadingPosters from "../posters/LoadingPoster";
 
 interface ILoadingPageComponents {
   status: "loading" | "error" | "success" | "idle";
   children: any;
+  posters?: boolean;
 }
 
-const LoadingPageComponents = ({ status, children }: ILoadingPageComponents) =>
+const LoadingPageComponents = ({ status, children, posters }: ILoadingPageComponents) =>
   useMemo(() => {
     // TODO: Error component
     if (status === "error") {
@@ -16,6 +18,10 @@ const LoadingPageComponents = ({ status, children }: ILoadingPageComponents) =>
 
     // TODO: Do something with the loading status
     if (status === "loading") {
+      if (posters) {
+        return <LoadingPosters />;
+      }
+
       return <div className="h-screen" />;
     }
 

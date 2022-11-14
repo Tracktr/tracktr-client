@@ -98,24 +98,22 @@ model Series {
 }
 
 model Seasons {
-  id              Int               @id
-  name            String
-  poster          String
-  season_number   Int?
-  Series          Series?           @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  series_id       Int?
-  episodes        Episodes[]
-  EpisodesHistory EpisodesHistory[]
+  id            Int        @id
+  name          String
+  poster        String
+  season_number Int?
+  Series        Series?    @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  series_id     Int?
+  episodes      Episodes[]
 }
 
 model Episodes {
-  id              Int               @id
-  name            String
-  episode_number  Int
-  season_number   Int?
-  Seasons         Seasons?          @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
-  seasons_id      Int?
-  EpisodesHistory EpisodesHistory[]
+  id             Int      @id
+  name           String
+  episode_number Int
+  season_number  Int?
+  Seasons        Seasons? @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
+  seasons_id     Int?
 }
 
 model EpisodesHistory {
@@ -127,6 +125,4 @@ model EpisodesHistory {
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  season         Seasons  @relation(fields: [season_number], references: [id], onDelete: Cascade)
-  episode        Episodes @relation(fields: [episode_number], references: [id], onDelete: Cascade)
 }

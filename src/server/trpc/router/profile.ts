@@ -1,4 +1,5 @@
 import { z } from "zod";
+import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
 export const profileRouter = router({
@@ -47,5 +48,41 @@ export const profileRouter = router({
       });
 
       return user;
+    }),
+
+  watchHistory: protectedProcedure
+    .input(
+      z.object({
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const episodes = await ctx.prisma.episodesHistory.findMany({
+        where: { user_id: ctx.session.user.profile.userId },
+        include: {
+          series: true,
+        },
+      });
+
+      const movies = await ctx.prisma.moviesHistory.findMany({
+        where: { user_id: ctx.session.user.profile.userId },
+        include: {
+          movie: true,
+        },
+      });
+
+      const sortedHistory = [...episodes, ...movies].sort((a, b) => {
+        if (a.datetime < b.datetime) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      return {
+        history: paginate(sortedHistory, input.pageSize, input.page),
+        pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
+      };
     }),
 });
