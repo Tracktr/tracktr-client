@@ -22,7 +22,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <div className="flex flex-wrap items-center justify-center gap-4 py-5 md:justify-start">
+        <div className="flex flex-wrap items-center justify-center gap-4 py-5">
           {history.map((item: any) => {
             const date = new Date(item.datetime).toLocaleString(
               "en-UK", // TODO: get time format from user language
@@ -108,8 +108,8 @@ const HistoryPage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
-          <div className="flex items-center align-middle">
-            <h1 className="mt-6 text-3xl">History</h1>
+          <div className="flex items-center px-5 mt-6 align-middle">
+            <h1 className="text-3xl">History</h1>
             <div className="flex items-center justify-center gap-4 ml-auto align-middle">
               <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
                 Previous page
