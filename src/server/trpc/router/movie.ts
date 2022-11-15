@@ -114,7 +114,7 @@ export const movieRouter = router({
         id: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const result = await ctx.prisma.moviesHistory.deleteMany({
         where: {
           user_id: ctx.session.user.id,

@@ -110,7 +110,7 @@ export const episodeRouter = router({
         id: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const result = await ctx.prisma.episodesHistory.deleteMany({
         where: {
           user_id: ctx.session.user.id,
