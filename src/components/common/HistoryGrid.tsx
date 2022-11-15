@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
+import PosterGrid from "./PosterGrid";
 
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
@@ -17,7 +18,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <div className="grid gap-4 py-5 grid-cols-fluid">
+        <PosterGrid>
           {history.map((item: any) => {
             const date = new Date(item.datetime).toLocaleString(
               "en-UK", // TODO: get time format from user language
@@ -65,7 +66,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
               </Link>
             );
           })}
-        </div>
+        </PosterGrid>
       )}
     </LoadingPageComponents>
   );

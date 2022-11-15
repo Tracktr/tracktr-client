@@ -38,7 +38,7 @@ const HistoryPage = () => {
       {() => (
         <div className="max-w-6xl m-auto">
           <ProfileHeader image={data?.image} name={data?.name} />
-          <div className="items-center mt-6 align-middle md:flex">
+          <div className="items-center my-5 align-middle md:flex">
             <h1 className="text-3xl">History</h1>
             <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
               <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../../utils/trpc";
 import LoadingPageComponents from "../common/LoadingPageComponents";
+import PosterGrid from "../common/PosterGrid";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import TVPoster from "../posters/TVPoster";
 
@@ -27,27 +28,29 @@ const TVInfiniteScroll = () => {
 
   return (
     <div className="px-4">
-      <div className="z-40 text-4xl">Series</div>
+      <div className="z-40 mb-5 text-4xl">Series</div>
       <LoadingPageComponents status={status} posters>
         {() => (
-          <div className="grid gap-4 py-5 grid-cols-fluid">
-            {data?.pages.map((page) =>
-              page.results.map((content: any) => {
-                return (
-                  <TVPoster
-                    imageSrc={`${content.poster_path}`}
-                    name={content.title || content.name}
-                    key={content.id}
-                    url={`tv/${content.id}`}
-                    score={content.vote_average}
-                  />
-                );
-              })
-            )}
-            <div className="loader" ref={ref}>
-              {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-            </div>
-          </div>
+          <PosterGrid>
+            <>
+              {data?.pages.map((page) =>
+                page.results.map((content: any) => {
+                  return (
+                    <TVPoster
+                      imageSrc={`${content.poster_path}`}
+                      name={content.title || content.name}
+                      key={content.id}
+                      url={`tv/${content.id}`}
+                      score={content.vote_average}
+                    />
+                  );
+                })
+              )}
+              <div className="loader" ref={ref}>
+                {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+              </div>
+            </>
+          </PosterGrid>
         )}
       </LoadingPageComponents>
     </div>

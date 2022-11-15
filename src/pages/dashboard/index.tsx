@@ -32,7 +32,7 @@ const DashboardPage = () => {
           />
           <div className="max-w-6xl m-auto">
             <div className="items-center mt-6 align-middle md:flex">
-              <div className="flex gap-4">
+              <div className="flex gap-4 mb-5">
                 <div className="text-3xl">Recently watched</div>
                 <Link href="/profile/history">
                   <a className="flex items-center px-3 py-1 rounded-full bg-primary text-primaryBackground">

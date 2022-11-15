@@ -15,9 +15,6 @@ module.exports = {
         primary: "#FAC42C",
         primaryBackground: "#101010",
       },
-      gridTemplateColumns: {
-        'fluid': 'repeat(auto-fit, minmax(10rem, 11rem))'
-      }
     },
   },
   plugins: [
