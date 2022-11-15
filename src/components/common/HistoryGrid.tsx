@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
 import PosterGrid from "./PosterGrid";
+import { CgTrash } from "react-icons/cg";
 
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
@@ -37,7 +38,7 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
                 }
                 key={item.id}
               >
-                <a className="w-[170px]">
+                <a className="w-[170px] group">
                   <div className="relative">
                     <Image
                       alt={`Poster image for ${
@@ -53,13 +54,18 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
                       height="240px"
                       className="rounded"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gradient-to-t from-primaryBackground">
-                      <span className="w-full text-sm line-clamp-2">
-                        {item?.movie_id
-                          ? `${item.movie.title}`
-                          : `${item.season_number}x${item.episode_number} ${item.series.name}`}
-                      </span>
-                      <div className="text-xs line-clamp-1">{date}</div>
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primaryBackground">
+                      <div className="px-4 py-2">
+                        <span className="w-full text-sm line-clamp-2">
+                          {item?.movie_id
+                            ? `${item.movie.title}`
+                            : `${item.season_number}x${item.episode_number} ${item.series.name}`}
+                        </span>
+                        <div className="text-xs line-clamp-1">{date}</div>
+                      </div>
+                      <div className="justify-center hidden text-3xl text-red-500 group-hover:flex">
+                        <CgTrash />
+                      </div>
                     </div>
                   </div>
                 </a>
