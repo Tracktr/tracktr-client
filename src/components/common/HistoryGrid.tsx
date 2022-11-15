@@ -70,16 +70,22 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
                       </div>
                     </a>
                   </Link>
-                  <button
-                    className="flex justify-center w-full text-3xl text-red-500 hover:text-red-600 max-h-0 group-hover:max-h-10 animated"
-                    onClick={() => handleDelete(item.id, item.movie_id ? "movie" : "episode")}
-                  >
-                    <CgTrash />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                  <div className="pt-1 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 bg-gradient-to-l from-primaryBackground">
+                    <button
+                      className="text-3xl text-red-500 transition-all duration-300 ease-in-out hover:text-red-700"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDelete(item.id, item.movie_id ? "movie" : "episode");
+                      }}
+                    >
+                      <MdDelete className="text-2xl" />
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </PosterGrid>
       )}
     </LoadingPageComponents>
