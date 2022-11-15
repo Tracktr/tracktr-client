@@ -41,8 +41,8 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
                 }
                 key={item.id}
               >
-                <a>
-                  <div className="relative w-[170px]">
+                <a className="w-[170px]">
+                  <div className="relative">
                     <Image
                       alt={`Poster image for ${
                         item?.movie_id
