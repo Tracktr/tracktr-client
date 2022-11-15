@@ -108,6 +108,25 @@ export const movieRouter = router({
       }
     }),
 
+  removeMovieFromWatched: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.prisma.moviesHistory.deleteMany({
+        where: {
+          user_id: ctx.session.user.id,
+          id: input.id,
+        },
+      });
+
+      return {
+        ...result,
+      };
+    }),
+
   watchHistoryByID: protectedProcedure
     .input(
       z.object({
