@@ -9,7 +9,7 @@ import { CgTrash } from "react-icons/cg";
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
-  handleDelete: (e: string) => void;
+  handleDelete: (id: string, type: "movie" | "episode") => void;
 }
 
 const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Element => {
@@ -74,7 +74,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
                   </Link>
                   <button
                     className="justify-center hidden w-full text-3xl text-red-500 hover:text-red-600 group-hover:flex"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item.id, item.movie_id ? "movie" : "episode")}
                   >
                     <CgTrash />
                   </button>

@@ -17,7 +17,13 @@ const HistoryPage = () => {
     refetch,
   } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
-  const deleteFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
+  const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
     onSuccess: () => {
       refetch();
     },
@@ -39,8 +45,12 @@ const HistoryPage = () => {
     refetch();
   };
 
-  const handleDelete = (id: string) => {
-    deleteFromHistory.mutate({ id });
+  const handleDelete = (id: string, type: "movie" | "episode") => {
+    if (type === "movie") {
+      deleteEpisodeFromHistory.mutate({ id });
+    } else if (type === "episode") {
+      deleteMovieFromHistory.mutate({ id });
+    }
   };
 
   return (

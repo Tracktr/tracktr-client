@@ -10,16 +10,37 @@ import HistoryGrid from "../../components/common/HistoryGrid";
 const DashboardPage = () => {
   const router = useRouter();
   const { status: sessionStatus } = useSession();
-  const { data: history, status: historyStatus } = trpc.profile.watchHistory.useQuery(
-    { page: 1, pageSize: 6 },
-    { keepPreviousData: true }
-  );
+  const {
+    data: history,
+    status: historyStatus,
+    refetch,
+  } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 }, { keepPreviousData: true });
+
+  const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
       router.push("/");
     }
   });
+
+  const handleDelete = (id: string, type: "movie" | "episode") => {
+    if (type === "episode") {
+      deleteEpisodeFromHistory.mutate({ id });
+    } else if (type === "movie") {
+      deleteMovieFromHistory.mutate({ id });
+    }
+  };
 
   return (
     <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
@@ -41,7 +62,7 @@ const DashboardPage = () => {
                 </Link>
               </div>
             </div>
-            <HistoryGrid history={history?.history || []} status={historyStatus} />
+            <HistoryGrid history={history?.history || []} status={historyStatus} handleDelete={handleDelete} />
           </div>
         </div>
       )}
