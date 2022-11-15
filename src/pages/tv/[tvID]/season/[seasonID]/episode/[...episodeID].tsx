@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../../../../components/pageBlocks/CastBlock";
 import ContentHeader from "../../../../../../components/pageBlocks/ContentHeader";
+import EpisodeSwitcherBlock from "../../../../../../components/pageBlocks/EpisodeSwitcherBlock";
 import { trpc } from "../../../../../../utils/trpc";
 
 const EpisodePage = () => {
@@ -32,6 +33,7 @@ const EpisodePage = () => {
           themeColor={tvShow.theme_color}
         >
           <CastBlock cast={episodeData.credits.cast} />
+          <EpisodeSwitcherBlock seasons={tvShow.seasons} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
