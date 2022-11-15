@@ -9,9 +9,10 @@ import { CgTrash } from "react-icons/cg";
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
+  handleDelete: (e: string) => void;
 }
 
-const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
+const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Element => {
   if (history.length < 1 && status !== "loading") {
     return <div>No history found, start watching some shows and movies!</div>;
   }
@@ -21,25 +22,21 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
       {() => (
         <PosterGrid>
           {history.map((item: any) => {
-            const date = new Date(item.datetime).toLocaleString(
-              "en-UK", // TODO: get time format from user language
-              {
-                dateStyle: "medium",
-                timeStyle: "short",
-              }
-            );
+            const date = new Date(item.datetime).toLocaleString("en-UK", {
+              dateStyle: "medium",
+              timeStyle: "short",
+            });
 
             return (
-              <Link
-                href={
-                  item?.movie_id
-                    ? `/movies/${item.movie.id}`
-                    : `/tv/${item.series_id}/season/${item.season_number}/episode/${item.episode_number}`
-                }
-                key={item.id}
-              >
-                <a className="w-[170px] group">
-                  <div className="relative">
+              <div className="relative w-[170px] group" key={item.id}>
+                <Link
+                  href={
+                    item?.movie_id
+                      ? `/movies/${item.movie.id}`
+                      : `/tv/${item.series_id}/season/${item.season_number}/episode/${item.episode_number}`
+                  }
+                >
+                  <a>
                     <Image
                       alt={`Poster image for ${
                         item?.movie_id
@@ -54,7 +51,17 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
                       height="240px"
                       className="rounded"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primaryBackground">
+                  </a>
+                </Link>
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primaryBackground">
+                  <Link
+                    href={
+                      item?.movie_id
+                        ? `/movies/${item.movie.id}`
+                        : `/tv/${item.series_id}/season/${item.season_number}/episode/${item.episode_number}`
+                    }
+                  >
+                    <a>
                       <div className="px-4 py-2">
                         <span className="w-full text-sm line-clamp-2">
                           {item?.movie_id
@@ -63,13 +70,16 @@ const HistoryGrid = ({ history, status }: IHistoryGrid): JSX.Element => {
                         </span>
                         <div className="text-xs line-clamp-1">{date}</div>
                       </div>
-                      <div className="justify-center hidden text-3xl text-red-500 group-hover:flex">
-                        <CgTrash />
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </Link>
+                    </a>
+                  </Link>
+                  <button
+                    className="justify-center hidden w-full text-3xl text-red-500 hover:text-red-600 group-hover:flex"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <CgTrash />
+                  </button>
+                </div>
+              </div>
             );
           })}
         </PosterGrid>
