@@ -1,7 +1,9 @@
-import { signIn, useSession } from "next-auth/react";
-import { ReactFragment, ReactNode, useEffect, useState } from "react";
-import { ImSpinner2, ImCheckmark } from "react-icons/im";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
+import LoadingButton from "./LoadingButton";
+import UnwatchedButton from "./UnwatchedButton";
+import WatchedItemButton from "./WatchedItemButton";
 
 interface IWatchedButtonProps {
   itemID: number;
@@ -9,34 +11,6 @@ interface IWatchedButtonProps {
   seasonID: number;
   themeColor: any;
 }
-
-interface IButton {
-  onClick?: () => void;
-  onKeyDown?: (e: any) => void;
-  themeColor: any;
-  children: ReactNode;
-}
-
-const Button = ({ onClick, onKeyDown, children, themeColor }: IButton) => (
-  <div
-    style={{
-      borderColor: themeColor.hex,
-      background: themeColor.hex,
-    }}
-    className={`
-      text-left px-3 my-2 flex justify-between py-2 align-middle items-center gap-2 rounded font-bold text-white 
-      ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
-      ${themeColor.isDark && "text-white"}
-      ${themeColor.isLight && "text-primaryBackground"}
-    `}
-    onClick={onClick}
-    onKeyDown={onKeyDown}
-    role="button"
-    tabIndex={0}
-  >
-    {children}
-  </div>
-);
 
 const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
@@ -112,48 +86,15 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
   };
 
   if (state === "loading") {
-    return (
-      <Button themeColor={themeColor}>
-        <div>Adding to list</div>
-        <div>
-          <ImSpinner2 className="w-6 h-6 animate-spin" />
-        </div>
-      </Button>
-    );
+    return <LoadingButton themeColor={themeColor} />;
   }
 
   if (state === "watched" && watchHistory.data) {
-    const data: any[] = Object.values(watchHistory.data);
-    const date = new Date(data[data.length - 1].datetime).toLocaleDateString(
-      "en-UK", // TODO: get time format from user language
-      {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }
-    );
-
-    return (
-      <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
-        <div>
-          <div className="text-sm font-bold">
-            Watched {Object.keys(watchHistory.data).length > 0 && `${Object.keys(watchHistory.data).length} times`}
-          </div>
-          <div className="text-xs italic normal-case">Last on {date}</div>
-        </div>
-      </Button>
-    );
+    return <WatchedItemButton themeColor={themeColor} watchHistory={watchHistory} handleOnClick={handleOnClick} />;
   }
 
   if (state === "unwatched") {
-    return (
-      <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
-        <div>Add to watched</div>
-        <div>
-          <ImCheckmark className="mr-1 text-lg" />
-        </div>
-      </Button>
-    );
+    return <UnwatchedButton themeColor={themeColor} handleOnClick={handleOnClick} />;
   }
 
   return <></>;
