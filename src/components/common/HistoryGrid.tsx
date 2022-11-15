@@ -73,7 +73,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
                     </a>
                   </Link>
                   <button
-                    className="flex justify-center w-full text-3xl text-red-500 hover:text-red-600 max-h-0 group-hover:max-h-10 animated"
+                    className="flex justify-center w-full text-3xl text-red-500 hover:text-red-600 max-h-0 group-hover:max-h-10 transistion-[max-height]"
                     onClick={() => handleDelete(item.id, item.movie_id ? "movie" : "episode")}
                   >
                     <CgTrash />
