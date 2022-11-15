@@ -27,6 +27,8 @@ interface IContentHeader {
   amountOfEpisodes?: number;
   children?: any;
   themeColor?: any;
+  season?: string;
+  episode?: string;
 }
 
 const ContentHeader = ({
@@ -44,6 +46,8 @@ const ContentHeader = ({
   seriesProgression,
   amountOfEpisodes,
   themeColor,
+  season,
+  episode,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -97,6 +101,22 @@ const ContentHeader = ({
                   {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
 
                   <div>
+                    {season && episode && (
+                      <div className="flex">
+                        <span
+                          style={{
+                            background: themeColor?.hex,
+                          }}
+                          className={`
+                            inline-block px-3 py-1 text-xs rounded-full       
+                            ${themeColor.isDark && "text-white"}
+                            ${themeColor.isLight && "text-primaryBackground"}
+                          `}
+                        >
+                          {season}x{episode}
+                        </span>
+                      </div>
+                    )}
                     {title}
                     {date && (
                       <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">{date.slice(0, 4)}</span>
