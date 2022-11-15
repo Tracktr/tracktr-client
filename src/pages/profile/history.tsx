@@ -46,9 +46,9 @@ const HistoryPage = () => {
   };
 
   const handleDelete = (id: string, type: "movie" | "episode") => {
-    if (type === "movie") {
+    if (type === "episode") {
       deleteEpisodeFromHistory.mutate({ id });
-    } else if (type === "episode") {
+    } else if (type === "movie") {
       deleteMovieFromHistory.mutate({ id });
     }
   };
