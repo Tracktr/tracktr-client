@@ -27,6 +27,8 @@ const TVPage = () => {
           title={data.name}
           description={data.overview}
           themeColor={tvShow.theme_color}
+          seriesProgression={tvShow.number_of_episodes_watched}
+          amountOfEpisodes={tvShow.number_of_episodes}
         >
           <EpisodesBlock episodes={data.episodes} />
           <CastBlock cast={data.credits.cast} />

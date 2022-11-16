@@ -5,7 +5,7 @@ interface SeriesProgressionBlockProps {
 
 const SeriesProgressionBlock = ({ numberOfEpisodesWatched, amountOfEpisodes }: SeriesProgressionBlockProps) => {
   const { count } = numberOfEpisodesWatched[0];
-  const currentPercentage = (Number(count) / Number(amountOfEpisodes)) * 100;
+  const currentPercentage = Math.ceil((Number(count) / Number(amountOfEpisodes)) * 100);
   return (
     <div>
       <div className="flex justify-between pb-1 text-xs uppercase opacity-50">
