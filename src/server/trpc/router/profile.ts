@@ -106,7 +106,7 @@ export const profileRouter = router({
     });
 
     const result = await Promise.all(
-      episodes.map(async (lastEpisode) => {
+      episodes.filter(async (lastEpisode) => {
         const season = await ctx.prisma.seasons.findFirst({
           where: {
             series_id: lastEpisode.series_id,
@@ -119,18 +119,22 @@ export const profileRouter = router({
         });
 
         const nextEpisode: any = season?.episodes.filter((ep) => {
-          if (ep.episode_number === lastEpisode.episode_number + 1) {
+          if (ep.episode_number === lastEpisode.episode_number + 1 && ep.season_number === lastEpisode.season_number) {
             return true;
           } else {
             return false;
           }
         });
 
-        return { ...nextEpisode[0], series: season?.Series };
+        //TODO: check for next series
+        if (nextEpisode[0]) {
+          return {
+            ...nextEpisode[0],
+            series: season?.Series,
+          };
+        }
       })
     );
-
-    console.log(result);
 
     return { result };
   }),
