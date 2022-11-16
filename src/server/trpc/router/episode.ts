@@ -50,6 +50,7 @@ export const episodeRouter = router({
 
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
+      //TODO: add all seasons of tv show
       const newSeriesCreateUpdate = {
         id: show.id,
         name: show.name,

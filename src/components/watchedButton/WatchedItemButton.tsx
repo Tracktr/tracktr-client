@@ -8,14 +8,11 @@ interface IWatchedButtonProps {
 
 const WatchedItemButton = ({ themeColor, watchHistory, handleOnClick }: IWatchedButtonProps) => {
   const data: any[] = Object.values(watchHistory.data);
-  const date = new Date(data[data.length - 1].datetime).toLocaleDateString(
-    "en-UK", // TODO: get time format from user language
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }
-  );
+  const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   return (
     <Button themeColor={themeColor} onClick={(e: void) => handleOnClick(e)} onKeyDown={handleOnClick}>
