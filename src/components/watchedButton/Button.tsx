@@ -12,7 +12,7 @@ const Button = ({ onClick, onKeyDown, children, themeColor }: IWatchedButton) =>
       background: themeColor.hex,
     }}
     className={`
-      text-left px-3 my-2 flex justify-between py-2 align-middle items-center gap-2 rounded font-bold text-white 
+      text-left px-3 my-2 flex justify-between py-2 align-middle items-center gap-2 rounded font-bold 
       ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
       ${themeColor.isDark && "text-white"}
       ${themeColor.isLight && "text-primaryBackground"}
