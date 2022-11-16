@@ -33,6 +33,8 @@ const EpisodePage = () => {
           themeColor={tvShow.theme_color}
           season={episodeData.season_number}
           episode={episodeData.episode_number}
+          seriesProgression={tvShow.number_of_episodes_watched}
+          amountOfEpisodes={tvShow.number_of_episodes}
         >
           <CastBlock cast={episodeData.credits.cast} />
           <EpisodeSwitcherBlock seasons={tvShow.seasons} />

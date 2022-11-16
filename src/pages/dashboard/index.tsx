@@ -53,7 +53,7 @@ const DashboardPage = () => {
             type="multi"
             backgroundImage="https://www.themoviedb.org/t/p/original/xMMrBziwJqrgjerqpNeQvwuwiUp.jpg"
           />
-          <div className="max-w-6xl m-auto">
+          <div className="max-w-6xl px-4 m-auto">
             <div className="my-6">
               <div className="items-center align-middle md:flex">
                 <div className="flex flex-wrap gap-4 mb-5">

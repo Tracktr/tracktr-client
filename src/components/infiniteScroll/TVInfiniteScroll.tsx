@@ -32,7 +32,7 @@ const TVInfiniteScroll = () => {
 
   return (
     <div className="px-4">
-      <div className="flex items-center pb-6">
+      <div className="items-center pb-6 md:flex">
         <div className="z-40 text-4xl">Series</div>
         <SortPill
           buttons={{
