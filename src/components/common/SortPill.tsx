@@ -14,7 +14,7 @@ interface ISortPill {
 }
 
 const SortPill = ({ buttons }: ISortPill) => (
-  <div className="pt-1 pl-12">
+  <div className="pt-1 md:ml-auto">
     <div className="flex items-center justify-center text-xs border-2 rounded-full border-primary">
       {buttons.data.map((b) => (
         <motion.div

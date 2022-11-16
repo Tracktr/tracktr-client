@@ -8,7 +8,7 @@ const SeriesProgressionBlock = ({ numberOfEpisodesWatched, amountOfEpisodes }: S
   const currentPercentage = (Number(count) / Number(amountOfEpisodes)) * 100;
   return (
     <div>
-      <div className="flex justify-between pb-1 text-sm uppercase opacity-50">
+      <div className="flex justify-between pb-1 text-xs uppercase opacity-50">
         <p>{currentPercentage}% Watched</p>
         <p>
           {Number(count)}/{amountOfEpisodes} episodes

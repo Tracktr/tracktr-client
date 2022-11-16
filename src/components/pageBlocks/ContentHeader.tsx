@@ -73,6 +73,14 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
+              <div className="pt-4 pb-4 md:row-start-auto">
+                {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
+                  <SeriesProgressionBlock
+                    amountOfEpisodes={amountOfEpisodes}
+                    numberOfEpisodesWatched={seriesProgression}
+                  />
+                )}
+              </div>
               {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} />}
               {session.status === "authenticated" && (
                 <hr
@@ -135,14 +143,6 @@ const ContentHeader = ({
             </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
-              <div className="col-span-2 pt-4 pb-4 lg:ml-6 md:row-start-auto">
-                {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
-                  <SeriesProgressionBlock
-                    amountOfEpisodes={amountOfEpisodes}
-                    numberOfEpisodesWatched={seriesProgression}
-                  />
-                )}
-              </div>
             </div>
 
             {children || ""}
