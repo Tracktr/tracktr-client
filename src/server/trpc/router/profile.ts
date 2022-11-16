@@ -94,9 +94,6 @@ export const profileRouter = router({
     }),
 
   upNext: protectedProcedure.query(async ({ ctx }) => {
-    // eslint-disable-next-line prefer-const
-    let nextEpisodes: any[] = [];
-
     const episodes = await ctx.prisma.episodesHistory.findMany({
       where: { user_id: ctx.session.user.profile.userId },
       include: {
@@ -108,31 +105,33 @@ export const profileRouter = router({
       distinct: ["series_id"],
     });
 
-    episodes.map(async (lastEpisode) => {
-      const season = await ctx.prisma.seasons.findFirst({
-        where: {
-          series_id: lastEpisode.series_id,
-          season_number: lastEpisode.season_number,
-        },
-        include: {
-          episodes: true,
-          Series: true,
-        },
-      });
+    const result = await Promise.all(
+      episodes.map(async (lastEpisode) => {
+        const season = await ctx.prisma.seasons.findFirst({
+          where: {
+            series_id: lastEpisode.series_id,
+            season_number: lastEpisode.season_number,
+          },
+          include: {
+            episodes: true,
+            Series: true,
+          },
+        });
 
-      const nextEpisode = season?.episodes.filter((ep) => {
-        if (ep.episode_number === lastEpisode.episode_number + 1) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+        const nextEpisode: any = season?.episodes.filter((ep) => {
+          if (ep.episode_number === lastEpisode.episode_number + 1) {
+            return true;
+          } else {
+            return false;
+          }
+        });
 
-      nextEpisodes.push({ ...nextEpisode?.[0], series: season?.Series });
-    });
+        return { ...nextEpisode[0], series: season?.Series };
+      })
+    );
 
-    // TODO: only return when episode map has finished
+    console.log(result);
 
-    return { nextEpisodes };
+    return { result };
   }),
 });
