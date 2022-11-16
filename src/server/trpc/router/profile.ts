@@ -1,3 +1,4 @@
+import { Episodes } from "@prisma/client";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -91,4 +92,47 @@ export const profileRouter = router({
         pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
       };
     }),
+
+  upNext: protectedProcedure.query(async ({ ctx }) => {
+    // eslint-disable-next-line prefer-const
+    let nextEpisodes: any[] = [];
+
+    const episodes = await ctx.prisma.episodesHistory.findMany({
+      where: { user_id: ctx.session.user.profile.userId },
+      include: {
+        series: true,
+      },
+      orderBy: {
+        datetime: "desc",
+      },
+      distinct: ["series_id"],
+    });
+
+    episodes.map(async (lastEpisode) => {
+      const season = await ctx.prisma.seasons.findFirst({
+        where: {
+          series_id: lastEpisode.series_id,
+          season_number: lastEpisode.season_number,
+        },
+        include: {
+          episodes: true,
+          Series: true,
+        },
+      });
+
+      const nextEpisode = season?.episodes.filter((ep) => {
+        if (ep.episode_number === lastEpisode.episode_number + 1) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      nextEpisodes.push({ ...nextEpisode?.[0], series: season?.Series });
+    });
+
+    // TODO: only return when episode map has finished
+
+    return { nextEpisodes };
+  }),
 });
