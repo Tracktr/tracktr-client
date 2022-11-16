@@ -33,7 +33,7 @@ const TVInfiniteScroll = () => {
   return (
     <div className="px-4">
       <div className="flex items-center pb-6">
-        <div className="z-40 text-4xl">Movies</div>
+        <div className="z-40 text-4xl">Series</div>
         <SortPill
           buttons={{
             onClick: (value) => setFilter(value),
