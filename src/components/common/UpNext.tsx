@@ -12,7 +12,14 @@ interface IepisodesGrid {
 
 const UpNext = ({ episodes, status }: IepisodesGrid): JSX.Element => {
   if (episodes.length < 1 && status !== "loading") {
-    return <div>You&pos;ve finished all your shows!!</div>;
+    return (
+      <div>
+        You have finished all your shows, go check out some{" "}
+        <Link href="/tv">
+          <a className="underline">new ones!</a>
+        </Link>
+      </div>
+    );
   }
 
   return (
