@@ -127,12 +127,37 @@ export const profileRouter = router({
           }
         });
 
-        //TODO: check for next series
         if (nextEpisode[0]) {
           return {
             ...nextEpisode[0],
             series: season?.Series,
           };
+        } else {
+          const nextSeason = await ctx.prisma.seasons.findFirst({
+            where: {
+              series_id: lastEpisode.series_id,
+              season_number: lastEpisode.season_number + 1,
+            },
+            include: {
+              episodes: true,
+              Series: true,
+            },
+          });
+
+          const nextEpisode: any = nextSeason?.episodes.filter((ep) => {
+            if (ep.episode_number === 1 && ep.season_number === lastEpisode.season_number + 1) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+
+          if (nextEpisode[0]) {
+            return {
+              ...nextEpisode[0],
+              series: season?.Series,
+            };
+          }
         }
       })
     );
