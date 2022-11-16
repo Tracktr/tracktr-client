@@ -63,12 +63,18 @@ export const profileRouter = router({
         include: {
           series: true,
         },
+        orderBy: {
+          datetime: "desc",
+        },
       });
 
       const movies = await ctx.prisma.moviesHistory.findMany({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           movie: true,
+        },
+        orderBy: {
+          datetime: "desc",
         },
       });
 
