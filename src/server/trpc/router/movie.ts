@@ -30,10 +30,11 @@ export const movieRouter = router({
     .input(
       z.object({
         cursor: z.number().nullish(),
+        filter: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL("movie/popular", process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`movie/${input.filter}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
