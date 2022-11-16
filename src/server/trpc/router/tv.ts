@@ -1,6 +1,5 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
 import convertImageToPrimaryColor from "../../../utils/colors";
 
 export const tvRouter = router({

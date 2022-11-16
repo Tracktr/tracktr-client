@@ -1,4 +1,3 @@
-import { Episodes } from "@prisma/client";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
 import PosterGrid from "./PosterGrid";
-import { AnimatePresence, motion } from "framer-motion";
 import { Episodes } from "@prisma/client";
 
 interface IepisodesGrid {
