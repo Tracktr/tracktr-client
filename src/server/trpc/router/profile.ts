@@ -162,11 +162,15 @@ export const profileRouter = router({
     );
 
     return {
-      result: result.filter((el: any) => {
-        if (el !== undefined) {
-          return true;
-        }
-      }),
+      result: paginate(
+        result.filter((el: any) => {
+          if (el !== undefined) {
+            return true;
+          }
+        }),
+        6,
+        1
+      ),
     };
   }),
 });
