@@ -106,7 +106,7 @@ export const profileRouter = router({
     });
 
     const result = await Promise.all(
-      episodes.filter(async (lastEpisode) => {
+      episodes.flatMap(async (lastEpisode) => {
         const season = await ctx.prisma.seasons.findFirst({
           where: {
             series_id: lastEpisode.series_id,
@@ -118,6 +118,7 @@ export const profileRouter = router({
           },
         });
 
+        // Removes all episodes that don't have a next episode
         const nextEpisode: any = season?.episodes.filter((ep) => {
           if (ep.episode_number === lastEpisode.episode_number + 1 && ep.season_number === lastEpisode.season_number) {
             return true;
@@ -136,6 +137,12 @@ export const profileRouter = router({
       })
     );
 
-    return { result };
+    return {
+      result: result.filter((el: any) => {
+        if (el !== undefined) {
+          return true;
+        }
+      }),
+    };
   }),
 });
