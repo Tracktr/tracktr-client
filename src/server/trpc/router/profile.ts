@@ -1,4 +1,3 @@
-import { Episodes } from "@prisma/client";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -127,22 +126,51 @@ export const profileRouter = router({
           }
         });
 
-        //TODO: check for next series
         if (nextEpisode[0]) {
           return {
             ...nextEpisode[0],
             series: season?.Series,
           };
+        } else {
+          const nextSeason = await ctx.prisma.seasons.findFirst({
+            where: {
+              series_id: lastEpisode.series_id,
+              season_number: lastEpisode.season_number + 1,
+            },
+            include: {
+              episodes: true,
+              Series: true,
+            },
+          });
+
+          const nextEpisode: any = nextSeason?.episodes.filter((ep) => {
+            if (ep.episode_number === 1 && ep.season_number === lastEpisode.season_number + 1) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+
+          if (nextEpisode[0]) {
+            return {
+              ...nextEpisode[0],
+              series: season?.Series,
+            };
+          }
         }
       })
     );
 
     return {
-      result: result.filter((el: any) => {
-        if (el !== undefined) {
-          return true;
-        }
-      }),
+      result: paginate(
+        result.filter((el: any) => {
+          if (el !== undefined) {
+            return true;
+          }
+        }),
+        6,
+        1
+      ),
     };
   }),
 });

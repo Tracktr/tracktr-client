@@ -16,7 +16,6 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
       return <p className="pt-64">Error</p>;
     }
 
-    // TODO: Do something with the loading status
     if (status === "loading") {
       if (posters) {
         return <LoadingPosters />;
@@ -42,6 +41,6 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
     }
 
     return <></>;
-  }, [status, children]);
+  }, [status, children, posters]);
 
 export default LoadingPageComponents;

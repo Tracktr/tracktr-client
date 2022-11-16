@@ -57,7 +57,7 @@ const DashboardPage = () => {
             <div className="my-6">
               <div className="items-center align-middle md:flex">
                 <div className="flex flex-wrap gap-4 mb-5">
-                  <div className="text-3xl">Next up to watch</div>
+                  <div className="text-3xl">Up next</div>
                 </div>
               </div>
               <UpNext episodes={upNext?.result || []} status={upNextStatus} />
