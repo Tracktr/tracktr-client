@@ -55,7 +55,7 @@ const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element
                       />
                     </a>
                   </Link>
-                  <div className="absolute bottom-0 left-0 right-0 overflow-hidden text-center bg-gradient-to-t from-primaryBackground">
+                  <div className="absolute bottom-0 left-0 right-0 overflow-hidden text-center select-none bg-gradient-to-t from-primaryBackground">
                     <div className="px-4 pt-2">
                       <span className="w-full text-sm line-clamp-2">
                         {`S${item.season_number} - E${item.episode_number}`}
