@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { trpc } from "../../utils/trpc";
 import LoadingPageComponents from "../common/LoadingPageComponents";
-import PosterGrid from "../common/PosterGrid";
+import { PosterGrid } from "../common/PosterGrid";
 import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import MoviePoster from "../posters/MoviePoster";

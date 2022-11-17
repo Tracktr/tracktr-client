@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
-import PosterGrid from "../../../components/common/PosterGrid";
+import { PosterGrid } from "../../../components/common/PosterGrid";
 import { LoadingPoster } from "../../../components/posters/LoadingPoster";
 import TVPoster from "../../../components/posters/TVPoster";
 import { trpc } from "../../../utils/trpc";

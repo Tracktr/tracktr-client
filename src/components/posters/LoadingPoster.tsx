@@ -1,4 +1,4 @@
-import PosterGrid from "../common/PosterGrid";
+import { PosterGrid } from "../common/PosterGrid";
 
 export const LoadingPoster = () => (
   <div className="flex flex-col gap-y-[6px]">
