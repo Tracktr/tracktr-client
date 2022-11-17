@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
-import PosterGrid from "./PosterGrid";
+import { PosterGridWithScrollContainer } from "./PosterGrid";
 import { MdDelete } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -21,7 +21,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <PosterGrid>
+        <PosterGridWithScrollContainer>
           <AnimatePresence mode="popLayout" initial={false}>
             {history.map((item: any) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
@@ -86,7 +86,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
               );
             })}
           </AnimatePresence>
-        </PosterGrid>
+        </PosterGridWithScrollContainer>
       )}
     </LoadingPageComponents>
   );
