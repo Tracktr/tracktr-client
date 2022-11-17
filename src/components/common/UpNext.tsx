@@ -55,28 +55,27 @@ const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element
                       />
                     </a>
                   </Link>
-                  <div className="absolute bottom-0 left-0 right-0 overflow-hidden bg-gradient-to-t from-primaryBackground">
-                    <Link href={`/tv/${item.series._id}/season/${item.season_number}/episode/${item.episode_number}`}>
-                      <a>
-                        <div className="px-4 py-2">
-                          <span className="w-full text-sm text-center line-clamp-2">
-                            {`S${item.season_number} - E${item.episode_number}`}
-                          </span>
-                        </div>
-                      </a>
-                    </Link>
-                    <button
-                      className="flex justify-center w-full text-3xl text-opacity-100 max-h-0 group-hover:max-h-10 animated"
-                      onClick={() =>
-                        markAsWatched({
-                          episodeNumber: item.episode_number,
-                          seasonNumber: item.season_number,
-                          seriesId: item.series.id,
-                        })
-                      }
-                    >
-                      <ImCheckmark2 />
-                    </button>
+                  <div className="absolute bottom-0 left-0 right-0 overflow-hidden text-center bg-gradient-to-t from-primaryBackground">
+                    <div className="px-4 pt-2">
+                      <span className="w-full text-sm line-clamp-2">
+                        {`S${item.season_number} - E${item.episode_number}`}
+                      </span>
+                    </div>
+                    <div className="max-h-0 group-hover:max-h-40 animated">
+                      <div className="pb-2 text-sm">{item.series.name}</div>
+                      <button
+                        className="flex justify-center w-full text-3xl text-opacity-100"
+                        onClick={() =>
+                          markAsWatched({
+                            episodeNumber: item.episode_number,
+                            seasonNumber: item.season_number,
+                            seriesId: item.series.id,
+                          })
+                        }
+                      >
+                        <ImCheckmark2 />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               );
