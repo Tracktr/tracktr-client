@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { BackdropImage, PosterImage } from "../../utils/generateImages";
-import WatchedButton from "../watchedButton";
+import WatchedButton from "../watchButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";

@@ -12,7 +12,7 @@ interface IWatchedButtonProps {
   themeColor: any;
 }
 
-const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButtonProps) => {
+const WatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButtonProps) => {
   const [state, setState] = useState<"watched" | "unwatched" | "loading" | undefined>();
   const { data: session, status: sessionStatus } = useSession();
   let watchHistory: any;
@@ -100,4 +100,4 @@ const WatchedButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchedButt
   return <></>;
 };
 
-export default WatchedButton;
+export default WatchButton;
