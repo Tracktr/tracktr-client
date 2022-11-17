@@ -24,6 +24,8 @@ const MoviesInfiniteScroll = () => {
     }
   );
 
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation();
+
   useEffect(() => {
     if (inView) {
       fetchNextPage();
@@ -56,11 +58,13 @@ const MoviesInfiniteScroll = () => {
                 page.results.map((content: any) => {
                   return (
                     <MoviePoster
+                      id={content.id}
                       imageSrc={`${content.poster_path}`}
                       name={content.title || content.name}
                       key={content.id}
                       url={`movies/${content.id}`}
                       score={content.vote_average}
+                      markAsWatched={markAsWatched.mutate}
                     />
                   );
                 })
