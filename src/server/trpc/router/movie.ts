@@ -39,8 +39,32 @@ export const movieRouter = router({
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
-      const res = await fetch(url);
+      const res: any = await fetch(url);
       const json = await res.json();
+
+      //TODO: check if movie is already watched
+      if (ctx?.session?.user) {
+        json.results = await Promise.all(
+          json.results.map(async (movie: any) => {
+            const watched = await ctx.prisma.moviesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id as string,
+                movie_id: movie.id,
+              },
+            });
+
+            if (watched) {
+              return { ...movie, watched: true };
+            } else {
+              return { ...movie, watched: false };
+            }
+          })
+        );
+      } else {
+        json.results = json.results.map((movie: any) => {
+          return { ...movie, watched: false };
+        });
+      }
 
       return {
         ...json,
