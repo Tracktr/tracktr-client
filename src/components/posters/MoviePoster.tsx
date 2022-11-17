@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillStar } from "react-icons/ai";
-import { ImCheckmark2 } from "react-icons/im";
+import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
 import { PosterImage } from "../../utils/generateImages";
 export interface IPoster {
   imageSrc: string;
@@ -9,10 +9,11 @@ export interface IPoster {
   url?: string;
   score?: number;
   id: number;
+  watched: boolean;
   markAsWatched: (e: any) => any;
 }
 
-const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id }: IPoster) => (
+const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }: IPoster) => (
   <div className="group">
     <div className="relative">
       <Link href={url || "#"}>
@@ -35,7 +36,7 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id }: IPoster)
             })
           }
         >
-          <ImCheckmark2 />
+          {watched ? <ImCheckmark /> : <ImCheckmark2 />}
         </button>
         {score !== undefined && (
           <div className="flex justify-center w-full">

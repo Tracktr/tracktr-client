@@ -12,19 +12,22 @@ const MoviesInfiniteScroll = () => {
   const MAX_PAGES = 5;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.movie.infiniteMovies.useInfiniteQuery(
-    {
-      filter: filter,
-    },
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 && lastPage.page <= MAX_PAGES ? nextPage : undefined;
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+    trpc.movie.infiniteMovies.useInfiniteQuery(
+      {
+        filter: filter,
       },
-    }
-  );
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 && lastPage.page <= MAX_PAGES ? nextPage : undefined;
+        },
+      }
+    );
 
-  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation();
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   useEffect(() => {
     if (inView) {
@@ -65,6 +68,7 @@ const MoviesInfiniteScroll = () => {
                       url={`movies/${content.id}`}
                       score={content.vote_average}
                       markAsWatched={markAsWatched.mutate}
+                      watched={content.watched}
                     />
                   );
                 })
