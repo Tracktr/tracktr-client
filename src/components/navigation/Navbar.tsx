@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Logo from "../common/Logo";
 import NavButton from "./Navbutton";
+import { BiMenuAltRight } from "react-icons/bi";
+import NavMobile from "./NavMobile";
 
-const navLinks = [
+export const navLinks = [
   { href: "/movies", text: "Movies", active: false },
   { href: "/tv", text: " Series", active: false },
 ];
@@ -38,10 +40,19 @@ const subMenuAnimate = {
 const Navbar = () => {
   const { data: session, status } = useSession();
   const [profileHover, setProfileHover] = useState(false);
+  const [navMobile, setNavMobile] = useState(false);
 
   const toggleProfileHover = () => {
     setProfileHover(!profileHover);
   };
+
+  const toggleNavMobile = () => {
+    setNavMobile(!navMobile);
+  };
+
+  useEffect(() => {
+    document.body.classList.toggle("overflow-hidden");
+  }, [navMobile]);
 
   return (
     <>
@@ -56,52 +67,60 @@ const Navbar = () => {
             </ul>
             <div className="flex items-center justify-end col-span-2 lg:col-span-1">
               {status !== "loading" && (
-                <div className="hidden mr-6 lg:mr-0 lg:block">
-                  {session ? (
-                    <motion.div
-                      className="relative"
-                      onMouseEnter={toggleProfileHover}
-                      onMouseLeave={toggleProfileHover}
-                    >
-                      <button type="button" className="w-full h-full">
-                        <a className="flex items-center pl-4">
-                          <Image
-                            unoptimized
-                            src={session.user?.image ? session.user.image : ""}
-                            width="36px"
-                            height="36px"
-                            className="rounded-full"
-                            alt="User profile image"
-                          />
-                          <p className="ml-2 text-sm">{session.user?.name}</p>
-                        </a>
-                      </button>
+                <>
+                  <div className="hidden mr-6 lg:mr-0 lg:block">
+                    {session ? (
                       <motion.div
-                        initial="exit"
-                        animate={profileHover ? "enter" : "exit"}
-                        variants={subMenuAnimate}
-                        className="absolute z-50 w-full rounded-md shadow-md top-10 bg-primaryBackground"
+                        className="relative"
+                        onMouseEnter={toggleProfileHover}
+                        onMouseLeave={toggleProfileHover}
                       >
-                        <div className="p-2 text-sm">
-                          <Link href="/profile">
-                            <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">Profile</a>
-                          </Link>
-                          <Link href="/profile/history">
-                            <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">History</a>
-                          </Link>
-                          <button
-                            onClick={() => signOut()}
-                            className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
-                          >
-                            Sign Out
-                          </button>
-                        </div>
+                        <button type="button" className="w-full h-full">
+                          <a className="flex items-center pl-4">
+                            <Image
+                              unoptimized
+                              src={session.user?.image ? session.user.image : ""}
+                              width="36px"
+                              height="36px"
+                              className="rounded-full"
+                              alt="User profile image"
+                            />
+                            <p className="ml-2 text-sm">{session.user?.name}</p>
+                          </a>
+                        </button>
+                        <motion.div
+                          initial="exit"
+                          animate={profileHover ? "enter" : "exit"}
+                          variants={subMenuAnimate}
+                          className="absolute z-50 w-full rounded-md shadow-md top-10 bg-primaryBackground"
+                        >
+                          <div className="p-2 text-sm">
+                            <Link href="/profile">
+                              <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">Profile</a>
+                            </Link>
+                            <Link href="/profile/history">
+                              <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">History</a>
+                            </Link>
+                            <button
+                              onClick={() => signOut()}
+                              className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
+                            >
+                              Sign Out
+                            </button>
+                          </div>
+                        </motion.div>
                       </motion.div>
-                    </motion.div>
-                  ) : (
-                    <NavButton href="/api/auth/signin" text="Sign in" active={false} />
-                  )}
-                </div>
+                    ) : (
+                      <NavButton href="/api/auth/signin" text="Sign in" active={false} />
+                    )}
+                  </div>
+                  <div className="flex lg:hidden">
+                    <button onClick={() => setNavMobile(!navMobile)}>
+                      <BiMenuAltRight className="text-3xl text-white" />
+                    </button>
+                    {navMobile && <NavMobile toggleNavMobile={toggleNavMobile} />}
+                  </div>
+                </>
               )}
             </div>
           </div>
