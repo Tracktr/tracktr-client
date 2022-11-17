@@ -50,7 +50,6 @@ const ContentHeader = ({
   episode,
 }: IContentHeader) => {
   const session = useSession();
-  console.log(season, episode);
 
   return (
     <>
