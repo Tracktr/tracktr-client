@@ -15,3 +15,9 @@
     height: -webkit-fill-available;
   }
 }
+
+@layer components {
+  .animated {
+    transition: all ease-in-out 0.5s;
+  }
+}
