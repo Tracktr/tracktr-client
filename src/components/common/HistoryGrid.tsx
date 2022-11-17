@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
-import { PosterGridWithScrollContainer } from "./PosterGrid";
+import { PosterGrid } from "./PosterGrid";
 import { MdDelete } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -11,9 +11,10 @@ interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
   handleDelete: (id: string, type: "movie" | "episode") => void;
+  hasScrollContainer?: boolean;
 }
 
-const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Element => {
+const HistoryGrid = ({ history, status, handleDelete, hasScrollContainer }: IHistoryGrid): JSX.Element => {
   if (history.length < 1 && status !== "loading") {
     return <div>No history found, start watching some shows and movies!</div>;
   }
@@ -21,7 +22,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <PosterGridWithScrollContainer>
+        <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
             {history.map((item: any) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
@@ -86,7 +87,7 @@ const HistoryGrid = ({ history, status, handleDelete }: IHistoryGrid): JSX.Eleme
               );
             })}
           </AnimatePresence>
-        </PosterGridWithScrollContainer>
+        </PosterGrid>
       )}
     </LoadingPageComponents>
   );

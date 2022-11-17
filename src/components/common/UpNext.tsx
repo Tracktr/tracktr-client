@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
-import { PosterGrid, PosterGridWithScrollContainer } from "./PosterGrid";
+import { PosterGrid } from "./PosterGrid";
 import { Episodes } from "@prisma/client";
 
 interface IepisodesGrid {
@@ -25,7 +25,7 @@ const UpNext = ({ episodes, status }: IepisodesGrid): JSX.Element => {
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
-        <PosterGridWithScrollContainer>
+        <PosterGrid hasScrollContainer>
           {episodes.map((item: any) => {
             return (
               <div className="relative w-[170px] group" key={item.id}>
@@ -47,7 +47,7 @@ const UpNext = ({ episodes, status }: IepisodesGrid): JSX.Element => {
               </div>
             );
           })}
-        </PosterGridWithScrollContainer>
+        </PosterGrid>
       )}
     </LoadingPageComponents>
   );

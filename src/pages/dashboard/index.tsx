@@ -73,7 +73,12 @@ const DashboardPage = () => {
                   </Link>
                 </div>
               </div>
-              <HistoryGrid history={history?.history || []} status={historyStatus} handleDelete={handleDelete} />
+              <HistoryGrid
+                hasScrollContainer
+                history={history?.history || []}
+                status={historyStatus}
+                handleDelete={handleDelete}
+              />
             </div>
           </div>
         </div>
