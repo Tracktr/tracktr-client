@@ -6,7 +6,7 @@ export const seasonRouter = router({
     .input(
       z.object({
         tvID: z.string().nullish(),
-        seasonID: z.string().nullish(),
+        seasonID: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
