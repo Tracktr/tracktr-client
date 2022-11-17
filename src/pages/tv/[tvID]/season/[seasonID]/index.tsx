@@ -15,7 +15,7 @@ const TVPage = () => {
 
   const { data, status } = trpc.season.seasonByID.useQuery({
     tvID: tvID as string,
-    seasonID: seasonID ? seasonID[0] : undefined,
+    seasonID: Number(seasonID),
   });
 
   return (

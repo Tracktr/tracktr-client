@@ -50,6 +50,7 @@ const ContentHeader = ({
   episode,
 }: IContentHeader) => {
   const session = useSession();
+  console.log(season, episode);
 
   return (
     <>
@@ -111,7 +112,7 @@ const ContentHeader = ({
                   {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
 
                   <div>
-                    {season && episode && (
+                    {season?.toString() && episode?.toString() && (
                       <div className="flex">
                         <span
                           style={{

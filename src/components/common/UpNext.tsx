@@ -4,6 +4,7 @@ import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
 import PosterGrid from "./PosterGrid";
 import { Episodes } from "@prisma/client";
+import HorizontalScrollContainer from "./HorizontalScrollContainer";
 
 interface IepisodesGrid {
   episodes: Episodes[];
