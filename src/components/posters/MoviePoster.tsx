@@ -39,9 +39,9 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id }: IPoster)
         </button>
         {score !== undefined && (
           <div className="flex justify-center w-full">
-            <span className="flex items-center p-2 text-xs">
+            <span className="flex items-center p-2 text-sm">
               <AiFillStar className="mr-2 text-primary" size={18} />
-              {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
+              {score > 0 ? score.toPrecision(2) + "/10" : "N/A"}
             </span>
           </div>
         )}
