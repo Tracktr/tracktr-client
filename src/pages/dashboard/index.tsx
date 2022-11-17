@@ -16,11 +16,12 @@ const DashboardPage = () => {
     status: historyStatus,
     refetch,
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
-  const { data: upNext, status: upNextStatus } = trpc.profile.upNext.useQuery();
+  const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
 
   const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
     onSuccess: () => {
       refetch();
+      refetchUpNext();
     },
   });
 
