@@ -61,7 +61,7 @@ const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element
                         {`S${item.season_number} - E${item.episode_number}`}
                       </span>
                     </div>
-                    <div className="max-h-0 group-hover:max-h-40 animated">
+                    <div className="max-h-0 group-hover:max-h-[170px] transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">
                       <div className="pb-2 text-sm">{item.series.name}</div>
                       <button
                         className="flex justify-center w-full text-3xl text-opacity-100"
