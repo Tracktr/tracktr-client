@@ -42,7 +42,6 @@ export const movieRouter = router({
       const res: any = await fetch(url);
       const json = await res.json();
 
-      //TODO: check if movie is already watched
       if (ctx?.session?.user) {
         json.results = await Promise.all(
           json.results.map(async (movie: any) => {
