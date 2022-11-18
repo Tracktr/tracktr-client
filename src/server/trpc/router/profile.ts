@@ -36,7 +36,7 @@ export const profileRouter = router({
             update: {
               adult: input.adult,
               language: input.language,
-              location: input.location,
+              region: input.location,
             },
           },
         },
