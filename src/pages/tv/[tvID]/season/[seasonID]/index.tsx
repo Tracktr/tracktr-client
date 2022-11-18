@@ -13,10 +13,13 @@ const TVPage = () => {
     tvID: tvID as string,
   });
 
-  const { data, status, refetch } = trpc.season.seasonByID.useQuery({
-    tvID: tvID as string,
-    seasonID: Number(seasonID),
-  });
+  const { data, status, refetch } = trpc.season.seasonByID.useQuery(
+    {
+      tvID: tvID as string,
+      seasonID: Number(seasonID),
+    },
+    { enabled: router.isReady }
+  );
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
     onSuccess: () => {
