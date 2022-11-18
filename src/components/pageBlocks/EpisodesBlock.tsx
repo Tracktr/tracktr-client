@@ -26,6 +26,7 @@ const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
           score={item.vote_average}
           series_id={item.show_id}
           markAsWatched={markAsWatched.mutate}
+          watched={item.watched}
         />
       ))}
     </div>

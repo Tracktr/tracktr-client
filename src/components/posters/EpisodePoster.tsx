@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillStar } from "react-icons/ai";
-import { ImCheckmark2 } from "react-icons/im";
+import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
 import { PosterImage } from "../../utils/generateImages";
 
 export interface IEpisodePoster {
@@ -14,6 +14,7 @@ export interface IEpisodePoster {
   score?: number;
   markAsWatched: (e: any) => void;
   series_id: number;
+  watched: boolean;
 }
 
 const EpisodePoster = ({
@@ -26,6 +27,7 @@ const EpisodePoster = ({
   score,
   markAsWatched,
   series_id,
+  watched,
 }: IEpisodePoster) => (
   <div className="md:flex">
     <div className="relative flex-shrink-0">
@@ -51,7 +53,7 @@ const EpisodePoster = ({
             })
           }
         >
-          <ImCheckmark2 />
+          {watched ? <ImCheckmark /> : <ImCheckmark2 />}
         </button>
         {score !== undefined && (
           <div className="flex items-end">
