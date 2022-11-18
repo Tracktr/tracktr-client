@@ -13,9 +13,15 @@ const TVPage = () => {
     tvID: tvID as string,
   });
 
-  const { data, status } = trpc.season.seasonByID.useQuery({
+  const { data, status, refetch } = trpc.season.seasonByID.useQuery({
     tvID: tvID as string,
     seasonID: Number(seasonID),
+  });
+
+  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
   });
 
   return (
@@ -30,7 +36,7 @@ const TVPage = () => {
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
         >
-          <EpisodesBlock episodes={data.episodes} />
+          <EpisodesBlock episodes={data.episodes} markAsWatched={markAsWatched.mutate} />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}

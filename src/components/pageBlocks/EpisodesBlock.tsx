@@ -1,16 +1,14 @@
 import { useRouter } from "next/router";
-import { trpc } from "../../utils/trpc";
 import EpisodePoster from "../posters/EpisodePoster";
 
 interface IEpisodesBlock {
   episodes: any;
+  markAsWatched: (e: any) => void;
 }
 
-const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
+const EpisodesBlock = ({ episodes, markAsWatched }: IEpisodesBlock) => {
   const router = useRouter();
   const { tvID } = router.query;
-
-  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation();
 
   return (
     <div className="space-y-4 mb-14">
@@ -25,7 +23,7 @@ const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
           url={`/tv/${tvID}/season/${item.season_number}/episode/${item.episode_number}`}
           score={item.vote_average}
           series_id={item.show_id}
-          markAsWatched={markAsWatched.mutate}
+          markAsWatched={markAsWatched}
           watched={item.watched}
         />
       ))}
