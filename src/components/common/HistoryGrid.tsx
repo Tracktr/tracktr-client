@@ -71,7 +71,7 @@ const HistoryGrid = ({ history, status, handleDelete, hasScrollContainer }: IHis
                       </div>
                     </a>
                   </Link>
-                  <div className="pt-1 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100 bg-gradient-to-l from-primaryBackground">
+                  <div className="pt-1 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
                     <button
                       className="text-3xl text-red-500 transition-all duration-300 ease-in-out hover:text-red-700"
                       onClick={(e) => {
