@@ -67,12 +67,6 @@ model Profile {
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Languages {
-  iso_639_1   String @unique
-  englishName String
-  name        String
-}
-
 model Movies {
   id            Int             @id
   title         String

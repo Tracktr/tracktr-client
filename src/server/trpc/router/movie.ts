@@ -38,6 +38,7 @@ export const movieRouter = router({
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+      if (ctx) url.searchParams.append("region", ctx.session?.user?.profile.location as string);
 
       const res = await fetch(url);
       const json = await res.json();
@@ -61,6 +62,7 @@ export const movieRouter = router({
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
       if (ctx) url.searchParams.append("include_adult", ctx.session?.user?.profile?.adult ? "true" : "false");
+      if (ctx) url.searchParams.append("region", ctx.session?.user?.profile.location as string);
 
       const res = await fetch(url);
       const json = await res.json();

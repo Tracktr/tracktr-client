@@ -13,13 +13,8 @@ export const profileRouter = router({
       },
     });
 
-    const languages = await ctx.prisma.languages.findMany();
-
     return {
       ...user,
-      languages: {
-        ...languages,
-      },
     };
   }),
 

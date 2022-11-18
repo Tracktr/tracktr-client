@@ -16,6 +16,7 @@ export const multiRouter = router({
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
       if (ctx) url.searchParams.append("include_adult", ctx.session?.user?.profile?.adult ? "true" : "false");
+      if (ctx) url.searchParams.append("region", ctx.session?.user?.profile.location as string);
 
       const res = await fetch(url);
       const json = await res.json();
