@@ -39,49 +39,51 @@ export const episodeRouter = router({
     .mutation(async ({ ctx, input }) => {
       const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-      url.searchParams.append("append_to_response", `season/${input.seasonNumber}`);
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const show = await fetch(url).then((res) => res.json());
-      const currentSeason = show[`season/${input.seasonNumber}`];
-      // Getting the season ID until the append to response is fixed
-      // (https://www.themoviedb.org/talk/5bf41a1f0e0a26266f09a707?language=pa-IN)
-      currentSeason.id = show.seasons.filter((s: TmdbSeason) => s.season_number === input.seasonNumber)[0].id;
 
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
-      //TODO: add all seasons of tv show
       const newSeriesCreateUpdate = {
         id: show.id,
         name: show.name,
         poster: seriesPoster,
-        // Adds only the current season
         seasons: {
-          connectOrCreate: [
-            {
-              where: { id: currentSeason.id },
-              create: {
-                id: currentSeason.id,
-                name: currentSeason.name,
-                poster: currentSeason.poster_path ? currentSeason.poster_path : seriesPoster,
-                season_number: currentSeason.season_number,
-                // Loop over all episodes in the season
-                episodes: {
-                  connectOrCreate: currentSeason.episodes.map((e: TmdbEpisode) => {
-                    return {
-                      where: { id: e.id },
-                      create: {
-                        id: e.id,
-                        name: e.name,
-                        episode_number: e.episode_number,
-                        season_number: e.season_number,
-                      },
-                    };
-                  }),
+          connectOrCreate: await Promise.all(
+            show.seasons.map(async (season: any) => {
+              const url = new URL(
+                `tv/${input?.seriesId}/season/${season.season_number}`,
+                process.env.NEXT_PUBLIC_TMDB_API
+              );
+              url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+              const seasonWithEpisodes = await fetch(url).then((res) => res.json());
+
+              return {
+                where: { id: season.id },
+                create: {
+                  id: season.id,
+                  name: season.name,
+                  poster: season.poster_path ? season.poster_path : seriesPoster,
+                  season_number: season.season_number,
+                  episodes: {
+                    connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
+                      return {
+                        where: { id: e.id },
+                        create: {
+                          id: e.id,
+                          name: e.name,
+                          episode_number: e.episode_number,
+                          season_number: e.season_number,
+                        },
+                      };
+                    }),
+                  },
                 },
-              },
-            },
-          ],
+              };
+            })
+          ),
         },
       };
 
