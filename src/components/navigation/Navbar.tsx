@@ -51,7 +51,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    document.body.classList.toggle("overflow-hidden");
+    if (navMobile) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
   }, [navMobile]);
 
   return (
