@@ -15,7 +15,7 @@ interface JustWatchProps {
 const JustWatch = ({ justWatch, themeColor }: JustWatchProps) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
-  const currentLocation = justWatch.results[session.data?.user?.profile.location.toUpperCase() ?? "GB"];
+  const currentLocation = justWatch.results[session.data?.user?.profile?.region.toUpperCase() ?? "GB"];
 
   const close = () => setModalOpen(false);
   const open = () => setModalOpen(true);

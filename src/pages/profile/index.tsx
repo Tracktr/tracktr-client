@@ -9,7 +9,8 @@ const ProfilePage = () => {
   const router = useRouter();
   const session = useSession();
   const { data, status } = trpc.profile.profileBySession.useQuery();
-  const { data: watchRegions } = trpc.common.watchProviders.useQuery();
+  const { data: languages } = trpc.common.languages.useQuery();
+  const { data: watchRegions } = trpc.common.watchProviderRegions.useQuery();
 
   const [adult, setAdult] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -32,7 +33,7 @@ const ProfilePage = () => {
       setAdult(data.profile?.adult ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
-      setSelectedLocation(data?.profile?.location ?? "GB");
+      setSelectedLocation(data?.profile?.region ?? "GB");
     }
   }, [data, status]);
 
@@ -68,16 +69,16 @@ const ProfilePage = () => {
                   value={selectedLanguage}
                 >
                   {data &&
-                    Object.values(data.languages).map(({ englishName, iso_639_1 }: any) => (
+                    Object.values(languages).map(({ english_name, iso_639_1 }: any) => (
                       <option key={iso_639_1} value={iso_639_1}>
-                        {englishName}
+                        {english_name}
                       </option>
                     ))}
                 </select>
               </label>
 
               <label className="flex items-center w-full">
-                <span>Streaming Location</span>
+                <span>Region</span>
                 <select
                   className="ml-auto text-primaryBackground"
                   onChange={(e) => setSelectedLocation(e.target.value)}

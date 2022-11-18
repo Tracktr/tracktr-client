@@ -11,9 +11,6 @@
     "prisma:generate": "dotenv -e .env.local -- npx prisma generate",
     "prisma:studio": "dotenv -e .env.local -- npx prisma studio"
   },
-  "prisma": {
-    "seed": "dotenv -e .env.local -- ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-  },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.6.1",
