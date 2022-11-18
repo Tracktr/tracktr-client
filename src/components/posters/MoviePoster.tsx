@@ -27,7 +27,7 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }:
           />
         </a>
       </Link>
-      <div className="absolute bottom-0 left-0 z-10 flex items-center justify-center w-full transition-all duration-300 ease-in-out opacity-0 select-none group-hover:opacity-100 bg-gradient-to-t from-primaryBackground">
+      <div className="absolute bottom-0 left-0 z-10 flex items-center justify-center w-full max-w-[170px] transition-all duration-300 ease-in-out opacity-0 select-none group-hover:opacity-100 bg-gradient-to-t from-primaryBackground">
         <button
           className="flex justify-center w-full text-2xl text-opacity-100"
           onClick={() =>
