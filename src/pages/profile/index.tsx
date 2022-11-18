@@ -33,7 +33,7 @@ const ProfilePage = () => {
       setAdult(data.profile?.adult ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
-      setSelectedLocation(data?.profile?.location ?? "GB");
+      setSelectedLocation(data?.profile?.region ?? "GB");
     }
   }, [data, status]);
 
