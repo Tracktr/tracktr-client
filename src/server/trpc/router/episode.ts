@@ -39,80 +39,71 @@ export const episodeRouter = router({
     .mutation(async ({ ctx, input }) => {
       const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const show = await fetch(url).then((res) => res.json());
 
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
-      // Save series
+      const newSeriesCreateUpdate = {
+        id: show.id,
+        name: show.name,
+        poster: seriesPoster,
+        seasons: {
+          connectOrCreate: await Promise.all(
+            show.seasons.map(async (season: any) => {
+              const url = new URL(
+                `tv/${input?.seriesId}/season/${season.season_number}`,
+                process.env.NEXT_PUBLIC_TMDB_API
+              );
+              url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+              const seasonWithEpisodes = await fetch(url).then((res) => res.json());
+
+              return {
+                where: { id: season.id },
+                create: {
+                  id: season.id,
+                  name: season.name,
+                  poster: season.poster_path ? season.poster_path : seriesPoster,
+                  season_number: season.season_number,
+                  episodes: {
+                    connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
+                      return {
+                        where: { id: e.id },
+                        create: {
+                          id: e.id,
+                          name: e.name,
+                          episode_number: e.episode_number,
+                          season_number: e.season_number,
+                        },
+                      };
+                    }),
+                  },
+                },
+              };
+            })
+          ),
+        },
+      };
+
       const newSeries = await ctx.prisma.series.upsert({
         where: { id: input.seriesId },
-        update: {
-          id: show.id,
-          name: show.name,
-          poster: seriesPoster,
-        },
-        create: {
-          id: show.id,
-          name: show.name,
-          poster: seriesPoster,
-        },
+        update: newSeriesCreateUpdate,
+        create: newSeriesCreateUpdate,
       });
 
-      // Episodes and seasons
-      if (newSeries) {
-        Promise.all(
-          show.seasons.map(async (season: any) => {
-            const url = new URL(
-              `tv/${input?.seriesId}/season/${season.season_number}`,
-              process.env.NEXT_PUBLIC_TMDB_API
-            );
-            url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-            const seasonWithEpisodes = await fetch(url).then((res) => res.json());
-
-            // Save season with episodes
-            const newSeason = {
-              id: season.id,
-              name: season.name,
-              poster: season.poster_path,
-              season_number: season.season_number,
-              series_id: show.id,
-              episodes: {
-                connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
-                  return {
-                    where: { id: e.id },
-                    create: {
-                      id: e.id,
-                      name: e.name,
-                      episode_number: e.episode_number,
-                      season_number: e.season_number,
-                    },
-                  };
-                }),
-              },
-            };
-
-            const addSeason = await ctx.prisma.seasons.upsert({
-              where: { id: season.id },
-              update: newSeason,
-              create: newSeason,
-            });
-
-            return addSeason;
-          })
-        ).then(async () => {
-          // Save episode
-          return await ctx.prisma.episodesHistory.create({
-            data: {
-              datetime: new Date(),
-              user_id: ctx?.session?.user?.id as string,
-              series_id: input.seriesId,
-              season_number: input.seasonNumber,
-              episode_number: input.episodeNumber,
-            },
-          });
+      if (newSeries !== null) {
+        const result = await ctx.prisma.episodesHistory.create({
+          data: {
+            datetime: new Date(),
+            user_id: ctx?.session?.user?.id as string,
+            series_id: input.seriesId,
+            season_number: input.seasonNumber,
+            episode_number: input.episodeNumber,
+          },
         });
+        return result;
       }
     }),
 
