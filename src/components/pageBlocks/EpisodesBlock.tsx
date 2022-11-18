@@ -3,9 +3,10 @@ import EpisodePoster from "../posters/EpisodePoster";
 
 interface IEpisodesBlock {
   episodes: any;
+  markAsWatched: (e: any) => void;
 }
 
-const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
+const EpisodesBlock = ({ episodes, markAsWatched }: IEpisodesBlock) => {
   const router = useRouter();
   const { tvID } = router.query;
 
@@ -21,6 +22,9 @@ const EpisodesBlock = ({ episodes }: IEpisodesBlock) => {
           episode={item.episode_number}
           url={`/tv/${tvID}/season/${item.season_number}/episode/${item.episode_number}`}
           score={item.vote_average}
+          series_id={item.show_id}
+          markAsWatched={markAsWatched}
+          watched={item.watched}
         />
       ))}
     </div>

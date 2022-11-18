@@ -18,6 +18,31 @@ export const seasonRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (ctx?.session?.user) {
+        json.episodes = await Promise.all(
+          json.episodes.map(async (episode: any) => {
+            const watched = await ctx.prisma.episodesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id as string,
+                series_id: episode.show_id,
+                season_number: episode.season_number,
+                episode_number: episode.episode_number,
+              },
+            });
+
+            if (watched) {
+              return { ...episode, watched: true };
+            } else {
+              return { ...episode, watched: false };
+            }
+          })
+        );
+      } else {
+        json.episodes = json.results.map((movie: any) => {
+          return { ...movie, watched: false };
+        });
+      }
+
       return {
         ...json,
       };

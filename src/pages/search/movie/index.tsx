@@ -4,7 +4,7 @@ import { useInView } from "react-intersection-observer";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../../components/common/PosterGrid";
 import { LoadingPoster } from "../../../components/posters/LoadingPoster";
-import TVPoster from "../../../components/posters/TVPoster";
+import MoviePoster from "../../../components/posters/MoviePoster";
 import { trpc } from "../../../utils/trpc";
 
 const SearchPage = () => {
@@ -12,15 +12,20 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.movie.searchMovie.useInfiniteQuery(
-    { query: query as string },
-    {
-      getNextPageParam: (lastPage: any, allPages: any) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+    trpc.movie.searchMovie.useInfiniteQuery(
+      { query: query as string },
+      {
+        getNextPageParam: (lastPage: any, allPages: any) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
+        },
+      }
+    );
+
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   useEffect(() => {
     if (inView) {
@@ -38,12 +43,15 @@ const SearchPage = () => {
               {data?.pages.map((page) =>
                 page.results.map((content: any) => {
                   return (
-                    <TVPoster
+                    <MoviePoster
+                      id={content.id}
                       imageSrc={`${content.poster_path}`}
                       name={content.title || content.name}
                       key={content.id}
-                      url={`/tv/${content.id}`}
+                      url={`/movie/${content.id}`}
                       score={content.vote_average}
+                      watched={content.watched}
+                      markAsWatched={markAsWatched.mutate}
                     />
                   );
                 })

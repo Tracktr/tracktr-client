@@ -14,19 +14,27 @@ const DashboardPage = () => {
   const {
     data: history,
     status: historyStatus,
-    refetch,
+    refetch: refetchHistory,
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
-  const { data: upNext, status: upNextStatus } = trpc.profile.upNext.useQuery();
+  const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
 
   const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
     onSuccess: () => {
-      refetch();
+      refetchHistory();
+      refetchUpNext();
+    },
+  });
+
+  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+    onSuccess: () => {
+      refetchUpNext();
+      refetchHistory();
     },
   });
 
   const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
     onSuccess: () => {
-      refetch();
+      refetchHistory();
     },
   });
 
@@ -60,7 +68,7 @@ const DashboardPage = () => {
                   <div className="text-xl md:text-3xl">Up next</div>
                 </div>
               </div>
-              <UpNext episodes={upNext?.result || []} status={upNextStatus} />
+              <UpNext episodes={upNext?.result || []} status={upNextStatus} markAsWatched={markAsWatched.mutate} />
             </div>
             <div className="my-6">
               <div className="items-center align-middle md:flex">
