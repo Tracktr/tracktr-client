@@ -65,17 +65,17 @@ const DashboardPage = () => {
             <div className="my-6">
               <div className="items-center align-middle md:flex">
                 <div className="flex flex-wrap gap-4 mb-5">
-                  <div className="text-3xl">Up next</div>
+                  <div className="text-xl md:text-3xl">Up next</div>
                 </div>
               </div>
               <UpNext episodes={upNext?.result || []} status={upNextStatus} markAsWatched={markAsWatched.mutate} />
             </div>
             <div className="my-6">
               <div className="items-center align-middle md:flex">
-                <div className="flex flex-wrap gap-4 mb-5">
-                  <div className="text-3xl">Recently watched</div>
+                <div className="flex items-center justify-between w-full gap-4 mb-5">
+                  <div className="text-xl md:text-3xl">Recently watched</div>
                   <Link href="/profile/history">
-                    <a className="flex flex-wrap items-center px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground">
+                    <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
                       See all history
                     </a>
                   </Link>
