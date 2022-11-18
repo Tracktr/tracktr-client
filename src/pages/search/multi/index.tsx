@@ -13,15 +13,20 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.multi.searchMulti.useInfiniteQuery(
-    { query: query as string },
-    {
-      getNextPageParam: (lastPage: any, allPages: any) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+    trpc.multi.searchMulti.useInfiniteQuery(
+      { query: query as string },
+      {
+        getNextPageParam: (lastPage: any, allPages: any) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
+        },
+      }
+    );
+
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
 
   useEffect(() => {
     if (inView) {
@@ -52,11 +57,14 @@ const SearchPage = () => {
                 if (content.media_type === "movie") {
                   return (
                     <MoviePoster
+                      id={content.id}
                       imageSrc={`${content.poster_path}`}
                       name={content.title || content.name}
                       key={content.id}
                       url={`/movies/${content.id}`}
                       score={content.vote_average}
+                      watched={content.watched}
+                      markAsWatched={markAsWatched.mutate}
                     />
                   );
                 }
