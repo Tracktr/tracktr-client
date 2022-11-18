@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const session = useSession();
   const { data, status } = trpc.profile.profileBySession.useQuery();
   const { data: languages } = trpc.common.languages.useQuery();
-  const { data: watchRegions } = trpc.common.watchProviders.useQuery();
+  const { data: watchRegions } = trpc.common.watchProviderRegions.useQuery();
 
   const [adult, setAdult] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
