@@ -90,6 +90,29 @@ export const movieRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (ctx?.session?.user) {
+        json.results = await Promise.all(
+          json.results.map(async (movie: any) => {
+            const watched = await ctx.prisma.moviesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id as string,
+                movie_id: movie.id,
+              },
+            });
+
+            if (watched) {
+              return { ...movie, watched: true };
+            } else {
+              return { ...movie, watched: false };
+            }
+          })
+        );
+      } else {
+        json.results = json.results.map((movie: any) => {
+          return { ...movie, watched: false };
+        });
+      }
+
       return {
         ...json,
       };
