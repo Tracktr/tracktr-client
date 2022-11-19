@@ -3,7 +3,7 @@ import EpisodePoster from "../posters/EpisodePoster";
 
 interface IEpisodesBlock {
   episodes: any;
-  markAsWatched: (e: any) => void;
+  markAsWatched: any;
 }
 
 const EpisodesBlock = ({ episodes, markAsWatched }: IEpisodesBlock) => {

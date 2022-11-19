@@ -69,7 +69,7 @@ const DashboardPage = () => {
                     <div className="text-xl md:text-3xl">Up next</div>
                   </div>
                 </div>
-                <UpNext episodes={upNext?.result || []} status={upNextStatus} markAsWatched={markAsWatched.mutate} />
+                <UpNext episodes={upNext?.result || []} status={upNextStatus} markAsWatched={markAsWatched} />
               </div>
             )}
             {history?.history && history?.history?.length > 0 && (
