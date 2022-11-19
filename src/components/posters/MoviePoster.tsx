@@ -40,9 +40,9 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }:
       </Link>
     </div>
     <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
-    <div className="pt-1 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+    <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
       <button
-        className="text-xl text-red-500 transition-all duration-300 ease-in-out hover:text-red-700"
+        className="text-xl transition-all duration-300 ease-in-out hover:text-red-700"
         onClick={() => {
           markAsWatched({
             movieId: id,

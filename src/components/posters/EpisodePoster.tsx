@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AiFillStar } from "react-icons/ai";
-import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
+import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 
 export interface IEpisodePoster {
@@ -29,8 +29,8 @@ const EpisodePoster = ({
   series_id,
   watched,
 }: IEpisodePoster) => (
-  <div className="md:flex">
-    <div className="relative flex-shrink-0">
+  <div className="md:flex group">
+    <div className="relative flex flex-shrink-0">
       <Link href={url || "#"}>
         <a>
           <Image
@@ -42,42 +42,49 @@ const EpisodePoster = ({
           />
         </a>
       </Link>
-      <div className="absolute bottom-0 left-0 z-10 flex items-center w-full select-none bg-gradient-to-t from-primaryBackground">
-        <button
-          className="flex justify-center p-2 text-2xl text-opacity-100"
-          onClick={() =>
-            markAsWatched({
-              episodeNumber: episode,
-              seasonNumber: season,
-              seriesId: series_id,
-            })
-          }
-        >
-          {watched ? <ImCheckmark /> : <ImCheckmark2 />}
-        </button>
-        {score !== undefined && (
-          <div className="flex items-end">
-            <span className="flex items-center p-2">
-              <AiFillStar className="mr-2 text-primary" size={24} />
-              {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
-            </span>
-          </div>
-        )}
+      <div className="absolute bottom-0 left-0 z-10 flex items-center w-full select-none bg-gradient-to-t from-primaryBackground"></div>
+      <div className="flex flex-col max-w-md py-4 md:py-0 md:pl-2">
+        <Link href={url || "#"}>
+          <a>
+            <p className="flex items-center justify-center pb-2 font-bold text-md">
+              <span className="px-3 py-1 mr-2 rounded-full bg-primary text-primaryBackground">
+                {season}x{episode}
+              </span>
+              {name}
+              {score !== undefined && (
+                <span className="flex ml-auto text-white">
+                  <span className="flex items-center text-sm">
+                    <AiFillStar className="mr-1 text-primary" size={18} />
+                    {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
+                  </span>
+                </span>
+              )}
+            </p>
+          </a>
+        </Link>
+
+        <Link href={url || "#"}>
+          <a>
+            <p className="text-sm line-clamp-4">{overview}</p>
+          </a>
+        </Link>
+
+        <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+          <button
+            className="text-2xl transition-all duration-300 ease-in-out hover:text-red-500"
+            onClick={() => {
+              markAsWatched({
+                episodeNumber: episode,
+                seasonNumber: season,
+                seriesId: series_id,
+              });
+            }}
+          >
+            {watched ? <MdDelete /> : <AiOutlineCheckCircle />}
+          </button>
+        </div>
       </div>
     </div>
-    <Link href={url || "#"}>
-      <a>
-        <div className="max-w-md py-4 md:py-0 md:pl-2">
-          <p className="pb-2 font-bold text-md">
-            <span className="px-3 py-1 mr-2 rounded-full bg-primary text-primaryBackground">
-              {season}x{episode}
-            </span>
-            {name}
-          </p>
-          <p className="text-sm">{overview}</p>
-        </div>
-      </a>
-    </Link>
   </div>
 );
 
