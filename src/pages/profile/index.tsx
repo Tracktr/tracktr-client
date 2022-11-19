@@ -24,7 +24,7 @@ const ProfilePage = () => {
     mutation.mutate({
       adult,
       language: selectedLanguage,
-      location: selectedLocation,
+      region: selectedLocation,
     });
   };
 
