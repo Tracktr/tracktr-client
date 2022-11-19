@@ -14,17 +14,6 @@ interface IepisodesGrid {
 }
 
 const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element => {
-  if (episodes.length < 1 && status !== "loading") {
-    return (
-      <div>
-        You have finished all your shows, go check out some{" "}
-        <Link href="/tv">
-          <a className="underline">new ones!</a>
-        </Link>
-      </div>
-    );
-  }
-
   return (
     <LoadingPageComponents status={status} posters>
       {() => (

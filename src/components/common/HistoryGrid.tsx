@@ -15,10 +15,6 @@ interface IHistoryGrid {
 }
 
 const HistoryGrid = ({ history, status, handleDelete, hasScrollContainer }: IHistoryGrid): JSX.Element => {
-  if (history.length < 1 && status !== "loading") {
-    return <div>No history found, start watching some shows and movies!</div>;
-  }
-
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
