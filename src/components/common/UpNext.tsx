@@ -6,6 +6,7 @@ import { PosterGrid } from "./PosterGrid";
 import { Episodes } from "@prisma/client";
 import { ImCheckmark2 } from "react-icons/im";
 import { AnimatePresence, motion } from "framer-motion";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 interface IepisodesGrid {
   episodes: Episodes[];
@@ -44,28 +45,23 @@ const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element
                       />
                     </a>
                   </Link>
-                  <div className="absolute bottom-0 left-0 right-0 overflow-hidden text-center select-none bg-gradient-to-t from-primaryBackground">
-                    <div className="px-4 pt-2">
-                      <span className="w-full text-sm line-clamp-2">
-                        {`S${item.season_number} - E${item.episode_number}`}
-                      </span>
-                    </div>
-                    <div className="max-h-0 group-hover:max-h-[170px] transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">
-                      <div className="pb-2 text-sm">{item.series.name}</div>
-                      <button
-                        className="flex justify-center w-full text-3xl text-opacity-100"
-                        onClick={() =>
-                          markAsWatched({
-                            episodeNumber: item.episode_number,
-                            seasonNumber: item.season_number,
-                            seriesId: item.series.id,
-                          })
-                        }
-                      >
-                        <ImCheckmark2 />
-                      </button>
-                    </div>
+                  <div className="pb-2 text-xs">
+                    {`${item.season_number}x${item.episode_number}`}
+                    {` `}
+                    {item.series.name}
                   </div>
+                  <button
+                    className="flex text-gray-500 text-opacity-100 hover:text-green-500"
+                    onClick={() =>
+                      markAsWatched({
+                        episodeNumber: item.episode_number,
+                        seasonNumber: item.season_number,
+                        seriesId: item.series.id,
+                      })
+                    }
+                  >
+                    <AiOutlineCheckCircle className="text-2xl" />
+                  </button>
                 </motion.div>
               );
             })}
