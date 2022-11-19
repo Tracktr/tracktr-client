@@ -121,7 +121,7 @@ export const profileRouter = router({
           }
         });
 
-        if (nextEpisode[0]) {
+        if (nextEpisode.length > 0) {
           return {
             ...nextEpisode[0],
             series: season?.Series,
@@ -146,7 +146,7 @@ export const profileRouter = router({
             }
           });
 
-          if (nextEpisode[0]) {
+          if (nextEpisode) {
             return {
               ...nextEpisode[0],
               series: season?.Series,
