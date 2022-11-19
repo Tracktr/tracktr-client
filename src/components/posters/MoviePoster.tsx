@@ -11,7 +11,7 @@ export interface IPoster {
   score?: number;
   id: number;
   watched: boolean;
-  markAsWatched: (e: any) => any;
+  markAsWatched: any;
 }
 
 const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }: IPoster) => (
@@ -42,9 +42,10 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }:
     <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
     <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
       <button
+        disabled={markAsWatched.isLoading}
         className="text-xl transition-all duration-300 ease-in-out hover:text-red-700"
         onClick={() => {
-          markAsWatched({
+          markAsWatched.mutate({
             movieId: id,
           });
         }}

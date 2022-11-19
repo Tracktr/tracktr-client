@@ -12,7 +12,7 @@ export interface IEpisodePoster {
   season: string;
   episode: string;
   score?: number;
-  markAsWatched: (e: any) => void;
+  markAsWatched: any;
   series_id: number;
   watched: boolean;
 }
@@ -71,9 +71,10 @@ const EpisodePoster = ({
 
         <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
           <button
+            disabled={markAsWatched.isLoading}
             className="text-2xl transition-all duration-300 ease-in-out hover:text-red-500"
             onClick={() => {
-              markAsWatched({
+              markAsWatched.mutate({
                 episodeNumber: episode,
                 seasonNumber: season,
                 seriesId: series_id,

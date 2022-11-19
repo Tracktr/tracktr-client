@@ -67,7 +67,7 @@ const MoviesInfiniteScroll = () => {
                       key={content.id}
                       url={`movies/${content.id}`}
                       score={content.vote_average}
-                      markAsWatched={markAsWatched.mutate}
+                      markAsWatched={markAsWatched}
                       watched={content.watched}
                     />
                   );

@@ -39,7 +39,7 @@ const TVPage = () => {
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
         >
-          <EpisodesBlock episodes={data.episodes} markAsWatched={markAsWatched.mutate} />
+          <EpisodesBlock episodes={data.episodes} markAsWatched={markAsWatched} />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}

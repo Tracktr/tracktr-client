@@ -11,7 +11,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 interface IepisodesGrid {
   episodes: Episodes[];
   status: "error" | "success" | "loading";
-  markAsWatched: (e: any) => void;
+  markAsWatched: any;
 }
 
 const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element => {
@@ -51,9 +51,10 @@ const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element
                     {item.series.name}
                   </div>
                   <button
+                    disabled={markAsWatched.isLoading}
                     className="flex text-gray-500 text-opacity-100 hover:text-green-500"
                     onClick={() =>
-                      markAsWatched({
+                      markAsWatched.mutate({
                         episodeNumber: item.episode_number,
                         seasonNumber: item.season_number,
                         seriesId: item.series.id,
