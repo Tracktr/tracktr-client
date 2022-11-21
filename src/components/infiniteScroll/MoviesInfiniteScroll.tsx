@@ -29,6 +29,12 @@ const MoviesInfiniteScroll = () => {
     onSuccess: () => refetch(),
   });
 
+  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   useEffect(() => {
     if (inView) {
       fetchNextPage();
@@ -69,6 +75,8 @@ const MoviesInfiniteScroll = () => {
                       score={content.vote_average}
                       markAsWatched={markAsWatched}
                       watched={content.watched}
+                      deleteFromWatched={deleteMovieFromHistory}
+                      watched_id={content.watched_id}
                     />
                   );
                 })

@@ -14,9 +14,21 @@ export interface IPoster {
   id: number;
   watched: boolean;
   markAsWatched: any;
+  watched_id: string;
+  deleteFromWatched: any;
 }
 
-const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }: IPoster) => {
+const MoviePoster = ({
+  imageSrc,
+  name,
+  url,
+  score,
+  markAsWatched,
+  id,
+  watched,
+  deleteFromWatched,
+  watched_id,
+}: IPoster) => {
   const { status } = useSession();
 
   return (
@@ -54,9 +66,13 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }:
               watched ? "hover:text-red-500" : "hover:text-white"
             }`}
             onClick={() => {
-              markAsWatched.mutate({
-                movieId: id,
-              });
+              if (watched) {
+                deleteFromWatched.mutate({ id: watched_id });
+              } else {
+                markAsWatched.mutate({
+                  movieId: id,
+                });
+              }
             }}
           >
             {markAsWatched.isLoading ? (

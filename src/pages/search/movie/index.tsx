@@ -27,6 +27,12 @@ const SearchPage = () => {
     onSuccess: () => refetch(),
   });
 
+  const deleteFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   useEffect(() => {
     if (inView) {
       fetchNextPage();
@@ -52,6 +58,8 @@ const SearchPage = () => {
                       score={content.vote_average}
                       watched={content.watched}
                       markAsWatched={markAsWatched.mutate}
+                      deleteFromWatched={deleteFromHistory}
+                      watched_id={content.watched_id}
                     />
                   );
                 })
