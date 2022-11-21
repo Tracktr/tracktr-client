@@ -6,17 +6,18 @@ import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
 import ReactDOM from "react-dom";
 import Link from "next/link";
+import { convertProviderToUrl } from "../../utils/JustWatchProviders";
 
 interface JustWatchProps {
   justWatch: any;
   themeColor: any;
+  name: string;
 }
 
-const JustWatch = ({ justWatch, themeColor }: JustWatchProps) => {
+const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
-  const currentLocation = justWatch.results[session.data?.user?.profile?.language.toUpperCase() ?? "GB"];
-
+  const currentLocation = justWatch.results[session.data?.user?.profile?.region.toUpperCase() ?? "GB"];
   const close = () => setModalOpen(false);
   const open = () => setModalOpen(true);
 
@@ -38,7 +39,7 @@ const JustWatch = ({ justWatch, themeColor }: JustWatchProps) => {
       </motion.button>
 
       <AnimatePresence initial={false} mode="wait">
-        {modalOpen && <Modal handleClose={close} data={currentLocation} session={session} />}
+        {modalOpen && <Modal handleClose={close} data={currentLocation} session={session} name={name} />}
       </AnimatePresence>
     </div>
   );
@@ -58,7 +59,7 @@ const Backdrop = ({ children, onClick }: any) => {
   );
 };
 
-const Modal = ({ handleClose, data }: any) => {
+const Modal = ({ handleClose, data, name }: any) => {
   return ReactDOM.createPortal(
     <Backdrop onClick={handleClose}>
       <div
@@ -72,15 +73,24 @@ const Modal = ({ handleClose, data }: any) => {
                 <p className="pb-2 font-bold">Streaming</p>
                 <HorizontalScrollContainer>
                   {data.flatrate.map((item: any) => (
-                    <div key={item.provider_name} className="flex-shrink-0">
-                      <Image
-                        className="rounded-md"
-                        alt={item.provider_name}
-                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                        width={56}
-                        height={56}
-                      />
-                    </div>
+                    <Link
+                      href={convertProviderToUrl({
+                        provider: item.provider_name,
+                        name: name,
+                      })}
+                      key={item.provider_name}
+                      className="flex-shrink-0"
+                    >
+                      <a target="_blank">
+                        <Image
+                          className="rounded-md"
+                          alt={item.provider_name}
+                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                          width={56}
+                          height={56}
+                        />
+                      </a>
+                    </Link>
                   ))}
                 </HorizontalScrollContainer>
               </div>
@@ -91,15 +101,24 @@ const Modal = ({ handleClose, data }: any) => {
                 <p className="pb-2 font-bold">Rent</p>
                 <HorizontalScrollContainer>
                   {data.rent.map((item: any) => (
-                    <div key={item.provider_name} className="flex-shrink-0">
-                      <Image
-                        className="rounded-md"
-                        alt={item.provider_name}
-                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                        width={56}
-                        height={56}
-                      />
-                    </div>
+                    <Link
+                      href={convertProviderToUrl({
+                        provider: item.provider_name,
+                        name: name,
+                      })}
+                      key={item.provider_name}
+                      className="flex-shrink-0"
+                    >
+                      <a target="_blank">
+                        <Image
+                          className="rounded-md"
+                          alt={item.provider_name}
+                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                          width={56}
+                          height={56}
+                        />
+                      </a>
+                    </Link>
                   ))}
                 </HorizontalScrollContainer>
               </div>
@@ -110,15 +129,24 @@ const Modal = ({ handleClose, data }: any) => {
                 <p className="pb-2 font-bold">Purchase</p>
                 <HorizontalScrollContainer>
                   {data.buy.map((item: any) => (
-                    <div key={item.provider_name} className="flex-shrink-0">
-                      <Image
-                        className="rounded-md"
-                        alt={item.provider_name}
-                        src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                        width={56}
-                        height={56}
-                      />
-                    </div>
+                    <Link
+                      href={convertProviderToUrl({
+                        provider: item.provider_name,
+                        name: name,
+                      })}
+                      key={item.provider_name}
+                      className="flex-shrink-0"
+                    >
+                      <a target="_blank">
+                        <Image
+                          className="rounded-md"
+                          alt={item.provider_name}
+                          src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                          width={56}
+                          height={56}
+                        />
+                      </a>
+                    </Link>
                   ))}
                 </HorizontalScrollContainer>
               </div>

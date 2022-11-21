@@ -83,7 +83,7 @@ const ContentHeader = ({
                 </div>
               )}
 
-              {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} />}
+              {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} name={title} />}
               {session.status === "authenticated" && (
                 <hr
                   style={{
