@@ -31,15 +31,15 @@ export const seasonRouter = router({
             });
 
             if (watched) {
-              return { ...episode, watched: true };
+              return { ...episode, watched: true, watched_id: watched.id };
             } else {
-              return { ...episode, watched: false };
+              return { ...episode, watched: false, watched_id: null };
             }
           })
         );
       } else {
-        json.episodes = json.results.map((movie: any) => {
-          return { ...movie, watched: false };
+        json.episodes = json.episodes.map((episode: any) => {
+          return { ...episode, watched: false };
         });
       }
 

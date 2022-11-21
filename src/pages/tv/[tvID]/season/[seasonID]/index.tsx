@@ -21,12 +21,6 @@ const TVPage = () => {
     { enabled: router.isReady }
   );
 
-  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
   return (
     <LoadingPageComponents status={status}>
       {() => (
@@ -39,7 +33,7 @@ const TVPage = () => {
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
         >
-          <EpisodesBlock episodes={data.episodes} markAsWatched={markAsWatched} />
+          <EpisodesBlock episodes={data.episodes} refetch={refetch} />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}
