@@ -57,7 +57,7 @@ const SearchPage = () => {
                       url={`/movie/${content.id}`}
                       score={content.vote_average}
                       watched={content.watched}
-                      markAsWatched={markAsWatched.mutate}
+                      markAsWatched={markAsWatched}
                       deleteFromWatched={deleteFromHistory}
                       watched_id={content.watched_id}
                     />
