@@ -21,7 +21,7 @@ const BaseWatchButton = ({ onClick, children, themeColor }: IBaseWatchButton) =>
       background: themeColor.hex,
     }}
     className={`
-      text-left px-3 py-2 gap-2 rounded font-bold h-14 w-full
+      text-left px-3 py-2 rounded font-bold h-14 w-full
       ${themeColor.isDark && "text-white"}
       ${themeColor.isLight && "text-primaryBackground"}
     `}
