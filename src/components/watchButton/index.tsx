@@ -1,5 +1,6 @@
 import { IThemeColor } from "./BaseWatchButton";
 import EpisodeWatchButton from "./EpisodeWatchButton";
+import MovieWatchButton from "./MovieWatchButton";
 
 export interface IWatchButtonProps {
   itemID: number;
@@ -12,7 +13,7 @@ const WatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchButtonPr
   if (episodeID && seasonID) {
     return <EpisodeWatchButton itemID={itemID} episodeID={episodeID} seasonID={seasonID} themeColor={themeColor} />;
   } else {
-    return <div>movie button</div>;
+    return <MovieWatchButton itemID={itemID} episodeID={episodeID} seasonID={seasonID} themeColor={themeColor} />;
   }
 };
 
