@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { BackdropImage, PosterImage } from "../../utils/generateImages";
-import WatchedButton from "../watchButton";
+import WatchButton from "../watchButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
@@ -93,7 +93,7 @@ const ContentHeader = ({
                 />
               )}
               {watchButton && session.status === "authenticated" && (
-                <WatchedButton
+                <WatchButton
                   itemID={watchButton.itemID}
                   episodeID={Number(watchButton.episodeID)}
                   seasonID={Number(watchButton.seasonID)}
