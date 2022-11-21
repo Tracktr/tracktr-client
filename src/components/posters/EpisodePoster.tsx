@@ -17,7 +17,7 @@ export interface IEpisodePoster {
   score?: number;
   series_id: number;
   watched: boolean;
-  watched_id: string;
+  watched_id: string | null;
   refetch: () => void;
 }
 
@@ -97,7 +97,7 @@ const EpisodePoster = ({
                   watched ? "hover:text-red-500" : "hover:text-white"
                 }`}
                 onClick={() => {
-                  if (watched) {
+                  if (watched && watched_id) {
                     deleteFromWatched.mutate({ id: watched_id });
                   } else {
                     markAsWatched.mutate({

@@ -13,8 +13,8 @@ export interface IPoster {
   url?: string;
   score?: number;
   id: number;
-  watched: boolean;
-  watched_id: string;
+  watched: boolean | null;
+  watched_id: string | null;
   refetch: () => void;
 }
 
@@ -58,7 +58,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
       </div>
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
 
-      {status === "authenticated" && (
+      {status === "authenticated" && watched !== null && (
         <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
           <button
             disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
@@ -66,7 +66,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
               watched ? "hover:text-red-500" : "hover:text-white"
             }`}
             onClick={() => {
-              if (watched) {
+              if (watched && watched_id) {
                 deleteFromWatched.mutate({ id: watched_id });
               } else {
                 markAsWatched.mutate({

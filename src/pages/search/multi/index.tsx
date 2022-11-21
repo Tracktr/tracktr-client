@@ -63,8 +63,9 @@ const SearchPage = () => {
                       key={content.id}
                       url={`/movies/${content.id}`}
                       score={content.vote_average}
-                      watched={content.watched}
-                      markAsWatched={markAsWatched.mutate}
+                      watched={null}
+                      refetch={refetch}
+                      watched_id={null}
                     />
                   );
                 }
