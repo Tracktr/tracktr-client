@@ -78,7 +78,9 @@ const EpisodePoster = ({
             <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
               <button
                 disabled={markAsWatched.isLoading}
-                className="text-2xl transition-all duration-300 ease-in-out hover:text-red-500"
+                className={`text-2xl transition-all duration-300 ease-in-out ${
+                  watched ? "hover:text-red-500" : "hover:text-green-500"
+                }`}
                 onClick={() => {
                   markAsWatched.mutate({
                     episodeNumber: episode,
