@@ -17,6 +17,8 @@ export interface IEpisodePoster {
   markAsWatched: any;
   series_id: number;
   watched: boolean;
+  watched_id: string;
+  deleteFromWatched: any;
 }
 
 const EpisodePoster = ({
@@ -30,6 +32,8 @@ const EpisodePoster = ({
   markAsWatched,
   series_id,
   watched,
+  deleteFromWatched,
+  watched_id,
 }: IEpisodePoster) => {
   const { status } = useSession();
 
@@ -82,11 +86,15 @@ const EpisodePoster = ({
                   watched ? "hover:text-red-500" : "hover:text-green-500"
                 }`}
                 onClick={() => {
-                  markAsWatched.mutate({
-                    episodeNumber: episode,
-                    seasonNumber: season,
-                    seriesId: series_id,
-                  });
+                  if (watched) {
+                    deleteFromWatched.mutate({ id: watched_id });
+                  } else {
+                    markAsWatched.mutate({
+                      episodeNumber: episode,
+                      seasonNumber: season,
+                      seriesId: series_id,
+                    });
+                  }
                 }}
               >
                 {markAsWatched.isLoading ? (
