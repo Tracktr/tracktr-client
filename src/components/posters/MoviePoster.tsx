@@ -51,7 +51,7 @@ const MoviePoster = ({ imageSrc, name, url, score, markAsWatched, id, watched }:
           <button
             disabled={markAsWatched.isLoading}
             className={`text-2xl transition-all duration-300 ease-in-out ${
-              watched ? "hover:text-red-500" : "hover:text-green-500"
+              watched ? "hover:text-red-500" : "hover:text-white"
             }`}
             onClick={() => {
               markAsWatched.mutate({
