@@ -5,20 +5,20 @@ import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
+import { trpc } from "../../utils/trpc";
 
 export interface IEpisodePoster {
   imageSrc: string;
   name: string;
   url?: string;
   overview: string;
-  season: string;
-  episode: string;
+  season: number;
+  episode: number;
   score?: number;
-  markAsWatched: any;
   series_id: number;
   watched: boolean;
   watched_id: string;
-  deleteFromWatched: any;
+  refetch: () => void;
 }
 
 const EpisodePoster = ({
@@ -29,13 +29,24 @@ const EpisodePoster = ({
   season,
   episode,
   score,
-  markAsWatched,
   series_id,
   watched,
-  deleteFromWatched,
   watched_id,
+  refetch,
 }: IEpisodePoster) => {
   const { status } = useSession();
+
+  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const deleteFromWatched = trpc.episode.removeEpisodeFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   return (
     <div className="md:flex group">
@@ -81,7 +92,7 @@ const EpisodePoster = ({
           {status === "authenticated" && (
             <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
               <button
-                disabled={markAsWatched.isLoading}
+                disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
                 className={`text-2xl transition-all duration-300 ease-in-out ${
                   watched ? "hover:text-red-500" : "hover:text-white"
                 }`}
@@ -97,7 +108,7 @@ const EpisodePoster = ({
                   }
                 }}
               >
-                {markAsWatched.isLoading ? (
+                {markAsWatched.isLoading || deleteFromWatched.isLoading ? (
                   <ImSpinner2 className="w-6 h-6 animate-spin" />
                 ) : watched ? (
                   <MdDelete />
