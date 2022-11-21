@@ -1,6 +1,5 @@
 interface IBaseWatchButton {
   onClick?: (e: any) => void;
-  onKeyDown?: (e: any) => void;
   themeColor: IThemeColor;
   children: JSX.Element | JSX.Element[];
 }
@@ -15,25 +14,21 @@ export interface IThemeColor {
   isLight: boolean;
 }
 
-const BaseWatchButton = ({ onClick, onKeyDown, children, themeColor }: IBaseWatchButton) => (
-  <div
+const BaseWatchButton = ({ onClick, children, themeColor }: IBaseWatchButton) => (
+  <button
     style={{
       borderColor: themeColor.hex,
       background: themeColor.hex,
     }}
     className={`
-      text-left px-3 my-2 flex justify-between py-2 align-middle items-center gap-2 rounded font-bold  h-14
-      ${onClick === undefined && onKeyDown === undefined && "cursor-default select-auto"}
+      text-left px-3 py-2 gap-2 rounded font-bold h-14 w-full
       ${themeColor.isDark && "text-white"}
       ${themeColor.isLight && "text-primaryBackground"}
     `}
     onClick={onClick}
-    onKeyDown={onKeyDown}
-    role="button"
-    tabIndex={0}
   >
     {children}
-  </div>
+  </button>
 );
 
 export default BaseWatchButton;

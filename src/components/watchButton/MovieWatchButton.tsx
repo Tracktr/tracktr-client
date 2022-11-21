@@ -68,7 +68,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
 
   if (state === "unwatched") {
     return (
-      <BaseWatchButton onClick={addToHistory} onKeyDown={addToHistory} themeColor={themeColor}>
+      <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div>Add to watched</div>
         <div>
           <ImCheckmark2 className="mr-1 text-lg" />
@@ -87,7 +87,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
     const plays = Object.keys(watchHistory.data as []).length;
 
     return (
-      <BaseWatchButton onClick={removeFromHistory} onKeyDown={removeFromHistory} themeColor={themeColor}>
+      <BaseWatchButton onClick={removeFromHistory} themeColor={themeColor}>
         <div>
           <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
           <div className="text-xs italic normal-case">Last on {date}</div>

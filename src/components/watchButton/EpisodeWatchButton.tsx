@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { ImCheckmark, ImCheckmark2 } from "react-icons/im";
+import { ImCheckmark2 } from "react-icons/im";
 import { IWatchButtonProps } from ".";
 import { trpc } from "../../utils/trpc";
 import BaseWatchButton from "./BaseWatchButton";
@@ -74,7 +74,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
 
   if (state === "unwatched") {
     return (
-      <BaseWatchButton onClick={addToHistory} onKeyDown={addToHistory} themeColor={themeColor}>
+      <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div>Add to watched</div>
         <div>
           <ImCheckmark2 className="mr-1 text-lg" />
@@ -93,11 +93,9 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
     const plays = Object.keys(watchHistory.data as []).length;
 
     return (
-      <BaseWatchButton onClick={removeFromHistory} onKeyDown={removeFromHistory} themeColor={themeColor}>
-        <div>
-          <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
-          <div className="text-xs italic normal-case">Last on {date}</div>
-        </div>
+      <BaseWatchButton onClick={removeFromHistory} themeColor={themeColor}>
+        <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
+        <div className="text-xs italic normal-case">Last on {date}</div>
       </BaseWatchButton>
     );
   }
