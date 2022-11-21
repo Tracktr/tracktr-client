@@ -38,8 +38,8 @@ export const seasonRouter = router({
           })
         );
       } else {
-        json.episodes = json.results.map((movie: any) => {
-          return { ...movie, watched: false };
+        json.episodes = json.episodes.map((episode: any) => {
+          return { ...episode, watched: false };
         });
       }
 
