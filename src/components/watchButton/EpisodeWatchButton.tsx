@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { ImCheckmark2 } from "react-icons/im";
+import { MdDelete } from "react-icons/md";
 import { IWatchButtonProps } from ".";
 import { trpc } from "../../utils/trpc";
 import BaseWatchButton from "./BaseWatchButton";
@@ -95,10 +97,36 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
     const plays = Object.keys(watchHistory.data as []).length;
 
     return (
-      <BaseWatchButton onClick={removeFromHistory} themeColor={themeColor}>
-        <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
-        <div className="text-xs italic normal-case">Last on {date}</div>
-      </BaseWatchButton>
+      <div
+        style={{
+          borderColor: themeColor.hex,
+          background: themeColor.hex,
+        }}
+        className={`
+      text-left rounded font-bold h-14 w-full relative group
+      ${themeColor.isDark && "text-white"}
+      ${themeColor.isLight && "text-primaryBackground"}
+    `}
+      >
+        <div className="absolute top-0 w-full h-full px-3 py-2">
+          <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
+          <div className="text-xs italic normal-case">Last on {date}</div>
+        </div>
+        <div className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow bg-gradient-to-t from-primaryBackground group-hover:opacity-100 backdrop-blur">
+          <button className="flex flex-col items-center text-xl" onClick={addToHistory}>
+            <span className="text-center text-green-700">
+              <AiOutlineCheckCircle />
+            </span>
+            <span className="text-xs">Watch</span>
+          </button>
+          <button className="flex flex-col items-center text-3xl group" onClick={removeFromHistory}>
+            <span className="text-center text-red-700">
+              <MdDelete className="text-xl" />
+            </span>
+            <span className="text-xs">Remove</span>
+          </button>
+        </div>
+      </div>
     );
   }
 
