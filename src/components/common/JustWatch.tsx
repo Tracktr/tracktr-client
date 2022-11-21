@@ -6,7 +6,47 @@ import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
 import ReactDOM from "react-dom";
 import Link from "next/link";
-import { convertProviderToUrl } from "../../utils/JustWatchProviders";
+
+export const providers: any = {
+  Netflix: {
+    name: "Netflix",
+    url: "https://www.netflix.com/",
+    searchUrl: "https://www.netflix.com/search?q=",
+  },
+  "Amazon Video": {
+    name: "Amazon Video",
+    url: "https://www.primevideo.com/",
+    searchUrl: "https://www.primevideo.com/search/?phrase=",
+  },
+  "Apple iTunes": {
+    name: "Apple iTunes",
+    url: "https://tv.apple.com/",
+    searchUrl: "https://tv.apple.com/search?term=",
+  },
+  "Microsoft Store": {
+    name: "Microsoft Store",
+    url: "https://www.microsoft.com/store/movies-and-tv",
+    searchUrl: "https://www.microsoft.com/search/explore?q=",
+  },
+  "Rakuten TV": {
+    name: "Rakuten TV",
+    url: "https://rakuten.tv/",
+    searchUrl: "https://rakuten.tv/nl/search?q=",
+  },
+};
+
+interface ConvertProviderToUrlProps {
+  provider: string;
+  name: string;
+}
+
+const convertProviderToUrl = ({ provider, name }: ConvertProviderToUrlProps) => {
+  if (providers[provider]) {
+    return providers[provider].searchUrl + name;
+  } else {
+    return "#";
+  }
+};
 
 interface JustWatchProps {
   justWatch: any;
