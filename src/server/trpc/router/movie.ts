@@ -37,8 +37,8 @@ export const movieRouter = router({
       const url = new URL(`movie/${input.filter}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
-      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-      if (ctx) url.searchParams.append("region", ctx.session?.user?.profile.region as string);
+      if (ctx?.session?.user) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+      if (ctx?.session?.user) url.searchParams.append("region", ctx.session?.user?.profile.region as string);
 
       const res: any = await fetch(url);
       const json = await res.json();
