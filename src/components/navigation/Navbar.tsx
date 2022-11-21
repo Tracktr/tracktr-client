@@ -13,6 +13,11 @@ export const navLinks = [
   { href: "/tv", text: " Series", active: false },
 ];
 
+const subLinks = [
+  { href: "/profile", text: "Profile" },
+  { href: "/profile/history", text: "History" },
+];
+
 const subMenuAnimate = {
   enter: {
     height: "auto",
@@ -99,12 +104,13 @@ const Navbar = () => {
                           className="absolute z-50 w-full rounded-md shadow-md top-10 bg-primaryBackground"
                         >
                           <div className="p-2 text-sm">
-                            <Link href="/profile">
-                              <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">Profile</a>
-                            </Link>
-                            <Link href="/profile/history">
-                              <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">History</a>
-                            </Link>
+                            {subLinks.map((item) => (
+                              <Link key={item.href} href={item.href}>
+                                <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">
+                                  {item.text}
+                                </a>
+                              </Link>
+                            ))}
                             <button
                               onClick={() => signOut()}
                               className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
@@ -122,7 +128,7 @@ const Navbar = () => {
                     <button onClick={() => setNavMobile(!navMobile)}>
                       <BiMenuAltRight className="text-3xl text-white" />
                     </button>
-                    {navMobile && <NavMobile toggleNavMobile={toggleNavMobile} />}
+                    {navMobile && <NavMobile submenuItems={subLinks} toggleNavMobile={toggleNavMobile} />}
                   </div>
                 </>
               )}

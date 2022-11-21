@@ -5,10 +5,13 @@ import { navLinks } from "./Navbar";
 import { motion } from "framer-motion";
 import Logo from "../common/Logo";
 import { IoMdClose } from "react-icons/io";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { BiChevronDown } from "react-icons/bi";
+import { useState } from "react";
 
-const NavMobile = ({ toggleNavMobile }: any) => {
+const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
+  const [submenu, setSubMenu] = useState(false);
   const session = useSession();
 
   return ReactDOM.createPortal(
@@ -49,8 +52,8 @@ const NavMobile = ({ toggleNavMobile }: any) => {
             ))}
             <div className="py-4 mt-auto text-white">
               {session ? (
-                <Link href="/profile/" type="button" className="w-full h-full">
-                  <a onClick={toggleNavMobile} className="flex items-center pl-4">
+                <>
+                  <button onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4">
                     <Image
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
@@ -60,8 +63,27 @@ const NavMobile = ({ toggleNavMobile }: any) => {
                       alt="User profile image"
                     />
                     <p className="ml-2 text-sm">{session.data?.user?.name}</p>
-                  </a>
-                </Link>
+                    <button className="ml-auto mr-4 text-2xl" onClick={() => setSubMenu(!submenu)}>
+                      <BiChevronDown />
+                    </button>
+                  </button>
+                  <div
+                    className={`text-sm text-center ${
+                      submenu ? "h-28" : "h-0 overflow-hidden"
+                    } transition-all duration-300 ease-in-out`}
+                  >
+                    {submenuItems.map((item: any) => (
+                      <Link key={item.href} href={item.href}>
+                        <a onClick={toggleNavMobile} className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">
+                          {item.text}
+                        </a>
+                      </Link>
+                    ))}
+                    <button onClick={() => signOut()} className="block w-full p-2 rounded-md hover:bg-zinc-800">
+                      Sign Out
+                    </button>
+                  </div>
+                </>
               ) : (
                 <li className="text-white list-none group">
                   <Link href="/api/auth/signin">
