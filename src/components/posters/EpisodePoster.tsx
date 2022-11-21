@@ -50,7 +50,7 @@ const EpisodePoster = ({
 
   return (
     <div className="md:flex group">
-      <div className="relative flex flex-shrink-0">
+      <div className="relative flex-shrink-0 md:flex">
         <Link href={url || "#"}>
           <a>
             <Image

@@ -15,7 +15,7 @@ const PosterGrid = ({ children, hasScrollContainer = false }: IPosterGrid) => {
   }
 
   return (
-    <div className="grid justify-center grid-cols-2 gap-4 px-4 md:justify-start sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+    <div className="grid justify-center grid-cols-2 gap-4 md:px-4 md:justify-start sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       {children}
     </div>
   );
