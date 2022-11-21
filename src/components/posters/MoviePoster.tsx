@@ -5,6 +5,7 @@ import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
+import { trpc } from "../../utils/trpc";
 
 export interface IPoster {
   imageSrc: string;
@@ -13,23 +14,22 @@ export interface IPoster {
   score?: number;
   id: number;
   watched: boolean;
-  markAsWatched: any;
   watched_id: string;
-  deleteFromWatched: any;
+  refetch: () => void;
 }
 
-const MoviePoster = ({
-  imageSrc,
-  name,
-  url,
-  score,
-  markAsWatched,
-  id,
-  watched,
-  deleteFromWatched,
-  watched_id,
-}: IPoster) => {
+const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refetch }: IPoster) => {
   const { status } = useSession();
+
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
+
+  const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   return (
     <div className="group">
@@ -61,7 +61,7 @@ const MoviePoster = ({
       {status === "authenticated" && (
         <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
           <button
-            disabled={markAsWatched.isLoading}
+            disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
             className={`text-2xl transition-all duration-300 ease-in-out ${
               watched ? "hover:text-red-500" : "hover:text-white"
             }`}
@@ -75,7 +75,7 @@ const MoviePoster = ({
               }
             }}
           >
-            {markAsWatched.isLoading ? (
+            {markAsWatched.isLoading || deleteFromWatched.isLoading ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
             ) : watched ? (
               <MdDelete />
