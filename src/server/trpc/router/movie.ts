@@ -101,9 +101,9 @@ export const movieRouter = router({
             });
 
             if (watched) {
-              return { ...movie, watched: true };
+              return { ...movie, watched: true, watched_id: watched.id };
             } else {
-              return { ...movie, watched: false };
+              return { ...movie, watched: false, watched_id: null };
             }
           })
         );
