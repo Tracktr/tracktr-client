@@ -69,6 +69,7 @@ const ProfilePage = () => {
                   value={selectedLanguage}
                 >
                   {data &&
+                    languages &&
                     Object.values(languages).map(({ english_name, iso_639_1 }: any) => (
                       <option key={iso_639_1} value={iso_639_1}>
                         {english_name}
@@ -85,6 +86,7 @@ const ProfilePage = () => {
                   value={selectedLocation}
                 >
                   {data &&
+                    watchRegions &&
                     Object.values(watchRegions.results).map(({ english_name, iso_3166_1 }: any) => (
                       <option key={iso_3166_1} value={iso_3166_1}>
                         {english_name}

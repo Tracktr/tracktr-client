@@ -44,7 +44,7 @@ const SearchPage = () => {
                       imageSrc={`${content.poster_path}`}
                       name={content.title || content.name}
                       key={content.id}
-                      url={`/movie/${content.id}`}
+                      url={`/movies/${content.id}`}
                       score={content.vote_average}
                       watched={content.watched}
                       refetch={refetch}
