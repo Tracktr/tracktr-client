@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
+import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 
@@ -86,7 +87,13 @@ const EpisodePoster = ({
                   });
                 }}
               >
-                {watched ? <MdDelete /> : <AiOutlineCheckCircle />}
+                {markAsWatched.isLoading ? (
+                  <ImSpinner2 className="w-6 h-6 animate-spin" />
+                ) : watched ? (
+                  <MdDelete />
+                ) : (
+                  <AiOutlineCheckCircle />
+                )}
               </button>
             </div>
           )}
