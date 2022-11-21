@@ -119,7 +119,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
             </span>
             <span className="text-xs">Watch</span>
           </button>
-          <button className="flex flex-col items-center text-3xl group" onClick={removeFromHistory}>
+          <button className="flex flex-col items-center text-3xl" onClick={removeFromHistory}>
             <span className="text-center text-red-700">
               <MdDelete className="text-xl" />
             </span>
