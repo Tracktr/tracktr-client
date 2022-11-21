@@ -75,9 +75,11 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
   if (state === "unwatched") {
     return (
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
-        <div>Add to watched</div>
-        <div>
-          <ImCheckmark2 className="mr-1 text-lg" />
+        <div className="flex items-center justify-between">
+          <div>Add to watched</div>
+          <div>
+            <ImCheckmark2 className="mr-1 text-lg" />
+          </div>
         </div>
       </BaseWatchButton>
     );

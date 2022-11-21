@@ -8,9 +8,11 @@ interface ILoadingWatchButtonProps {
 const LoadingWatchButton = ({ themeColor }: ILoadingWatchButtonProps) => {
   return (
     <BaseWatchButton themeColor={themeColor}>
-      <div>Loading</div>
-      <div>
-        <ImSpinner2 className="w-6 h-6 animate-spin" />
+      <div className="flex items-center justify-between">
+        <div>Loading</div>
+        <div>
+          <ImSpinner2 className="w-6 h-6 animate-spin" />
+        </div>
       </div>
     </BaseWatchButton>
   );
