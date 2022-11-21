@@ -31,9 +31,9 @@ export const seasonRouter = router({
             });
 
             if (watched) {
-              return { ...episode, watched: true };
+              return { ...episode, watched: true, watched_id: watched.id };
             } else {
-              return { ...episode, watched: false };
+              return { ...episode, watched: false, watched_id: null };
             }
           })
         );
