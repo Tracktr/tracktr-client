@@ -4,7 +4,6 @@ import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
 import { PosterGrid } from "./PosterGrid";
 import { Episodes } from "@prisma/client";
-import { ImCheckmark2 } from "react-icons/im";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 
