@@ -117,13 +117,13 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
             <span className="text-center text-green-700">
               <AiOutlineCheckCircle />
             </span>
-            <span className="text-xs">Watch again</span>
+            <span className="py-1 text-xs font-normal">Watch</span>
           </button>
           <button className="flex flex-col items-center text-3xl" onClick={removeFromHistory}>
             <span className="text-center text-red-700">
               <MdDelete className="text-xl" />
             </span>
-            <span className="text-xs">Remove last</span>
+            <span className="py-1 text-xs font-normal">Remove</span>
           </button>
         </div>
       </div>
