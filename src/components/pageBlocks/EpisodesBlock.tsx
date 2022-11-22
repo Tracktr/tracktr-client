@@ -4,9 +4,10 @@ import EpisodePoster from "../posters/EpisodePoster";
 interface IEpisodesBlock {
   episodes: any;
   refetch: () => void;
+  fetchStatus: boolean;
 }
 
-const EpisodesBlock = ({ episodes, refetch }: IEpisodesBlock) => {
+const EpisodesBlock = ({ episodes, refetch, fetchStatus }: IEpisodesBlock) => {
   const router = useRouter();
   const { tvID } = router.query;
 
@@ -26,6 +27,7 @@ const EpisodesBlock = ({ episodes, refetch }: IEpisodesBlock) => {
           watched={item.watched}
           watched_id={item.watched_id}
           refetch={refetch}
+          fetchStatus={fetchStatus}
         />
       ))}
     </div>
