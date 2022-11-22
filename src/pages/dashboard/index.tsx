@@ -18,39 +18,11 @@ const DashboardPage = () => {
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
   const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
 
-  const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
-    onSuccess: () => {
-      refetchHistory();
-      refetchUpNext();
-    },
-  });
-
-  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
-    onSuccess: () => {
-      refetchUpNext();
-      refetchHistory();
-    },
-  });
-
-  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
-    onSuccess: () => {
-      refetchHistory();
-    },
-  });
-
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
       router.push("/");
     }
   });
-
-  const handleDelete = (id: string, type: "movie" | "episode") => {
-    if (type === "episode") {
-      deleteEpisodeFromHistory.mutate({ id });
-    } else if (type === "movie") {
-      deleteMovieFromHistory.mutate({ id });
-    }
-  };
 
   return (
     <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
@@ -69,7 +41,12 @@ const DashboardPage = () => {
                     <div className="text-xl md:text-3xl">Up next</div>
                   </div>
                 </div>
-                <UpNext episodes={upNext?.result || []} status={upNextStatus} markAsWatched={markAsWatched} />
+                <UpNext
+                  episodes={upNext?.result || []}
+                  status={upNextStatus}
+                  refetchHistory={refetchHistory}
+                  refetchUpNext={refetchUpNext}
+                />
               </div>
             )}
             {history?.history && history?.history?.length > 0 && (
@@ -88,7 +65,8 @@ const DashboardPage = () => {
                   hasScrollContainer
                   history={history?.history || []}
                   status={historyStatus}
-                  handleDelete={handleDelete}
+                  refetchHistory={refetchHistory}
+                  refetchUpNext={refetchUpNext}
                 />
               </div>
             )}

@@ -6,14 +6,23 @@ import { PosterGrid } from "./PosterGrid";
 import { Episodes } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { trpc } from "../../utils/trpc";
 
 interface IepisodesGrid {
   episodes: Episodes[];
   status: "error" | "success" | "loading";
-  markAsWatched: any;
+  refetchHistory: () => void;
+  refetchUpNext: () => void;
 }
 
-const UpNext = ({ episodes, status, markAsWatched }: IepisodesGrid): JSX.Element => {
+const UpNext = ({ episodes, status, refetchHistory, refetchUpNext }: IepisodesGrid): JSX.Element => {
+  const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+    onSuccess: () => {
+      refetchUpNext();
+      refetchHistory();
+    },
+  });
+
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
