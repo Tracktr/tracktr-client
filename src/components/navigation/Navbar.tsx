@@ -7,6 +7,7 @@ import Logo from "../common/Logo";
 import NavButton from "./Navbutton";
 import { BiMenuAltRight } from "react-icons/bi";
 import NavMobile from "./NavMobile";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 export const navLinks = [
   { href: "/movies", text: "Movies", active: false },
@@ -86,9 +87,10 @@ const Navbar = () => {
                       >
                         <button type="button" className="w-full h-full">
                           <a className="flex items-center pl-4">
-                            <Image
+                            <ImageWithFallback
                               unoptimized
                               src={session.user?.image ? session.user.image : ""}
+                              fallbackSrc="/placeholder_profile.png"
                               width="36px"
                               height="36px"
                               className="rounded-full"
