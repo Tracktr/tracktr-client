@@ -17,18 +17,6 @@ const HistoryPage = () => {
     refetch,
   } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
-  const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
-  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
-  });
-
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
       router.push("/");
@@ -43,14 +31,6 @@ const HistoryPage = () => {
   const previousPage = () => {
     setPage(page - 1);
     refetch();
-  };
-
-  const handleDelete = (id: string, type: "movie" | "episode") => {
-    if (type === "episode") {
-      deleteEpisodeFromHistory.mutate({ id });
-    } else if (type === "movie") {
-      deleteMovieFromHistory.mutate({ id });
-    }
   };
 
   return (
@@ -82,7 +62,12 @@ const HistoryPage = () => {
               </button>
             </div>
           </div>
-          <HistoryGrid history={history?.history || []} status={historyStatus} handleDelete={handleDelete} />
+          <HistoryGrid
+            history={history?.history || []}
+            status={historyStatus}
+            refetchHistory={refetch}
+            refetchUpNext={() => console.log("I should change this")}
+          />
         </div>
       )}
     </LoadingPageComponents>
