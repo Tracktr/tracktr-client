@@ -7,6 +7,8 @@ import { Episodes } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { trpc } from "../../utils/trpc";
+import { ImSpinner2 } from "react-icons/im";
+import { useState } from "react";
 
 interface IepisodesGrid {
   episodes: Episodes[];
@@ -16,7 +18,12 @@ interface IepisodesGrid {
 }
 
 const UpNext = ({ episodes, status, refetchHistory, refetchUpNext }: IepisodesGrid): JSX.Element => {
+  const [currentLoadingID, setCurrentLoadingID] = useState<number | undefined>();
+
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
+    onMutate: (e) => {
+      setCurrentLoadingID(e.seriesId);
+    },
     onSuccess: () => {
       refetchUpNext();
       refetchHistory();
@@ -58,19 +65,23 @@ const UpNext = ({ episodes, status, refetchHistory, refetchUpNext }: IepisodesGr
                     {` `}
                     {item.series.name}
                   </div>
-                  <button
-                    disabled={markAsWatched.isLoading}
-                    className="flex text-gray-500 text-opacity-100 hover:text-green-500"
-                    onClick={() =>
-                      markAsWatched.mutate({
-                        episodeNumber: item.episode_number,
-                        seasonNumber: item.season_number,
-                        seriesId: item.series.id,
-                      })
-                    }
-                  >
-                    <AiOutlineCheckCircle className="text-2xl" />
-                  </button>
+                  {markAsWatched.isLoading && item.series.id === currentLoadingID ? (
+                    <ImSpinner2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <button
+                      disabled={markAsWatched.isLoading}
+                      className="flex text-gray-500 text-opacity-100 hover:text-green-500"
+                      onClick={() =>
+                        markAsWatched.mutate({
+                          episodeNumber: item.episode_number,
+                          seasonNumber: item.season_number,
+                          seriesId: item.series.id,
+                        })
+                      }
+                    >
+                      <AiOutlineCheckCircle className="text-2xl" />
+                    </button>
+                  )}
                 </motion.div>
               );
             })}
