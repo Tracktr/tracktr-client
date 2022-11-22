@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { ImCheckmark2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { IWatchButtonProps } from ".";
 import { trpc } from "../../utils/trpc";
@@ -80,7 +79,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
         <div className="flex items-center justify-between">
           <div>Add to watched</div>
           <div>
-            <ImCheckmark2 className="mr-1 text-lg" />
+            <AiOutlineCheckCircle className="mr-1 text-2xl" />
           </div>
         </div>
       </BaseWatchButton>
@@ -112,7 +111,9 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
           <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
           <div className="text-xs italic normal-case">Last on {date}</div>
         </div>
-        <div className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow bg-gradient-to-t from-primaryBackground group-hover:opacity-100 backdrop-blur">
+        <div
+          className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow group-hover:opacity-100 backdrop-blur "
+        >
           <button className="flex flex-col items-center text-xl" onClick={addToHistory}>
             <span className="text-center text-green-700">
               <AiOutlineCheckCircle />
