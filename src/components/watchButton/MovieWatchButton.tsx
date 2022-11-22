@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { ImCheckmark2 } from "react-icons/im";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { IWatchButtonProps } from ".";
 import { trpc } from "../../utils/trpc";
 import BaseWatchButton from "./BaseWatchButton";
@@ -71,7 +71,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div>Add to watched</div>
         <div>
-          <ImCheckmark2 className="mr-1 text-lg" />
+          <AiOutlineCheckCircle className="mr-1 text-2xl" />
         </div>
       </BaseWatchButton>
     );

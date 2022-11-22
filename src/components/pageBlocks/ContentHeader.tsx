@@ -66,7 +66,7 @@ const ContentHeader = ({
       <div className="relative w-full">
         <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
           <div className="col-span-1 mx-4 text-center">
-            <div className="relative inline-block border-4 rounded-md border-primaryBackground">
+            <div className="sticky inline-block border-4 rounded-md border-primaryBackground top-16">
               <Image
                 alt={"Poster image for:" + title}
                 width="208"
