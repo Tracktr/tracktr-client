@@ -12,7 +12,7 @@ const MoviesInfiniteScroll = () => {
   const MAX_PAGES = 5;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
     trpc.movie.infiniteMovies.useInfiniteQuery(
       {
         filter: filter,
@@ -66,6 +66,7 @@ const MoviesInfiniteScroll = () => {
                       watched={content.watched}
                       watched_id={content.watched_id}
                       refetch={refetch}
+                      fetchStatus={isRefetching}
                     />
                   );
                 })

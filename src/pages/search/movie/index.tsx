@@ -12,7 +12,7 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
     trpc.movie.searchMovie.useInfiniteQuery(
       { query: query as string },
       {
@@ -49,6 +49,7 @@ const SearchPage = () => {
                       watched={content.watched}
                       refetch={refetch}
                       watched_id={content.watched_id}
+                      fetchStatus={isRefetching}
                     />
                   );
                 })

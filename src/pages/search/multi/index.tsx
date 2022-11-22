@@ -13,7 +13,7 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch } =
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
     trpc.multi.searchMulti.useInfiniteQuery(
       { query: query as string },
       {
@@ -23,10 +23,6 @@ const SearchPage = () => {
         },
       }
     );
-
-  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
-    onSuccess: () => refetch(),
-  });
 
   useEffect(() => {
     if (inView) {
@@ -66,6 +62,7 @@ const SearchPage = () => {
                       watched={null}
                       refetch={refetch}
                       watched_id={null}
+                      fetchStatus={isRefetching}
                     />
                   );
                 }

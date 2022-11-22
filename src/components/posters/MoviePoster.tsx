@@ -16,9 +16,10 @@ export interface IPoster {
   watched: boolean | null;
   watched_id: string | null;
   refetch: () => void;
+  fetchStatus: boolean;
 }
 
-const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refetch }: IPoster) => {
+const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refetch, fetchStatus }: IPoster) => {
   const { status } = useSession();
 
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
@@ -75,7 +76,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
               }
             }}
           >
-            {markAsWatched.isLoading || deleteFromWatched.isLoading ? (
+            {markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
             ) : watched ? (
               <MdDelete />

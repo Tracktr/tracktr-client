@@ -1,6 +1,6 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { TmdbEpisode, TmdbSeason } from "../../../types/tmdb";
+import { TmdbEpisode } from "../../../types/tmdb";
 
 export const episodeRouter = router({
   episodeById: publicProcedure

@@ -19,6 +19,7 @@ export interface IEpisodePoster {
   watched: boolean;
   watched_id: string | null;
   refetch: () => void;
+  fetchStatus: boolean;
 }
 
 const EpisodePoster = ({
@@ -33,6 +34,7 @@ const EpisodePoster = ({
   watched,
   watched_id,
   refetch,
+  fetchStatus,
 }: IEpisodePoster) => {
   const { status } = useSession();
 
@@ -108,7 +110,7 @@ const EpisodePoster = ({
                   }
                 }}
               >
-                {markAsWatched.isLoading || deleteFromWatched.isLoading ? (
+                {markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus ? (
                   <ImSpinner2 className="w-6 h-6 animate-spin" />
                 ) : watched ? (
                   <MdDelete />

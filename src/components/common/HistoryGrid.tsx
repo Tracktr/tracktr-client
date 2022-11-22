@@ -6,15 +6,54 @@ import LoadingPageComponents from "./LoadingPageComponents";
 import { PosterGrid } from "./PosterGrid";
 import { MdDelete } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
+import { trpc } from "../../utils/trpc";
+import { ImSpinner2 } from "react-icons/im";
+import { useState } from "react";
 
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
-  handleDelete: (id: string, type: "movie" | "episode") => void;
   hasScrollContainer?: boolean;
+  refetchHistory: () => void;
+  refetchUpNext: () => void;
 }
 
-const HistoryGrid = ({ history, status, handleDelete, hasScrollContainer }: IHistoryGrid): JSX.Element => {
+const HistoryGrid = ({
+  history,
+  status,
+  hasScrollContainer,
+  refetchHistory,
+  refetchUpNext,
+}: IHistoryGrid): JSX.Element => {
+  const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
+
+  const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
+    onMutate: (e) => {
+      setCurrentLoadingID(e.id);
+    },
+    onSuccess: () => {
+      refetchHistory();
+      refetchUpNext();
+    },
+  });
+
+  const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
+    onMutate: (e) => {
+      setCurrentLoadingID(e.id);
+    },
+    onSuccess: () => {
+      refetchHistory();
+    },
+  });
+
+  const handleDelete = (id: string, type: "movie" | "episode") => {
+    if (type === "episode") {
+      deleteEpisodeFromHistory.mutate({ id });
+    } else if (type === "movie") {
+      deleteMovieFromHistory.mutate({ id });
+    }
+  };
+
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
@@ -68,16 +107,21 @@ const HistoryGrid = ({ history, status, handleDelete, hasScrollContainer }: IHis
                     </a>
                   </Link>
                   <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                    <button
-                      className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDelete(item.id, item.movie_id ? "movie" : "episode");
-                      }}
-                    >
-                      <MdDelete className="text-2xl" />
-                    </button>
+                    {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
+                    (deleteMovieFromHistory.isLoading && item.id === currentLoadingID) ? (
+                      <ImSpinner2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                      <button
+                        className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDelete(item.id, item.movie_id ? "movie" : "episode");
+                        }}
+                      >
+                        <MdDelete className="text-2xl" />
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               );

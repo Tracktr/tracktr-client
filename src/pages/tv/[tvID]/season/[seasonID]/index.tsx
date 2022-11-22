@@ -13,7 +13,7 @@ const TVPage = () => {
     tvID: tvID as string,
   });
 
-  const { data, status, refetch } = trpc.season.seasonByID.useQuery(
+  const { data, status, refetch, isRefetching } = trpc.season.seasonByID.useQuery(
     {
       tvID: tvID as string,
       seasonID: Number(seasonID),
@@ -33,7 +33,7 @@ const TVPage = () => {
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
         >
-          <EpisodesBlock episodes={data.episodes} refetch={refetch} />
+          <EpisodesBlock episodes={data.episodes} refetch={refetch} fetchStatus={isRefetching} />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}
