@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
@@ -37,14 +38,19 @@ const EpisodePoster = ({
   fetchStatus,
 }: IEpisodePoster) => {
   const { status } = useSession();
+  const [currentLoadingID, setCurrentLoadingID] = useState<number>();
+
+  useEffect(() => {
+    if (!fetchStatus) setCurrentLoadingID(undefined);
+  }, [fetchStatus]);
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
+    onMutate: () => setCurrentLoadingID(episode),
+    onSuccess: () => refetch(),
   });
 
   const deleteFromWatched = trpc.episode.removeEpisodeFromWatched.useMutation({
+    onMutate: () => setCurrentLoadingID(episode),
     onSuccess: () => {
       refetch();
     },
@@ -110,7 +116,8 @@ const EpisodePoster = ({
                   }
                 }}
               >
-                {markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus ? (
+                {(markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus) &&
+                episode === currentLoadingID ? (
                   <ImSpinner2 className="w-6 h-6 animate-spin" />
                 ) : watched ? (
                   <MdDelete />

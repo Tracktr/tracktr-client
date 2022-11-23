@@ -8,7 +8,7 @@ import BaseWatchButton from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
 
 const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchButtonProps) => {
-  const { data: session, status: sessionStatus } = useSession();
+  const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
   const watchHistory = trpc.episode.watchHistoryByID.useQuery(
@@ -42,14 +42,14 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
   });
 
   useEffect(() => {
-    if (sessionStatus !== "loading" && session && watchHistory.status === "success") {
+    if (sessionStatus === "authenticated" && watchHistory.status === "success") {
       if (Object.keys(watchHistory.data).length > 0) {
         setState("watched");
       } else {
         setState("unwatched");
       }
     }
-  }, [session, sessionStatus, watchHistory.data, watchHistory.status, markAsWatched.status]);
+  }, [sessionStatus, watchHistory.data, watchHistory.status, markAsWatched.status]);
 
   const addToHistory = (e: any) => {
     if (e?.key === "Enter" || e?.key === undefined) {
@@ -111,9 +111,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
           <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
           <div className="text-xs italic normal-case">Last on {date}</div>
         </div>
-        <div
-          className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow group-hover:opacity-100 backdrop-blur "
-        >
+        <div className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow group-hover:opacity-100 backdrop-blur ">
           <button className="flex flex-col items-center text-xl" onClick={addToHistory}>
             <span className="text-center text-green-700">
               <AiOutlineCheckCircle />
