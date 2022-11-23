@@ -31,7 +31,7 @@ const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
         <div className="flex flex-col w-full h-full text-center align-middle">
           <div className="flex items-center justify-between pt-2 pb-2">
             <div className="pl-4">
-              <Logo textColor="text-white" dotColor="text-primary" />
+              <Logo textColor="text-white" dotColor="text-primary" signedIn={session.status === "authenticated"} />
             </div>
 
             <button onClick={toggleNavMobile} className="pr-4 text-3xl text-primary">

@@ -5,7 +5,7 @@ const ImageWithFallback = (props: any) => {
   const { src, fallbackSrc, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
 
-  return <Image {...rest} src={imgSrc} onError={() => setImgSrc(fallbackSrc)} />;
+  return <Image {...rest} src={imgSrc} onError={() => setImgSrc(fallbackSrc)} alt="Fallback image" />;
 };
 
 export default ImageWithFallback;

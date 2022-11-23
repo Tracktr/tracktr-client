@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import Logo from "../common/Logo";
 import NavButton from "./Navbutton";
 import { BiMenuAltRight } from "react-icons/bi";
