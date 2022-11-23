@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
@@ -21,15 +22,16 @@ export interface IPoster {
 
 const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refetch, fetchStatus }: IPoster) => {
   const { status } = useSession();
+  const [currentLoadingID, setCurrentLoadingID] = useState<number>();
 
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onMutate: (e) => setCurrentLoadingID(e.movieId),
     onSuccess: () => refetch(),
   });
 
   const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
-    onSuccess: () => {
-      refetch();
-    },
+    onMutate: () => setCurrentLoadingID(id),
+    onSuccess: () => refetch(),
   });
 
   return (
@@ -76,7 +78,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
               }
             }}
           >
-            {markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus ? (
+            {(markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus) && id === currentLoadingID ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
             ) : watched ? (
               <MdDelete />
