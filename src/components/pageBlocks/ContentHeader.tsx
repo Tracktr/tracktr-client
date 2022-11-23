@@ -29,6 +29,7 @@ interface IContentHeader {
   themeColor?: any;
   season?: string;
   episode?: string;
+  refetchProgression?: () => void;
 }
 
 const ContentHeader = ({
@@ -48,6 +49,7 @@ const ContentHeader = ({
   themeColor,
   season,
   episode,
+  refetchProgression,
 }: IContentHeader) => {
   const session = useSession();
 
@@ -98,6 +100,7 @@ const ContentHeader = ({
                   episodeID={Number(watchButton.episodeID)}
                   seasonID={Number(watchButton.seasonID)}
                   themeColor={themeColor}
+                  refetchProgression={refetchProgression}
                 />
               )}
             </div>

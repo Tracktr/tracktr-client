@@ -9,7 +9,7 @@ const EpisodePage = () => {
   const router = useRouter();
   const { tvID, seasonID, episodeID } = router.query;
 
-  const { data: tvShow } = trpc.tv.tvById.useQuery({
+  const { data: tvShow, refetch } = trpc.tv.tvById.useQuery({
     tvID: tvID as string,
   });
 
@@ -35,6 +35,7 @@ const EpisodePage = () => {
           episode={episodeData.episode_number}
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
+          refetchProgression={refetch}
         >
           <CastBlock cast={episodeData.credits.cast} />
           <EpisodeSwitcherBlock seasons={tvShow.seasons} />
