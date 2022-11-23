@@ -16,7 +16,10 @@ const SeriesProgressionBlock = ({ numberOfEpisodesWatched, amountOfEpisodes }: S
       </div>
 
       <div className="flex w-full bg-black rounded-full">
-        <span className="h-2 rounded-full bg-primary" style={{ width: `${currentPercentage}%` }} />
+        <span
+          className="h-2 transition-all duration-300 ease-in-out rounded-full bg-primary"
+          style={{ width: `${currentPercentage}%` }}
+        />
       </div>
     </div>
   );

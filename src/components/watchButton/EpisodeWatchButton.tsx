@@ -7,7 +7,7 @@ import { trpc } from "../../utils/trpc";
 import BaseWatchButton from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
 
-const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchButtonProps) => {
+const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
@@ -28,6 +28,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
       setState("loading");
     },
     onSuccess: () => {
+      refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
   });
@@ -37,6 +38,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchB
       setState("loading");
     },
     onSuccess: () => {
+      refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
   });

@@ -7,13 +7,30 @@ export interface IWatchButtonProps {
   episodeID: number;
   seasonID: number;
   themeColor: IThemeColor;
+  refetchProgression?: () => void;
 }
 
-const WatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchButtonProps) => {
+const WatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
   if (episodeID && seasonID) {
-    return <EpisodeWatchButton itemID={itemID} episodeID={episodeID} seasonID={seasonID} themeColor={themeColor} />;
+    return (
+      <EpisodeWatchButton
+        itemID={itemID}
+        episodeID={episodeID}
+        seasonID={seasonID}
+        themeColor={themeColor}
+        refetchProgression={refetchProgression}
+      />
+    );
   } else {
-    return <MovieWatchButton itemID={itemID} episodeID={episodeID} seasonID={seasonID} themeColor={themeColor} />;
+    return (
+      <MovieWatchButton
+        itemID={itemID}
+        episodeID={episodeID}
+        seasonID={seasonID}
+        themeColor={themeColor}
+        refetchProgression={refetchProgression}
+      />
+    );
   }
 };
 
