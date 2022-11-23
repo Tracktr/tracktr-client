@@ -22,7 +22,13 @@ const DetailsBlock = ({
       {releaseDate && (
         <div className="flex flex-col">
           <h2 className="text-base font-bold opacity-75">Release Date</h2>
-          <p className="pt-2">{releaseDate}</p>
+          <p className="pt-2">
+            {new Date(releaseDate).toLocaleDateString("en-UK", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
         </div>
       )}
       {runtime && (
