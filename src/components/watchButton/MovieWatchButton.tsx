@@ -69,9 +69,11 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
   if (state === "unwatched") {
     return (
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
-        <div>Add to watched</div>
-        <div>
-          <AiOutlineCheckCircle className="mr-1 text-2xl" />
+        <div className="flex items-center justify-between">
+          <div>Add to watched</div>
+          <div>
+            <AiOutlineCheckCircle className="mr-1 text-2xl" />
+          </div>
         </div>
       </BaseWatchButton>
     );
