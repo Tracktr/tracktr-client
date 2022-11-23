@@ -8,7 +8,7 @@ import BaseWatchButton from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
 
 const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor }: IWatchButtonProps) => {
-  const { data: session, status: sessionStatus } = useSession();
+  const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
   const watchHistory = trpc.episode.watchHistoryByID.useQuery(
