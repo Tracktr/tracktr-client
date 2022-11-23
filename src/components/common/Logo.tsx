@@ -8,7 +8,7 @@ interface ILogo {
 const Logo = ({ textColor, dotColor }: ILogo) => (
   <Link href="/">
     <a className="col-span-1">
-      <h1 className={`text-3xl font-black ${textColor}`}>
+      <h1 className={`text-3xl font-black select-none ${textColor}`}>
         TRACKTR
         <span className={dotColor}>.</span>
       </h1>
