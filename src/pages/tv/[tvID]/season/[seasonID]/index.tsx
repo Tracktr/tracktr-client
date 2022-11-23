@@ -9,17 +9,28 @@ const TVPage = () => {
   const router = useRouter();
   const { tvID, seasonID } = router.query;
 
-  const { data: tvShow } = trpc.tv.tvById.useQuery({
+  const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery({
     tvID: tvID as string,
   });
 
-  const { data, status, refetch, isRefetching } = trpc.season.seasonByID.useQuery(
+  const {
+    data,
+    status,
+    refetch: seasonRefetch,
+    isRefetching,
+  } = trpc.season.seasonByID.useQuery(
     {
       tvID: tvID as string,
       seasonID: Number(seasonID),
     },
     { enabled: router.isReady }
   );
+
+  //TODO: merge these trpc request to one
+  const refetch = () => {
+    tvRefetch();
+    seasonRefetch();
+  };
 
   return (
     <LoadingPageComponents status={status}>
