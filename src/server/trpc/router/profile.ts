@@ -1,4 +1,5 @@
 import { z } from "zod";
+import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
@@ -88,27 +89,47 @@ export const profileRouter = router({
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
-    const episodes = await ctx.prisma.episodesHistory.count({
-      where: {
-        user_id: ctx.session.user.profile.userId,
-        datetime: {
-          gte: new Date(Date.now() - 604800000),
-        },
-      },
-    });
+    const episodeCounts: {
+      date: Date;
+      count: number;
+    }[] = [];
+    const movieCounts: {
+      date: Date;
+      count: number;
+    }[] = [];
 
-    const movies = await ctx.prisma.moviesHistory.count({
-      where: {
-        user_id: ctx.session.user.profile.userId,
-        datetime: {
-          gte: new Date(Date.now() - 604800000),
-        },
-      },
-    });
+    for (let i = 0; i < 7; i++) {
+      const gte = new Date(getDateXDaysAgo(i + 1).setHours(0, 0, 0, 0));
+      const lt = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
+
+      await ctx.prisma.episodesHistory
+        .count({
+          where: {
+            user_id: ctx.session.user.profile.userId,
+            datetime: {
+              gte,
+              lt,
+            },
+          },
+        })
+        .then((res) => episodeCounts.push({ date: gte, count: res }));
+
+      await ctx.prisma.moviesHistory
+        .count({
+          where: {
+            user_id: ctx.session.user.profile.userId,
+            datetime: {
+              gte,
+              lt,
+            },
+          },
+        })
+        .then((res) => movieCounts.push({ date: gte, count: res }));
+    }
 
     return {
-      episodes,
-      movies,
+      episodes: episodeCounts,
+      movies: movieCounts,
     };
   }),
 

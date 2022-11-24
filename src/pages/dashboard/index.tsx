@@ -53,8 +53,8 @@ const DashboardPage = () => {
             <div className="my-6">
               <div className="text-xl md:text-3xl">Your week in review</div>
               <div className="py-1">
-                Last week you watched {stats?.episodes ? stats.episodes : 0} episodes and{" "}
-                {stats?.movies ? stats?.movies : 0} movies.
+                {/* Last week you watched {stats?.episodes ? stats.episodes : 0} episodes and{" "}
+                {stats?.movies ? stats?.movies : 0} movies. */}
               </div>
             </div>
             {history?.history && history?.history?.length > 0 && (
