@@ -89,7 +89,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchPr
   }
 
   if (state === "watched") {
-    const data: any[] = Object.values(watchHistory.data as any[]);
+    const data = Object.values(watchHistory.data as any[]);
     const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
       year: "numeric",
       month: "short",

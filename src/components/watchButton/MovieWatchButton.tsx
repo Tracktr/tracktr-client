@@ -81,7 +81,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
   }
 
   if (state === "watched") {
-    const data: any[] = Object.values(watchHistory.data as any[]);
+    const date = Object.values(watchHistory.data as any[]);
     const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
       year: "numeric",
       month: "short",
