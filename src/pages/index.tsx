@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     if (sessionStatus === "authenticated") {
       router.push("/dashboard");
     }
-  });
+  }, [router, sessionStatus]);
 
   return (
     <LoadingPageComponents status={sessionStatus === "unauthenticated" ? "success" : "loading"}>
