@@ -6,6 +6,7 @@ import { PosterGrid } from "../../../components/common/PosterGrid";
 import { LoadingPoster } from "../../../components/posters/LoadingPoster";
 import TVPoster from "../../../components/posters/TVPoster";
 import { trpc } from "../../../utils/trpc";
+import { IPage } from "../movie";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const SearchPage = () => {
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.searchTV.useInfiniteQuery(
     { query: query as string },
     {
-      getNextPageParam: (lastPage: any, allPages: any) => {
+      getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
         const nextPage = allPages.length + 1;
         return lastPage.results.length !== 0 ? nextPage : undefined;
       },
@@ -36,7 +37,7 @@ const SearchPage = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: any) => {
+                page.results.map((content) => {
                   return (
                     <TVPoster
                       imageSrc={`${content.poster_path}`}

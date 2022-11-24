@@ -37,7 +37,7 @@ const HistoryPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <div className="max-w-6xl m-auto">
-          <ProfileHeader image={data?.image} name={data?.name} />
+          <ProfileHeader image={String(data?.image)} name={String(data?.name)} />
           <div className="items-center my-5 align-middle md:flex">
             <h1 className="text-3xl">History</h1>
             <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">

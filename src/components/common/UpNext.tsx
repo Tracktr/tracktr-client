@@ -3,20 +3,34 @@ import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import LoadingPageComponents from "./LoadingPageComponents";
 import { PosterGrid } from "./PosterGrid";
-import { Episodes } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 
-interface IepisodesGrid {
-  episodes: Episodes[];
+interface Series {
+  id: number;
+  name: string;
+  poster: string;
+}
+
+interface IEpisode {
+  id: number;
+  name: string;
+  episode_number: number;
+  season_number: number;
+  seasons_id: number;
+  series: Series;
+}
+
+interface IEpisodesGrid {
+  episodes: IEpisode[];
   status: "error" | "success" | "loading";
   refetch: () => void;
 }
 
-const UpNext = ({ episodes, status, refetch }: IepisodesGrid): JSX.Element => {
+const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<number | undefined>();
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
@@ -33,7 +47,7 @@ const UpNext = ({ episodes, status, refetch }: IepisodesGrid): JSX.Element => {
       {() => (
         <PosterGrid hasScrollContainer>
           <AnimatePresence mode="popLayout" initial={false}>
-            {episodes.map((item: any) => {
+            {episodes.map((item) => {
               return (
                 <motion.div
                   className="relative w-[170px] group"

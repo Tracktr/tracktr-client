@@ -6,7 +6,7 @@ import NProgress from "nprogress";
 
 interface ILoadingPageComponents {
   status: "loading" | "error" | "success" | "idle";
-  children: any;
+  children: () => any;
   posters?: boolean;
 }
 
@@ -31,19 +31,17 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
 
     if (status === "success") {
       typeof window !== "undefined" && NProgress.done();
-      if (typeof children === "function") {
-        return (
-          <AnimatePresence>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ ease: "anticipate", duration: 0.75 }}
-            >
-              {children()}
-            </motion.div>
-          </AnimatePresence>
-        );
-      }
+      return (
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ease: "anticipate", duration: 0.75 }}
+          >
+            {children()}
+          </motion.div>
+        </AnimatePresence>
+      );
     }
 
     return <></>;

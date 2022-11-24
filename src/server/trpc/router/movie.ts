@@ -2,6 +2,23 @@ import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
 
+interface IMovie {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: false;
+  vote_average: number;
+  vote_count: 815;
+}
+
 export const movieRouter = router({
   movieById: publicProcedure
     .input(
@@ -10,7 +27,7 @@ export const movieRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const url: any = new URL(`movie/${input?.slug}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`movie/${input?.slug}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("append_to_response", "credits,watch/providers");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
@@ -34,18 +51,18 @@ export const movieRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`movie/${input.filter}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url: URL = new URL(`movie/${input.filter}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("page", input?.cursor?.toString() || "1");
       if (ctx?.session?.user) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
       if (ctx?.session?.user) url.searchParams.append("region", ctx.session?.user?.profile.region as string);
 
-      const res: any = await fetch(url);
+      const res = await fetch(url);
       const json = await res.json();
 
       if (ctx?.session?.user) {
         json.results = await Promise.all(
-          json.results.map(async (movie: any) => {
+          json.results.map(async (movie: IMovie) => {
             const watched = await ctx.prisma.moviesHistory.findFirst({
               where: {
                 user_id: ctx?.session?.user?.id as string,
@@ -61,7 +78,7 @@ export const movieRouter = router({
           })
         );
       } else {
-        json.results = json.results.map((movie: any) => {
+        json.results = json.results.map((movie: IMovie) => {
           return { ...movie, watched: false };
         });
       }
@@ -92,7 +109,7 @@ export const movieRouter = router({
 
       if (ctx?.session?.user) {
         json.results = await Promise.all(
-          json.results.map(async (movie: any) => {
+          json.results.map(async (movie: IMovie) => {
             const watched = await ctx.prisma.moviesHistory.findFirst({
               where: {
                 user_id: ctx?.session?.user?.id as string,
@@ -108,7 +125,7 @@ export const movieRouter = router({
           })
         );
       } else {
-        json.results = json.results.map((movie: any) => {
+        json.results = json.results.map((movie: IMovie) => {
           return { ...movie, watched: false };
         });
       }

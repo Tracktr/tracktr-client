@@ -7,7 +7,8 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
+import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -26,10 +27,12 @@ const DashboardPage = () => {
     }
   });
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length)
       return (
-        <div className="px-5 py-2 text-sm rounded-full bg-slate-500 active:border-none">{`Watched ${payload[0].value} items`}</div>
+        <div className="px-5 py-2 text-sm rounded-full bg-slate-500 active:border-none">{`Watched ${
+          payload[0] !== undefined && payload[0].value
+        } items`}</div>
       );
 
     return null;

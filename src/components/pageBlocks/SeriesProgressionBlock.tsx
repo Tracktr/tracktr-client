@@ -1,10 +1,10 @@
 interface SeriesProgressionBlockProps {
-  numberOfEpisodesWatched: any;
-  amountOfEpisodes: any;
+  numberOfEpisodesWatched: { count: number }[];
+  amountOfEpisodes: number;
 }
 
 const SeriesProgressionBlock = ({ numberOfEpisodesWatched, amountOfEpisodes }: SeriesProgressionBlockProps) => {
-  const { count } = numberOfEpisodesWatched[0];
+  const count = numberOfEpisodesWatched[0]?.count;
   const currentPercentage = Math.ceil((Number(count) / Number(amountOfEpisodes)) * 100);
   return (
     <div>

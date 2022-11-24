@@ -1,5 +1,6 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
+import { TmdbEpisode } from "../../../types/tmdb";
 
 export const seasonRouter = router({
   seasonByID: publicProcedure
@@ -10,7 +11,7 @@ export const seasonRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.tvID}/season/${input?.seasonID}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url: URL = new URL(`tv/${input?.tvID}/season/${input?.seasonID}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("append_to_response", "credits");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
@@ -20,7 +21,7 @@ export const seasonRouter = router({
 
       if (ctx?.session?.user) {
         json.episodes = await Promise.all(
-          json.episodes.map(async (episode: any) => {
+          json.episodes.map(async (episode: TmdbEpisode) => {
             const watched = await ctx.prisma.episodesHistory.findFirst({
               where: {
                 user_id: ctx?.session?.user?.id as string,
@@ -38,7 +39,7 @@ export const seasonRouter = router({
           })
         );
       } else {
-        json.episodes = json.episodes.map((episode: any) => {
+        json.episodes = json.episodes.map((episode: TmdbEpisode) => {
           return { ...episode, watched: false };
         });
       }

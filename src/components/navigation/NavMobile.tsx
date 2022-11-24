@@ -10,7 +10,16 @@ import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
 
-const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
+const NavMobile = ({
+  toggleNavMobile,
+  submenuItems,
+}: {
+  toggleNavMobile: () => void;
+  submenuItems: {
+    href: string;
+    text: string;
+  }[];
+}) => {
   const [submenu, setSubMenu] = useState(false);
   const session = useSession();
 
@@ -72,7 +81,7 @@ const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
                       submenu ? "h-28" : "h-0 overflow-hidden"
                     } transition-all duration-300 ease-in-out`}
                   >
-                    {submenuItems.map((item: any) => (
+                    {submenuItems.map((item: { href: string; text: string }) => (
                       <Link key={item.href} href={item.href}>
                         <a onClick={toggleNavMobile} className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">
                           {item.text}

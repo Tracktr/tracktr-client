@@ -10,13 +10,6 @@ import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 
-interface IHistoryGrid {
-  history: (MoviesHistory | EpisodesHistory)[];
-  status: "error" | "success" | "loading";
-  hasScrollContainer?: boolean;
-  refetch: () => void;
-}
-
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
 
@@ -51,7 +44,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
       {() => (
         <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: any) => {
+            {history.map((item: IHistoryItem) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
                 dateStyle: "medium",
                 timeStyle: "short",
@@ -69,7 +62,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
                   <Link
                     href={
                       item?.movie_id
-                        ? `/movies/${item.movie.id}`
+                        ? `/movies/${item.movie?.id}`
                         : `/tv/${item.series_id}/season/${item.season_number}/episode/${item.episode_number}`
                     }
                   >
@@ -77,11 +70,11 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
                       <Image
                         alt={`Poster image for ${
                           item?.movie_id
-                            ? item.movie.title
-                            : `${item.season_number}x${item.episode_number} ${item.series.name}`
+                            ? item.movie?.title
+                            : `${item.season_number}x${item.episode_number} ${item.series?.name}`
                         }`}
                         src={PosterImage({
-                          path: item.movie_id ? item.movie.poster : item.series.poster,
+                          path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
                           size: "sm",
                         })}
                         width="170px"
@@ -91,8 +84,8 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
                       <div>
                         <span className="w-full text-xs truncate line-clamp-2">
                           {item?.movie_id
-                            ? `${item.movie.title}`
-                            : `${item.season_number}x${item.episode_number} ${item.series.name}`}
+                            ? `${item.movie?.title}`
+                            : `${item.season_number}x${item.episode_number} ${item.series?.name}`}
                         </span>
                         <div className="text-xs opacity-50 line-clamp-1">{date}</div>
                       </div>
@@ -124,5 +117,36 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
     </LoadingPageComponents>
   );
 };
+
+interface IHistoryGrid {
+  history: (MoviesHistory | EpisodesHistory)[];
+  status: "error" | "success" | "loading";
+  hasScrollContainer?: boolean;
+  refetch: () => void;
+}
+
+interface ISeries {
+  id: number;
+  name: string;
+  poster: string;
+}
+
+interface IMovie {
+  id: number;
+  title: string;
+  poster: string;
+}
+
+interface IHistoryItem {
+  id: string;
+  datetime: Date;
+  user_id: string;
+  series_id?: number;
+  season_number?: number;
+  episode_number?: number;
+  series?: ISeries;
+  movie_id?: number;
+  movie?: IMovie;
+}
 
 export default HistoryGrid;

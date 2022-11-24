@@ -8,6 +8,7 @@ import MoviePoster from "../../../components/posters/MoviePoster";
 import PersonPoster from "../../../components/posters/PersonPoster";
 import TVPoster from "../../../components/posters/TVPoster";
 import { trpc } from "../../../utils/trpc";
+import { IPage } from "../movie";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const SearchPage = () => {
     trpc.multi.searchMulti.useInfiniteQuery(
       { query: query as string },
       {
-        getNextPageParam: (lastPage: any, allPages: any) => {
+        getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
           const nextPage = allPages.length + 1;
           return lastPage.results.length !== 0 ? nextPage : undefined;
         },
@@ -39,7 +40,7 @@ const SearchPage = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: any) => {
+                page.results.map((content) => {
                   if (content.media_type === "tv") {
                     return (
                       <TVPoster

@@ -1,6 +1,6 @@
 import ImageWithFallback from "../common/ImageWithFallback";
 
-const ProfileHeader = ({ image, name }: any) => (
+const ProfileHeader = ({ image, name }: { image: string; name: string }) => (
   <div className="max-w-6xl pt-24 m-auto">
     <div className="flex items-center">
       <ImageWithFallback

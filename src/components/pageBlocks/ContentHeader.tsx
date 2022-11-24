@@ -5,8 +5,9 @@ import WatchButton from "../watchButton";
 import GenresBlock from "./GenresBlock";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
-import JustWatch from "../common/JustWatch";
+import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
+import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 interface IContentHeader {
   watchButton?: {
@@ -16,17 +17,22 @@ interface IContentHeader {
   };
   cover?: string;
   poster: string;
-  genres?: string[];
+  genres?: {
+    id: number;
+    name: string;
+  }[];
   title: string;
   date?: string;
   description: string;
   score?: number;
   gender?: number;
-  justWatch?: any;
-  seriesProgression?: any;
+  justWatch?: { results: IJustWatchProps };
+  seriesProgression?: {
+    count: number;
+  }[];
   amountOfEpisodes?: number;
-  children?: any;
-  themeColor?: any;
+  children?: JSX.Element | JSX.Element[];
+  themeColor: IThemeColor;
   season?: string;
   episode?: string;
   refetchProgression?: () => void;

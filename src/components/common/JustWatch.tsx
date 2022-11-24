@@ -6,8 +6,23 @@ import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
 import ReactDOM from "react-dom";
 import Link from "next/link";
+import { IThemeColor } from "../watchButton/BaseWatchButton";
 
-export const providers: any = {
+interface IProvider {
+  name: string;
+  url: string;
+  searchUrl: string;
+}
+
+interface Provider {
+  Netflix: IProvider;
+  "Amazon Video": IProvider;
+  "Apple iTunes": IProvider;
+  "Microsoft Store": IProvider;
+  "Rakuten TV": IProvider;
+}
+
+export const providers: Provider = {
   Netflix: {
     name: "Netflix",
     url: "https://www.netflix.com/",
@@ -41,23 +56,18 @@ interface ConvertProviderToUrlProps {
 }
 
 const convertProviderToUrl = ({ provider, name }: ConvertProviderToUrlProps) => {
-  if (providers[provider]) {
-    return providers[provider].searchUrl + name;
+  if (providers[provider as keyof Provider]) {
+    return providers[provider as keyof Provider].searchUrl + name;
   } else {
     return "#";
   }
 };
 
-interface JustWatchProps {
-  justWatch: any;
-  themeColor: any;
-  name: string;
-}
-
 const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
   const session = useSession();
   const [modalOpen, setModalOpen] = useState(false);
-  const currentLocation = justWatch.results[session.data?.user?.profile?.region.toUpperCase() ?? "GB"];
+  const currentLocation =
+    justWatch.results[(session.data?.user?.profile?.region.toUpperCase() as keyof IJustWatchProps) ?? "GB"];
   const close = () => setModalOpen(false);
   const open = () => setModalOpen(true);
 
@@ -79,13 +89,12 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
       </motion.button>
 
       <AnimatePresence initial={false} mode="wait">
-        {modalOpen && <Modal handleClose={close} data={currentLocation} session={session} name={name} />}
+        {modalOpen && <Modal handleClose={close} data={currentLocation} name={name} />}
       </AnimatePresence>
     </div>
   );
 };
-
-const Backdrop = ({ children, onClick }: any) => {
+const Backdrop = ({ children, onClick }: { children: JSX.Element | JSX.Element[]; onClick: () => void }) => {
   return (
     <motion.div
       onClick={onClick}
@@ -99,7 +108,7 @@ const Backdrop = ({ children, onClick }: any) => {
   );
 };
 
-const Modal = ({ handleClose, data, name }: any) => {
+const Modal = ({ handleClose, data, name }: { handleClose: () => void; data: IProviders; name: string }) => {
   return ReactDOM.createPortal(
     <Backdrop onClick={handleClose}>
       <div
@@ -112,7 +121,7 @@ const Modal = ({ handleClose, data, name }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Streaming</p>
                 <HorizontalScrollContainer>
-                  {data.flatrate.map((item: any) => (
+                  {data.flatrate.map((item) => (
                     <Link
                       href={convertProviderToUrl({
                         provider: item.provider_name,
@@ -140,7 +149,7 @@ const Modal = ({ handleClose, data, name }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Rent</p>
                 <HorizontalScrollContainer>
-                  {data.rent.map((item: any) => (
+                  {data.rent.map((item) => (
                     <Link
                       href={convertProviderToUrl({
                         provider: item.provider_name,
@@ -168,7 +177,7 @@ const Modal = ({ handleClose, data, name }: any) => {
               <div className="pt-4">
                 <p className="pb-2 font-bold">Purchase</p>
                 <HorizontalScrollContainer>
-                  {data.buy.map((item: any) => (
+                  {data.buy.map((item) => (
                     <Link
                       href={convertProviderToUrl({
                         provider: item.provider_name,
@@ -206,5 +215,115 @@ const Modal = ({ handleClose, data, name }: any) => {
     document.body
   );
 };
+
+interface JustWatchProps {
+  justWatch: {
+    results: IJustWatchProps;
+  };
+  themeColor: IThemeColor;
+  name: string;
+}
+
+interface IProviderType {
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+  display_priority: number;
+}
+
+interface IProviders {
+  link: string;
+  free: IProviderType[];
+  flatrate: IProviderType[];
+  rent: IProviderType[];
+  buy: IProviderType[];
+}
+
+export interface IJustWatchProps {
+  AE: IProviders;
+  AR: IProviders;
+  AT: IProviders;
+  AU: IProviders;
+  BA: IProviders;
+  BB: IProviders;
+  BE: IProviders;
+  BG: IProviders;
+  BO: IProviders;
+  BR: IProviders;
+  BS: IProviders;
+  CA: IProviders;
+  CH: IProviders;
+  CI: IProviders;
+  CL: IProviders;
+  CO: IProviders;
+  CR: IProviders;
+  CZ: IProviders;
+  DE: IProviders;
+  DK: IProviders;
+  DO: IProviders;
+  DZ: IProviders;
+  EC: IProviders;
+  EG: IProviders;
+  ES: IProviders;
+  FI: IProviders;
+  FR: IProviders;
+  GB: IProviders;
+  GF: IProviders;
+  GH: IProviders;
+  GQ: IProviders;
+  GT: IProviders;
+  HK: IProviders;
+  HN: IProviders;
+  HR: IProviders;
+  HU: IProviders;
+  ID: IProviders;
+  IE: IProviders;
+  IL: IProviders;
+  IN: IProviders;
+  IQ: IProviders;
+  IT: IProviders;
+  JM: IProviders;
+  JP: IProviders;
+  KE: IProviders;
+  KR: IProviders;
+  LB: IProviders;
+  LY: IProviders;
+  MD: IProviders;
+  MU: IProviders;
+  MX: IProviders;
+  MY: IProviders;
+  MZ: IProviders;
+  NE: IProviders;
+  NG: IProviders;
+  NL: IProviders;
+  NO: IProviders;
+  NZ: IProviders;
+  PA: IProviders;
+  PE: IProviders;
+  PH: IProviders;
+  PL: IProviders;
+  PS: IProviders;
+  PT: IProviders;
+  PY: IProviders;
+  RO: IProviders;
+  RU: IProviders;
+  SA: IProviders;
+  SC: IProviders;
+  SE: IProviders;
+  SG: IProviders;
+  SI: IProviders;
+  SK: IProviders;
+  SN: IProviders;
+  SV: IProviders;
+  TH: IProviders;
+  TT: IProviders;
+  TW: IProviders;
+  TZ: IProviders;
+  UG: IProviders;
+  US: IProviders;
+  UY: IProviders;
+  VE: IProviders;
+  ZM: IProviders;
+}
 
 export default JustWatch;

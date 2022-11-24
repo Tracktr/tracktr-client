@@ -16,7 +16,7 @@ const SearchPage = () => {
     trpc.movie.searchMovie.useInfiniteQuery(
       { query: query as string },
       {
-        getNextPageParam: (lastPage: any, allPages: any) => {
+        getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
           const nextPage = allPages.length + 1;
           return lastPage.results.length !== 0 ? nextPage : undefined;
         },
@@ -37,7 +37,7 @@ const SearchPage = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: any) => {
+                page.results.map((content) => {
                   return (
                     <MoviePoster
                       id={content.id}
@@ -65,5 +65,57 @@ const SearchPage = () => {
     </div>
   );
 };
+
+interface KnownFor {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  media_type: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+interface Result {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  media_type: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+  watched: boolean;
+  watched_id: string | null;
+  first_air_date: string;
+  name: string;
+  origin_country: string[];
+  original_name: string;
+  gender?: number;
+  known_for: KnownFor[];
+  known_for_department: string;
+  profile_path: string;
+}
+
+export interface IPage {
+  page: number;
+  results: Result[];
+  total_pages: number;
+  total_results: number;
+}
 
 export default SearchPage;

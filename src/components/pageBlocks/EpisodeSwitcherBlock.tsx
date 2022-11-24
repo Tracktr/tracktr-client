@@ -3,7 +3,15 @@ import { useRouter } from "next/router";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
 
 interface EpisodeSwitcherBlockProps {
-  seasons: any;
+  seasons: {
+    air_date: string;
+    episode_count: number;
+    id: number;
+    name: string;
+    overview: string;
+    poster_path: string;
+    season_number: number;
+  }[];
 }
 
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
@@ -15,8 +23,8 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   };
 
   const hasNextEpisode = () => {
-    return seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`].episode_count <=
-      Number(episodeID)
+    return seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`]?.episode_count ||
+      0 <= Number(episodeID)
       ? false
       : true;
   };
