@@ -87,6 +87,31 @@ export const profileRouter = router({
       };
     }),
 
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const episodes = await ctx.prisma.episodesHistory.count({
+      where: {
+        user_id: ctx.session.user.profile.userId,
+        datetime: {
+          gte: new Date(Date.now() - 604800000),
+        },
+      },
+    });
+
+    const movies = await ctx.prisma.moviesHistory.count({
+      where: {
+        user_id: ctx.session.user.profile.userId,
+        datetime: {
+          gte: new Date(Date.now() - 604800000),
+        },
+      },
+    });
+
+    return {
+      episodes,
+      movies,
+    };
+  }),
+
   upNext: protectedProcedure.query(async ({ ctx }) => {
     const episodes = await ctx.prisma.episodesHistory.findMany({
       where: { user_id: ctx.session.user.profile.userId },
