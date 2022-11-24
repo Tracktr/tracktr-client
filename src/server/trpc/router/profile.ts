@@ -97,6 +97,8 @@ export const profileRouter = router({
       date: Date;
       count: number;
     }[] = [];
+    let episodeCounter = 0;
+    let movieCounter = 0;
 
     for (let i = 0; i < 7; i++) {
       const gte = new Date(getDateXDaysAgo(i + 1).setHours(0, 0, 0, 0));
@@ -112,7 +114,10 @@ export const profileRouter = router({
             },
           },
         })
-        .then((res) => episodeCounts.push({ date: gte, count: res }));
+        .then((res) => {
+          if (res > 0) episodeCounter++;
+          episodeCounts.push({ date: gte, count: res });
+        });
 
       await ctx.prisma.moviesHistory
         .count({
@@ -124,12 +129,17 @@ export const profileRouter = router({
             },
           },
         })
-        .then((res) => movieCounts.push({ date: gte, count: res }));
+        .then((res) => {
+          if (res > 0) movieCounter++;
+          movieCounts.push({ date: gte, count: res });
+        });
     }
 
     return {
       episodes: episodeCounts,
       movies: movieCounts,
+      episodeAmount: episodeCounter,
+      movieAmount: movieCounter,
     };
   }),
 
