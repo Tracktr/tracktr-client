@@ -16,7 +16,7 @@ const SearchPage = () => {
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.searchTV.useInfiniteQuery(
     { query: query as string },
     {
-      getNextPageParam: (lastPage: IPage, allPages: IPage) => {
+      getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
         const nextPage = allPages.length + 1;
         return lastPage.results.length !== 0 ? nextPage : undefined;
       },
