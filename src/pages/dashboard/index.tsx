@@ -8,7 +8,7 @@ import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
-import { ValueType, NameType } from "recharts/src/component/DefaultTooltipContent";
+import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 
 const DashboardPage = () => {
   const router = useRouter();
