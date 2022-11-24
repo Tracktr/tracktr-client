@@ -7,6 +7,25 @@ import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import MoviePoster from "../posters/MoviePoster";
 
+interface IMovie {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+  watched: boolean;
+  watched_id: string | null;
+}
+
 const MoviesInfiniteScroll = () => {
   const [filter, setFilter] = useState("popular");
   const MAX_PAGES = 5;
@@ -54,12 +73,12 @@ const MoviesInfiniteScroll = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: any) => {
+                page.results.map((content: IMovie) => {
                   return (
                     <MoviePoster
                       id={content.id}
                       imageSrc={`${content.poster_path}`}
-                      name={content.title || content.name}
+                      name={content.title}
                       key={content.id}
                       url={`movies/${content.id}`}
                       score={content.vote_average}

@@ -33,8 +33,6 @@ interface IEpisodesGrid {
 const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<number | undefined>();
 
-  console.log(episodes);
-
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
     onMutate: (e) => {
       setCurrentLoadingID(e.seriesId);
