@@ -23,10 +23,11 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   };
 
   const hasNextEpisode = () => {
-    return seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`]?.episode_count ||
-      0 <= Number(episodeID)
-      ? false
-      : true;
+    const episode_count = seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`]?.episode_count;
+
+    if (Number(episode_count) > Number(episodeID)) {
+      return true;
+    }
   };
 
   const previousEpisodePath = () => {
