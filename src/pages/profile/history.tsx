@@ -62,12 +62,7 @@ const HistoryPage = () => {
               </button>
             </div>
           </div>
-          <HistoryGrid
-            history={history?.history || []}
-            status={historyStatus}
-            refetchHistory={refetch}
-            refetchUpNext={() => console.log("I should change this")}
-          />
+          <HistoryGrid history={history?.history || []} status={historyStatus} refetch={refetch} />
         </div>
       )}
     </LoadingPageComponents>

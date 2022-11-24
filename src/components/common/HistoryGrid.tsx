@@ -14,17 +14,10 @@ interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
   status: "error" | "success" | "loading";
   hasScrollContainer?: boolean;
-  refetchHistory: () => void;
-  refetchUpNext: () => void;
+  refetch: () => void;
 }
 
-const HistoryGrid = ({
-  history,
-  status,
-  hasScrollContainer,
-  refetchHistory,
-  refetchUpNext,
-}: IHistoryGrid): JSX.Element => {
+const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
 
   const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
@@ -32,8 +25,7 @@ const HistoryGrid = ({
       setCurrentLoadingID(e.id);
     },
     onSuccess: () => {
-      refetchHistory();
-      refetchUpNext();
+      refetch();
     },
   });
 
@@ -42,7 +34,7 @@ const HistoryGrid = ({
       setCurrentLoadingID(e.id);
     },
     onSuccess: () => {
-      refetchHistory();
+      refetch();
     },
   });
 

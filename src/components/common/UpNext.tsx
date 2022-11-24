@@ -13,11 +13,10 @@ import { useState } from "react";
 interface IepisodesGrid {
   episodes: Episodes[];
   status: "error" | "success" | "loading";
-  refetchHistory: () => void;
-  refetchUpNext: () => void;
+  refetch: () => void;
 }
 
-const UpNext = ({ episodes, status, refetchHistory, refetchUpNext }: IepisodesGrid): JSX.Element => {
+const UpNext = ({ episodes, status, refetch }: IepisodesGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<number | undefined>();
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
@@ -25,8 +24,7 @@ const UpNext = ({ episodes, status, refetchHistory, refetchUpNext }: IepisodesGr
       setCurrentLoadingID(e.seriesId);
     },
     onSuccess: () => {
-      refetchUpNext();
-      refetchHistory();
+      refetch();
     },
   });
 

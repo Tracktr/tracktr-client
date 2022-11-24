@@ -18,7 +18,7 @@ const DashboardPage = () => {
     refetch: refetchHistory,
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
   const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
-  const { data: stats, status: statsStatus, refetch: refetchStats } = trpc.profile.stats.useQuery();
+  const { data: stats, refetch: refetchStats } = trpc.profile.stats.useQuery();
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
@@ -33,6 +33,12 @@ const DashboardPage = () => {
       );
 
     return null;
+  };
+
+  const refetch = () => {
+    refetchUpNext();
+    refetchHistory();
+    refetchStats();
   };
 
   return (
@@ -52,12 +58,7 @@ const DashboardPage = () => {
                     <div className="text-xl md:text-3xl">Up next</div>
                   </div>
                 </div>
-                <UpNext
-                  episodes={upNext?.result || []}
-                  status={upNextStatus}
-                  refetchHistory={refetchHistory}
-                  refetchUpNext={refetchUpNext}
-                />
+                <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
               </div>
             )}
             {stats?.history && stats?.history.length > 0 && (
@@ -92,8 +93,7 @@ const DashboardPage = () => {
                   hasScrollContainer
                   history={history?.history || []}
                   status={historyStatus}
-                  refetchHistory={refetchHistory}
-                  refetchUpNext={refetchUpNext}
+                  refetch={refetch}
                 />
               </div>
             )}
