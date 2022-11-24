@@ -69,7 +69,7 @@ const DashboardPage = () => {
                 </div>
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={stats?.history} margin={{ left: -50 }}>
-                    <XAxis dataKey="date" allowDecimals={false} interval={0} />
+                    <XAxis dataKey="date" allowDecimals={false} />
                     <YAxis dataKey="count" allowDecimals={false} tick={false} />
                     <Bar dataKey="count" fill="#FAC42C" />
                     <Tooltip content={<CustomTooltip />} />
