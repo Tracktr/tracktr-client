@@ -25,7 +25,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
+    <LoadingPageComponents status={sessionStatus === "unauthenticated" ? "success" : "loading"}>
       {() => (
         <div>
           <section className="py-16 sm:py-16 lg:py-24">
