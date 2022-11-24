@@ -58,15 +58,7 @@ const DashboardPage = () => {
                   You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 30 days
                 </div>
                 <ResponsiveContainer width="100%" height={200}>
-                  <BarChart
-                    data={stats?.history}
-                    margin={{
-                      top: 20,
-                      right: 0,
-                      left: 0,
-                      bottom: 0,
-                    }}
-                  >
+                  <BarChart data={stats?.history} margin={{ left: -40 }}>
                     <XAxis dataKey="date" allowDecimals={false} />
                     <YAxis dataKey="count" allowDecimals={false} />
                     <Bar dataKey="count" fill="#8884d8" />
