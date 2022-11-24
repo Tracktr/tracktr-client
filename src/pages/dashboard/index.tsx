@@ -42,7 +42,7 @@ const DashboardPage = () => {
   };
 
   return (
-    <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
+    <LoadingPageComponents status={sessionStatus === "authenticated" ? "success" : "loading"}>
       {() => (
         <div>
           <SearchHeader
