@@ -17,7 +17,10 @@ interface IContentHeader {
   };
   cover?: string;
   poster: string;
-  genres?: string[];
+  genres?: {
+    id: number;
+    name: string;
+  }[];
   title: string;
   date?: string;
   description: string;
@@ -26,7 +29,7 @@ interface IContentHeader {
   justWatch?: { results: IJustWatchProps };
   seriesProgression?: {
     count: number;
-  };
+  }[];
   amountOfEpisodes?: number;
   children?: JSX.Element | JSX.Element[];
   themeColor: IThemeColor;
