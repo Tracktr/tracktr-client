@@ -97,8 +97,8 @@ export const profileRouter = router({
     let movieCounter = 0;
 
     for (let i = 0; i < 14; i++) {
-      const gte = new Date(getDateXDaysAgo(i + 1).setHours(0, 0, 0, 0));
-      const lt = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
+      const gte = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
+      const lt = new Date(getDateXDaysAgo(i - 1).setHours(0, 0, 0, 0));
 
       await ctx.prisma.episodesHistory
         .count({
