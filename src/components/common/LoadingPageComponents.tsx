@@ -12,16 +12,16 @@ interface ILoadingPageComponents {
 
 const LoadingPageComponents = ({ status, children, posters }: ILoadingPageComponents) =>
   useMemo(() => {
-    NProgress.configure({ showSpinner: false });
+    typeof window !== "undefined" && NProgress.configure({ showSpinner: false });
 
     // TODO: Error component
     if (status === "error") {
-      NProgress.done();
+      typeof window !== "undefined" && NProgress.done();
       return <p className="max-w-6xl px-4 m-auto">Error</p>;
     }
 
     if (status === "loading") {
-      NProgress.start();
+      typeof window !== "undefined" && NProgress.start();
       if (posters) {
         return <LoadingPosters />;
       }
@@ -30,7 +30,7 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
     }
 
     if (status === "success") {
-      NProgress.done();
+      typeof window !== "undefined" && NProgress.done();
       if (typeof children === "function") {
         return (
           <AnimatePresence>
