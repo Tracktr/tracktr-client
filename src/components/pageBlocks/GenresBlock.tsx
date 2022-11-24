@@ -1,12 +1,17 @@
+import { IThemeColor } from "../watchButton/BaseWatchButton";
+
 interface GenresBlockProps {
-  genres?: string[];
-  themeColor?: any;
+  genres?: {
+    id: number;
+    name: string;
+  }[];
+  themeColor: IThemeColor;
 }
 
 const GenresBlock = ({ genres, themeColor }: GenresBlockProps) => {
   return (
     <div className="flex">
-      {genres?.map((genre: any) => (
+      {genres?.map((genre) => (
         <span
           key={genre.id}
           style={{
