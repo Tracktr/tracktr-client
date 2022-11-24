@@ -181,7 +181,11 @@ const Home: NextPage = () => {
               </div>
 
               <div className="max-w-3xl mx-auto mt-8 space-y-4 text-black md:mt-16">
-                <div className="transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50">
+                <div
+                  className={`overflow-hidden transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
+                    openFAQ.faq1 === true ? "max-h-96" : "max-h-20"
+                  }`}
+                >
                   <button
                     onClick={() =>
                       setOpenFAQ({
@@ -196,7 +200,7 @@ const Home: NextPage = () => {
                     <IoIosArrowUp className="w-6 h-6 text-gray-400" />
                   </button>
 
-                  <div className={`px-4 pb-5 sm:px-6 sm:pb-6 ${openFAQ.faq1 === true ? "" : "hidden"}`}>
+                  <div className={`px-4 pb-5 sm:px-6 sm:pb-6`}>
                     <p>
                       Creating an account is done with one click! <br />
                       Just press sign in and use one of your social media accounts to sign in!
@@ -206,7 +210,11 @@ const Home: NextPage = () => {
               </div>
 
               <div className="max-w-3xl mx-auto mt-8 space-y-4 text-black md:mt-4">
-                <div className="transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50">
+                <div
+                  className={`overflow-hidden transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
+                    openFAQ.faq2 === true ? "max-h-96" : "max-h-20"
+                  }`}
+                >
                   <button
                     onClick={() =>
                       setOpenFAQ({
@@ -221,7 +229,7 @@ const Home: NextPage = () => {
                     <IoIosArrowUp className="w-6 h-6 text-gray-400" />
                   </button>
 
-                  <div className={`px-4 pb-5 sm:px-6 sm:pb-6 ${openFAQ.faq2 === true ? "" : "hidden"}`}>
+                  <div className={`px-4 pb-5 sm:px-6 sm:pb-6`}>
                     <p>We&apos;re free, but we might add subscriptions later.</p>
                   </div>
                 </div>
