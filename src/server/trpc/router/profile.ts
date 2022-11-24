@@ -89,18 +89,20 @@ export const profileRouter = router({
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
-    const episodeCounts: {
-      date: Date;
+    const episodes: {
+      date: string;
       count: number;
+      type: "movie" | "episode";
     }[] = [];
-    const movieCounts: {
-      date: Date;
+    const movies: {
+      date: string;
       count: number;
+      type: "movie" | "episode";
     }[] = [];
     let episodeCounter = 0;
     let movieCounter = 0;
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 30; i++) {
       const gte = new Date(getDateXDaysAgo(i + 1).setHours(0, 0, 0, 0));
       const lt = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
 
@@ -116,7 +118,14 @@ export const profileRouter = router({
         })
         .then((res) => {
           if (res > 0) episodeCounter++;
-          episodeCounts.push({ date: gte, count: res });
+          episodes.push({
+            date: gte.toLocaleString("en-UK", {
+              month: "short",
+              day: "numeric",
+            }),
+            count: res,
+            type: "episode",
+          });
         });
 
       await ctx.prisma.moviesHistory
@@ -131,13 +140,27 @@ export const profileRouter = router({
         })
         .then((res) => {
           if (res > 0) movieCounter++;
-          movieCounts.push({ date: gte, count: res });
+          movies.push({
+            date: gte.toLocaleString("en-UK", {
+              month: "short",
+              day: "numeric",
+            }),
+            count: res,
+            type: "episode",
+          });
         });
     }
 
+    const sorted = episodes.sort((a, b) => {
+      if (new Date(a.date) > new Date(b.date)) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
     return {
-      episodes: episodeCounts,
-      movies: movieCounts,
+      episodes: sorted,
       episodeAmount: episodeCounter,
       movieAmount: movieCounter,
     };

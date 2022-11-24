@@ -7,6 +7,7 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
+import { Bar, BarChart, Legend, Tooltip, XAxis, YAxis } from "recharts";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -51,10 +52,25 @@ const DashboardPage = () => {
               </div>
             )}
             <div className="my-6">
-              <div className="text-xl md:text-3xl">Your week in review</div>
+              <div className="text-xl md:text-3xl">Your month in review</div>
               <div className="py-1">
-                You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies.
+                You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 30 days
               </div>
+              <BarChart
+                width={1000}
+                height={300}
+                data={stats?.episodes}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <XAxis dataKey="date" allowDecimals={false} />
+                <YAxis dataKey="count" allowDecimals={false} />
+                <Bar dataKey="count" fill="#8884d8" />
+              </BarChart>
             </div>
             {history?.history && history?.history?.length > 0 && (
               <div className="my-6">
