@@ -17,6 +17,7 @@ const DashboardPage = () => {
     refetch: refetchHistory,
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
   const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
+  const { data: stats, status: statsStatus, refetch: refetchStats } = trpc.profile.stats.useQuery();
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
@@ -49,6 +50,13 @@ const DashboardPage = () => {
                 />
               </div>
             )}
+            <div className="my-6">
+              <div className="text-xl md:text-3xl">Your week in review</div>
+              <div className="py-1">
+                Last week you watched {stats?.episodes ? stats.episodes : 0} episodes and{" "}
+                {stats?.movies ? stats?.movies : 0} movies.
+              </div>
+            </div>
             {history?.history && history?.history?.length > 0 && (
               <div className="my-6">
                 <div className="items-center align-middle md:flex">
