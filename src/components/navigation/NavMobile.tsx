@@ -53,7 +53,7 @@ const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
             <div className="py-4 mt-auto text-white">
               {session ? (
                 <>
-                  <button onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4">
+                  <div onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4">
                     <Image
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
@@ -66,7 +66,7 @@ const NavMobile = ({ toggleNavMobile, submenuItems }: any) => {
                     <button className="ml-auto mr-4 text-2xl" onClick={() => setSubMenu(!submenu)}>
                       <BiChevronDown />
                     </button>
-                  </button>
+                  </div>
                   <div
                     className={`text-sm text-center ${
                       submenu ? "h-28" : "h-0 overflow-hidden"
