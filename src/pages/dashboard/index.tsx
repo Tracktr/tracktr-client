@@ -7,6 +7,7 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const DashboardPage = () => {
     refetch: refetchHistory,
   } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
   const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
+  const { data: stats, refetch: refetchStats } = trpc.profile.stats.useQuery();
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
@@ -24,8 +26,23 @@ const DashboardPage = () => {
     }
   });
 
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length)
+      return (
+        <div className="px-5 py-2 text-sm rounded-full bg-slate-500 active:border-none">{`Watched ${payload[0].value} items`}</div>
+      );
+
+    return null;
+  };
+
+  const refetch = () => {
+    refetchUpNext();
+    refetchHistory();
+    refetchStats();
+  };
+
   return (
-    <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
+    <LoadingPageComponents status={sessionStatus === "authenticated" ? "success" : "loading"}>
       {() => (
         <div>
           <SearchHeader
@@ -41,12 +58,23 @@ const DashboardPage = () => {
                     <div className="text-xl md:text-3xl">Up next</div>
                   </div>
                 </div>
-                <UpNext
-                  episodes={upNext?.result || []}
-                  status={upNextStatus}
-                  refetchHistory={refetchHistory}
-                  refetchUpNext={refetchUpNext}
-                />
+                <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
+              </div>
+            )}
+            {stats?.history && stats?.history.length > 0 && (
+              <div className="my-6">
+                <div className="text-xl md:text-3xl">Your two weeks</div>
+                <div className="pt-1 pb-5">
+                  You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
+                </div>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={stats?.history} margin={{ left: -50 }}>
+                    <XAxis dataKey="date" allowDecimals={false} />
+                    <YAxis dataKey="count" allowDecimals={false} tick={false} />
+                    <Bar dataKey="count" fill="#FAC42C" />
+                    <Tooltip content={<CustomTooltip />} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             )}
             {history?.history && history?.history?.length > 0 && (
@@ -65,8 +93,7 @@ const DashboardPage = () => {
                   hasScrollContainer
                   history={history?.history || []}
                   status={historyStatus}
-                  refetchHistory={refetchHistory}
-                  refetchUpNext={refetchUpNext}
+                  refetch={refetch}
                 />
               </div>
             )}

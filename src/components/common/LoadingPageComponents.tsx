@@ -2,6 +2,7 @@
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingPosters from "../posters/LoadingPoster";
+import NProgress from "nprogress";
 
 interface ILoadingPageComponents {
   status: "loading" | "error" | "success" | "idle";
@@ -11,12 +12,16 @@ interface ILoadingPageComponents {
 
 const LoadingPageComponents = ({ status, children, posters }: ILoadingPageComponents) =>
   useMemo(() => {
+    typeof window !== "undefined" && NProgress.configure({ showSpinner: false });
+
     // TODO: Error component
     if (status === "error") {
-      return <p className="pt-64">Error</p>;
+      typeof window !== "undefined" && NProgress.done();
+      return <p className="max-w-6xl px-4 m-auto">Error</p>;
     }
 
     if (status === "loading") {
+      typeof window !== "undefined" && NProgress.start();
       if (posters) {
         return <LoadingPosters />;
       }
@@ -25,6 +30,7 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
     }
 
     if (status === "success") {
+      typeof window !== "undefined" && NProgress.done();
       if (typeof children === "function") {
         return (
           <AnimatePresence>

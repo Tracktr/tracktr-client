@@ -1,4 +1,5 @@
 import { z } from "zod";
+import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
@@ -86,6 +87,84 @@ export const profileRouter = router({
         pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
       };
     }),
+
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const items: {
+      date: string;
+      count: number;
+    }[] = [];
+    let episodeCounter = 0;
+    let movieCounter = 0;
+
+    for (let i = 0; i < 14; i++) {
+      const gte = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
+      const lt = new Date(getDateXDaysAgo(i - 1).setHours(0, 0, 0, 0));
+
+      await ctx.prisma.episodesHistory
+        .count({
+          where: {
+            user_id: ctx.session.user.profile.userId,
+            datetime: {
+              gte,
+              lt,
+            },
+          },
+        })
+        .then((res) => {
+          if (res > 0) episodeCounter++;
+          items.push({
+            date: gte.toLocaleString("en-UK", {
+              month: "short",
+              day: "numeric",
+            }),
+            count: res,
+          });
+        });
+
+      await ctx.prisma.moviesHistory
+        .count({
+          where: {
+            user_id: ctx.session.user.profile.userId,
+            datetime: {
+              gte,
+              lt,
+            },
+          },
+        })
+        .then((res) => {
+          if (res > 0) movieCounter++;
+          items.push({
+            date: gte.toLocaleString("en-UK", {
+              month: "short",
+              day: "numeric",
+            }),
+            count: res,
+          });
+        });
+    }
+
+    const result = items.reduce((acc: any, { date, count, itemType }: any) => {
+      acc[date] ??= { date: date, count: [] };
+      acc[date].count = Number(acc[date].count) + Number(count);
+      acc[date].itemType = itemType;
+
+      return acc;
+    }, {});
+
+    const sorted = Object.values(result).sort((a: any, b: any) => {
+      if (new Date(a.date) > new Date(b.date)) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    return {
+      history: sorted,
+      episodeAmount: episodeCounter,
+      movieAmount: movieCounter,
+    };
+  }),
 
   upNext: protectedProcedure.query(async ({ ctx }) => {
     const episodes = await ctx.prisma.episodesHistory.findMany({
