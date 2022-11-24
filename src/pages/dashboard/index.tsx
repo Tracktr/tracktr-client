@@ -7,7 +7,7 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
-import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -25,6 +25,15 @@ const DashboardPage = () => {
       router.push("/");
     }
   });
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length)
+      return (
+        <div className="px-5 py-2 text-sm rounded-full bg-slate-500 active:border-none">{`Watched ${payload[0].value} items`}</div>
+      );
+
+    return null;
+  };
 
   return (
     <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
@@ -53,15 +62,16 @@ const DashboardPage = () => {
             )}
             {stats?.history && stats?.history.length > 0 && (
               <div className="my-6">
-                <div className="text-xl md:text-3xl">Your month in review</div>
-                <div className="py-1">
-                  You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 30 days
+                <div className="text-xl md:text-3xl">Your two weeks</div>
+                <div className="pt-1 pb-5">
+                  You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
                 </div>
                 <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={stats?.history} margin={{ left: -40 }}>
-                    <XAxis dataKey="date" allowDecimals={false} />
-                    <YAxis dataKey="count" allowDecimals={false} />
+                  <BarChart data={stats?.history} margin={{ left: -50 }}>
+                    <XAxis dataKey="date" allowDecimals={false} interval={0} />
+                    <YAxis dataKey="count" allowDecimals={false} tick={false} />
                     <Bar dataKey="count" fill="#8884d8" />
+                    <Tooltip content={<CustomTooltip />} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
