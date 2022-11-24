@@ -63,7 +63,6 @@ export const movieRouter = router({
       if (ctx?.session?.user) {
         json.results = await Promise.all(
           json.results.map(async (movie: IMovie) => {
-            console.log(movie);
             const watched = await ctx.prisma.moviesHistory.findFirst({
               where: {
                 user_id: ctx?.session?.user?.id as string,

@@ -156,7 +156,6 @@ export const profileRouter = router({
     }, {});
 
     const sorted = Object.values(result).sort((a: IStatItem, b: IStatItem) => {
-      console.log(a);
       if (new Date(a.date) > new Date(b.date)) {
         return 1;
       } else {

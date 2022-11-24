@@ -47,7 +47,7 @@ const ProfilePage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <div className="max-w-6xl m-auto">
-          <ProfileHeader image={data?.image} name={data?.name} />
+          <ProfileHeader image={String(data?.image)} name={String(data?.name)} />
           <div className="p-4 mx-4 mt-16 text-white rounded-md md:max-w-md bg-zinc-900">
             <form onSubmit={onSubmit}>
               <p className="pb-6 text-2xl font-bold">Settings</p>
