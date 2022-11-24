@@ -10,7 +10,6 @@ import TVPoster from "../posters/TVPoster";
 interface IShow {
   backdrop_path: string;
   first_air_date: string;
-  genre_ids: any[];
   id: number;
   name: string;
   origin_country: string[];
