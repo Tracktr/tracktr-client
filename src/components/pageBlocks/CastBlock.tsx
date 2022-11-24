@@ -18,8 +18,6 @@ interface ICast {
 }
 
 const CastBlock = ({ cast }: ICast) => {
-  console.log(cast);
-
   if (cast.length > 0) {
     return (
       <div className="relative mx-1 md:mx-0 md:mb-24">

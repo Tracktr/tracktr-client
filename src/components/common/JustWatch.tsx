@@ -239,7 +239,7 @@ interface IProviders {
   buy: IProviderType[];
 }
 
-interface IJustWatchProps {
+export interface IJustWatchProps {
   AE: IProviders;
   AR: IProviders;
   AT: IProviders;
