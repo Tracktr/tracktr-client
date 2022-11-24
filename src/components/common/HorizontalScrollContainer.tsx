@@ -3,7 +3,7 @@ import "react-indiana-drag-scroll/dist/style.css";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-const HorizontalScrollContainer = ({ children }: any) => {
+const HorizontalScrollContainer = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   const { ref } = useScrollContainer();
 
   return (
