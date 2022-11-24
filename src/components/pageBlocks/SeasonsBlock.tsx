@@ -3,7 +3,15 @@ import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import TVPoster from "../posters/TVPoster";
 
 interface ISeasons {
-  seasons: any;
+  seasons: {
+    air_date: string;
+    episode_count: number;
+    id: number;
+    name: string;
+    overview: string;
+    poster_path: string;
+    season_number: number;
+  }[];
 }
 
 const SeasonsBlock = ({ seasons }: ISeasons) => {
@@ -18,7 +26,7 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
           {seasons
             .slice(0)
             .reverse()
-            .map((item: any) => (
+            .map((item) => (
               <div key={item.id} className="flex-shrink-0">
                 <TVPoster
                   imageSrc={item.poster_path}
