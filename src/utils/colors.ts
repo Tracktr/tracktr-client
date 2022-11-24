@@ -2,7 +2,7 @@ import { getAverageColor } from "fast-average-color-node";
 import { BackdropImage, PosterImage } from "./generateImages";
 
 interface IConvertImageToPrimaryColor {
-  image: any;
+  image: string;
   fallback?: string | undefined;
 }
 

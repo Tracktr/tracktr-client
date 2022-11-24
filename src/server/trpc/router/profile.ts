@@ -3,6 +3,11 @@ import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
+interface IStatItem {
+  date: string;
+  count: number;
+}
+
 export const profileRouter = router({
   profileBySession: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findFirst({
@@ -143,15 +148,15 @@ export const profileRouter = router({
         });
     }
 
-    const result = items.reduce((acc: any, { date, count, itemType }: any) => {
+    const result: IStatItem[] = items.reduce((acc: any, { date, count, itemType }: any) => {
       acc[date] ??= { date: date, count: [] };
       acc[date].count = Number(acc[date].count) + Number(count);
-      acc[date].itemType = itemType;
 
       return acc;
     }, {});
 
-    const sorted = Object.values(result).sort((a: any, b: any) => {
+    const sorted = Object.values(result).sort((a: IStatItem, b: IStatItem) => {
+      console.log(a);
       if (new Date(a.date) > new Date(b.date)) {
         return 1;
       } else {
@@ -192,7 +197,7 @@ export const profileRouter = router({
         });
 
         // Removes all episodes that don't have a next episode
-        const nextEpisode: any = season?.episodes.filter((ep) => {
+        const nextEpisode = season?.episodes.filter((ep) => {
           if (ep.episode_number === lastEpisode.episode_number + 1 && ep.season_number === lastEpisode.season_number) {
             return true;
           } else {
@@ -217,7 +222,7 @@ export const profileRouter = router({
             },
           });
 
-          const nextEpisode: any = nextSeason?.episodes.filter((ep) => {
+          const nextEpisode = nextSeason?.episodes.filter((ep) => {
             if (ep.episode_number === 1 && ep.season_number === lastEpisode.season_number + 1) {
               return true;
             } else {
@@ -237,7 +242,7 @@ export const profileRouter = router({
 
     return {
       result: paginate(
-        result.filter((el: any) => {
+        result.filter((el) => {
           if (el !== undefined) {
             return true;
           }
