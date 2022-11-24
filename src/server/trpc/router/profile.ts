@@ -148,7 +148,7 @@ export const profileRouter = router({
         });
     }
 
-    const result: IStatItem[] = items.reduce((acc: any, { date, count, itemType }: any) => {
+    const result: IStatItem[] = items.reduce((acc: any, { date, count }: any) => {
       acc[date] ??= { date: date, count: [] };
       acc[date].count = Number(acc[date].count) + Number(count);
 
