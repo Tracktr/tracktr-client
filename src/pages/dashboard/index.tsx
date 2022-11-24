@@ -26,10 +26,6 @@ const DashboardPage = () => {
     }
   });
 
-  const handleMouseOver = (e) => {
-    console.log("nugget", e);
-  };
-
   return (
     <LoadingPageComponents status={sessionStatus === "loading" ? "loading" : "success"}>
       {() => (
@@ -73,7 +69,7 @@ const DashboardPage = () => {
                   >
                     <XAxis dataKey="date" allowDecimals={false} />
                     <YAxis dataKey="count" allowDecimals={false} />
-                    <Bar dataKey="count" fill="#8884d8" onMouseOver={handleMouseOver} />
+                    <Bar dataKey="count" fill="#8884d8" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

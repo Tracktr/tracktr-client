@@ -89,20 +89,14 @@ export const profileRouter = router({
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
-    const episodes: {
+    const items: {
       date: string;
       count: number;
-      type: "movie" | "episode";
-    }[] = [];
-    const movies: {
-      date: string;
-      count: number;
-      type: "movie" | "episode";
     }[] = [];
     let episodeCounter = 0;
     let movieCounter = 0;
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 7; i++) {
       const gte = new Date(getDateXDaysAgo(i + 1).setHours(0, 0, 0, 0));
       const lt = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
 
@@ -118,13 +112,12 @@ export const profileRouter = router({
         })
         .then((res) => {
           if (res > 0) episodeCounter++;
-          episodes.push({
+          items.push({
             date: gte.toLocaleString("en-UK", {
               month: "short",
               day: "numeric",
             }),
             count: res,
-            type: "episode",
           });
         });
 
@@ -140,27 +133,26 @@ export const profileRouter = router({
         })
         .then((res) => {
           if (res > 0) movieCounter++;
-          movies.push({
+          items.push({
             date: gte.toLocaleString("en-UK", {
               month: "short",
               day: "numeric",
             }),
             count: res,
-            type: "episode",
           });
         });
     }
 
-    const sorted = episodes.sort((a, b) => {
-      if (new Date(a.date) > new Date(b.date)) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
+    const result = items.reduce((acc: any, { date, count, itemType }: any) => {
+      acc[date] ??= { date: date, count: [] };
+      acc[date].count = Number(acc[date].count) + Number(count);
+      acc[date].itemType = itemType;
+
+      return acc;
+    }, {});
 
     return {
-      episodes: sorted,
+      history: result,
       episodeAmount: episodeCounter,
       movieAmount: movieCounter,
     };
