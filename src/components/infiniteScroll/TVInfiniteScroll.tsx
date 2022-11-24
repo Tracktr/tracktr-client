@@ -7,6 +7,22 @@ import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import TVPoster from "../posters/TVPoster";
 
+interface IShow {
+  backdrop_path: string;
+  first_air_date: string;
+  genre_ids: any[];
+  id: number;
+  name: string;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
 const TVInfiniteScroll = () => {
   const [filter, setFilter] = useState("popular");
   const MAX_PAGES = 5;
@@ -52,11 +68,11 @@ const TVInfiniteScroll = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: any) => {
+                page.results.map((content: IShow) => {
                   return (
                     <TVPoster
                       imageSrc={`${content.poster_path}`}
-                      name={content.title || content.name}
+                      name={content.name}
                       key={content.id}
                       url={`tv/${content.id}`}
                       score={content.vote_average}
