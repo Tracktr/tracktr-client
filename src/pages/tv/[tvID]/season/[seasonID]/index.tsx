@@ -40,6 +40,7 @@ const TVPage = () => {
           poster={data.poster_path}
           title={data.name}
           description={data.overview}
+          justWatch={tvShow["watch/providers"]}
           themeColor={tvShow.theme_color}
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
