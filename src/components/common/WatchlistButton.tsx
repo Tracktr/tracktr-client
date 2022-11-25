@@ -10,12 +10,18 @@ interface IWatchlistButtonProps {
 }
 
 const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProps) => {
-  const { data, status, refetch, isRefetching } = trpc.watchlist.checkItemInWatchlist.useQuery({
+  const { data, refetch, isRefetching } = trpc.watchlist.checkItemInWatchlist.useQuery({
     itemID: Number(movieID || seriesID),
   });
 
   const addToWatchlist = trpc.watchlist.addItem.useMutation({
     onSuccess: () => refetch(),
+  });
+
+  const deleteFromWatchlist = trpc.watchlist.removeItem.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
   });
 
   return (
@@ -37,13 +43,19 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
         </button>
       ) : (
         <button
-          onClick={() =>
-            addToWatchlist.mutate({
-              watchlist_id: "clawhxsx9000297to1cn7nc08",
-              movie_id: movieID,
-              series_id: seriesID,
-            })
-          }
+          onClick={() => {
+            if (data?.id) {
+              deleteFromWatchlist.mutate({
+                id: data?.id,
+              });
+            } else {
+              addToWatchlist.mutate({
+                watchlist_id: "clawhxsx9000297to1cn7nc08",
+                movie_id: movieID,
+                series_id: seriesID,
+              });
+            }
+          }}
           style={{
             backgroundColor: themeColor.hex,
           }}

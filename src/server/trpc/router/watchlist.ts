@@ -78,10 +78,14 @@ export const watchlistRouter = router({
             },
           },
         },
+        include: {
+          WatchlistItem: true,
+        },
       });
 
       return {
         inWatchlist: Boolean(watchlist),
+        id: watchlist?.WatchlistItem[0]?.id,
       };
     }),
 
