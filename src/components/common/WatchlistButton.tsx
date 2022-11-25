@@ -1,4 +1,4 @@
-import { BsListCheck, BsList } from "react-icons/Bs";
+import { BsListCheck, BsList } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
