@@ -1,24 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ImSpinner2 } from "react-icons/im";
+import { MdDelete } from "react-icons/md";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
-import MoviePoster from "../../components/posters/MoviePoster";
-import TVPoster from "../../components/posters/TVPoster";
+import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
 const WatchlistPage = () => {
+  const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
+
   const router = useRouter();
   const session = useSession();
   const [page, setPage] = useState<number>(1);
+
   const { data, status } = trpc.profile.profileBySession.useQuery();
   const {
     data: watchlist,
     status: watchlistStatus,
     refetch,
-    isRefetching,
   } = trpc.watchlist.getUserWatchlist.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
   useEffect(() => {
@@ -35,6 +40,19 @@ const WatchlistPage = () => {
   const previousPage = () => {
     setPage(page - 1);
     refetch();
+  };
+
+  const deleteItem = trpc.watchlist.removeItem.useMutation({
+    onMutate: (e) => {
+      setCurrentLoadingID(e.id);
+    },
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    deleteItem.mutate({ id });
   };
 
   return (
@@ -86,35 +104,42 @@ const WatchlistPage = () => {
                       className="relative w-[170px] group"
                       key={item.id}
                     >
-                      {watchlist.WatchlistItem &&
-                        watchlist.WatchlistItem.map((item) => {
-                          if (item.series_id) {
-                            return (
-                              <TVPoster
-                                imageSrc={`${item.series?.poster}`}
-                                name={String(item.series?.name)}
-                                key={item.series?.id}
-                                url={`/tv/${item.series?.id}`}
-                              />
-                            );
-                          }
-
-                          if (item.movie_id) {
-                            return (
-                              <MoviePoster
-                                id={Number(item.movies?.id)}
-                                imageSrc={`${item.movies?.poster}`}
-                                name={String(item.movies?.title)}
-                                key={item.movies?.id}
-                                url={`/movies/${item.movies?.id}`}
-                                watched={null}
-                                watched_id={null}
-                                refetch={refetch}
-                                fetchStatus={isRefetching}
-                              />
-                            );
-                          }
-                        })}
+                      <Link href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}>
+                        <a className="relative w-[170px] group">
+                          <Image
+                            alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
+                            src={PosterImage({
+                              path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),
+                              size: "sm",
+                            })}
+                            width="170px"
+                            height="240px"
+                            className="rounded"
+                          />
+                          <div>
+                            <span className="w-full text-xs truncate line-clamp-2">
+                              {item?.movie_id ? item.movies?.title : item.series?.name}
+                            </span>
+                          </div>
+                        </a>
+                      </Link>
+                      <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+                        {deleteItem.isLoading && item.id === currentLoadingID ? (
+                          <ImSpinner2 className="w-6 h-6 animate-spin" />
+                        ) : (
+                          <button
+                            className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDelete(item.id);
+                            }}
+                            title="Remove from watchlist"
+                          >
+                            <MdDelete className="text-2xl" />
+                          </button>
+                        )}
+                      </div>
                     </motion.div>
                   );
                 })}
