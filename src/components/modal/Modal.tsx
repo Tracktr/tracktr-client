@@ -15,8 +15,24 @@ const Backdrop = ({ children, onClick }: { children: JSX.Element | JSX.Element[]
   );
 };
 
+const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
+  return (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className="w-full h-auto max-w-xl px-4 text-white rounded-md shadow-xl bg-primaryBackground"
+    >
+      {children}
+    </div>
+  );
+};
+
 const Modal = ({ handleClose, children }: { handleClose: () => void; children: JSX.Element | JSX.Element[] }) => {
-  return ReactDOM.createPortal(<Backdrop onClick={handleClose}>{children}</Backdrop>, document.body);
+  return ReactDOM.createPortal(
+    <Backdrop onClick={handleClose}>
+      <ModalWrapper>{children}</ModalWrapper>
+    </Backdrop>,
+    document.body
+  );
 };
 
 export default Modal;
