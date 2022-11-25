@@ -44,6 +44,7 @@ const TVPage = () => {
           themeColor={tvShow.theme_color}
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
+          videos={tvShow.videos}
         >
           <EpisodesBlock episodes={data.episodes} refetch={refetch} fetchStatus={isRefetching} />
           <CastBlock cast={data.credits.cast} />

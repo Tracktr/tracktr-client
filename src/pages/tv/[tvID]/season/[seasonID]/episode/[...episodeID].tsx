@@ -37,6 +37,7 @@ const EpisodePage = () => {
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
           refetchProgression={refetch}
+          videos={tvShow.videos}
         >
           <CastBlock cast={episodeData.credits.cast} />
           <EpisodeSwitcherBlock seasons={tvShow.seasons} />
