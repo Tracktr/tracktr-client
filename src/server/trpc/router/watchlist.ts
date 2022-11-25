@@ -1,3 +1,4 @@
+import { WatchlistItem } from "@prisma/client";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -25,8 +26,36 @@ export const watchlistRouter = router({
         },
       });
 
-      if (watchlist?.WatchlistItem)
+      if (watchlist?.WatchlistItem) {
         watchlist.WatchlistItem = paginate(watchlist?.WatchlistItem, input.pageSize, input.page);
+
+        if (ctx?.session?.user) {
+          watchlist.WatchlistItem = await Promise.all(
+            watchlist.WatchlistItem.map(async (item) => {
+              if (item.movie_id) {
+                const watched = await ctx.prisma.moviesHistory.findFirst({
+                  where: {
+                    user_id: ctx?.session?.user?.id as string,
+                    movie_id: item?.movies?.id,
+                  },
+                });
+
+                if (watched) {
+                  return { ...item, watched: true, watched_id: watched.id };
+                } else {
+                  return { ...item, watched: false, watched_id: null };
+                }
+              } else {
+                return { ...item, watched: false, watched_id: null };
+              }
+            })
+          );
+        } else {
+          watchlist.WatchlistItem = watchlist.WatchlistItem.map((item) => {
+            return { ...item, watched: false };
+          });
+        }
+      }
 
       return {
         ...watchlist,
