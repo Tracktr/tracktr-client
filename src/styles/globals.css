@@ -15,3 +15,16 @@
     height: -webkit-fill-available;
   }
 }
+
+/* Fader for scroll wrappers */
+.should_fade::after {
+  content: "";
+  width: 60px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(to right, rgba(15, 15, 15, 0) 0%, rgb(15, 15, 15) 50%);
+  will-change: opacity;
+  pointer-events: none;
+}

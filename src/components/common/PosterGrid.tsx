@@ -8,7 +8,7 @@ interface IPosterGrid {
 const PosterGrid = ({ children, hasScrollContainer = false }: IPosterGrid) => {
   if (hasScrollContainer) {
     return (
-      <HorizontalScrollContainer>
+      <HorizontalScrollContainer should_fade={false}>
         <div className="flex gap-4">{children}</div>
       </HorizontalScrollContainer>
     );
