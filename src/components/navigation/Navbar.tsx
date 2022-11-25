@@ -7,6 +7,7 @@ import NavButton from "./Navbutton";
 import { BiMenuAltRight } from "react-icons/bi";
 import NavMobile from "./NavMobile";
 import ImageWithFallback from "../common/ImageWithFallback";
+import { SignupWindow } from "../../pages/google-signin";
 
 export const navLinks = [
   { href: "/movies", text: "Movies", active: false },
@@ -123,7 +124,11 @@ const Navbar = () => {
                         </motion.div>
                       </motion.div>
                     ) : (
-                      <NavButton href="/api/auth/signin" text="Sign in" active={false} />
+                      <li className={`inline-block text-white list-none group`}>
+                        <button onClick={() => SignupWindow()}>
+                          <a className={`group-hover:text-primary px-4 py-2 inline-block`}>Sign in</a>
+                        </button>
+                      </li>
                     )}
                   </div>
                   <div className="flex lg:hidden">
