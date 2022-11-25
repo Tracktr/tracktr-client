@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
+import { TiDeleteOutline } from "react-icons/ti";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
@@ -24,6 +26,7 @@ const WatchlistPage = () => {
     data: watchlist,
     status: watchlistStatus,
     refetch,
+    isRefetching,
   } = trpc.watchlist.getUserWatchlist.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
   useEffect(() => {
@@ -54,6 +57,16 @@ const WatchlistPage = () => {
   const handleDelete = (id: string) => {
     deleteItem.mutate({ id });
   };
+
+  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
+
+  const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   return (
     <LoadingPageComponents
@@ -93,7 +106,7 @@ const WatchlistPage = () => {
           <PosterGrid hasScrollContainer={false}>
             <AnimatePresence mode="popLayout" initial={false}>
               {watchlist?.WatchlistItem &&
-                watchlist.WatchlistItem.map((item) => {
+                watchlist.WatchlistItem.map((item: any) => {
                   return (
                     <motion.div
                       layout
@@ -123,12 +136,37 @@ const WatchlistPage = () => {
                           </div>
                         </a>
                       </Link>
-                      <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                        {deleteItem.isLoading && item.id === currentLoadingID ? (
+                      <div className="flex pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+                        {item.movie_id &&
+                          ((markAsWatched.isLoading || deleteFromWatched.isLoading || isRefetching) &&
+                          item.movies.id === currentLoadingID ? (
+                            <ImSpinner2 className="w-6 h-6 animate-spin" />
+                          ) : (
+                            <button
+                              disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
+                              className={`text-2xl transition-all duration-300 ease-in-out ${
+                                item.watched ? "hover:text-red-500" : "hover:text-white"
+                              }`}
+                              onClick={() => {
+                                if (item.watched && item.watched_id) {
+                                  setCurrentLoadingID(item.movies.id);
+                                  deleteFromWatched.mutate({ id: item.watched_id });
+                                } else {
+                                  setCurrentLoadingID(item.movies.id);
+                                  markAsWatched.mutate({
+                                    movieId: item.movies.id,
+                                  });
+                                }
+                              }}
+                            >
+                              {item.watched ? <MdDelete /> : <AiOutlineCheckCircle />}
+                            </button>
+                          ))}
+                        {(deleteItem.isLoading || markAsWatched.isLoading) && item.id === currentLoadingID ? (
                           <ImSpinner2 className="w-6 h-6 animate-spin" />
                         ) : (
                           <button
-                            className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                            className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -136,7 +174,7 @@ const WatchlistPage = () => {
                             }}
                             title="Remove from watchlist"
                           >
-                            <MdDelete className="text-2xl" />
+                            <TiDeleteOutline className="text-2xl" />
                           </button>
                         )}
                       </div>
