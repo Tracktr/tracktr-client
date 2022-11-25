@@ -30,7 +30,7 @@ const DashboardPage = () => {
   const CustomTooltip = ({ active, payload }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length)
       return (
-        <div className="px-5 py-2 text-sm text-black rounded-full shadow-xl bg-primary active:border-none">{`Watched ${
+        <div className="px-5 py-2 text-sm text-black rounded-full shadow-xl outline-none bg-primary active:border-none">{`Watched ${
           payload[0] !== undefined && payload[0].value
         } items`}</div>
       );
@@ -75,7 +75,7 @@ const DashboardPage = () => {
                     <XAxis dataKey="date" allowDecimals={false} />
                     <YAxis dataKey="count" allowDecimals={false} tick={false} />
                     <Bar dataKey="count" fill="#f9bd13" />
-                    <Tooltip cursor={false} content={<CustomTooltip />} />
+                    <Tooltip wrapperStyle={{ outline: "none" }} cursor={false} content={<CustomTooltip />} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
