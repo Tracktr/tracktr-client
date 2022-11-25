@@ -104,7 +104,13 @@ const ContentHeader = ({
                 />
               )}
 
-              <WatchlistButton themeColor={themeColor} />
+              {watchButton && session.status === "authenticated" && (
+                <WatchlistButton
+                  themeColor={themeColor}
+                  movieID={!watchButton?.episodeID ? watchButton?.itemID : undefined}
+                  seriesID={watchButton?.episodeID ? watchButton?.episodeID : undefined}
+                />
+              )}
               {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
                 <div className="pt-4 pb-4 md:row-start-auto">

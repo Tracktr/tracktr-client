@@ -1,13 +1,25 @@
 import { MdList } from "react-icons/md";
+import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 interface IWatchlistButtonProps {
   themeColor: IThemeColor;
+  movieID: number | undefined;
+  seriesID: number | undefined;
 }
 
-const WatchlistButton = ({ themeColor }: IWatchlistButtonProps) => {
+const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProps) => {
+  const addToWatchlist = trpc.watchlist.addItem.useMutation();
+
   return (
     <button
+      onClick={() =>
+        addToWatchlist.mutate({
+          watchlist_id: "clawhxsx9000297to1cn7nc08",
+          movie_id: movieID,
+          series_id: seriesID,
+        })
+      }
       style={{
         backgroundColor: themeColor.hex,
       }}
