@@ -252,34 +252,45 @@ export const profileRouter = router({
     };
   }),
 
-  watchlist: protectedProcedure.query(async ({ ctx }) => {
-    // const watchlist = ctx.prisma.watchlist.create({
-    //   data: {
-    //     user_id: ctx.session.user.profile.userId,
-    //   },
-    // });
-    // const watchlistItem = ctx.prisma.watchlistItem.create({
-    //   data: {
-    //     series_id: 117648,
-    //     watchlist_id: "clawea5to0001u5qsys6khyp6",
-    //   },
-    // });
-    const watchlist = ctx.prisma.watchlist.findFirst({
-      where: {
-        user_id: ctx.session.user.profile.userId,
-      },
-      include: {
-        WatchlistItem: {
-          include: {
-            series: true,
-            movies: true,
+  watchlist: protectedProcedure
+    .input(
+      z.object({
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx }) => {
+      // const watchlist = ctx.prisma.watchlist.create({
+      //   data: {
+      //     user_id: ctx.session.user.profile.userId,
+      //   },
+      // });
+      // const watchlistItem = ctx.prisma.watchlistItem.create({
+      //   data: {
+      //     series_id: 117648,
+      //     watchlist_id: "clawea5to0001u5qsys6khyp6",
+      //   },
+      // });
+      const watchlist = await ctx.prisma.watchlist.findFirst({
+        where: {
+          user_id: ctx.session.user.profile.userId,
+        },
+        include: {
+          WatchlistItem: {
+            include: {
+              series: true,
+              movies: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    return {
-      ...watchlist,
-    };
-  }),
+      if (watchlist?.WatchlistItem)
+        watchlist.WatchlistItem = paginate(watchlist?.WatchlistItem, input.pageSize, input.page);
+
+      return {
+        ...watchlist,
+        pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
+      };
+    }),
 });
