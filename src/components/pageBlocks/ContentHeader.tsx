@@ -8,6 +8,7 @@ import { IoMdFemale, IoMdMale } from "react-icons/io";
 import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
+import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
 
 interface IContentHeader {
   watchButton?: {
@@ -35,6 +36,7 @@ interface IContentHeader {
   themeColor: IThemeColor;
   season?: string;
   episode?: string;
+  videos?: any;
   refetchProgression?: () => void;
 }
 
@@ -55,6 +57,7 @@ const ContentHeader = ({
   themeColor,
   season,
   episode,
+  videos,
   refetchProgression,
 }: IContentHeader) => {
   const session = useSession();
@@ -81,6 +84,8 @@ const ContentHeader = ({
                 height="311"
                 src={PosterImage({ path: poster, size: "lg" })}
               />
+
+              <WatchTrailerButton themeColor={themeColor} data={videos} />
 
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
                 <div className="pt-4 pb-4 md:row-start-auto">
@@ -149,7 +154,6 @@ const ContentHeader = ({
                   </span>
                 )}
               </div>
-
               <GenresBlock genres={genres} themeColor={themeColor} />
             </div>
             <div className="grid-cols-5 lg:grid">

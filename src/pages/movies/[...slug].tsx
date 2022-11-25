@@ -26,6 +26,7 @@ const MoviePage = () => {
           score={data.vote_average}
           justWatch={data["watch/providers"]}
           themeColor={data.theme_color}
+          videos={data.videos}
         >
           <DetailsBlock
             budget={data.budget}
