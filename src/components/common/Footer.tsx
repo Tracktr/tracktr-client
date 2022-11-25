@@ -1,7 +1,10 @@
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
+  const session = useSession();
+
   return (
     <footer className="relative pt-32 pb-6 mt-12 bg-[#1A1A1A]">
       <div className="container px-4 mx-auto">
@@ -17,6 +20,22 @@ const Footer = () => {
           </div>
           <div className="w-full px-4 lg:w-6/12">
             <div className="flex flex-wrap mb-6 items-top">
+              {session.status === "authenticated" && (
+                <div className="w-full px-4 ml-auto lg:w-4/12">
+                  <span className="block mb-2 text-sm font-semibold uppercase">Account</span>
+                  <ul className="list-unstyled">
+                    <li>
+                      <Link href="/profile">
+                        <a className="block pb-2 text-sm">Profile</a>
+                      </Link>
+                      <Link href="/profile/history">
+                        <a className="block pb-2 text-sm">History</a>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              )}
+
               <div className="w-full px-4 ml-auto lg:w-4/12">
                 <span className="block mb-2 text-sm font-semibold uppercase">Find Content</span>
                 <ul className="list-unstyled">
