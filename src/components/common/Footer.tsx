@@ -31,6 +31,9 @@ const Footer = () => {
                       <Link href="/profile/history">
                         <a className="block pb-2 text-sm">History</a>
                       </Link>
+                      <Link href="/profile/watchlist">
+                        <a className="block pb-2 text-sm">Watchlist</a>
+                      </Link>
                     </li>
                   </ul>
                 </div>

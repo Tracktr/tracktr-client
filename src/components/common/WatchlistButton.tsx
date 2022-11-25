@@ -1,5 +1,6 @@
 import { BsListCheck, BsList } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
+import { MdOutlineBookmarkAdd, MdOutlineBookmarkAdded } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
@@ -67,12 +68,12 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
           {data?.inWatchlist ? (
             <>
               <span className="font-bold">In your watchlist</span>
-              <BsListCheck className="text-2xl" />
+              <MdOutlineBookmarkAdded className="mr-1 text-2xl" />
             </>
           ) : (
             <>
               <span className="font-bold">Add to watchlist</span>
-              <BsList className="text-2xl" />
+              <MdOutlineBookmarkAdd className="mr-1 text-2xl" />
             </>
           )}
         </button>

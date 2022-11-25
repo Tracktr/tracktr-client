@@ -120,15 +120,6 @@ const ContentHeader = ({
                   />
                 </div>
               )}
-
-              {watchButton && session.status === "authenticated" && (
-                <hr
-                  style={{
-                    borderColor: themeColor?.hex,
-                  }}
-                  className="w-1/2 m-auto my-2 border-2 rounded-full opacity-75"
-                />
-              )}
               {watchButton && session.status === "authenticated" && (
                 <WatchButton
                   itemID={watchButton.itemID}
