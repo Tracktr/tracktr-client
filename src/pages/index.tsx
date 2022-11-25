@@ -9,6 +9,7 @@ import { BsFillEmojiHeartEyesFill } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineLiveTv } from "react-icons/md";
 import LoadingPageComponents from "../components/common/LoadingPageComponents";
+import { SignupWindow } from "./google-signin";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
                   </p>
 
                   <button
-                    onClick={() => signIn()}
+                    onClick={() => SignupWindow()}
                     className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
                     role="button"
                   >
@@ -113,7 +114,7 @@ const Home: NextPage = () => {
           </section>
 
           <section className="bg-primaryBackground 2xl:py-24">
-            <div className="px-4 mx-auto bg-black max-w-7xl sm:px-6 lg:px-8 2xl:rounded-xl">
+            <div className="px-4 mx-auto bg-[#1A1A1A] max-w-7xl sm:px-6 lg:px-8 2xl:rounded-xl">
               <div className="py-10 sm:py-16 lg:py-24 2xl:pl-24">
                 <div className="grid items-center grid-cols-1 gap-y-8 lg:grid-cols-2 lg:gap-x-8 2xl:gap-x-20">
                   <div className="relative lg:order-2 2xl:-mr-24">
@@ -160,7 +161,7 @@ const Home: NextPage = () => {
 
                     <div className="flex flex-col items-start mt-8 sm:space-x-4 sm:flex-row sm:items-center lg:mt-12">
                       <button
-                        onClick={() => signIn()}
+                        onClick={() => SignupWindow()}
                         title=""
                         className="inline-flex items-center justify-center px-4 py-4 text-base font-semibold text-black transition-all duration-200 border border-transparent rounded-md bg-primary"
                         role="button"
