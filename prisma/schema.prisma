@@ -126,7 +126,7 @@ model EpisodesHistory {
 
 model Watchlist {
   id            String          @id @default(cuid())
-  user_id       String
+  user_id       String          @unique
   user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   WatchlistItem WatchlistItem[]
 }
