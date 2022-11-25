@@ -9,6 +9,7 @@ import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+import { MdOutlineNextWeek, MdOutlineWrapText, MdQueuePlayNext } from "react-icons/md";
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -55,18 +56,24 @@ const DashboardPage = () => {
           />
           <div className="max-w-6xl px-4 m-auto">
             {upNext?.result && upNext?.result?.length > 0 && (
-              <div className="my-6">
+              <div className="mt-6 mb-12">
                 <div className="items-center align-middle md:flex">
                   <div className="flex flex-wrap gap-4 mb-5">
-                    <div className="text-xl md:text-3xl">Up next</div>
+                    <div className="flex items-center text-xl align-middle md:text-3xl">
+                      <MdQueuePlayNext className="mr-4" />
+                      Up next
+                    </div>
                   </div>
                 </div>
                 <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
               </div>
             )}
             {stats?.history && stats?.history.length > 0 && (
-              <div className="my-6">
-                <div className="text-xl md:text-3xl">Your two weeks</div>
+              <div className="mt-6 mb-12">
+                <div className="flex items-center text-xl align-middle md:text-3xl">
+                  <MdOutlineNextWeek className="mr-4" />
+                  Your two weeks
+                </div>
                 <div className="pt-1 pb-5">
                   You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
                 </div>
@@ -84,7 +91,10 @@ const DashboardPage = () => {
               <div className="my-6">
                 <div className="items-center align-middle md:flex">
                   <div className="flex items-center justify-between w-full gap-4 mb-5">
-                    <div className="text-xl md:text-3xl">Recently watched</div>
+                    <div className="flex items-center justify-center text-xl md:text-3xl">
+                      <MdOutlineWrapText className="mr-4" />
+                      Recently watched
+                    </div>
                     <Link href="/profile/history">
                       <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
                         See all history
