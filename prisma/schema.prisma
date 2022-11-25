@@ -72,6 +72,8 @@ model Movies {
   title         String
   poster        String
   MoviesHistory MoviesHistory[]
+  Watchlist     Watchlist?      @relation(fields: [watchlistId], references: [id])
+  watchlistId   String?
 }
 
 model MoviesHistory {
@@ -89,6 +91,8 @@ model Series {
   poster          String
   seasons         Seasons[]
   EpisodesHistory EpisodesHistory[]
+  Watchlist       Watchlist?        @relation(fields: [watchlistId], references: [id])
+  watchlistId     String?
 }
 
 model Seasons {
@@ -119,4 +123,10 @@ model EpisodesHistory {
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+}
+
+model Watchlist {
+  id     String   @id @default(cuid())
+  movies Movies[]
+  series Series[]
 }
