@@ -85,7 +85,7 @@ const ContentHeader = ({
                 src={PosterImage({ path: poster, size: "lg" })}
               />
 
-              <WatchTrailerButton themeColor={themeColor} data={videos} />
+              {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
 
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
                 <div className="pt-4 pb-4 md:row-start-auto">
