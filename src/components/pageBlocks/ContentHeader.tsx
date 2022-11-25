@@ -9,6 +9,8 @@ import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
+import { useScroll, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface IContentHeader {
   watchButton?: {
@@ -61,6 +63,14 @@ const ContentHeader = ({
   refetchProgression,
 }: IContentHeader) => {
   const session = useSession();
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const { scrollY } = useScroll();
+
+  useEffect(() => {
+    return scrollY.onChange((latest) => {
+      setScrollPosition(latest);
+    });
+  }, [scrollY]);
 
   return (
     <>
@@ -77,15 +87,25 @@ const ContentHeader = ({
       <div className="relative w-full">
         <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
           <div className="col-span-1 mx-4 text-center">
-            <div className="sticky inline-block border-4 rounded-md border-primaryBackground top-16">
-              <Image
-                alt={"Poster image for:" + title}
-                width="208"
-                height="311"
-                src={PosterImage({ path: poster, size: "lg" })}
-              />
-
-              {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
+            <div className="sticky inline-block top-16 max-w-[216px] w-full ">
+              <motion.div
+                animate={{
+                  overflow: "hidden",
+                  width: scrollPosition > 300 ? "150px" : "auto",
+                  height: "auto",
+                  transition: {
+                    bounce: 0,
+                  },
+                }}
+                className="m-auto border-4 rounded-md border-primaryBackground"
+              >
+                <Image
+                  alt={"Poster image for:" + title}
+                  width="208"
+                  height="311"
+                  src={PosterImage({ path: poster, size: "lg" })}
+                />
+              </motion.div>
 
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
                 <div className="pt-4 pb-4 md:row-start-auto">
@@ -96,13 +116,12 @@ const ContentHeader = ({
                 </div>
               )}
 
-              {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} name={title} />}
-              {session.status === "authenticated" && (
+              {watchButton && session.status === "authenticated" && (
                 <hr
                   style={{
                     borderColor: themeColor?.hex,
                   }}
-                  className="w-1/2 m-auto my-4 border-2 rounded-full opacity-75"
+                  className="w-1/2 m-auto my-2 border-2 rounded-full opacity-75"
                 />
               )}
               {watchButton && session.status === "authenticated" && (
@@ -158,6 +177,10 @@ const ContentHeader = ({
             </div>
             <div className="grid-cols-5 lg:grid">
               <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
+              <div className="col-span-2 max-w-[200px] w-full ml-auto">
+                {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
+                {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} name={title} />}
+              </div>
             </div>
 
             {children || ""}
