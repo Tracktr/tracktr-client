@@ -11,6 +11,7 @@ import { IThemeColor } from "../watchButton/BaseWatchButton";
 import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
 import { useScroll, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import WatchlistButton from "../common/WatchlistButton";
 
 interface IContentHeader {
   watchButton?: {
@@ -131,6 +132,13 @@ const ContentHeader = ({
                   seasonID={Number(watchButton.seasonID)}
                   themeColor={themeColor}
                   refetchProgression={refetchProgression}
+                />
+              )}
+              {watchButton && session.status === "authenticated" && (
+                <WatchlistButton
+                  themeColor={themeColor}
+                  movieID={!watchButton?.episodeID ? watchButton?.itemID : undefined}
+                  seriesID={watchButton?.episodeID ? watchButton?.episodeID : undefined}
                 />
               )}
             </div>

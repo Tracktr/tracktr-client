@@ -1,4 +1,3 @@
-import { WatchlistItem } from "@prisma/client";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -63,6 +62,29 @@ export const watchlistRouter = router({
       };
     }),
 
+  checkItemInWatchlist: protectedProcedure
+    .input(
+      z.object({
+        itemID: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const watchlist = await ctx.prisma.watchlist.findFirst({
+        where: {
+          user_id: ctx.session.user.profile.userId,
+          WatchlistItem: {
+            some: {
+              OR: [{ movie_id: input.itemID }, { series_id: input.itemID }],
+            },
+          },
+        },
+      });
+
+      return {
+        inWatchlist: Boolean(watchlist),
+      };
+    }),
+
   addItem: protectedProcedure
     .input(
       z.object({
@@ -75,26 +97,6 @@ export const watchlistRouter = router({
       const watchlistItem = ctx.prisma.watchlistItem.create({
         data: {
           movie_id: input.movie_id,
-          series_id: input.series_id,
-          watchlist_id: input.watchlist_id,
-        },
-      });
-
-      return {
-        ...watchlistItem,
-      };
-    }),
-
-  addSeries: protectedProcedure
-    .input(
-      z.object({
-        watchlist_id: z.string(),
-        series_id: z.number(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const watchlistItem = ctx.prisma.watchlistItem.create({
-        data: {
           series_id: input.series_id,
           watchlist_id: input.watchlist_id,
         },
