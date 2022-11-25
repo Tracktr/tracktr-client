@@ -18,10 +18,10 @@ const HistoryPage = () => {
   } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
 
   useEffect(() => {
-    if (session.status === "unauthenticated" && status !== "loading") {
+    if (session.status === "unauthenticated") {
       router.push("/");
     }
-  });
+  }, [session, router]);
 
   const nextPage = () => {
     setPage(page + 1);
