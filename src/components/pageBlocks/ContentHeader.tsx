@@ -8,7 +8,7 @@ import { IoMdFemale, IoMdMale } from "react-icons/io";
 import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
-import WatchTrailerButton from "../common/buttons/watchTrailerButton";
+import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
 
 interface IContentHeader {
   watchButton?: {
