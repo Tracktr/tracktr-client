@@ -41,6 +41,8 @@ interface IContentHeader {
   episode?: string;
   videos?: any;
   refetchProgression?: () => void;
+  movieID?: number;
+  seriesID?: number;
 }
 
 const ContentHeader = ({
@@ -61,6 +63,8 @@ const ContentHeader = ({
   season,
   episode,
   videos,
+  movieID,
+  seriesID,
   refetchProgression,
 }: IContentHeader) => {
   const session = useSession();
@@ -134,12 +138,8 @@ const ContentHeader = ({
                   refetchProgression={refetchProgression}
                 />
               )}
-              {watchButton && session.status === "authenticated" && (
-                <WatchlistButton
-                  themeColor={themeColor}
-                  movieID={!watchButton?.episodeID ? watchButton?.itemID : undefined}
-                  seriesID={watchButton?.episodeID ? watchButton?.episodeID : undefined}
-                />
+              {(movieID || seriesID) && session.status === "authenticated" && (
+                <WatchlistButton themeColor={themeColor} movieID={movieID} seriesID={seriesID} />
               )}
             </div>
           </div>

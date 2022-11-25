@@ -27,6 +27,7 @@ const MoviePage = () => {
           justWatch={data["watch/providers"]}
           themeColor={data.theme_color}
           videos={data.videos}
+          movieID={data.id}
         >
           <DetailsBlock
             budget={data.budget}

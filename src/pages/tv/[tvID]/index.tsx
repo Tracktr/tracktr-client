@@ -27,6 +27,7 @@ const TVPage = () => {
           amountOfEpisodes={data.number_of_episodes}
           videos={data.videos}
           themeColor={data.theme_color}
+          seriesID={data.id}
         >
           <DetailsBlock
             status={data.status}
