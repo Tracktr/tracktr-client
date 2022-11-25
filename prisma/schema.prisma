@@ -49,6 +49,7 @@ model User {
   profile         Profile?
   MoviesHistory   MoviesHistory[]
   EpisodesHistory EpisodesHistory[]
+  Watchlist       Watchlist[]
 }
 
 model VerificationToken {
@@ -72,6 +73,7 @@ model Movies {
   title         String
   poster        String
   MoviesHistory MoviesHistory[]
+  WatchlistItem WatchlistItem[]
 }
 
 model MoviesHistory {
@@ -89,6 +91,7 @@ model Series {
   poster          String
   seasons         Seasons[]
   EpisodesHistory EpisodesHistory[]
+  WatchlistItem   WatchlistItem[]
 }
 
 model Seasons {
@@ -119,4 +122,21 @@ model EpisodesHistory {
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+}
+
+model Watchlist {
+  id            String          @id @default(cuid())
+  user_id       String          @unique
+  user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  WatchlistItem WatchlistItem[]
+}
+
+model WatchlistItem {
+  id           String    @id @default(cuid())
+  watchlist_id String
+  movie_id     Int?
+  series_id    Int?
+  movies       Movies?   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  series       Series?   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  watchlist    Watchlist @relation(fields: [watchlist_id], references: [id], onDelete: Cascade)
 }
