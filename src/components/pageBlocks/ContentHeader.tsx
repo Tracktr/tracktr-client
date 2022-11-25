@@ -85,6 +85,24 @@ const ContentHeader = ({
                 src={PosterImage({ path: poster, size: "lg" })}
               />
 
+              {watchButton && session.status === "authenticated" && (
+                <WatchButton
+                  itemID={watchButton.itemID}
+                  episodeID={Number(watchButton.episodeID)}
+                  seasonID={Number(watchButton.seasonID)}
+                  themeColor={themeColor}
+                  refetchProgression={refetchProgression}
+                />
+              )}
+              {session.status === "authenticated" && (
+                <hr
+                  style={{
+                    borderColor: themeColor?.hex,
+                  }}
+                  className="w-1/2 m-auto my-4 border-2 rounded-full opacity-75"
+                />
+              )}
+
               {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
 
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
@@ -97,23 +115,6 @@ const ContentHeader = ({
               )}
 
               {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} name={title} />}
-              {session.status === "authenticated" && (
-                <hr
-                  style={{
-                    borderColor: themeColor?.hex,
-                  }}
-                  className="w-1/2 m-auto my-4 border-2 rounded-full opacity-75"
-                />
-              )}
-              {watchButton && session.status === "authenticated" && (
-                <WatchButton
-                  itemID={watchButton.itemID}
-                  episodeID={Number(watchButton.episodeID)}
-                  seasonID={Number(watchButton.seasonID)}
-                  themeColor={themeColor}
-                  refetchProgression={refetchProgression}
-                />
-              )}
             </div>
           </div>
 
