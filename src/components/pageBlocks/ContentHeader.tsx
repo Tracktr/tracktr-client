@@ -9,6 +9,7 @@ import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
+import WatchlistButton from "../common/WatchListButton";
 
 interface IContentHeader {
   watchButton?: {
@@ -103,8 +104,8 @@ const ContentHeader = ({
                 />
               )}
 
+              <WatchlistButton themeColor={themeColor} />
               {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
-
               {seriesProgression && amountOfEpisodes && session.status === "authenticated" && (
                 <div className="pt-4 pb-4 md:row-start-auto">
                   <SeriesProgressionBlock
