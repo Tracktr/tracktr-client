@@ -92,22 +92,37 @@ export const watchlistRouter = router({
   addItem: protectedProcedure
     .input(
       z.object({
-        watchlist_id: z.string(),
         movie_id: z.number().optional(),
         series_id: z.number().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const watchlistItem = ctx.prisma.watchlistItem.create({
-        data: {
-          movie_id: input.movie_id,
-          series_id: input.series_id,
-          watchlist_id: input.watchlist_id,
+      const watchlist = ctx.prisma.watchlist.upsert({
+        where: {
+          user_id: ctx.session.user.profile.userId,
+        },
+        update: {
+          user_id: ctx.session.user.profile.userId,
+          WatchlistItem: {
+            create: {
+              movie_id: input.movie_id,
+              series_id: input.series_id,
+            },
+          },
+        },
+        create: {
+          user_id: ctx.session.user.profile.userId,
+          WatchlistItem: {
+            create: {
+              movie_id: input.movie_id,
+              series_id: input.series_id,
+            },
+          },
         },
       });
 
       return {
-        ...watchlistItem,
+        ...watchlist,
       };
     }),
 

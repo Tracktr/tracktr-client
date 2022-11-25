@@ -50,7 +50,6 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
               });
             } else {
               addToWatchlist.mutate({
-                watchlist_id: "clawhxsx9000297to1cn7nc08",
                 movie_id: movieID,
                 series_id: seriesID,
               });
