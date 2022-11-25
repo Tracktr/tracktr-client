@@ -60,11 +60,49 @@ export const watchlistRouter = router({
         movie_id: z.number(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const watchlistItem = ctx.prisma.watchlistItem.create({
         data: {
           movie_id: input.movie_id,
           watchlist_id: input.watchlist_id,
+        },
+      });
+
+      return {
+        ...watchlistItem,
+      };
+    }),
+
+  addSeries: protectedProcedure
+    .input(
+      z.object({
+        watchlist_id: z.string(),
+        series_id: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const watchlistItem = ctx.prisma.watchlistItem.create({
+        data: {
+          series_id: input.series_id,
+          watchlist_id: input.watchlist_id,
+        },
+      });
+
+      return {
+        ...watchlistItem,
+      };
+    }),
+
+  removeItem: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const watchlistItem = ctx.prisma.watchlistItem.delete({
+        where: {
+          id: input.id,
         },
       });
 
