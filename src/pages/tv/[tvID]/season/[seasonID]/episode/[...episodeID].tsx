@@ -32,6 +32,7 @@ const EpisodePage = () => {
           score={episodeData.vote_average}
           themeColor={tvShow.theme_color}
           season={episodeData.season_number}
+          justWatch={tvShow["watch/providers"]}
           episode={episodeData.episode_number}
           seriesProgression={tvShow.number_of_episodes_watched}
           amountOfEpisodes={tvShow.number_of_episodes}
