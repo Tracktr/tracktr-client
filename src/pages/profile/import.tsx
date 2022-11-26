@@ -35,10 +35,9 @@ const ImportPage = () => {
       header: true,
       skipEmptyLines: true,
       complete: function ({ data }: { data: ITraktData[] }) {
-        console.log(data);
         const formattedData = data.map((item) => {
           if (!item.tmdb_id) {
-            console.log("NO ID", item);
+            console.error("NO ID", item);
             return {
               id: "",
               type: "",
@@ -46,7 +45,7 @@ const ImportPage = () => {
             };
           }
           if (!item.type) {
-            console.log("No type", item);
+            console.error("No type", item);
             return {
               id: "",
               type: "",

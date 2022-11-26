@@ -273,8 +273,6 @@ export const profileRouter = router({
 
       const result = Promise.all(
         input.map(async (item) => {
-          console.log(item);
-
           if (item.type === "movie") {
             const existsInDB = await ctx.prisma.movies.findFirst({
               where: { id: Number(item.id) },
@@ -399,7 +397,6 @@ export const profileRouter = router({
         })
       )
         .then(async () => {
-          console.log("Creating new movies & series");
           const createManyMovies = await ctx.prisma.movies.createMany({
             data: manyMovies,
             skipDuplicates: true,
