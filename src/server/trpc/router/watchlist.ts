@@ -25,6 +25,8 @@ export const watchlistRouter = router({
         },
       });
 
+      const watchlistLength = watchlist?.WatchlistItem?.length || 0;
+
       if (watchlist?.WatchlistItem) {
         watchlist.WatchlistItem = paginate(watchlist?.WatchlistItem, input.pageSize, input.page);
 
@@ -58,7 +60,7 @@ export const watchlistRouter = router({
 
       return {
         ...watchlist,
-        pagesAmount: Math.ceil(watchlist?.WatchlistItem?.length || 0 / input.pageSize),
+        pagesAmount: Math.ceil(watchlistLength / input.pageSize),
       };
     }),
 
