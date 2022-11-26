@@ -419,5 +419,7 @@ export const profileRouter = router({
           ...createManyEpisodes,
         };
       });
+
+      return result;
     }),
 });
