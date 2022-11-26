@@ -9,15 +9,21 @@ const EpisodePage = () => {
   const router = useRouter();
   const { tvID, seasonID, episodeID } = router.query;
 
-  const { data: tvShow, refetch } = trpc.tv.tvById.useQuery({
-    tvID: tvID as string,
-  });
+  const { data: tvShow, refetch } = trpc.tv.tvById.useQuery(
+    {
+      tvID: tvID as string,
+    },
+    { enabled: router.isReady }
+  );
 
-  const { data: episodeData, status: episodeStatus } = trpc.episode.episodeById.useQuery({
-    tvID: tvID as string,
-    seasonID: seasonID as string,
-    episodeID: episodeID ? episodeID[0] : undefined,
-  });
+  const { data: episodeData, status: episodeStatus } = trpc.episode.episodeById.useQuery(
+    {
+      tvID: tvID as string,
+      seasonID: seasonID as string,
+      episodeID: episodeID ? episodeID[0] : undefined,
+    },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={episodeStatus}>

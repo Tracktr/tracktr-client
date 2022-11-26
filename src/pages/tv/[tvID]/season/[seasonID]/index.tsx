@@ -9,9 +9,12 @@ const TVPage = () => {
   const router = useRouter();
   const { tvID, seasonID } = router.query;
 
-  const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery({
-    tvID: tvID as string,
-  });
+  const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery(
+    {
+      tvID: tvID as string,
+    },
+    { enabled: router.isReady }
+  );
 
   const {
     data,
