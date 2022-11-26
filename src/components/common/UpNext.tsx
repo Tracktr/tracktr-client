@@ -42,7 +42,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
     },
   });
 
-  if (episodes.length < 1) {
+  if (episodes.length < 1 && status !== "loading") {
     return <div>No up next episodes found</div>;
   }
 

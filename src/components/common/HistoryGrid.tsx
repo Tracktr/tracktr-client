@@ -39,7 +39,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
     }
   };
 
-  if (history.length < 1) {
+  if (history.length < 1 && status !== "loading") {
     return <div>No history found</div>;
   }
 
