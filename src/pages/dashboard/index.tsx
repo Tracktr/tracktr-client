@@ -55,61 +55,56 @@ const DashboardPage = () => {
             backgroundImage="https://www.themoviedb.org/t/p/original/xMMrBziwJqrgjerqpNeQvwuwiUp.jpg"
           />
           <div className="max-w-6xl px-4 m-auto">
-            {upNext?.result && upNext?.result?.length > 0 && (
-              <div className="mt-6 mb-12">
-                <div className="items-center align-middle md:flex">
-                  <div className="flex flex-wrap gap-4 mb-5">
-                    <div className="flex items-center text-xl align-middle md:text-3xl">
-                      <MdQueuePlayNext className="mr-4" />
-                      Up next
-                    </div>
+            <div className="mt-6 mb-12">
+              <div className="items-center align-middle md:flex">
+                <div className="flex flex-wrap gap-4 mb-5">
+                  <div className="flex items-center text-xl align-middle md:text-3xl">
+                    <MdQueuePlayNext className="mr-4" />
+                    Up next
                   </div>
                 </div>
-                <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
               </div>
-            )}
-            {stats?.history && stats?.history.length > 0 && (
-              <div className="mt-6 mb-12">
-                <div className="flex items-center text-xl align-middle md:text-3xl">
-                  <MdOutlineNextWeek className="mr-4" />
-                  Your two weeks
-                </div>
-                <div className="pt-1 pb-5">
-                  You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
-                </div>
-                <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={stats?.history} margin={{ left: -50 }}>
-                    <XAxis dataKey="date" allowDecimals={false} />
-                    <YAxis dataKey="count" allowDecimals={false} tick={false} />
-                    <Bar dataKey="count" fill="#f9bd13" />
-                    <Tooltip wrapperStyle={{ outline: "none" }} cursor={false} content={<CustomTooltip />} />
-                  </BarChart>
-                </ResponsiveContainer>
+              <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
+            </div>
+
+            <div className="mt-6 mb-12">
+              <div className="flex items-center text-xl align-middle md:text-3xl">
+                <MdOutlineNextWeek className="mr-4" />
+                Your last two weeks
               </div>
-            )}
-            {history?.history && history?.history?.length > 0 && (
-              <div className="my-6">
-                <div className="items-center align-middle md:flex">
-                  <div className="flex items-center justify-between w-full gap-4 mb-5">
-                    <div className="flex items-center justify-center text-xl md:text-3xl">
-                      <MdOutlineWrapText className="mr-4" />
-                      Recently watched
-                    </div>
-                    <Link href="/profile/history">
-                      <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
-                        See all history
-                      </a>
-                    </Link>
+              <div className="pt-1 pb-5">
+                You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
+              </div>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={stats?.history} margin={{ left: -50 }}>
+                  <XAxis dataKey="date" allowDecimals={false} />
+                  <YAxis dataKey="count" allowDecimals={false} tick={false} />
+                  <Bar dataKey="count" fill="#f9bd13" />
+                  <Tooltip wrapperStyle={{ outline: "none" }} cursor={false} content={<CustomTooltip />} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="my-6">
+              <div className="items-center align-middle md:flex">
+                <div className="flex items-center justify-between w-full gap-4 mb-5">
+                  <div className="flex items-center justify-center text-xl md:text-3xl">
+                    <MdOutlineWrapText className="mr-4" />
+                    Recently watched
                   </div>
+                  <Link href="/profile/history">
+                    <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
+                      See all history
+                    </a>
+                  </Link>
                 </div>
-                <HistoryGrid
-                  hasScrollContainer
-                  history={history?.history || []}
-                  status={historyStatus}
-                  refetch={refetch}
-                />
               </div>
-            )}
+              <HistoryGrid
+                hasScrollContainer
+                history={history?.history || []}
+                status={historyStatus}
+                refetch={refetch}
+              />
+            </div>
           </div>
         </div>
       )}

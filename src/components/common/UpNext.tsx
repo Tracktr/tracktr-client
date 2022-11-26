@@ -42,6 +42,10 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
     },
   });
 
+  if (episodes.length < 1) {
+    return <div>No up next episodes found</div>;
+  }
+
   return (
     <LoadingPageComponents status={status} posters>
       {() => (
