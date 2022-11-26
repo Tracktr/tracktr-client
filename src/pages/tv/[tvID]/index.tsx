@@ -10,7 +10,7 @@ const TVPage = () => {
   const router = useRouter();
   const { tvID } = router.query;
 
-  const { data, status } = trpc.tv.tvById.useQuery({ tvID: tvID as string });
+  const { data, status } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
 
   return (
     <LoadingPageComponents status={status}>

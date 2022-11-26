@@ -1,6 +1,7 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
+import { TmdbEpisode } from "../../../types/tmdb";
 
 export const tvRouter = router({
   tvById: publicProcedure
@@ -19,6 +20,66 @@ export const tvRouter = router({
       const json = await res.json();
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
+
+      const existsInDB = await ctx.prisma.series.findFirst({
+        where: { id: json.id },
+      });
+
+      if (!existsInDB) {
+        await ctx.prisma.series.create({
+          data: {
+            id: json.id,
+            name: json.name,
+            poster: json.poster_path,
+            seasons: {
+              connectOrCreate: await Promise.all(
+                json.seasons.map(
+                  async (season: {
+                    air_date: string;
+                    episode_count: number;
+                    id: number;
+                    name: string;
+                    overview: string;
+                    poster_path: string;
+                    season_number: number;
+                  }) => {
+                    const url = new URL(
+                      `tv/${json.id}/season/${season.season_number}`,
+                      process.env.NEXT_PUBLIC_TMDB_API
+                    );
+                    url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+                    const seasonWithEpisodes = await fetch(url).then((res) => res.json());
+
+                    return {
+                      where: { id: season.id },
+                      create: {
+                        id: season.id,
+                        name: season.name,
+                        poster: season.poster_path ? season.poster_path : json.poster_path,
+                        season_number: season.season_number,
+                        episodes: {
+                          connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
+                            return {
+                              where: { id: e.id },
+                              create: {
+                                id: e.id,
+                                name: e.name,
+                                episode_number: e.episode_number,
+                                season_number: e.season_number,
+                              },
+                            };
+                          }),
+                        },
+                      },
+                    };
+                  }
+                )
+              ),
+            },
+          },
+        });
+      }
 
       if (ctx && input?.tvID) {
         const episodesWatched = await ctx.prisma.$queryRaw`
