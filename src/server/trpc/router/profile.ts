@@ -281,8 +281,9 @@ export const profileRouter = router({
               const movie = new URL(`movie/${item.id}`, process.env.NEXT_PUBLIC_TMDB_API);
               movie.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-              const res = await fetch(movie);
-              const json = await res.json();
+              const json = await fetch(movie)
+                .then((res) => res.json())
+                .catch((e) => console.error("Failed fetching from TMDB", e));
 
               if (json.id && json.title && json.poster_path) {
                 const newMovie = await ctx.prisma.movies.create({
@@ -320,7 +321,9 @@ export const profileRouter = router({
               url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
               if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
-              const json = await fetch(url).then((res) => res.json());
+              const json = await fetch(url)
+                .then((res) => res.json())
+                .catch((e) => console.error("Failed fetching from TMDB", e));
 
               if (json.id && json.name && json.poster_path) {
                 try {
