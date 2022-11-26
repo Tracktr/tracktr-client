@@ -24,7 +24,6 @@ interface IShow {
 
 const TVInfiniteScroll = () => {
   const [filter, setFilter] = useState("popular");
-  const MAX_PAGES = 5;
   const { ref, inView } = useInView();
 
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.infiniteTV.useInfiniteQuery(
@@ -34,7 +33,7 @@ const TVInfiniteScroll = () => {
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 && lastPage.page <= MAX_PAGES ? nextPage : undefined;
+        return lastPage.results.length !== 0 ? nextPage : undefined;
       },
     }
   );

@@ -60,7 +60,7 @@ const NavMobile = ({
               </li>
             ))}
             <div className="py-4 mt-auto text-white">
-              {session ? (
+              {session.status === "authenticated" ? (
                 <>
                   <div onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4">
                     <Image
@@ -78,7 +78,7 @@ const NavMobile = ({
                   </div>
                   <div
                     className={`text-sm text-center ${
-                      submenu ? "h-28" : "h-0 overflow-hidden"
+                      submenu ? "h-36" : "h-0 overflow-hidden"
                     } transition-all duration-300 ease-in-out`}
                   >
                     {submenuItems.map((item: { href: string; text: string }) => (

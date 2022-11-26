@@ -1,8 +1,8 @@
-import { BsListCheck, BsList } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
-import { MdOutlineBookmarkAdd, MdOutlineBookmarkAdded } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
+import { MdBookmarkAdd, MdBookmarkRemove } from "react-icons/md";
+import ReactTooltip from "react-tooltip";
 
 interface IWatchlistButtonProps {
   themeColor: IThemeColor;
@@ -34,12 +34,11 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
             backgroundColor: themeColor.hex,
           }}
           className={`
-        flex items-center justify-between w-full px-3 py-2 mt-2 rounded-md          
+        flex items-center justify-between mt-2 rounded-md px-3 py-2       
         ${themeColor.isDark && "text-white"}
         ${themeColor.isLight && "text-primaryBackground"}
       `}
         >
-          <span className="font-bold">Loading</span>
           <ImSpinner2 className="w-6 h-6 animate-spin" />
         </button>
       ) : (
@@ -60,21 +59,21 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
             backgroundColor: themeColor.hex,
           }}
           className={`
-        flex items-center justify-between w-full px-3 py-2 mt-2 rounded-md          
+        flex items-center justify-between mt-2 rounded-md          
         ${themeColor.isDark && "text-white"}
         ${themeColor.isLight && "text-primaryBackground"}
       `}
         >
           {data?.inWatchlist ? (
-            <>
-              <span className="font-bold">In your watchlist</span>
-              <MdOutlineBookmarkAdded className="mr-1 text-2xl" />
-            </>
+            <span className="px-3 py-2" data-tip="Remove from Watchlist">
+              <ReactTooltip />
+              <MdBookmarkRemove className="text-2xl" />
+            </span>
           ) : (
-            <>
-              <span className="font-bold">Add to watchlist</span>
-              <MdOutlineBookmarkAdd className="mr-1 text-2xl" />
-            </>
+            <span className="px-3 py-2" data-tip="Add to Watchlist">
+              <ReactTooltip />
+              <MdBookmarkAdd className="text-2xl" />
+            </span>
           )}
         </button>
       )}
