@@ -82,7 +82,7 @@ const Navbar = () => {
                   <div className="hidden mr-6 lg:mr-0 lg:block">
                     {session ? (
                       <motion.div
-                        className="relative"
+                        className="relative flex"
                         onMouseEnter={toggleProfileHover}
                         onMouseLeave={toggleProfileHover}
                       >
