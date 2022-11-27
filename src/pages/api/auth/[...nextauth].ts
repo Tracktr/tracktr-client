@@ -14,7 +14,7 @@ const createUserProfile = async ({ user }: any) => {
       },
     });
   } catch (error) {
-    console.log(`❌ Unable to create Profile in Database`);
+    console.error(`❌ Unable to create Profile in Database`);
   }
 };
 

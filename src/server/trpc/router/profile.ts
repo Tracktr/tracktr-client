@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { TmdbEpisode } from "../../../types/tmdb";
 import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -251,4 +253,210 @@ export const profileRouter = router({
       ),
     };
   }),
+
+  import: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          id: z.string(),
+          type: z.string(),
+          season: z.string().optional(),
+          episode: z.string().optional(),
+          datetime: z.string(),
+        })
+      )
+    )
+    .mutation(async ({ ctx, input }) => {
+      const manyMoviesHistory: any[] = [];
+      const manyEpisodesHistory: any[] = [];
+
+      console.log("Length: ", input.length);
+
+      let i = 0;
+
+      for (i = 0; i < input.length; i++) {
+        const item = input[i];
+        console.log("Start ", i);
+        console.log("Item ", item);
+
+        if (item !== undefined) {
+          if (item.type === "movie") {
+            const existsInDB = await ctx.prisma.movies.findFirst({
+              where: { id: Number(item.id) },
+            });
+
+            if (!existsInDB) {
+              const movie = new URL(`movie/${item.id}`, process.env.NEXT_PUBLIC_TMDB_API);
+              movie.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+              const json = await fetch(movie)
+                .then((res: any) => res.json())
+                .catch((e: any) => console.error("Failed fetching movie from TMDB", e));
+
+              if (json.id && json.title && json.poster_path) {
+                const newMovie = await ctx.prisma.movies.create({
+                  data: {
+                    id: json.id,
+                    title: json.title,
+                    poster: json.poster_path,
+                  },
+                });
+
+                if (newMovie !== null) {
+                  manyMoviesHistory.push({
+                    datetime: item.datetime,
+                    movie_id: Number(item.id),
+                    user_id: ctx?.session?.user?.id as string,
+                  });
+
+                  console.log("Finished i", i);
+                  continue;
+                }
+              }
+            } else {
+              manyMoviesHistory.push({
+                datetime: item.datetime,
+                movie_id: Number(item.id),
+                user_id: ctx?.session?.user?.id as string,
+              });
+
+              console.log("Finished i", i);
+              continue;
+            }
+          } else if (item.type === "episode") {
+            const existsInDB = await ctx.prisma.series.findFirst({
+              where: { id: Number(item.id) },
+            });
+
+            if (!existsInDB) {
+              const url = new URL(`tv/${item?.id}`, process.env.NEXT_PUBLIC_TMDB_API);
+              url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+              if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+              const json = await fetch(url)
+                .then((res: any) => res.json())
+                .catch((e: any) => console.error("Failed fetching series from TMDB", e));
+
+              if (json.id && json.name && json.poster_path) {
+                try {
+                  const newSeries = await ctx.prisma.series.create({
+                    data: {
+                      id: Number(item.id),
+                      name: json.name,
+                      poster: json.poster_path,
+                      seasons: {
+                        connectOrCreate: await Promise.all(
+                          json.seasons.map(
+                            async (season: {
+                              air_date: string;
+                              episode_count: number;
+                              id: number;
+                              name: string;
+                              overview: string;
+                              poster_path: string;
+                              season_number: number;
+                            }) => {
+                              const url = new URL(
+                                `tv/${json.id}/season/${season.season_number}`,
+                                process.env.NEXT_PUBLIC_TMDB_API
+                              );
+                              url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+                              const seasonWithEpisodes = await fetch(url)
+                                .then((res: any) => res.json())
+                                .catch((e: any) => console.error("Failed fetching season from TMDB", e));
+
+                              return {
+                                where: { id: season.id },
+                                create: {
+                                  id: season.id,
+                                  name: season.name,
+                                  poster: season.poster_path ? season.poster_path : json.poster_path,
+                                  season_number: season.season_number,
+                                  episodes: {
+                                    connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
+                                      return {
+                                        where: { id: e.id },
+                                        create: {
+                                          id: e.id,
+                                          name: e.name,
+                                          episode_number: e.episode_number,
+                                          season_number: e.season_number,
+                                        },
+                                      };
+                                    }),
+                                  },
+                                },
+                              };
+                            }
+                          )
+                        ),
+                      },
+                    },
+                  });
+
+                  if (newSeries !== null) {
+                    manyEpisodesHistory.push({
+                      datetime: item.datetime,
+                      user_id: ctx?.session?.user?.id as string,
+                      series_id: Number(item.id),
+                      season_number: Number(item.season),
+                      episode_number: Number(item.episode),
+                    });
+
+                    console.log("Finished i", i);
+                    continue;
+                  }
+                } catch (e) {
+                  if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                    if (e.code === "P2002") {
+                      manyEpisodesHistory.push({
+                        datetime: item.datetime,
+                        user_id: ctx?.session?.user?.id as string,
+                        series_id: Number(item.id),
+                        season_number: Number(item.season),
+                        episode_number: Number(item.episode),
+                      });
+
+                      console.log("Finished i", i);
+                      continue;
+                    }
+                  }
+                }
+              }
+            } else {
+              manyEpisodesHistory.push({
+                datetime: item.datetime,
+                user_id: ctx?.session?.user?.id as string,
+                series_id: Number(item.id),
+                season_number: Number(item.season),
+                episode_number: Number(item.episode),
+              });
+
+              console.log("Finished i", i);
+              continue;
+            }
+          }
+        } else {
+          continue;
+        }
+      }
+
+      if (i === input.length) {
+        const createManyMoviesHistory = await ctx.prisma.moviesHistory.createMany({
+          data: manyMoviesHistory,
+          skipDuplicates: true,
+        });
+
+        const createManyEpisodesHistory = await ctx.prisma.episodesHistory.createMany({
+          data: manyEpisodesHistory,
+          skipDuplicates: true,
+        });
+
+        return {
+          ...createManyEpisodesHistory,
+          ...createManyMoviesHistory,
+        };
+      }
+    }),
 });
