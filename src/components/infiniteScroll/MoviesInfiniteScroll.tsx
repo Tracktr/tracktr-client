@@ -28,7 +28,6 @@ interface IMovie {
 
 const MoviesInfiniteScroll = () => {
   const [filter, setFilter] = useState("popular");
-  const MAX_PAGES = 5;
   const { ref, inView } = useInView();
 
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
@@ -39,7 +38,7 @@ const MoviesInfiniteScroll = () => {
       {
         getNextPageParam: (lastPage, allPages) => {
           const nextPage = allPages.length + 1;
-          return lastPage.results.length !== 0 && lastPage.page <= MAX_PAGES ? nextPage : undefined;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
         },
       }
     );

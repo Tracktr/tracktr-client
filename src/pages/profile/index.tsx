@@ -16,12 +16,12 @@ const ProfilePage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
-  const mutation = trpc.profile.updateProfile.useMutation();
+  const { mutate, isLoading } = trpc.profile.updateProfile.useMutation();
 
   const onSubmit = (event: any) => {
     event.preventDefault();
 
-    mutation.mutate({
+    mutate({
       adult,
       language: selectedLanguage,
       region: selectedLocation,
@@ -51,20 +51,20 @@ const ProfilePage = () => {
           <div className="p-4 mx-4 mt-16 text-white rounded-md md:max-w-md bg-zinc-900">
             <form onSubmit={onSubmit}>
               <p className="pb-6 text-2xl font-bold">Settings</p>
-              <label className="flex items-center w-full pb-1">
-                <span>Show adult 18+ content</span>
+              <label className="flex items-center w-full pb-3">
+                <span className="w-1/2">Include 18+ content</span>
                 <input
                   type="checkbox"
-                  className="ml-auto outline-none text-primary"
+                  className="w-6 h-6 ml-auto rounded-md outline-none text-primary"
                   onChange={() => setAdult(!adult)}
                   checked={adult}
                 />
               </label>
 
-              <label className="flex items-center w-full pb-1">
-                <span>Language</span>
+              <label className="flex items-center w-full pb-3">
+                <span className="w-1/2">Language</span>
                 <select
-                  className="ml-auto text-primaryBackground"
+                  className="w-1/2 px-2 py-1 ml-auto rounded-md text-primaryBackground"
                   onChange={(e) => setSelectedLanguage(e.target.value)}
                   value={selectedLanguage}
                 >
@@ -79,9 +79,9 @@ const ProfilePage = () => {
               </label>
 
               <label className="flex items-center w-full">
-                <span>Region</span>
+                <span className="w-1/2">Region</span>
                 <select
-                  className="ml-auto text-primaryBackground"
+                  className="w-1/2 px-2 py-1 ml-auto rounded-md text-primaryBackground"
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   value={selectedLocation}
                 >
@@ -102,6 +102,7 @@ const ProfilePage = () => {
                 >
                   Save Settings
                 </button>
+                {isLoading && <p className="ml-4">Saving...</p>}
               </div>
             </form>
           </div>
