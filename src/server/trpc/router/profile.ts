@@ -274,8 +274,15 @@ export const profileRouter = router({
       const manyMoviesHistory: any[] = [];
       const manyEpisodesHistory: any[] = [];
 
-      const result = Promise.all(
-        input.map(async (item) => {
+      console.log("Length: ", input.length);
+
+      let i = 0;
+
+      for (i = 0; i < input.length; i++) {
+        const item = input[i];
+        console.log("Start ", i);
+
+        if (item !== undefined) {
           if (item.type === "movie") {
             const existsInDB = await ctx.prisma.movies.findFirst({
               where: { id: Number(item.id) },
@@ -305,7 +312,8 @@ export const profileRouter = router({
                     user_id: ctx?.session?.user?.id as string,
                   });
 
-                  return true;
+                  console.log("Finished i", i);
+                  continue;
                 }
               }
             } else {
@@ -314,7 +322,9 @@ export const profileRouter = router({
                 movie_id: Number(item.id),
                 user_id: ctx?.session?.user?.id as string,
               });
-              return true;
+
+              console.log("Finished i", i);
+              continue;
             }
           } else if (item.type === "episode") {
             const existsInDB = await ctx.prisma.series.findFirst({
@@ -397,7 +407,8 @@ export const profileRouter = router({
                       episode_number: Number(item.episode),
                     });
 
-                    return true;
+                    console.log("Finished i", i);
+                    continue;
                   }
                 } catch (e) {
                   if (e instanceof Prisma.PrismaClientKnownRequestError) {
@@ -410,7 +421,8 @@ export const profileRouter = router({
                         episode_number: Number(item.episode),
                       });
 
-                      return true;
+                      console.log("Finished i", i);
+                      continue;
                     }
                   }
                 }
@@ -424,30 +436,30 @@ export const profileRouter = router({
                 episode_number: Number(item.episode),
               });
 
-              return true;
+              console.log("Finished i", i);
+              continue;
             }
           }
-        })
-      )
-        .then(async () => {
-          console.log("Creating history...");
-          const createManyMovies = await ctx.prisma.moviesHistory.createMany({
-            data: manyMoviesHistory,
-            skipDuplicates: true,
-          });
+        } else {
+          continue;
+        }
+      }
 
-          const createManyEpisodes = await ctx.prisma.episodesHistory.createMany({
-            data: manyEpisodesHistory,
-            skipDuplicates: true,
-          });
+      if (i === input.length) {
+        const createManyMoviesHistory = await ctx.prisma.moviesHistory.createMany({
+          data: manyMoviesHistory,
+          skipDuplicates: true,
+        });
 
-          return {
-            ...createManyMovies,
-            ...createManyEpisodes,
-          };
-        })
-        .catch((e) => console.error("Error: ", e));
+        const createManyEpisodesHistory = await ctx.prisma.episodesHistory.createMany({
+          data: manyEpisodesHistory,
+          skipDuplicates: true,
+        });
 
-      return result;
+        return {
+          ...createManyEpisodesHistory,
+          ...createManyMoviesHistory,
+        };
+      }
     }),
 });
