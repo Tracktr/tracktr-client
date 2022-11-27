@@ -5,10 +5,6 @@ import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const throttle = require("fetch-throttle");
-const fetchThrottle = throttle(fetch, 25, 1000);
-
 interface IStatItem {
   date: string;
   count: number;
@@ -281,6 +277,7 @@ export const profileRouter = router({
       for (i = 0; i < input.length; i++) {
         const item = input[i];
         console.log("Start ", i);
+        console.log("Item ", item);
 
         if (item !== undefined) {
           if (item.type === "movie") {
@@ -292,7 +289,7 @@ export const profileRouter = router({
               const movie = new URL(`movie/${item.id}`, process.env.NEXT_PUBLIC_TMDB_API);
               movie.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-              const json = await fetchThrottle(movie)
+              const json = await fetch(movie)
                 .then((res: any) => res.json())
                 .catch((e: any) => console.error("Failed fetching movie from TMDB", e));
 
@@ -336,7 +333,7 @@ export const profileRouter = router({
               url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
               if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
-              const json = await fetchThrottle(url)
+              const json = await fetch(url)
                 .then((res: any) => res.json())
                 .catch((e: any) => console.error("Failed fetching series from TMDB", e));
 
@@ -365,7 +362,7 @@ export const profileRouter = router({
                               );
                               url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-                              const seasonWithEpisodes = await fetchThrottle(url)
+                              const seasonWithEpisodes = await fetch(url)
                                 .then((res: any) => res.json())
                                 .catch((e: any) => console.error("Failed fetching season from TMDB", e));
 
