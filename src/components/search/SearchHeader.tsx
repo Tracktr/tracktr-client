@@ -1,6 +1,4 @@
-import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { IoSearch } from "react-icons/io5";
+import Search from "./Search";
 
 interface ISearchHeader {
   title: string;
@@ -9,26 +7,6 @@ interface ISearchHeader {
 }
 
 const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
-  const router = useRouter();
-  const [searchInput, setSearchInput] = useState("");
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
-    setSearchInput(value);
-  };
-
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      router.push(`/search/${type}?query=${searchInput}`);
-    }
-  };
-
-  const handleOnClick = (e: any) => {
-    e.preventDefault();
-    router.push(`/search/${type}/?query=${searchInput}`);
-  };
-
   return (
     <div>
       <div
@@ -44,21 +22,7 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
             Find amazing {title}
             <span className="text-primary">.</span>
           </div>
-          <div className="relative w-full px-4 mt-4 md:px-0 md:w-96">
-            <input
-              className="w-full h-10 p-4 bg-white rounded-full text-primaryBackground pr-14 text-md focus:outline-none"
-              type="text"
-              placeholder="Search..."
-              value={searchInput}
-              onChange={handleInput}
-              onKeyDown={handleKeyDown}
-            />
-            <IoSearch
-              onClick={handleOnClick}
-              size={24}
-              className="absolute top-0 z-10 h-10 mr-4 cursor-pointer right-4 md:right-0 text-primaryBackground"
-            />
-          </div>
+          <Search type={type} />
         </div>
       </div>
     </div>
