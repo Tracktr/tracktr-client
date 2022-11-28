@@ -48,7 +48,7 @@ const PublicProfile = () => {
 
           {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && (
             <button
-              className="inline-flex items-center px-6 py-4 my-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
+              className="inline-flex items-center px-6 py-4 mt-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
               role="button"
               onClick={() => {
                 if (profile?.friends?.length !== 1) {
@@ -71,7 +71,7 @@ const PublicProfile = () => {
             </button>
           )}
 
-          <div className="my-6">
+          <div className="mt-12 mb-6">
             <div className="items-center text-xl align-middle mb-7 md:flex md:text-3xl">
               <MdOutlineWrapText className="mr-4" />
               <div>Recently watched episodes</div>
