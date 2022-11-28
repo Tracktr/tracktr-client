@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Papa from "papaparse";
-import { ImSpinner2 } from "react-icons/im";
+import { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 
 export interface ITraktData {
@@ -31,12 +31,18 @@ export interface ITraktData {
 
 const ImportPage = () => {
   const router = useRouter();
+  const [currentPercentage, setCurrentPercentage] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>();
 
-  const importRoute = trpc.profile.import.useMutation({
-    onSuccess: () => router.push("/profile/history"),
-  });
+  useEffect(() => {
+    if (currentPercentage >= 100) router.push("/profile/history");
+  }, [currentPercentage, router]);
+
+  const importRoute = trpc.profile.import.useMutation();
 
   const changeHandler = (event: any) => {
+    setLoading(true);
+
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
@@ -68,7 +74,18 @@ const ImportPage = () => {
           };
         });
 
-        importRoute.mutate(formattedData);
+        const maxAmount = 250;
+        const amount = Math.ceil(formattedData.length / maxAmount);
+
+        for (let i = 1; i <= amount; i++) {
+          importRoute.mutate(formattedData.slice(maxAmount * (i - 1), maxAmount * i));
+
+          if (importRoute.isSuccess) {
+            console.log(Math.ceil(i / amount) * 10);
+            setCurrentPercentage(Math.ceil(i / amount) * 100);
+            continue;
+          }
+        }
       },
     });
   };
@@ -83,13 +100,18 @@ const ImportPage = () => {
         <label
           htmlFor="dropzone-file"
           className={`flex flex-col items-center justify-center w-full h-64 bg-gray-700 border-2 border-gray-600 border-dashed rounded-lg ${
-            !importRoute.isLoading && "cursor-pointer hover:bg-bray-800 hover:border-gray-500 hover:bg-gray-600"
+            !loading && "cursor-pointer hover:bg-bray-800 hover:border-gray-500 hover:bg-gray-600"
           }`}
         >
-          {importRoute.isLoading ? (
-            <div className="flex flex-col items-center">
-              <ImSpinner2 className="w-10 h-10 mb-4 animate-spin" />
-              <div>This might take a few minutes depending on the size of the file.</div>
+          {loading ? (
+            <div className="flex flex-col items-center w-full">
+              <div className="mb-3">Importing data...</div>
+              <div className="flex w-[15%] bg-black rounded-full">
+                <span
+                  className="h-2 transition-all duration-300 ease-in-out rounded-full bg-primary"
+                  style={{ width: `${currentPercentage}%` }}
+                />
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -118,7 +140,7 @@ const ImportPage = () => {
             id="dropzone-file"
             type="file"
             accept=".csv"
-            disabled={importRoute.isLoading}
+            disabled={loading}
             onChange={changeHandler}
             className="hidden"
           />
