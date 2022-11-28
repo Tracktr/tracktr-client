@@ -2,7 +2,7 @@ import SearchInput from "./SearchInput";
 
 interface ISearchHeader {
   title: string;
-  type?: string;
+  type: "multi" | "tv" | "movie" | "person";
   backgroundImage: string;
 }
 

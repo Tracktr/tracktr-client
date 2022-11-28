@@ -7,9 +7,9 @@ import { tvRouter } from "./tv";
 import { seasonRouter } from "./season";
 import { episodeRouter } from "./episode";
 import { commonRouter } from "./common";
-import { multiRouter } from "./multi";
 import { profileRouter } from "./profile";
 import { watchlistRouter } from "./watchlist";
+import { searchRouter } from "./search";
 
 export const appRouter = router({
   movie: movieRouter,
@@ -19,9 +19,9 @@ export const appRouter = router({
   episode: episodeRouter,
   auth: authRouter,
   common: commonRouter,
-  multi: multiRouter,
   profile: profileRouter,
   watchlist: watchlistRouter,
+  search: searchRouter,
 });
 
 // export type definition of API

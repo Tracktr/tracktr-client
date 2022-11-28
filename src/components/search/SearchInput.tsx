@@ -7,12 +7,12 @@ import { ImSpinner2 } from "react-icons/im";
 import { PosterImage, PersonImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
-const SearchInput = ({ type }: { type: string | undefined }) => {
+const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
 
-  const { data, fetchStatus, status } = trpc.multi.searchMulti.useQuery(
-    { query: searchInput },
+  const { data, fetchStatus, status } = trpc.search.useQuery(
+    { query: searchInput, type: type },
     {
       enabled: searchInput.length > 3,
     }

@@ -15,9 +15,15 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
+  const utils = trpc.useContext();
+
+  useEffect(() => {
+    utils.search.invalidate();
+  }, []);
+
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
-    trpc.multi.searchMulti.useInfiniteQuery(
-      { query: query as string },
+    trpc.search.useInfiniteQuery(
+      { query: query as string, type: "multi" },
       {
         getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
           const nextPage = allPages.length + 1;
@@ -39,51 +45,52 @@ const SearchPage = () => {
         {() => (
           <PosterGrid>
             <>
-              {data?.pages.map((page) =>
-                page.results.map((content) => {
-                  if (content.media_type === "tv") {
-                    return (
-                      <TVPoster
-                        imageSrc={`${content.poster_path}`}
-                        name={content.title || content.name}
-                        key={content.id}
-                        url={`/tv/${content.id}`}
-                        score={content.vote_average}
-                      />
-                    );
-                  }
+              {data &&
+                data.pages.map((page: { results: any[] }) =>
+                  page.results.map((content) => {
+                    if (content.media_type === "tv") {
+                      return (
+                        <TVPoster
+                          imageSrc={`${content.poster_path}`}
+                          name={content.title || content.name}
+                          key={content.id}
+                          url={`/tv/${content.id}`}
+                          score={content.vote_average}
+                        />
+                      );
+                    }
 
-                  if (content.media_type === "movie") {
-                    return (
-                      <MoviePoster
-                        id={content.id}
-                        imageSrc={`${content.poster_path}`}
-                        name={content.title || content.name}
-                        key={content.id}
-                        url={`/movies/${content.id}`}
-                        score={content.vote_average}
-                        watched={null}
-                        refetch={refetch}
-                        watched_id={null}
-                        fetchStatus={isRefetching}
-                      />
-                    );
-                  }
+                    if (content.media_type === "movie") {
+                      return (
+                        <MoviePoster
+                          id={content.id}
+                          imageSrc={`${content.poster_path}`}
+                          name={content.title || content.name}
+                          key={content.id}
+                          url={`/movies/${content.id}`}
+                          score={content.vote_average}
+                          watched={null}
+                          refetch={refetch}
+                          watched_id={null}
+                          fetchStatus={isRefetching}
+                        />
+                      );
+                    }
 
-                  if (content.media_type === "person") {
-                    return (
-                      <PersonPoster
-                        imageSrc={`${content.poster_path || content.profile_path}`}
-                        name={content.title || content.name}
-                        key={content.id}
-                        url={`/person/${content.id}`}
-                      />
-                    );
-                  }
+                    if (content.media_type === "person") {
+                      return (
+                        <PersonPoster
+                          imageSrc={`${content.poster_path || content.profile_path}`}
+                          name={content.title || content.name}
+                          key={content.id}
+                          url={`/person/${content.id}`}
+                        />
+                      );
+                    }
 
-                  return <div key={content.id} />;
-                })
-              )}
+                    return <div key={content.id} />;
+                  })
+                )}
               <div className="loader" ref={ref}>
                 {isFetchingNextPage && hasNextPage && <LoadingPoster />}
               </div>
