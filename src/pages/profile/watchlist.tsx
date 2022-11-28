@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
-import { TiDeleteOutline } from "react-icons/ti";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
@@ -159,7 +158,11 @@ const WatchlistPage = () => {
                                 }
                               }}
                             >
-                              {item.watched ? <MdDelete /> : <AiOutlineCheckCircle />}
+                              {item.watched ? (
+                                <MdDelete className="text-2xl" />
+                              ) : (
+                                <AiOutlineCheckCircle className="text-2xl" />
+                              )}
                             </button>
                           ))}
                         {(deleteItem.isLoading || markAsWatched.isLoading) && item.id === currentLoadingID ? (
@@ -174,7 +177,7 @@ const WatchlistPage = () => {
                             }}
                             title="Remove from watchlist"
                           >
-                            <TiDeleteOutline className="text-2xl" />
+                            <AiOutlineCloseCircle className="text-2xl" />
                           </button>
                         )}
                       </div>
