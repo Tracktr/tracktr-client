@@ -67,6 +67,7 @@ export const tvRouter = router({
                                 name: e.name,
                                 episode_number: e.episode_number,
                                 season_number: e.season_number,
+                                air_date: new Date(e.air_date),
                               },
                             };
                           }),
