@@ -6,6 +6,7 @@ specifiers:
   '@prisma/client': ^4.6.1
   '@tailwindcss/line-clamp': ^0.4.2
   '@tanstack/react-query': ^4.12.0
+  '@tanstack/react-query-devtools': ^4.18.0
   '@trpc/client': 10.0.0-proxy-beta.21
   '@trpc/next': 10.0.0-proxy-beta.21
   '@trpc/react-query': 10.0.0-proxy-beta.21
@@ -59,6 +60,7 @@ dependencies:
   '@next-auth/prisma-adapter': 1.0.5_p7lsj4tgwxez3eyhkdky54svke
   '@prisma/client': 4.6.1_prisma@4.6.1
   '@tanstack/react-query': 4.12.0_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-query-devtools': 4.18.0_pqnxmwujmmnpcx44ucekqkefny
   '@trpc/client': 10.0.0-proxy-beta.21_rd7vj7t4d65pc73uf3ugp2du5a
   '@trpc/next': 10.0.0-proxy-beta.21_bjm5sicxrr2qtony334nbhmwlm
   '@trpc/react-query': 10.0.0-proxy-beta.21_a4w25vazzuhigtxe3cq7waw2l4
@@ -477,8 +479,30 @@ packages:
       tailwindcss: 3.1.8_57znarxsqwmnneadci5z5fd5gu
     dev: true
 
+  /@tanstack/match-sorter-utils/8.1.1:
+    resolution: {integrity: sha512-IdmEekEYxQsoLOR0XQyw3jD1GujBpRRYaGJYQUw1eOT1eUugWxdc7jomh1VQ1EKHcdwDLpLaCz/8y4KraU4T9A==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.4.2
+    dev: false
+
   /@tanstack/query-core/4.12.0:
     resolution: {integrity: sha512-KEiFPNLMFByhNL2s6RBFL6Z5cNdwwQzFpW/II3GY+rEuQ343ZEoVyQ48zlUXXkEkbamQFIFg2onM8Pxf0Yo01A==}
+    dev: false
+
+  /@tanstack/react-query-devtools/4.18.0_pqnxmwujmmnpcx44ucekqkefny:
+    resolution: {integrity: sha512-L51D0AUqLTs7J+W7RypJrUEKXsS0y0eEhXAgO+rhcZH6i8jVrKLhcNZStQSnE+UpZqPm73uxt2e8TJgYfzz0nw==}
+    peerDependencies:
+      '@tanstack/react-query': 4.18.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tanstack/match-sorter-utils': 8.1.1
+      '@tanstack/react-query': 4.12.0_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      superjson: 1.10.1
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /@tanstack/react-query/4.12.0_biqbaboplfbrettd7655fr4n2y:

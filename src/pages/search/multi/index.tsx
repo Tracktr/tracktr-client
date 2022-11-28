@@ -15,12 +15,6 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const utils = trpc.useContext();
-
-  useEffect(() => {
-    utils.search.invalidate();
-  }, []);
-
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
     trpc.search.useInfiniteQuery(
       { query: query as string, type: "multi" },
