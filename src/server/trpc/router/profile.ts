@@ -3,7 +3,7 @@ import { z } from "zod";
 import { TmdbEpisode } from "../../../types/tmdb";
 import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
-import { router, protectedProcedure } from "../trpc";
+import { router, protectedProcedure, publicProcedure } from "../trpc";
 
 interface IStatItem {
   date: string;
@@ -26,13 +26,41 @@ export const profileRouter = router({
     };
   }),
 
-  profileById: protectedProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
+  profileById: publicProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
     const userResult = await ctx.prisma.user.findFirst({
       where: {
         id: input.user,
       },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        image: true,
+        email: false,
+        emailVerified: false,
+        accounts: false,
+        sessions: false,
         profile: true,
+        EpisodesHistory: {
+          take: 6,
+          include: {
+            series: true,
+          },
+          orderBy: {
+            datetime: "desc",
+          },
+        },
+        MoviesHistory: {
+          take: 6,
+          include: {
+            movie: true,
+          },
+          orderBy: {
+            datetime: "desc",
+          },
+        },
+        Watchlist: true,
+        friends: true,
+        symmetricFriends: true,
       },
     });
 
@@ -120,48 +148,6 @@ export const profileRouter = router({
 
     return result;
   }),
-
-  watchHistory: protectedProcedure
-    .input(
-      z.object({
-        pageSize: z.number(),
-        page: z.number(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const episodes = await ctx.prisma.episodesHistory.findMany({
-        where: { user_id: ctx.session.user.profile.userId },
-        include: {
-          series: true,
-        },
-        orderBy: {
-          datetime: "desc",
-        },
-      });
-
-      const movies = await ctx.prisma.moviesHistory.findMany({
-        where: { user_id: ctx.session.user.profile.userId },
-        include: {
-          movie: true,
-        },
-        orderBy: {
-          datetime: "desc",
-        },
-      });
-
-      const sortedHistory = [...episodes, ...movies].sort((a, b) => {
-        if (a.datetime < b.datetime) {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
-
-      return {
-        history: paginate(sortedHistory, input.pageSize, input.page),
-        pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
-      };
-    }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
     const items: {
