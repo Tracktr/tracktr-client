@@ -88,9 +88,6 @@ const ImportPage = () => {
         for (let i = 1; i <= amount; i++) {
           await importRoute.mutateAsync(formattedData.slice(maxAmount * (i - 1), maxAmount * i)).then(() => {
             setCurrentPercentage(Math.ceil((i / amount) * 100));
-            console.log("i", i);
-            console.log("amount", amount);
-            console.log("Math.ceil(i / amount) * 100", Math.ceil((i / amount) * 100));
           });
         }
       },
