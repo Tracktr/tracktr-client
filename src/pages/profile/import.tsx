@@ -46,7 +46,7 @@ const ImportPage = () => {
     Papa.parse(event.target.files[0], {
       header: true,
       skipEmptyLines: true,
-      complete: function ({ data }: { data: ITraktData[] }) {
+      complete: async function ({ data }: { data: ITraktData[] }) {
         const formattedData = data.map((item) => {
           if (!item.tmdb_id) {
             console.error("NO ID", item);
@@ -78,13 +78,12 @@ const ImportPage = () => {
         const amount = Math.ceil(formattedData.length / maxAmount);
 
         for (let i = 1; i <= amount; i++) {
-          importRoute.mutate(formattedData.slice(maxAmount * (i - 1), maxAmount * i));
-
-          if (importRoute.isSuccess) {
-            console.log(Math.ceil(i / amount) * 10);
-            setCurrentPercentage(Math.ceil(i / amount) * 100);
-            continue;
-          }
+          await importRoute.mutateAsync(formattedData.slice(maxAmount * (i - 1), maxAmount * i)).then(() => {
+            setCurrentPercentage(Math.ceil((i / amount) * 100));
+            console.log("i", i);
+            console.log("amount", amount);
+            console.log("Math.ceil(i / amount) * 100", Math.ceil((i / amount) * 100));
+          });
         }
       },
     });
