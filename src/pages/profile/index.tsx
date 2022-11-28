@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
