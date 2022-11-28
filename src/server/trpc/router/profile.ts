@@ -58,7 +58,17 @@ export const profileRouter = router({
             datetime: "desc",
           },
         },
-        Watchlist: true,
+        Watchlist: {
+          take: 6,
+          include: {
+            WatchlistItem: {
+              include: {
+                series: true,
+                movies: true,
+              },
+            },
+          },
+        },
         friends: {
           where: { id: ctx.session?.user?.id },
         },
