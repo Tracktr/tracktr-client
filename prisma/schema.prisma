@@ -105,12 +105,13 @@ model Seasons {
 }
 
 model Episodes {
-  id             Int      @id
+  id             Int       @id
   name           String
   episode_number Int
   season_number  Int?
-  Seasons        Seasons? @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
+  Seasons        Seasons?  @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
   seasons_id     Int?
+  air_date       DateTime?
 }
 
 model EpisodesHistory {
