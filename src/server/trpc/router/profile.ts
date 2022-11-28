@@ -274,14 +274,10 @@ export const profileRouter = router({
       const manyMoviesHistory: any[] = [];
       const manyEpisodesHistory: any[] = [];
 
-      console.log("Length: ", input.length);
-
       let i = 0;
 
       for (i = 0; i < input.length; i++) {
         const item = input[i];
-        console.log("Start ", i);
-        console.log("Item ", item);
 
         if (item !== undefined) {
           if (item.type === "movie") {
@@ -313,7 +309,6 @@ export const profileRouter = router({
                     user_id: ctx?.session?.user?.id as string,
                   });
 
-                  console.log("Finished i", i);
                   continue;
                 }
               }
@@ -324,7 +319,6 @@ export const profileRouter = router({
                 user_id: ctx?.session?.user?.id as string,
               });
 
-              console.log("Finished i", i);
               continue;
             }
           } else if (item.type === "episode") {
@@ -409,7 +403,6 @@ export const profileRouter = router({
                       episode_number: Number(item.episode),
                     });
 
-                    console.log("Finished i", i);
                     continue;
                   }
                 } catch (e) {
@@ -423,7 +416,6 @@ export const profileRouter = router({
                         episode_number: Number(item.episode),
                       });
 
-                      console.log("Finished i", i);
                       continue;
                     }
                   }
@@ -438,7 +430,6 @@ export const profileRouter = router({
                 episode_number: Number(item.episode),
               });
 
-              console.log("Finished i", i);
               continue;
             }
           }
