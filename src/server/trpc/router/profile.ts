@@ -59,7 +59,9 @@ export const profileRouter = router({
           },
         },
         Watchlist: true,
-        friends: true,
+        friends: {
+          where: { id: ctx.session?.user?.id },
+        },
         symmetricFriends: true,
       },
     });

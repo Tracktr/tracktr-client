@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { ImSpinner2 } from "react-icons/im";
 import { MdOutlineWrapText } from "react-icons/md";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
@@ -14,6 +15,7 @@ const PublicProfile = () => {
     data: profile,
     status: profileStatus,
     refetch,
+    isRefetching,
   } = trpc.profile.profileById.useQuery(
     {
       user: String(router.query.userid),
@@ -22,6 +24,12 @@ const PublicProfile = () => {
   );
 
   const addAsFriend = trpc.profile.createFriend.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const removeAsFriend = trpc.profile.removeFriend.useMutation({
     onSuccess: () => {
       refetch();
     },
@@ -37,8 +45,24 @@ const PublicProfile = () => {
             <button
               className="inline-flex items-center px-6 py-4 my-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
               role="button"
+              onClick={() => {
+                if (profile?.friends?.length !== 1) {
+                  addAsFriend.mutate({ friend: String(profile?.id) });
+                }
+                removeAsFriend.mutate({ friend: String(profile?.id) });
+              }}
+              disabled={addAsFriend.isLoading || removeAsFriend.isLoading}
             >
-              Add as friend
+              {addAsFriend.isLoading || removeAsFriend.isLoading || isRefetching ? (
+                <div className="flex gap-4">
+                  <ImSpinner2 className="w-6 h-6 animate-spin" />
+                  Loading
+                </div>
+              ) : profile?.friends?.length === 1 ? (
+                <div>Remove as friends</div>
+              ) : (
+                <div>Add as friend</div>
+              )}
             </button>
           )}
 
