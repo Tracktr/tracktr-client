@@ -199,7 +199,11 @@ export const profileRouter = router({
 
         // Removes all episodes that don't have a next episode
         const nextEpisode = season?.episodes.filter((ep) => {
-          if (ep.episode_number === lastEpisode.episode_number + 1 && ep.season_number === lastEpisode.season_number) {
+          if (
+            ep.episode_number === lastEpisode.episode_number + 1 &&
+            ep.season_number === lastEpisode.season_number &&
+            (ep?.air_date || new Date()) <= new Date()
+          ) {
             return true;
           } else {
             return false;
