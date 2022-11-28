@@ -226,6 +226,48 @@ export const profileRouter = router({
     };
   }),
 
+  watchHistory: protectedProcedure
+    .input(
+      z.object({
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const episodes = await ctx.prisma.episodesHistory.findMany({
+        where: { user_id: ctx.session.user.profile.userId },
+        include: {
+          series: true,
+        },
+        orderBy: {
+          datetime: "desc",
+        },
+      });
+
+      const movies = await ctx.prisma.moviesHistory.findMany({
+        where: { user_id: ctx.session.user.profile.userId },
+        include: {
+          movie: true,
+        },
+        orderBy: {
+          datetime: "desc",
+        },
+      });
+
+      const sortedHistory = [...episodes, ...movies].sort((a, b) => {
+        if (a.datetime < b.datetime) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      return {
+        history: paginate(sortedHistory, input.pageSize, input.page),
+        pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
+      };
+    }),
+
   upNext: protectedProcedure.query(async ({ ctx }) => {
     const episodes = await ctx.prisma.episodesHistory.findMany({
       where: { user_id: ctx.session.user.profile.userId },
