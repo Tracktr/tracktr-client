@@ -26,6 +26,21 @@ export const profileRouter = router({
     };
   }),
 
+  profileById: protectedProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
+    const userResult = await ctx.prisma.user.findFirst({
+      where: {
+        id: input.user,
+      },
+      include: {
+        profile: true,
+      },
+    });
+
+    return {
+      ...userResult,
+    };
+  }),
+
   updateProfile: protectedProcedure
     .input(
       z.object({
