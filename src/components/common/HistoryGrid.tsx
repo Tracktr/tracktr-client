@@ -10,7 +10,7 @@ import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 
-const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryGrid): JSX.Element => {
+const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
 
   const deleteEpisodeFromHistory = trpc.episode.removeEpisodeFromWatched.useMutation({
@@ -95,23 +95,25 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch }: IHistoryG
                       </div>
                     </a>
                   </Link>
-                  <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                    {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
-                    (deleteMovieFromHistory.isLoading && item.id === currentLoadingID) ? (
-                      <ImSpinner2 className="w-6 h-6 animate-spin" />
-                    ) : (
-                      <button
-                        className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleDelete(item.id, item.movie_id ? "movie" : "episode");
-                        }}
-                      >
-                        <MdDelete className="text-2xl" />
-                      </button>
-                    )}
-                  </div>
+                  {!inPublic && (
+                    <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+                      {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
+                      (deleteMovieFromHistory.isLoading && item.id === currentLoadingID) ? (
+                        <ImSpinner2 className="w-6 h-6 animate-spin" />
+                      ) : (
+                        <button
+                          className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDelete(item.id, item.movie_id ? "movie" : "episode");
+                          }}
+                        >
+                          <MdDelete className="text-2xl" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
@@ -127,6 +129,7 @@ interface IHistoryGrid {
   status: "error" | "success" | "loading";
   hasScrollContainer?: boolean;
   refetch: () => void;
+  inPublic?: boolean;
 }
 
 interface ISeries {
