@@ -78,7 +78,7 @@ const WatchlistPage = () => {
     >
       {() => (
         <div className="max-w-6xl m-auto">
-          <ProfileHeader image={String(data?.image)} name={String(data?.name)} />
+          <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Watchlist" />
           <div className="items-center my-5 align-middle md:flex">
             <h1 className="text-3xl">Watchlist</h1>
             <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
