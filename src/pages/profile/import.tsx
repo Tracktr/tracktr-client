@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
@@ -31,8 +32,15 @@ export interface ITraktData {
 
 const ImportPage = () => {
   const router = useRouter();
+  const session = useSession();
   const [currentPercentage, setCurrentPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>();
+
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/");
+    }
+  }, [session, router]);
 
   useEffect(() => {
     if (currentPercentage >= 100) router.push("/profile/history");
