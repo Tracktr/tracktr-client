@@ -72,7 +72,7 @@ const PublicProfile = () => {
           )}
 
           <div className="mt-12 mb-6">
-            <div className="items-center text-xl align-middle mb-7 md:flex md:text-3xl">
+            <div className="flex items-center text-xl align-middle mb-7 md:text-3xl">
               <MdOutlineWrapText className="mr-4" />
               <div>Recently watched episodes</div>
             </div>
@@ -85,7 +85,7 @@ const PublicProfile = () => {
             />
           </div>
           <div className="my-6">
-            <div className="items-center text-xl align-middle mb-7 md:flex md:text-3xl">
+            <div className="flex items-center text-xl align-middle mb-7 md:text-3xl">
               <MdOutlineWrapText className="mr-4" />
               <div>Recently watched movies</div>
             </div>
@@ -98,7 +98,7 @@ const PublicProfile = () => {
             />
           </div>
           <div className="my-6">
-            <div className="items-center text-xl align-middle mb-7 md:flex md:text-3xl">
+            <div className="flex items-center text-xl align-middle mb-7 md:text-3xl">
               <MdOutlineWrapText className="mr-4" />
               <div>Watchlist</div>
             </div>
