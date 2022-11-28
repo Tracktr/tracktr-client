@@ -1,4 +1,4 @@
-import Search from "./Search";
+import SearchInput from "./SearchInput";
 
 interface ISearchHeader {
   title: string;
@@ -22,7 +22,7 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
             Find amazing {title}
             <span className="text-primary">.</span>
           </div>
-          <Search type={type} />
+          <SearchInput type={type} />
         </div>
       </div>
     </div>
