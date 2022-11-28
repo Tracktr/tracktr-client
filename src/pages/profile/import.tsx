@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import Papa from "papaparse";
-import { useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 
