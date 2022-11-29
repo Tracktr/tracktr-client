@@ -90,12 +90,12 @@ const Navbar = () => {
               <AnimatePresence>
                 {navSearch && (
                   <motion.div
-                    initial={{ top: -50 }}
-                    animate={{ top: 0 }}
-                    exit={{ top: -50 }}
+                    initial={{ top: -50, opacity: 0 }}
+                    animate={{ top: 0, opacity: 1 }}
+                    exit={{ top: -50, opacity: 0 }}
                     className="absolute top-0 z-50 w-1/3 left-1/3"
                   >
-                    <SearchInput type="multi" />
+                    <SearchInput type="multi" hideNav={toggleNavSearch} />
                     <button className="absolute text-gray-500 right-2 top-4" onClick={toggleNavSearch}>
                       <CgClose className="text-2xl" />
                     </button>

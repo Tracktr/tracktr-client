@@ -7,7 +7,12 @@ import { ImSpinner2 } from "react-icons/im";
 import { PosterImage, PersonImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
-const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) => {
+interface SearchInputProps {
+  type: "multi" | "tv" | "movie" | "person";
+  hideNav?: () => void;
+}
+
+const SearchInput = ({ type, hideNav }: SearchInputProps) => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const [enabled, setEnabled] = useState(false);
@@ -27,12 +32,14 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      if (hideNav) hideNav();
       router.push(`/search/${type}?query=${searchInput}`);
     }
   };
 
   const handleOnClick = (e: any) => {
     e.preventDefault();
+    if (hideNav) hideNav();
     router.push(`/search/${type}/?query=${searchInput}`);
   };
 
@@ -85,7 +92,7 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
         />
       </div>
       {data && (
-        <div className="absolute grid w-full grid-cols-4 py-4 bg-white rounded-b-md text-primaryBackground">
+        <div className="absolute grid w-full grid-cols-4 py-4 bg-white shadow-lg rounded-b-md text-primaryBackground">
           {data.results.slice(0, 4).map((item: any) => (
             <Link
               href={`${url({
@@ -94,7 +101,12 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
               })}`}
               key={item.id}
             >
-              <a className="w-full text-center group">
+              <a
+                className="w-full text-center group"
+                onClick={() => {
+                  if (hideNav) hideNav();
+                }}
+              >
                 <div className="relative group">
                   <Image
                     alt={"image for" + item.original_title || item.original_name || item.name}
