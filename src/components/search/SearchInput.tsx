@@ -12,7 +12,7 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
   const [searchInput, setSearchInput] = useState("");
 
   const { data, fetchStatus, status } = trpc.search.useQuery(
-    { query: searchInput, type: type },
+    { query: searchInput, type: type, page: 1 },
     {
       enabled: searchInput.length > 3,
     }
