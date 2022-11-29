@@ -31,30 +31,34 @@ const SearchPage = () => {
 
   return (
     <div className="max-w-6xl px-4 pt-32 m-auto">
-      <div className="z-40 mb-5 text-4xl">Results for: {query}</div>
+      <div className="z-40 mb-5 text-4xl">
+        Results for: <span className="font-bold">{query}</span>
+      </div>
       <LoadingPageComponents status={status} posters>
         {() => (
-          <PosterGrid>
-            <>
-              {data?.pages.map((page) =>
-                page.results.map((content) => {
-                  return (
-                    <TVPoster
-                      imageSrc={`${content.poster_path}`}
-                      name={content.title || content.name}
-                      key={content.id}
-                      url={`/tv/${content.id}`}
-                      score={content.vote_average}
-                    />
-                  );
-                })
-              )}
-              <div className="loader" ref={ref}>
-                {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-              </div>
-              {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
-            </>
-          </PosterGrid>
+          <>
+            <PosterGrid>
+              <>
+                {data?.pages.map((page) =>
+                  page.results.map((content) => {
+                    return (
+                      <TVPoster
+                        imageSrc={`${content.poster_path}`}
+                        name={content.title || content.name}
+                        key={content.id}
+                        url={`/tv/${content.id}`}
+                        score={content.vote_average}
+                      />
+                    );
+                  })
+                )}
+                <div className="loader" ref={ref}>
+                  {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+                </div>
+              </>
+            </PosterGrid>
+            {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
+          </>
         )}
       </LoadingPageComponents>
     </div>
