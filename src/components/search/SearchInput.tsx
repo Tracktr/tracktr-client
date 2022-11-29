@@ -69,7 +69,7 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
     <div className="relative">
       <div
         className={`
-        flex max-w-md py-2 mt-2 text-gray-500 bg-white
+        flex py-2 mt-2 text-gray-500 bg-white
         ${status === "success" ? "rounded-t-md rounded-b-none" : "rounded-md"}
       `}
       >
@@ -85,7 +85,7 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
         />
       </div>
       {data && (
-        <div className="absolute grid w-full max-w-md grid-cols-4 py-4 bg-white rounded-b-md text-primaryBackground">
+        <div className="absolute grid w-full grid-cols-4 py-4 bg-white rounded-b-md text-primaryBackground">
           {data.results.slice(0, 4).map((item: any) => (
             <Link
               href={`${url({

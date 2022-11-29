@@ -22,7 +22,9 @@ const SearchHeader = ({ title, type, backgroundImage }: ISearchHeader) => {
             Find amazing {title}
             <span className="text-primary">.</span>
           </div>
-          <SearchInput type={type} />
+          <div className="max-w-md">
+            <SearchInput type={type} />
+          </div>
         </div>
       </div>
     </div>
