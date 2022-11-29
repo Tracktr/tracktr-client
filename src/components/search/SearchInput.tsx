@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { CgSearch } from "react-icons/cg";
 import { ImSpinner2 } from "react-icons/im";
 import { PosterImage, PersonImage } from "../../utils/generateImages";
@@ -10,11 +10,12 @@ import { trpc } from "../../utils/trpc";
 const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
+  const [enabled, setEnabled] = useState(false);
 
   const { data, fetchStatus, status } = trpc.search.useQuery(
     { query: searchInput, type: type, cursor: 1 },
     {
-      enabled: searchInput.length > 3,
+      enabled: searchInput.length > 3 && enabled,
     }
   );
 
@@ -34,6 +35,17 @@ const SearchInput = ({ type }: { type: "multi" | "tv" | "movie" | "person" }) =>
     e.preventDefault();
     router.push(`/search/${type}/?query=${searchInput}`);
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setEnabled(true);
+    }, 1000);
+
+    return () => {
+      setEnabled(false);
+      clearTimeout(delayDebounceFn);
+    };
+  }, [searchInput]);
 
   const icon = () => {
     if (fetchStatus === "idle" || fetchStatus === "paused") {
