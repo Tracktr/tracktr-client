@@ -26,10 +26,12 @@ export const profileRouter = router({
     };
   }),
 
-  profileById: publicProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
+  profileByUsername: publicProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
     const userResult = await ctx.prisma.user.findFirstOrThrow({
       where: {
-        id: input.user,
+        profile: {
+          username: input.user,
+        },
       },
       select: {
         id: true,

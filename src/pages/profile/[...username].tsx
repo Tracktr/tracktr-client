@@ -21,9 +21,9 @@ const PublicProfile = () => {
     status: profileStatus,
     refetch,
     isRefetching,
-  } = trpc.profile.profileById.useQuery(
+  } = trpc.profile.profileByUsername.useQuery(
     {
-      user: String(router.query.userid),
+      user: String(router.query.username),
     },
     { enabled: router.isReady }
   );
@@ -44,7 +44,7 @@ const PublicProfile = () => {
     <LoadingPageComponents status={profileStatus}>
       {() => (
         <div className="max-w-6xl m-auto">
-          <ProfileHeader image={String(profile?.image)} name={String(profile?.name)} />
+          <ProfileHeader image={String(profile?.image)} name={String(profile?.profile?.username)} />
 
           {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && (
             <button
