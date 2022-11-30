@@ -2,14 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Account {
@@ -28,6 +27,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -36,22 +36,24 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
-  id               String            @id @default(cuid())
-  name             String?
-  email            String?           @unique
-  emailVerified    DateTime?
-  image            String?
-  accounts         Account[]
-  sessions         Session[]
-  profile          Profile?
-  MoviesHistory    MoviesHistory[]
-  EpisodesHistory  EpisodesHistory[]
-  Watchlist        Watchlist[]
-  friends          User[]            @relation("UserFriends")
-  symmetricFriends User[]            @relation("UserFriends")
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  profile         Profile?
+  MoviesHistory   MoviesHistory[]
+  EpisodesHistory EpisodesHistory[]
+  Watchlist       Watchlist[]
+  following       User[]            @relation("UserFollowers")
+  followers       User[]            @relation("UserFollowers")
 }
 
 model VerificationToken {
@@ -63,6 +65,7 @@ model VerificationToken {
 }
 
 model Profile {
+  username String  @id @unique
   adult    Boolean @default(false)
   language String  @default("en")
   region   String  @default("GB")
@@ -85,6 +88,9 @@ model MoviesHistory {
   movie_id Int
   user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   movie    Movies   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([movie_id])
 }
 
 model Series {
@@ -104,6 +110,8 @@ model Seasons {
   Series        Series?    @relation(fields: [series_id], references: [id], onDelete: Cascade)
   series_id     Int?
   episodes      Episodes[]
+
+  @@index([series_id])
 }
 
 model Episodes {
@@ -114,6 +122,8 @@ model Episodes {
   Seasons        Seasons?  @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
   seasons_id     Int?
   air_date       DateTime?
+
+  @@index([seasons_id])
 }
 
 model EpisodesHistory {
@@ -125,6 +135,9 @@ model EpisodesHistory {
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+
+  @@index([series_id])
+  @@index([user_id])
 }
 
 model Watchlist {
@@ -142,4 +155,8 @@ model WatchlistItem {
   movies       Movies?   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
   series       Series?   @relation(fields: [series_id], references: [id], onDelete: Cascade)
   watchlist    Watchlist @relation(fields: [watchlist_id], references: [id], onDelete: Cascade)
+
+  @@index([movie_id])
+  @@index([series_id])
+  @@index([watchlist_id])
 }

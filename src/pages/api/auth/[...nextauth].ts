@@ -2,15 +2,17 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Prisma } from "@prisma/client";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import slugify from "slugify";
 import { prisma } from "../../../server/db/client";
 
 const createUserProfile = async ({ user }: any) => {
-  const { id } = user;
+  const { id, name } = user;
 
   try {
     await prisma.profile.create({
       data: {
         userId: id,
+        username: slugify(name, ""),
       },
     });
   } catch (error) {

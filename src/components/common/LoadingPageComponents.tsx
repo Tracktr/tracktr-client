@@ -17,7 +17,7 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
     // TODO: Error component
     if (status === "error") {
       typeof window !== "undefined" && NProgress.done();
-      return <p className="max-w-6xl px-4 m-auto">Error</p>;
+      return <p className="max-w-6xl px-4 py-24 m-auto">Error</p>;
     }
 
     if (status === "loading") {
