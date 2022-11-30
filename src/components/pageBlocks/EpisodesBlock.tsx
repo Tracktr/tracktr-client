@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 import EpisodePoster from "../posters/EpisodePoster";
+import { IThemeColor } from "../watchButton/BaseWatchButton";
 
-const EpisodesBlock = ({ episodes, refetch, fetchStatus }: IEpisodesBlock) => {
+const EpisodesBlock = ({ episodes, refetch, fetchStatus, themeColor }: IEpisodesBlock) => {
   const router = useRouter();
   const { tvID } = router.query;
 
@@ -22,6 +23,7 @@ const EpisodesBlock = ({ episodes, refetch, fetchStatus }: IEpisodesBlock) => {
           watched_id={item.watched_id}
           refetch={refetch}
           fetchStatus={fetchStatus}
+          themeColor={themeColor}
         />
       ))}
     </div>
@@ -32,6 +34,7 @@ interface IEpisodesBlock {
   episodes: IEpisode[];
   refetch: () => void;
   fetchStatus: boolean;
+  themeColor: IThemeColor;
 }
 
 interface Crew {
