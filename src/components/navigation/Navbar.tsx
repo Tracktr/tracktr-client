@@ -93,10 +93,10 @@ const Navbar = () => {
                     initial={{ top: -50, opacity: 0 }}
                     animate={{ top: 0, opacity: 1 }}
                     exit={{ top: -50, opacity: 0 }}
-                    className="absolute top-0 z-50 w-1/3 left-1/3"
+                    className="absolute top-0 left-0 z-50 w-full px-2 lg:w-1/3 lg:left-1/3"
                   >
                     <SearchInput type="multi" hideNav={toggleNavSearch} />
-                    <button className="absolute text-gray-500 right-2 top-4" onClick={toggleNavSearch}>
+                    <button className="absolute text-gray-500 right-4 top-4" onClick={toggleNavSearch}>
                       <CgClose className="text-2xl" />
                     </button>
                   </motion.div>
