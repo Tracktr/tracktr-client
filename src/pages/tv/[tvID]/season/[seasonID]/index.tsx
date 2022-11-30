@@ -49,7 +49,12 @@ const TVPage = () => {
           amountOfEpisodes={tvShow.number_of_episodes}
           videos={tvShow.videos}
         >
-          <EpisodesBlock episodes={data.episodes} refetch={refetch} fetchStatus={isRefetching} />
+          <EpisodesBlock
+            episodes={data.episodes}
+            refetch={refetch}
+            fetchStatus={isRefetching}
+            themeColor={tvShow.theme_color}
+          />
           <CastBlock cast={data.credits.cast} />
         </ContentHeader>
       )}

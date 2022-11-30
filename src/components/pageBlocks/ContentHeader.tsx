@@ -117,6 +117,7 @@ const ContentHeader = ({
                   <SeriesProgressionBlock
                     amountOfEpisodes={amountOfEpisodes}
                     numberOfEpisodesWatched={seriesProgression}
+                    themeColor={themeColor}
                   />
                 </div>
               )}

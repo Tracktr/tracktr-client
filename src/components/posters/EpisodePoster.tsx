@@ -7,6 +7,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 export interface IEpisodePoster {
   imageSrc: string;
@@ -21,6 +22,7 @@ export interface IEpisodePoster {
   watched_id: string | null;
   refetch: () => void;
   fetchStatus: boolean;
+  themeColor: IThemeColor;
 }
 
 const EpisodePoster = ({
@@ -36,6 +38,7 @@ const EpisodePoster = ({
   watched_id,
   refetch,
   fetchStatus,
+  themeColor,
 }: IEpisodePoster) => {
   const { status } = useSession();
   const [currentLoadingID, setCurrentLoadingID] = useState<number>();
@@ -75,7 +78,12 @@ const EpisodePoster = ({
           <Link href={url || "#"}>
             <a>
               <p className="flex items-center justify-center pb-2 font-bold text-md">
-                <span className="px-3 py-1 mr-2 rounded-full bg-primary text-primaryBackground">
+                <span
+                  style={{
+                    background: themeColor?.hex,
+                  }}
+                  className="px-3 py-1 mr-2 rounded-full text-primaryBackground"
+                >
                   {season}x{episode}
                 </span>
                 {name}
