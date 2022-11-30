@@ -11,7 +11,7 @@ export interface IWatchButtonProps {
 }
 
 const WatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
-  if (episodeID && seasonID) {
+  if (episodeID >= 0 && seasonID >= 0) {
     return (
       <EpisodeWatchButton
         itemID={itemID}
