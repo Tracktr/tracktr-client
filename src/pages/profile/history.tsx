@@ -15,7 +15,8 @@ const HistoryPage = () => {
     data: history,
     status: historyStatus,
     refetch,
-  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 50 }, { keepPreviousData: true });
+    isRefetching,
+  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 60 }, { keepPreviousData: true });
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -62,7 +63,11 @@ const HistoryPage = () => {
               </button>
             </div>
           </div>
-          <HistoryGrid history={history?.history || []} status={historyStatus} refetch={refetch} />
+          <HistoryGrid
+            history={history?.history || []}
+            status={isRefetching ? "loading" : historyStatus}
+            refetch={refetch}
+          />
         </div>
       )}
     </LoadingPageComponents>
