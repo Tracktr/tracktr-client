@@ -132,7 +132,7 @@ export const profileRouter = router({
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.profile.userId },
-        data: { following: { connect: [{ id: input.follower }] } },
+        data: { following: { disconnect: [{ id: input.follower }] } },
       });
 
       return {
