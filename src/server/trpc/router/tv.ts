@@ -84,10 +84,10 @@ export const tvRouter = router({
 
       if (ctx && input?.tvID) {
         const episodesWatched = await ctx.prisma.$queryRaw`
-          SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_number) as UNSIGNED)
+          SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_number, EpisodesHistory.season_number) as UNSIGNED)
           as "count"
-          FROM EpisodesHistory 
-          WHERE series_id = ${input?.tvID} 
+          FROM EpisodesHistory
+          WHERE series_id = ${input?.tvID}
           AND user_id = ${ctx.session?.user?.id}
         `;
 
