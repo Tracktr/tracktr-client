@@ -328,8 +328,8 @@ export const profileRouter = router({
 
           const nextEpisode = nextSeason?.episodes.filter((ep) => {
             if (
-              ep.episode_number === lastEpisode.episode_number + 1 &&
-              ep.season_number === lastEpisode.season_number &&
+              ep.episode_number === 1 &&
+              ep.season_number === lastEpisode.season_number + 1 &&
               ep?.air_date !== null &&
               ep?.air_date <= new Date()
             ) {
