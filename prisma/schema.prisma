@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "foreignKeys"
+  relationMode = "prisma"
 }
 
 model Account {
@@ -27,6 +27,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -35,6 +36,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -85,6 +88,9 @@ model MoviesHistory {
   movie_id Int
   user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   movie    Movies   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([movie_id])
 }
 
 model Series {
@@ -104,6 +110,8 @@ model Seasons {
   Series        Series?    @relation(fields: [series_id], references: [id], onDelete: Cascade)
   series_id     Int?
   episodes      Episodes[]
+
+  @@index([series_id])
 }
 
 model Episodes {
@@ -114,6 +122,8 @@ model Episodes {
   Seasons        Seasons?  @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
   seasons_id     Int?
   air_date       DateTime?
+
+  @@index([seasons_id])
 }
 
 model EpisodesHistory {
@@ -125,6 +135,9 @@ model EpisodesHistory {
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+
+  @@index([series_id])
+  @@index([user_id])
 }
 
 model Watchlist {
@@ -142,4 +155,8 @@ model WatchlistItem {
   movies       Movies?   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
   series       Series?   @relation(fields: [series_id], references: [id], onDelete: Cascade)
   watchlist    Watchlist @relation(fields: [watchlist_id], references: [id], onDelete: Cascade)
+
+  @@index([movie_id])
+  @@index([series_id])
+  @@index([watchlist_id])
 }
