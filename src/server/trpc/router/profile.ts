@@ -69,10 +69,8 @@ export const profileRouter = router({
             },
           },
         },
-        friends: {
-          where: { id: ctx.session?.user?.id },
-        },
-        symmetricFriends: true,
+        followers: true,
+        following: true,
       },
     });
 
@@ -108,54 +106,44 @@ export const profileRouter = router({
       return user;
     }),
 
-  createFriend: protectedProcedure
+  createFollowers: protectedProcedure
     .input(
       z.object({
-        friend: z.string(),
+        follower: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.profile.userId },
-        data: { friends: { connect: [{ id: input.friend }] } },
-      });
-      const friend = await ctx.prisma.user.update({
-        where: { id: input.friend },
-        data: { friends: { connect: [{ id: ctx.session.user.profile.userId }] } },
+        data: { following: { connect: [{ id: input.follower }] } },
       });
 
       return {
         ...user,
-        ...friend,
       };
     }),
 
-  removeFriend: protectedProcedure
+  removeFollowers: protectedProcedure
     .input(
       z.object({
-        friend: z.string(),
+        follower: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.profile.userId },
-        data: { friends: { disconnect: [{ id: input.friend }] } },
-      });
-      const friend = await ctx.prisma.user.update({
-        where: { id: input.friend },
-        data: { friends: { disconnect: [{ id: ctx.session.user.profile.userId }] } },
+        data: { following: { connect: [{ id: input.follower }] } },
       });
 
       return {
         ...user,
-        ...friend,
       };
     }),
 
-  getFriends: protectedProcedure.query(async ({ ctx }) => {
+  getFollowers: protectedProcedure.query(async ({ ctx }) => {
     const result = await ctx.prisma.user.findFirst({
       where: { id: ctx.session.user.profile.userId },
-      include: { friends: true },
+      include: { followers: true },
     });
 
     return result;

@@ -37,19 +37,19 @@ model Session {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  name             String?
-  email            String?           @unique
-  emailVerified    DateTime?
-  image            String?
-  accounts         Account[]
-  sessions         Session[]
-  profile          Profile?
-  MoviesHistory    MoviesHistory[]
-  EpisodesHistory  EpisodesHistory[]
-  Watchlist        Watchlist[]
-  friends          User[]            @relation("UserFriends")
-  symmetricFriends User[]            @relation("UserFriends")
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  profile         Profile?
+  MoviesHistory   MoviesHistory[]
+  EpisodesHistory EpisodesHistory[]
+  Watchlist       Watchlist[]
+  following       User[]            @relation("UserFollowers")
+  followers       User[]            @relation("UserFollowers")
 }
 
 model VerificationToken {

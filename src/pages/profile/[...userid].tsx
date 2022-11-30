@@ -28,13 +28,13 @@ const PublicProfile = () => {
     { enabled: router.isReady }
   );
 
-  const addAsFriend = trpc.profile.createFriend.useMutation({
+  const addAsFollower = trpc.profile.createFollowers.useMutation({
     onSuccess: () => {
       refetch();
     },
   });
 
-  const removeAsFriend = trpc.profile.removeFriend.useMutation({
+  const removeAsFollower = trpc.profile.removeFollowers.useMutation({
     onSuccess: () => {
       refetch();
     },
@@ -51,22 +51,22 @@ const PublicProfile = () => {
               className="inline-flex items-center px-6 py-4 mt-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
               role="button"
               onClick={() => {
-                if (profile?.friends?.length !== 1) {
-                  addAsFriend.mutate({ friend: String(profile?.id) });
+                if (profile?.followers?.length !== 1) {
+                  addAsFollower.mutate({ follower: String(profile?.id) });
                 }
-                removeAsFriend.mutate({ friend: String(profile?.id) });
+                removeAsFollower.mutate({ follower: String(profile?.id) });
               }}
-              disabled={addAsFriend.isLoading || removeAsFriend.isLoading}
+              disabled={addAsFollower.isLoading || removeAsFollower.isLoading}
             >
-              {addAsFriend.isLoading || removeAsFriend.isLoading || isRefetching ? (
+              {addAsFollower.isLoading || removeAsFollower.isLoading || isRefetching ? (
                 <div className="flex gap-4">
                   <ImSpinner2 className="w-6 h-6 animate-spin" />
                   Loading
                 </div>
-              ) : profile?.friends?.length === 1 ? (
-                <div>Remove as friends</div>
+              ) : profile?.followers?.length === 1 ? (
+                <div>Unfollow</div>
               ) : (
-                <div>Add as friend</div>
+                <div>Follow</div>
               )}
             </button>
           )}
