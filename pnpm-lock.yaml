@@ -50,6 +50,7 @@ specifiers:
   react-tooltip: ^4.5.1
   recharts: ^2.1.16
   simplebar-react: ^2.4.3
+  slugify: ^1.6.5
   superjson: ^1.11.0
   tailwindcss: ^3.2.4
   ts-node: ^10.9.1
@@ -82,6 +83,7 @@ dependencies:
   react-tooltip: 4.5.1_biqbaboplfbrettd7655fr4n2y
   recharts: 2.1.16_v2m5e27vhdewzwhryxwfaorcca
   simplebar-react: 2.4.3_biqbaboplfbrettd7655fr4n2y
+  slugify: 1.6.5
   superjson: 1.11.0
   ts-node: 10.9.1_i7crlymf22c7hnawxb4tbubvdq
   zod: 3.19.1
@@ -3522,6 +3524,11 @@ packages:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
     dev: true
+
+  /slugify/1.6.5:
+    resolution: {integrity: sha512-8mo9bslnBO3tr5PEVFzMPIWwWnipGS0xVbYf65zxDqfNwmzYn1LpiKNrR6DlClusuvo+hDHd1zKpmfAe83NQSQ==}
+    engines: {node: '>=8.0.0'}
+    dev: false
 
   /source-map-js/1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
