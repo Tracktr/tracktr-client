@@ -13,8 +13,8 @@ const SearchPage = () => {
   const { ref, inView } = useInView();
 
   const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
-    trpc.movie.searchMovie.useInfiniteQuery(
-      { query: query as string },
+    trpc.search.useInfiniteQuery(
+      { query: query as string, type: "movie" },
       {
         getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
           const nextPage = allPages.length + 1;

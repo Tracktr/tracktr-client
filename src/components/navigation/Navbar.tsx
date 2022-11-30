@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import Logo from "../common/Logo";
 import NavButton from "./Navbutton";
@@ -8,6 +8,8 @@ import { BiMenuAltRight } from "react-icons/bi";
 import NavMobile from "./NavMobile";
 import ImageWithFallback from "../common/ImageWithFallback";
 import { SignupWindow } from "../../pages/google-signin";
+import { CgClose, CgSearch } from "react-icons/cg";
+import SearchInput from "../search/SearchInput";
 
 export const navLinks = [
   { href: "/movies", text: "Movies", active: false },
@@ -48,6 +50,7 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   const [profileHover, setProfileHover] = useState(false);
   const [navMobile, setNavMobile] = useState(false);
+  const [navSearch, setNavSearch] = useState(false);
 
   const toggleProfileHover = () => {
     setProfileHover(!profileHover);
@@ -55,6 +58,10 @@ const Navbar = () => {
 
   const toggleNavMobile = () => {
     setNavMobile(!navMobile);
+  };
+
+  const toggleNavSearch = () => {
+    setNavSearch(!navSearch);
   };
 
   useEffect(() => {
@@ -77,6 +84,24 @@ const Navbar = () => {
               ))}
             </ul>
             <div className="flex items-center justify-end col-span-2 lg:col-span-1">
+              <button onClick={toggleNavSearch} className="px-4 py-2 group-hover:text-primary">
+                <CgSearch className="text-2xl" />
+              </button>
+              <AnimatePresence>
+                {navSearch && (
+                  <motion.div
+                    initial={{ top: -50, opacity: 0 }}
+                    animate={{ top: 0, opacity: 1 }}
+                    exit={{ top: -50, opacity: 0 }}
+                    className="absolute top-0 left-0 z-50 w-full px-2 lg:w-1/3 lg:left-1/3"
+                  >
+                    <SearchInput type="multi" hideNav={toggleNavSearch} />
+                    <button className="absolute text-gray-500 right-4 top-4" onClick={toggleNavSearch}>
+                      <CgClose className="text-2xl" />
+                    </button>
+                  </motion.div>
+                )}{" "}
+              </AnimatePresence>
               {status !== "loading" && (
                 <>
                   <div className="hidden mr-6 lg:mr-0 lg:block">
