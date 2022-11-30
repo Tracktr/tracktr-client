@@ -300,7 +300,8 @@ export const profileRouter = router({
           if (
             ep.episode_number === lastEpisode.episode_number + 1 &&
             ep.season_number === lastEpisode.season_number &&
-            (ep?.air_date || new Date()) <= new Date()
+            ep?.air_date !== null &&
+            ep?.air_date <= new Date()
           ) {
             return true;
           } else {
