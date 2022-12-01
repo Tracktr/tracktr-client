@@ -1,7 +1,7 @@
 import { PosterGrid } from "../common/PosterGrid";
 
-export const LoadingPoster = () => (
-  <div className="flex flex-col gap-y-[6px]">
+export const LoadingPoster = ({ hidden }: { hidden?: boolean }) => (
+  <div className={`${hidden ? "hidden md:flex" : "flex"} flex-col gap-y-[6px]`}>
     <div className="animate-pulse w-[170px] h-[240px] rounded bg-[#343434]" />
   </div>
 );
@@ -11,10 +11,10 @@ const LoadingPosters = () => {
     <PosterGrid>
       <LoadingPoster />
       <LoadingPoster />
-      <LoadingPoster />
-      <LoadingPoster />
-      <LoadingPoster />
-      <LoadingPoster />
+      <LoadingPoster hidden />
+      <LoadingPoster hidden />
+      <LoadingPoster hidden />
+      <LoadingPoster hidden />
     </PosterGrid>
   );
 };
