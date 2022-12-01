@@ -82,7 +82,11 @@ const EpisodePoster = ({
                   style={{
                     background: themeColor?.hex,
                   }}
-                  className="px-3 py-1 mr-2 rounded-full text-primaryBackground"
+                  className={`
+                    px-3 py-1 mr-2 rounded-full
+                    ${themeColor.isDark && "text-white"}
+                    ${themeColor.isLight && "text-primaryBackground"}
+                  `}
                 >
                   {season}x{episode}
                 </span>
