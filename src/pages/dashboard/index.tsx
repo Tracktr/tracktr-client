@@ -73,7 +73,7 @@ const DashboardPage = () => {
                 Your last two weeks
               </div>
               <div className="pt-1 pb-5">
-                You watched watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
+                You watched {stats?.episodeAmount} episodes and {stats?.movieAmount} movies the past 14 days
               </div>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={stats?.history} margin={{ left: -50 }}>
