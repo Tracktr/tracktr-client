@@ -18,6 +18,7 @@ export const navLinks = [
 
 const subLinks = [
   { href: "/profile", text: "Profile" },
+  { href: "/profile/settings", text: "Settings" },
   { href: "/profile/history", text: "History" },
   { href: "/profile/watchlist", text: "Watchlist" },
 ];
