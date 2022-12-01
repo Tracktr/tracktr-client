@@ -18,6 +18,16 @@ export const profileRouter = router({
       },
       include: {
         profile: true,
+        following: {
+          include: {
+            profile: true,
+          },
+        },
+        followers: {
+          include: {
+            profile: true,
+          },
+        },
       },
     });
 
