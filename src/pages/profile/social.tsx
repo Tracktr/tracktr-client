@@ -43,7 +43,7 @@ const FollowersPage = () => {
         {() => {
           return (
             <div className="mx-4 md:mx-0">
-              <div>
+              <div className="my-10">
                 <h1 className="my-5 text-3xl">Search</h1>
                 <div className="relative max-w-sm">
                   <div className="flex items-center py-2 mt-2 text-gray-500 bg-white rounded-full">
@@ -59,7 +59,7 @@ const FollowersPage = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="my-10">
                 <h1 className="my-5 text-3xl">Following</h1>
                 <div className="flex">
                   {data?.following && data?.following?.length > 0 ? (
@@ -85,7 +85,7 @@ const FollowersPage = () => {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="my-10">
                 <h1 className="my-5 text-3xl">Followers</h1>
                 <div className="flex">
                   {data?.followers && data?.followers?.length > 0 ? (
