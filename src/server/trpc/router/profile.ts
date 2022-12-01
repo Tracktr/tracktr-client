@@ -220,7 +220,7 @@ export const profileRouter = router({
           },
         })
         .then((res) => {
-          if (res > 0) episodeCounter++;
+          if (res > 0) episodeCounter += res;
           items.push({
             date: gte.toLocaleString("en-UK", {
               month: "short",
