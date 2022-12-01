@@ -41,6 +41,7 @@
     "slugify": "^1.6.5",
     "superjson": "^1.11.0",
     "ts-node": "^10.9.1",
+    "use-debounce": "^9.0.2",
     "zod": "^3.19.1"
   },
   "devDependencies": {

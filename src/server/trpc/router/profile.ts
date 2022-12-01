@@ -36,6 +36,33 @@ export const profileRouter = router({
     };
   }),
 
+  usernameSearch: protectedProcedure.input(z.object({ query: z.string() })).query(async ({ ctx, input }) => {
+    const result = await ctx.prisma.profile.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              search: input.query,
+            },
+          },
+          {
+            username: {
+              contains: input.query,
+            },
+          },
+        ],
+      },
+      include: {
+        user: true,
+      },
+      take: 6,
+    });
+
+    return {
+      results: result,
+    };
+  }),
+
   profileByUsername: publicProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
     const userResult = await ctx.prisma.user.findFirstOrThrow({
       where: {
