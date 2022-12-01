@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -71,6 +72,8 @@ model Profile {
   region   String  @default("GB")
   userId   String  @unique
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@fulltext([username])
 }
 
 model Movies {
