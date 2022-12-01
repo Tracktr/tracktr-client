@@ -21,6 +21,7 @@ const subLinks = [
   { href: "/profile/settings", text: "Settings" },
   { href: "/profile/history", text: "History" },
   { href: "/profile/watchlist", text: "Watchlist" },
+  { href: "/profile/social", text: "Social" },
 ];
 
 const subMenuAnimate = {
