@@ -18,11 +18,57 @@ export const profileRouter = router({
       },
       include: {
         profile: true,
+        following: {
+          include: {
+            profile: true,
+          },
+        },
+        followers: {
+          include: {
+            profile: true,
+          },
+        },
       },
     });
 
     return {
       ...user,
+    };
+  }),
+
+  usernameSearch: protectedProcedure.input(z.object({ query: z.string() })).query(async ({ ctx, input }) => {
+    const result = await ctx.prisma.profile.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              search: input.query,
+            },
+          },
+          {
+            username: {
+              contains: input.query,
+            },
+          },
+        ],
+        NOT: [{ username: ctx.session.user.profile?.username }],
+      },
+      include: {
+        user: {
+          include: {
+            followers: {
+              where: {
+                id: ctx.session.user.profile.userId,
+              },
+            },
+          },
+        },
+      },
+      take: 6,
+    });
+
+    return {
+      results: result,
     };
   }),
 

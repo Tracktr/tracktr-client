@@ -16,10 +16,11 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
     </div>
 
     {currentPage && (
-      <div className="flex gap-2 mx-5 my-10">
-        <Button name="Settings" currentPage={currentPage} link="/profile" />
+      <div className="flex flex-wrap gap-2 mx-5 my-10">
+        <Button name="Settings" currentPage={currentPage} link="/profile/settings" />
         <Button name="History" currentPage={currentPage} link="/profile/history" />
         <Button name="Watchlist" currentPage={currentPage} link="/profile/watchlist" />
+        <Button name="Social" currentPage={currentPage} link="/profile/social" />
       </div>
     )}
   </div>
