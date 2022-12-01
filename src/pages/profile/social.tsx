@@ -98,65 +98,69 @@ const FollowersPage = () => {
                         );
                       })}
                     </div>
-                  ) : debouncedValue.length >= 3 && fetchStatus !== "fetching" && searchInput.length > 0 ? (
-                    <div>No results</div>
                   ) : (
-                    <div className="h-[116px]"></div>
+                    debouncedValue.length >= 3 &&
+                    fetchStatus !== "fetching" &&
+                    searchInput.length > 0 && <div>No results</div>
                   )}
                 </div>
               </div>
-              <div className="my-10">
-                <h1 className="my-5 text-3xl">Following</h1>
-                <div className="flex gap-4">
-                  {data?.following && data?.following?.length > 0 ? (
-                    data?.following?.map((user) => {
-                      return (
-                        <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                          <a className="flex flex-col items-center">
-                            <ImageWithFallback
-                              src={user.image}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="96"
-                              height="96"
-                              alt="Profile picture"
-                              className="rounded-full"
-                            />
-                            <p className="text-sm">{user.profile?.username}</p>
-                          </a>
-                        </Link>
-                      );
-                    })
-                  ) : (
-                    <div>No followers</div>
-                  )}
-                </div>
-              </div>
-              <div className="my-10">
-                <h1 className="my-5 text-3xl">Followers</h1>
-                <div className="flex gap-4">
-                  {data?.followers && data?.followers?.length > 0 ? (
-                    data?.followers?.map((user) => {
-                      return (
-                        <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                          <a className="flex flex-col items-center">
-                            <ImageWithFallback
-                              src={user.image}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="96"
-                              height="96"
-                              alt="Profile picture"
-                              className="rounded-full"
-                            />
-                            <p className="text-sm">{user.profile?.username}</p>
-                          </a>
-                        </Link>
-                      );
-                    })
-                  ) : (
-                    <div>Not following any users</div>
-                  )}
-                </div>
-              </div>
+              {!searchResults && fetchStatus !== "fetching" && (
+                <>
+                  <div className="my-10">
+                    <h1 className="my-5 text-3xl">Following</h1>
+                    <div className="flex gap-4">
+                      {data?.following && data?.following?.length > 0 ? (
+                        data?.following?.map((user) => {
+                          return (
+                            <Link href={`/profile/${user.profile?.username}`} key={user.name}>
+                              <a className="flex flex-col items-center">
+                                <ImageWithFallback
+                                  src={user.image}
+                                  fallbackSrc="/placeholder_profile.png"
+                                  width="96"
+                                  height="96"
+                                  alt="Profile picture"
+                                  className="rounded-full"
+                                />
+                                <p className="text-sm">{user.profile?.username}</p>
+                              </a>
+                            </Link>
+                          );
+                        })
+                      ) : (
+                        <div>No followers</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="my-10">
+                    <h1 className="my-5 text-3xl">Followers</h1>
+                    <div className="flex gap-4">
+                      {data?.followers && data?.followers?.length > 0 ? (
+                        data?.followers?.map((user) => {
+                          return (
+                            <Link href={`/profile/${user.profile?.username}`} key={user.name}>
+                              <a className="flex flex-col items-center">
+                                <ImageWithFallback
+                                  src={user.image}
+                                  fallbackSrc="/placeholder_profile.png"
+                                  width="96"
+                                  height="96"
+                                  alt="Profile picture"
+                                  className="rounded-full"
+                                />
+                                <p className="text-sm">{user.profile?.username}</p>
+                              </a>
+                            </Link>
+                          );
+                        })
+                      ) : (
+                        <div>Not following any users</div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           );
         }}
