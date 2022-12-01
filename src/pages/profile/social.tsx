@@ -23,7 +23,7 @@ const FollowersPage = () => {
     <div className="max-w-6xl m-auto">
       <ProfileHeader
         image={String(session.data?.user?.image)}
-        currentPage="social"
+        currentPage="Social"
         name={String(session.data?.user?.name)}
       />
       <LoadingPageComponents status={status}>
@@ -31,16 +31,7 @@ const FollowersPage = () => {
           return (
             <div className="mx-4 md:mx-0">
               <div>
-                <div className="items-center align-middle md:flex">
-                  <div className="flex items-center justify-between w-full gap-4 mb-5">
-                    <div className="flex items-center justify-center text-xl md:text-3xl">Following</div>
-                    <Link href="/profile/social/search">
-                      <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
-                        Find new users
-                      </a>
-                    </Link>
-                  </div>
-                </div>
+                <h1 className="my-5 text-3xl">Following</h1>
                 <div className="flex">
                   {data?.following && data?.following?.length > 0 ? (
                     data?.following?.map((user) => {
