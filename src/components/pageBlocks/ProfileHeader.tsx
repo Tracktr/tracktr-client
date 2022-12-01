@@ -21,6 +21,7 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
         <Button name="History" currentPage={currentPage} link="/profile/history" />
         <Button name="Watchlist" currentPage={currentPage} link="/profile/watchlist" />
         <Button name="Social" currentPage={currentPage} link="/profile/social" />
+        <Button name="Import" currentPage={currentPage} link="/profile/import" />
       </div>
     )}
   </div>
