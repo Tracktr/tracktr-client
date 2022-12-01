@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import CastBlock from "../../components/pageBlocks/CastBlock";
 import ContentHeader from "../../components/pageBlocks/ContentHeader";
+import CrewBlock from "../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../components/pageBlocks/DetailsBlock";
 import { trpc } from "../../utils/trpc";
 
@@ -37,6 +38,7 @@ const MoviePage = () => {
             status={data.status}
           />
           <CastBlock cast={data.credits.cast} />
+          <CrewBlock crew={data.credits.crew} />
         </ContentHeader>
       )}
     </LoadingPageComponents>

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../../../components/pageBlocks/CastBlock";
 import ContentHeader from "../../../../../components/pageBlocks/ContentHeader";
+import CrewBlock from "../../../../../components/pageBlocks/CrewBlock";
 import EpisodesBlock from "../../../../../components/pageBlocks/EpisodesBlock";
 import { trpc } from "../../../../../utils/trpc";
 
@@ -56,6 +57,7 @@ const TVPage = () => {
             themeColor={tvShow.theme_color}
           />
           <CastBlock cast={data.credits.cast} />
+          <CrewBlock crew={data.credits.crew} />
         </ContentHeader>
       )}
     </LoadingPageComponents>
