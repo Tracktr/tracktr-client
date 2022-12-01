@@ -17,7 +17,7 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
 
     {currentPage && (
       <div className="flex gap-2 mx-5 my-10">
-        <Button name="Settings" currentPage={currentPage} link="/profile" />
+        <Button name="Settings" currentPage={currentPage} link="/profile/settings" />
         <Button name="History" currentPage={currentPage} link="/profile/history" />
         <Button name="Watchlist" currentPage={currentPage} link="/profile/watchlist" />
       </div>
