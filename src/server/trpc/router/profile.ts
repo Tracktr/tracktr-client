@@ -51,9 +51,18 @@ export const profileRouter = router({
             },
           },
         ],
+        NOT: [{ username: ctx.session.user.profile?.username }],
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            followers: {
+              where: {
+                id: ctx.session.user.profile.userId,
+              },
+            },
+          },
+        },
       },
       take: 6,
     });

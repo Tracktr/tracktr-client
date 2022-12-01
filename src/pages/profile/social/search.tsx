@@ -19,6 +19,8 @@ const FollowersPage = () => {
     data: searchResults,
     fetchStatus,
     status: searchStatus,
+    refetch,
+    isRefetching,
   } = trpc.profile.usernameSearch.useQuery(
     { query: searchInput },
     {
@@ -42,6 +44,18 @@ const FollowersPage = () => {
       e.preventDefault();
     }
   };
+
+  const addAsFollower = trpc.profile.createFollowers.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const removeAsFollower = trpc.profile.removeFollowers.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   return (
     <div className="max-w-6xl m-auto">
@@ -76,19 +90,41 @@ const FollowersPage = () => {
               <div className="flex gap-4">
                 {searchResults.results?.map((profile) => {
                   return (
-                    <Link href={`/profile/${profile?.username}`} key={profile?.username}>
-                      <a className="flex flex-col items-center">
-                        <ImageWithFallback
-                          src={profile.user.image}
-                          fallbackSrc="/placeholder_profile.png"
-                          width="96"
-                          height="96"
-                          alt="Profile picture"
-                          className="rounded-full"
-                        />
-                        <p className="text-sm">{profile?.username}</p>
-                      </a>
-                    </Link>
+                    <div key={profile?.username} className="flex flex-col items-center">
+                      <Link href={`/profile/${profile?.username}`}>
+                        <a className="flex flex-col items-center">
+                          <ImageWithFallback
+                            src={profile.user.image}
+                            fallbackSrc="/placeholder_profile.png"
+                            width="96"
+                            height="96"
+                            alt="Profile picture"
+                            className="rounded-full"
+                          />
+                          <p className="text-sm">{profile?.username}</p>
+                        </a>
+                      </Link>
+                      <button
+                        className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground"
+                        onClick={() => {
+                          if (profile?.user?.followers?.length !== 1) {
+                            addAsFollower.mutate({ follower: String(profile?.user?.id) });
+                          }
+                          removeAsFollower.mutate({ follower: String(profile?.user?.id) });
+                        }}
+                      >
+                        {addAsFollower.isLoading || removeAsFollower.isLoading || isRefetching ? (
+                          <div className="flex items-center gap-2">
+                            <ImSpinner2 className="animate-spin" />
+                            Loading
+                          </div>
+                        ) : profile?.user?.followers?.length === 1 ? (
+                          <div>Unfollow</div>
+                        ) : (
+                          <div>Follow</div>
+                        )}
+                      </button>
+                    </div>
                   );
                 })}
               </div>
