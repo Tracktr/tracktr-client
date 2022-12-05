@@ -6,6 +6,7 @@ import ContentPoster from "../../components/pageBlocks/ContentPoster";
 import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../components/pageBlocks/ContentMain";
 
 const PersonPage = () => {
   const router = useRouter();
@@ -27,10 +28,10 @@ const PersonPage = () => {
               hideWatchButton
             />
 
-            <div className="col-span-3 px-4">
+            <ContentMain>
               <ContentTitle theme_color={data.theme_color} title={data.name} gender={data.gender} />
               <ContentOverview name={data.name} overview={data.biography} theme_color={data.theme_color} />
-            </div>
+            </ContentMain>
           </ContentGrid>
         </>
       )}

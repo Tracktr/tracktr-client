@@ -9,6 +9,7 @@ import ContentPoster from "../../../../../components/pageBlocks/ContentPoster";
 import ContentOverview from "../../../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../../../components/pageBlocks/ContentMain";
 
 const TVPage = () => {
   const router = useRouter();
@@ -58,7 +59,7 @@ const TVPage = () => {
               }}
             />
 
-            <div className="col-span-3 px-4">
+            <ContentMain>
               <ContentTitle theme_color={tvShow.theme_color} title={data.name} score={data.vote_average} />
               <ContentOverview
                 name={data.name}
@@ -74,8 +75,8 @@ const TVPage = () => {
                 themeColor={tvShow.theme_color}
               />
               <CastBlock cast={data.credits.cast} />
-              <CrewBlock crew={data.credits.crew} />{" "}
-            </div>
+              <CrewBlock crew={data.credits.crew} />
+            </ContentMain>
           </ContentGrid>
         </>
       )}

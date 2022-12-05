@@ -9,6 +9,7 @@ import ContentPoster from "../../../../../../components/pageBlocks/ContentPoster
 import ContentOverview from "../../../../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -53,7 +54,7 @@ const EpisodePage = () => {
               }}
             />
 
-            <div className="col-span-3 px-4">
+            <ContentMain>
               <ContentTitle
                 theme_color={tvShow.theme_color}
                 title={episodeData.name}
@@ -75,7 +76,7 @@ const EpisodePage = () => {
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <EpisodeSwitcherBlock seasons={tvShow.seasons} />
-            </div>
+            </ContentMain>
           </ContentGrid>
         </>
       )}

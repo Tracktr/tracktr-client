@@ -10,6 +10,7 @@ import { trpc } from "../../../utils/trpc";
 import ContentOverview from "../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../components/pageBlocks/ContentMain";
 
 const TVPage = () => {
   const router = useRouter();
@@ -37,7 +38,7 @@ const TVPage = () => {
               }}
             />
 
-            <div className="col-span-3 px-4">
+            <ContentMain>
               <ContentTitle
                 theme_color={data.theme_color}
                 title={data.name}
@@ -61,7 +62,7 @@ const TVPage = () => {
               <SeasonsBlock seasons={data.seasons} />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
-            </div>
+            </ContentMain>
           </ContentGrid>
         </>
       )}

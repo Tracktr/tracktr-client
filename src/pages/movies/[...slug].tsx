@@ -9,6 +9,7 @@ import ContentPoster from "../../components/pageBlocks/ContentPoster";
 import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../components/pageBlocks/ContentMain";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const MoviePage = () => {
               theme_color={data.theme_color}
             />
 
-            <div className="col-span-3 px-4">
+            <ContentMain>
               <ContentTitle
                 theme_color={data.theme_color}
                 title={data.title}
@@ -55,7 +56,7 @@ const MoviePage = () => {
               />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
-            </div>
+            </ContentMain>
           </ContentGrid>
         </>
       )}
