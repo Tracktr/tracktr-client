@@ -108,6 +108,7 @@ model MoviesReviews {
   Movies   Movies   @relation(fields: [movie_id], references: [id])
   user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@unique([user_id, movie_id])
   @@index([movie_id])
   @@index([user_id])
 }
@@ -131,6 +132,7 @@ model SeriesReviews {
   Series    Series   @relation(fields: [series_id], references: [id])
   user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@unique([user_id, series_id])
   @@index([series_id])
   @@index([user_id])
 }
