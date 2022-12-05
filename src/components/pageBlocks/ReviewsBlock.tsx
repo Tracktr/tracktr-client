@@ -40,12 +40,13 @@ interface IReviewsBlock {
     content: string;
     user_id: string;
     series_id?: number;
-    moviesId?: any;
+    moviesId?: number;
+    created: Date;
     user: {
       id: string;
       name: string;
       email: string;
-      emailVerified?: any;
+      emailVerified?: boolean;
       image: string;
       profile: {
         username: string;
