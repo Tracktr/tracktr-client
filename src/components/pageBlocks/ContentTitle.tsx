@@ -1,4 +1,5 @@
 import { AiFillStar } from "react-icons/ai";
+import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import GenresBlock from "./GenresBlock";
 
@@ -9,6 +10,7 @@ const ContentTitle = ({
   air_date,
   score,
   genres,
+  gender,
 }: {
   episode?: {
     season_number: number;
@@ -17,16 +19,20 @@ const ContentTitle = ({
   theme_color: IThemeColor;
   title: string;
   air_date?: string;
-  score: number;
+  score?: number;
   genres?: {
     id: number;
     name: string;
   }[];
+  gender?: number;
 }) => {
   return (
     <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
       <div className="items-center justify-between md:flex">
         <h1 className="flex items-end max-w-2xl">
+          {gender === 1 && <IoMdFemale className="mr-2 text-pink-500" />}
+          {gender === 2 && <IoMdMale className="mr-2 text-blue-500" />}
+
           <div>
             {episode && (
               <div className="flex">
