@@ -77,23 +77,27 @@ const ContentPoster = ({
             />
           </div>
         )}
-        {episode && session.status === "authenticated" ? (
-          <EpisodeWatchButton
-            itemID={id}
-            episodeID={episode.episodeID}
-            seasonID={episode.seasonID}
-            themeColor={theme_color}
-            refetchProgression={episode.refetch}
-          />
-        ) : (
-          !hideWatchButton && <MovieWatchButton itemID={id} themeColor={theme_color} />
+        {!hideWatchButton &&
+          session.status === "authenticated" &&
+          (episode ? (
+            <EpisodeWatchButton
+              itemID={id}
+              episodeID={episode.episodeID}
+              seasonID={episode.seasonID}
+              themeColor={theme_color}
+              refetchProgression={episode.refetch}
+            />
+          ) : (
+            <MovieWatchButton itemID={id} themeColor={theme_color} />
+          ))}
+        {session.status === "authenticated" && (
+          <div className="grid grid-cols-4">
+            {showWatchlistButton && session.status === "authenticated" && (
+              <WatchlistButton themeColor={theme_color} movieID={id} />
+            )}
+            <ReviewButton themeColor={theme_color} />
+          </div>
         )}
-        <div className="grid grid-cols-4">
-          {showWatchlistButton && session.status === "authenticated" && (
-            <WatchlistButton themeColor={theme_color} movieID={id} />
-          )}
-          <ReviewButton themeColor={theme_color} />
-        </div>
       </div>
     </div>
   );
