@@ -1,7 +1,24 @@
 import Link from "next/link";
+import { MdDelete } from "react-icons/md";
+import { trpc } from "../../utils/trpc";
 import ImageWithFallback from "../common/ImageWithFallback";
 
-const ReviewsBlock = ({ reviews }: IReviewsBlock) => {
+const ReviewsBlock = ({ reviews, refetchReviews }: IReviewsBlock) => {
+  const removeMovieReview = trpc.review.removeMovieReview.useMutation({
+    onSuccess: () => refetchReviews(),
+  });
+  const removeSeriesReview = trpc.review.removeSeriesReview.useMutation({
+    onSuccess: () => refetchReviews(),
+  });
+
+  const handleDelete = (e: any) => {
+    if (e.series_id) {
+      removeSeriesReview.mutate({ seriesID: e.series_id });
+    } else if (e.movie_id) {
+      removeMovieReview.mutate({ movieID: e.movie_id });
+    }
+  };
+
   return (
     <div className="relative mx-1 md:mx-0 md:mb-8" id="reviews">
       <h2 className="pb-4 text-4xl font-bold">Reviews</h2>
@@ -23,7 +40,13 @@ const ReviewsBlock = ({ reviews }: IReviewsBlock) => {
                     <p className="text-xl">{review.user.profile.username}</p>
                   </a>
                 </Link>
-                <div className="ml-auto text-sm">
+                <button
+                  className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                  onClick={() => handleDelete(review)}
+                >
+                  <MdDelete className="text-xl" />
+                </button>
+                <div className="text-sm">
                   {review.created.toLocaleString("en-UK", {
                     dateStyle: "medium",
                     timeStyle: "short",
@@ -42,6 +65,7 @@ const ReviewsBlock = ({ reviews }: IReviewsBlock) => {
 };
 
 interface IReviewsBlock {
+  refetchReviews: () => void;
   reviews: {
     id: string;
     content: string;

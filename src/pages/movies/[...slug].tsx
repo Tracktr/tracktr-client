@@ -10,6 +10,7 @@ import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -57,6 +58,7 @@ const MoviePage = () => {
               />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
+              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} />
             </ContentMain>
           </ContentGrid>
         </>

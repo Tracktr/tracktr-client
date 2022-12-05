@@ -40,17 +40,17 @@ export const reviewRouter = router({
       return review;
     }),
 
-  removeMoviesReview: protectedProcedure
+  removeMovieReview: protectedProcedure
     .input(
       z.object({
-        moviesID: z.number(),
+        movieID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const review = ctx.prisma.moviesReviews.delete({
         where: {
           user_id_movie_id: {
-            movie_id: input.moviesID,
+            movie_id: input.movieID,
             user_id: ctx.session.user.id,
           },
         },

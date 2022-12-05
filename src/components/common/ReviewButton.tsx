@@ -23,7 +23,11 @@ const ReviewButton = ({
   const [input, setInput] = useState("");
 
   const addMovieReview = trpc.review.addMovieReview.useMutation({
-    onSuccess: () => setModalOpen(!modalOpen),
+    onSuccess: () => {
+      setModalOpen(!modalOpen);
+      refetchReviews();
+      router.push("#reviews");
+    },
   });
   const addSeriesReview = trpc.review.addSeriesReview.useMutation({
     onSuccess: () => {
