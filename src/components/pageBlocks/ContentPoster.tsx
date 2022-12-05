@@ -9,7 +9,7 @@ import EpisodeWatchButton from "../watchButton/EpisodeWatchButton";
 import MovieWatchButton from "../watchButton/MovieWatchButton";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 
-const PosterButtons = ({
+const ContentPoster = ({
   hideWatchButton,
   showWatchlistButton,
   title,
@@ -67,6 +67,15 @@ const PosterButtons = ({
           />
         </motion.div>
 
+        {progression && session.status === "authenticated" && (
+          <div className="pt-4 pb-4 md:row-start-auto">
+            <SeriesProgressionBlock
+              amountOfEpisodes={progression.number_of_episodes}
+              numberOfEpisodesWatched={progression.number_of_episodes_watched}
+              themeColor={theme_color}
+            />
+          </div>
+        )}
         {episode && session.status === "authenticated" ? (
           <EpisodeWatchButton
             itemID={id}
@@ -78,16 +87,6 @@ const PosterButtons = ({
         ) : (
           !hideWatchButton && <MovieWatchButton itemID={id} themeColor={theme_color} />
         )}
-
-        {progression && session.status === "authenticated" && (
-          <div className="pt-4 pb-4 md:row-start-auto">
-            <SeriesProgressionBlock
-              amountOfEpisodes={progression.number_of_episodes}
-              numberOfEpisodesWatched={progression.number_of_episodes_watched}
-              themeColor={theme_color}
-            />
-          </div>
-        )}
         {showWatchlistButton && session.status === "authenticated" && (
           <WatchlistButton themeColor={theme_color} movieID={id} />
         )}
@@ -96,4 +95,4 @@ const PosterButtons = ({
   );
 };
 
-export default PosterButtons;
+export default ContentPoster;

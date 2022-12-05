@@ -7,7 +7,8 @@ import { trpc } from "../../../../../utils/trpc";
 import WatchTrailerButton from "../../../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../../../components/common/JustWatch";
 import Backdrop from "../../../../../components/pageBlocks/Backdrop";
-import PosterButtons from "../../../../../components/pageBlocks/PosterButtons";
+import ContentPoster from "../../../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../../../components/pageBlocks/ContentOverview";
 
 const TVPage = () => {
   const router = useRouter();
@@ -46,7 +47,7 @@ const TVPage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <PosterButtons
+              <ContentPoster
                 hideWatchButton
                 title={data.name}
                 poster={data.poster_path}
@@ -66,19 +67,13 @@ const TVPage = () => {
                     </h1>
                   </div>
                 </div>
-                <div className="grid-cols-5 lg:grid">
-                  <p className="max-w-full col-span-3 pt-8 lg:pb-12">{data.overview}</p>
-                  <div className="col-span-2 max-w-[200px] w-full lg:ml-auto my-5">
-                    {tvShow.videos && <WatchTrailerButton themeColor={tvShow.theme_color} data={tvShow.videos} />}
-                    {tvShow["watch/providers"] && (
-                      <JustWatch
-                        justWatch={tvShow["watch/providers"]}
-                        themeColor={tvShow.theme_color}
-                        name={data.name}
-                      />
-                    )}
-                  </div>
-                </div>
+                <ContentOverview
+                  name={data.name}
+                  overview={data.overview}
+                  theme_color={tvShow.theme_color}
+                  videos={tvShow.videos}
+                  justwatch={tvShow["watch/providers"]}
+                />
                 <EpisodesBlock
                   episodes={data.episodes}
                   refetch={refetch}

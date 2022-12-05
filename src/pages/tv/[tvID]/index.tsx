@@ -8,9 +8,10 @@ import CastBlock from "../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
 import GenresBlock from "../../../components/pageBlocks/GenresBlock";
-import PosterButton from "../../../components/pageBlocks/PosterButtons";
+import PosterButton from "../../../components/pageBlocks/ContentPoster";
 import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
 import { trpc } from "../../../utils/trpc";
+import ContentOverview from "../../../components/pageBlocks/ContentOverview";
 
 const TVPage = () => {
   const router = useRouter();
@@ -54,15 +55,13 @@ const TVPage = () => {
                   </div>
                   <GenresBlock genres={data.genres} themeColor={data.theme_color} />
                 </div>
-                <div className="grid-cols-5 lg:grid">
-                  <p className="max-w-full col-span-3 pt-8 lg:pb-12">{data.overview}</p>
-                  <div className="col-span-2 max-w-[200px] w-full lg:ml-auto my-5">
-                    {data.videos && <WatchTrailerButton themeColor={data.theme_color} data={data.videos} />}
-                    {data["watch/providers"] && (
-                      <JustWatch justWatch={data["watch/providers"]} themeColor={data.theme_color} name={data.name} />
-                    )}
-                  </div>
-                </div>
+                <ContentOverview
+                  name={data.name}
+                  overview={data.overview}
+                  theme_color={data.theme_color}
+                  videos={data.videos}
+                  justwatch={data["watch/providers"]}
+                />
 
                 <DetailsBlock
                   status={data.status}

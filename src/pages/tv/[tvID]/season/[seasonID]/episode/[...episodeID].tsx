@@ -8,7 +8,8 @@ import { AiFillStar } from "react-icons/ai";
 import WatchTrailerButton from "../../../../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../../../../components/common/JustWatch";
 import Backdrop from "../../../../../../components/pageBlocks/Backdrop";
-import PosterButtons from "../../../../../../components/pageBlocks/PosterButtons";
+import ContentPoster from "../../../../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../../../../components/pageBlocks/ContentOverview";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -38,7 +39,7 @@ const EpisodePage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <PosterButtons
+              <ContentPoster
                 title={episodeData.name}
                 poster={tvShow.poster_path}
                 id={Number(tvID)}
@@ -91,19 +92,13 @@ const EpisodePage = () => {
                     )}
                   </div>
                 </div>
-                <div className="grid-cols-5 lg:grid">
-                  <p className="max-w-full col-span-3 pt-8 lg:pb-12">{episodeData.overview}</p>
-                  <div className="col-span-2 max-w-[200px] w-full lg:ml-auto my-5">
-                    {tvShow.videos && <WatchTrailerButton themeColor={tvShow.theme_color} data={tvShow.videos} />}
-                    {tvShow["watch/providers"] && (
-                      <JustWatch
-                        justWatch={tvShow["watch/providers"]}
-                        themeColor={tvShow.theme_color}
-                        name={episodeData.name}
-                      />
-                    )}
-                  </div>
-                </div>
+                <ContentOverview
+                  name={episodeData.name}
+                  overview={episodeData.overview}
+                  theme_color={tvShow.theme_color}
+                  videos={tvShow.videos}
+                  justwatch={tvShow["watch/providers"]}
+                />
 
                 <CastBlock cast={episodeData.credits.cast} />
                 <CrewBlock crew={episodeData.credits.crew} />
