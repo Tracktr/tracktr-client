@@ -15,7 +15,7 @@ import { AiFillStar } from "react-icons/ai";
 import GenresBlock from "../../components/pageBlocks/GenresBlock";
 import JustWatch from "../../components/common/JustWatch";
 import WatchTrailerButton from "../../components/common/buttons/WatchTrailerButton";
-import Backdrop from "../../components/contentHeader/Backdrop";
+import Backdrop from "../../components/pageBlocks/Backdrop";
 
 const MoviePage = () => {
   const router = useRouter();

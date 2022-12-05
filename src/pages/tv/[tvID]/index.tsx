@@ -8,7 +8,7 @@ import WatchTrailerButton from "../../../components/common/buttons/WatchTrailerB
 import JustWatch from "../../../components/common/JustWatch";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import WatchlistButton from "../../../components/common/WatchlistButton";
-import Backdrop from "../../../components/contentHeader/Backdrop";
+import Backdrop from "../../../components/pageBlocks/Backdrop";
 import CastBlock from "../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";

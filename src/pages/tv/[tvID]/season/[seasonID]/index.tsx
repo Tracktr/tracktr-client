@@ -12,7 +12,7 @@ import Image from "next/image";
 import SeriesProgressionBlock from "../../../../../components/pageBlocks/SeriesProgressionBlock";
 import WatchTrailerButton from "../../../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../../../components/common/JustWatch";
-import Backdrop from "../../../../../components/contentHeader/Backdrop";
+import Backdrop from "../../../../../components/pageBlocks/Backdrop";
 
 const TVPage = () => {
   const router = useRouter();
