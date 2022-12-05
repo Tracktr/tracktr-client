@@ -8,13 +8,14 @@ import WatchTrailerButton from "../../../components/common/buttons/WatchTrailerB
 import JustWatch from "../../../components/common/JustWatch";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import WatchlistButton from "../../../components/common/WatchlistButton";
+import Backdrop from "../../../components/contentHeader/Backdrop";
 import CastBlock from "../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
 import GenresBlock from "../../../components/pageBlocks/GenresBlock";
 import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
 import SeriesProgressionBlock from "../../../components/pageBlocks/SeriesProgressionBlock";
-import { BackdropImage, PosterImage } from "../../../utils/generateImages";
+import { PosterImage } from "../../../utils/generateImages";
 import { trpc } from "../../../utils/trpc";
 
 const TVPage = () => {
@@ -36,16 +37,7 @@ const TVPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
-          <div
-            className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
-            style={{
-              background:
-                data.backdrop_path && `url("${BackdropImage({ path: data.backdrop_path, size: "lg" })}") no-repeat`,
-              backgroundSize: "cover",
-            }}
-          >
-            <div className="relative w-full h-full bg-gradient-to-t from-primaryBackground" />
-          </div>
+          <Backdrop path={data.backdrop_path} />
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
