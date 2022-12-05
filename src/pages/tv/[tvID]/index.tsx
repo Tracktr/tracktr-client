@@ -9,6 +9,7 @@ import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
 import { trpc } from "../../../utils/trpc";
 import ContentOverview from "../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../components/pageBlocks/ContentGrid";
 
 const TVPage = () => {
   const router = useRouter();
@@ -22,48 +23,46 @@ const TVPage = () => {
         <>
           <ContentBackdrop path={data.backdrop_path} />
 
-          <div className="relative w-full">
-            <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <PosterButton
-                hideWatchButton
-                showWatchlistButton
-                title={data.title}
-                poster={data.poster_path}
-                id={data.id}
+          <ContentGrid>
+            <PosterButton
+              hideWatchButton
+              showWatchlistButton
+              title={data.title}
+              poster={data.poster_path}
+              id={data.id}
+              theme_color={data.theme_color}
+              progression={{
+                number_of_episodes: data.number_of_episodes,
+                number_of_episodes_watched: data.number_of_episodes_watched,
+              }}
+            />
+
+            <div className="col-span-3 px-4">
+              <ContentTitle
                 theme_color={data.theme_color}
-                progression={{
-                  number_of_episodes: data.number_of_episodes,
-                  number_of_episodes_watched: data.number_of_episodes_watched,
-                }}
+                title={data.name}
+                score={data.vote_average}
+                air_date={data.air_date}
+                genres={data.genres}
+              />
+              <ContentOverview
+                name={data.name}
+                overview={data.overview}
+                theme_color={data.theme_color}
+                videos={data.videos}
+                justwatch={data["watch/providers"]}
               />
 
-              <div className="col-span-3 px-4">
-                <ContentTitle
-                  theme_color={data.theme_color}
-                  title={data.name}
-                  score={data.vote_average}
-                  air_date={data.air_date}
-                  genres={data.genres}
-                />
-                <ContentOverview
-                  name={data.name}
-                  overview={data.overview}
-                  theme_color={data.theme_color}
-                  videos={data.videos}
-                  justwatch={data["watch/providers"]}
-                />
-
-                <DetailsBlock
-                  status={data.status}
-                  numberOfEpisodes={data.number_of_episodes}
-                  numberOfSeasons={data.number_of_seasons}
-                />
-                <SeasonsBlock seasons={data.seasons} />
-                <CastBlock cast={data.credits.cast} />
-                <CrewBlock crew={data.credits.crew} />
-              </div>
+              <DetailsBlock
+                status={data.status}
+                numberOfEpisodes={data.number_of_episodes}
+                numberOfSeasons={data.number_of_seasons}
+              />
+              <SeasonsBlock seasons={data.seasons} />
+              <CastBlock cast={data.credits.cast} />
+              <CrewBlock crew={data.credits.crew} />
             </div>
-          </div>
+          </ContentGrid>
         </>
       )}
     </LoadingPageComponents>

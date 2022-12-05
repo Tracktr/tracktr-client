@@ -8,6 +8,7 @@ import ContentBackdrop from "../../../../../../components/pageBlocks/ContentBack
 import ContentPoster from "../../../../../../components/pageBlocks/ContentPoster";
 import ContentOverview from "../../../../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -35,49 +36,47 @@ const EpisodePage = () => {
         <>
           <ContentBackdrop path={tvShow.backdrop_path} />
 
-          <div className="relative w-full">
-            <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <ContentPoster
-                title={episodeData.name}
-                poster={tvShow.poster_path}
-                id={Number(tvID)}
+          <ContentGrid>
+            <ContentPoster
+              title={episodeData.name}
+              poster={tvShow.poster_path}
+              id={Number(tvID)}
+              theme_color={tvShow.theme_color}
+              progression={{
+                number_of_episodes: tvShow.number_of_episodes,
+                number_of_episodes_watched: tvShow.number_of_episodes_watched,
+              }}
+              episode={{
+                episodeID: Number(episodeID),
+                refetch: refetch,
+                seasonID: Number(seasonID),
+              }}
+            />
+
+            <div className="col-span-3 px-4">
+              <ContentTitle
                 theme_color={tvShow.theme_color}
-                progression={{
-                  number_of_episodes: tvShow.number_of_episodes,
-                  number_of_episodes_watched: tvShow.number_of_episodes_watched,
-                }}
+                title={episodeData.name}
+                score={episodeData.vote_average}
+                air_date={episodeData.air_date}
                 episode={{
-                  episodeID: Number(episodeID),
-                  refetch: refetch,
-                  seasonID: Number(seasonID),
+                  season_number: episodeData.season_number,
+                  episode_number: episodeData.episode_number,
                 }}
               />
+              <ContentOverview
+                name={episodeData.name}
+                overview={episodeData.overview}
+                theme_color={tvShow.theme_color}
+                videos={tvShow.videos}
+                justwatch={tvShow["watch/providers"]}
+              />
 
-              <div className="col-span-3 px-4">
-                <ContentTitle
-                  theme_color={tvShow.theme_color}
-                  title={episodeData.name}
-                  score={episodeData.vote_average}
-                  air_date={episodeData.air_date}
-                  episode={{
-                    season_number: episodeData.season_number,
-                    episode_number: episodeData.episode_number,
-                  }}
-                />
-                <ContentOverview
-                  name={episodeData.name}
-                  overview={episodeData.overview}
-                  theme_color={tvShow.theme_color}
-                  videos={tvShow.videos}
-                  justwatch={tvShow["watch/providers"]}
-                />
-
-                <CastBlock cast={episodeData.credits.cast} />
-                <CrewBlock crew={episodeData.credits.crew} />
-                <EpisodeSwitcherBlock seasons={tvShow.seasons} />
-              </div>
+              <CastBlock cast={episodeData.credits.cast} />
+              <CrewBlock crew={episodeData.credits.crew} />
+              <EpisodeSwitcherBlock seasons={tvShow.seasons} />
             </div>
-          </div>
+          </ContentGrid>
         </>
       )}
     </LoadingPageComponents>
