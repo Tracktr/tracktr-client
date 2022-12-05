@@ -3,7 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
 import ImageWithFallback from "../common/ImageWithFallback";
 
-const ReviewsBlock = ({ reviews, refetchReviews }: IReviewsBlock) => {
+const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) => {
   const removeMovieReview = trpc.review.removeMovieReview.useMutation({
     onSuccess: () => refetchReviews(),
   });
@@ -23,10 +23,21 @@ const ReviewsBlock = ({ reviews, refetchReviews }: IReviewsBlock) => {
     <div className="relative mx-1 md:mx-0 md:mb-8" id="reviews">
       <h2 className="pb-4 text-4xl font-bold">Reviews</h2>
       <div className="flex flex-col gap-6">
-        {reviews.length > 0 ? (
+        {isRefetching ? (
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="animate-pulse w-[32px] h-[28px] rounded-full bg-[#343434]" />
+              <div className="animate-pulse w-[103px] h-[28px] rounded bg-[#343434]" />
+              <div className="animate-pulse w-[20px] h-[20px] rounded bg-[#343434] ml-auto" />
+              <div className="animate-pulse w-[118px] h-[28px] rounded bg-[#343434]" />
+            </div>
+            <div className="animate-pulse w-full h-[24px] rounded bg-[#343434] mb-1" />
+            <div className="animate-pulse w-full h-[24px] rounded bg-[#343434]" />
+          </div>
+        ) : reviews.length > 0 ? (
           reviews.map((review) => (
             <div key={review.id}>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-4">
                 <Link href={`/profile/${review.user.profile.username}`}>
                   <a className="flex items-center gap-2">
                     <ImageWithFallback
@@ -66,6 +77,7 @@ const ReviewsBlock = ({ reviews, refetchReviews }: IReviewsBlock) => {
 
 interface IReviewsBlock {
   refetchReviews: () => void;
+  isRefetching: boolean;
   reviews: {
     id: string;
     content: string;

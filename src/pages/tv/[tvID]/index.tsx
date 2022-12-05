@@ -17,7 +17,10 @@ const TVPage = () => {
   const router = useRouter();
   const { tvID } = router.query;
 
-  const { data, status, refetch } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
+  const { data, status, refetch, isRefetching } = trpc.tv.tvById.useQuery(
+    { tvID: tvID as string },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={status}>
@@ -64,7 +67,7 @@ const TVPage = () => {
               <SeasonsBlock seasons={data.seasons} />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} />
+              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>
