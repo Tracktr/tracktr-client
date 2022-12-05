@@ -6,8 +6,8 @@ import ReactTooltip from "react-tooltip";
 
 interface IWatchlistButtonProps {
   themeColor: IThemeColor;
-  movieID: number | undefined;
-  seriesID: number | undefined;
+  movieID?: number | undefined;
+  seriesID?: number | undefined;
 }
 
 const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProps) => {

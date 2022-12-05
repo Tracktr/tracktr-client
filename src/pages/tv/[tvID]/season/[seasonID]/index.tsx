@@ -1,10 +1,15 @@
 import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../../../components/pageBlocks/CastBlock";
-import ContentHeader from "../../../../../components/pageBlocks/ContentHeader";
 import CrewBlock from "../../../../../components/pageBlocks/CrewBlock";
 import EpisodesBlock from "../../../../../components/pageBlocks/EpisodesBlock";
 import { trpc } from "../../../../../utils/trpc";
+import ContentBackdrop from "../../../../../components/pageBlocks/ContentBackdrop";
+import ContentPoster from "../../../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../../../components/pageBlocks/ContentMain";
 
 const TVPage = () => {
   const router = useRouter();
@@ -30,7 +35,6 @@ const TVPage = () => {
     { enabled: router.isReady }
   );
 
-  //TODO: merge these trpc request to one
   const refetch = () => {
     tvRefetch();
     seasonRefetch();
@@ -39,26 +43,42 @@ const TVPage = () => {
   return (
     <LoadingPageComponents status={status}>
       {() => (
-        <ContentHeader
-          cover={tvShow.backdrop_path}
-          poster={data.poster_path}
-          title={data.name}
-          description={data.overview}
-          justWatch={tvShow["watch/providers"]}
-          themeColor={tvShow.theme_color}
-          seriesProgression={tvShow.number_of_episodes_watched}
-          amountOfEpisodes={tvShow.number_of_episodes}
-          videos={tvShow.videos}
-        >
-          <EpisodesBlock
-            episodes={data.episodes}
-            refetch={refetch}
-            fetchStatus={isRefetching}
-            themeColor={tvShow.theme_color}
-          />
-          <CastBlock cast={data.credits.cast} />
-          <CrewBlock crew={data.credits.crew} />
-        </ContentHeader>
+        <>
+          <ContentBackdrop path={tvShow.backdrop_path} />
+
+          <ContentGrid>
+            <ContentPoster
+              hideWatchButton
+              title={data.name}
+              poster={data.poster_path}
+              id={data.id}
+              theme_color={tvShow.theme_color}
+              progression={{
+                number_of_episodes: tvShow.number_of_episodes,
+                number_of_episodes_watched: tvShow.number_of_episodes_watched,
+              }}
+            />
+
+            <ContentMain>
+              <ContentTitle theme_color={tvShow.theme_color} title={data.name} score={data.vote_average} />
+              <ContentOverview
+                name={data.name}
+                overview={data.overview}
+                theme_color={tvShow.theme_color}
+                videos={tvShow.videos}
+                justwatch={tvShow["watch/providers"]}
+              />
+              <EpisodesBlock
+                episodes={data.episodes}
+                refetch={refetch}
+                fetchStatus={isRefetching}
+                themeColor={tvShow.theme_color}
+              />
+              <CastBlock cast={data.credits.cast} />
+              <CrewBlock crew={data.credits.crew} />
+            </ContentMain>
+          </ContentGrid>
+        </>
       )}
     </LoadingPageComponents>
   );

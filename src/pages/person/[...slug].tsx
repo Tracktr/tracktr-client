@@ -1,8 +1,13 @@
 import { useRouter } from "next/router";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
-import ContentHeader from "../../components/pageBlocks/ContentHeader";
-import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 import { trpc } from "../../utils/trpc";
+import ContentBackdrop from "../../components/pageBlocks/ContentBackdrop";
+import ContentPoster from "../../components/pageBlocks/ContentPoster";
+import ContentTitle from "../../components/pageBlocks/ContentTitle";
+import ContentOverview from "../../components/pageBlocks/ContentOverview";
+import ContentGrid from "../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../components/pageBlocks/ContentMain";
+import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 
 const PersonPage = () => {
   const router = useRouter();
@@ -12,16 +17,25 @@ const PersonPage = () => {
   return (
     <LoadingPageComponents status={status}>
       {() => (
-        <ContentHeader
-          cover=""
-          gender={data.gender}
-          poster={data.profile_path}
-          title={data.name}
-          description={data.biography}
-          themeColor={data.theme_color}
-        >
-          <CreditsBlock credits={{ movie: data.movie_credits, tv: data.tv_credits }} />
-        </ContentHeader>
+        <>
+          <ContentBackdrop />
+
+          <ContentGrid>
+            <ContentPoster
+              title={data.name}
+              poster={data.profile_path}
+              id={data.id}
+              theme_color={data.theme_color}
+              hideWatchButton
+            />
+
+            <ContentMain>
+              <ContentTitle theme_color={data.theme_color} title={data.name} gender={data.gender} />
+              <ContentOverview name={data.name} overview={data.biography} theme_color={data.theme_color} />
+              <CreditsBlock credits={{ movie: data.movie_credits, tv: data.tv_credits }} />
+            </ContentMain>
+          </ContentGrid>
+        </>
       )}
     </LoadingPageComponents>
   );

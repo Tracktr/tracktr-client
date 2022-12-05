@@ -2,10 +2,14 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { IWatchButtonProps } from ".";
 import { trpc } from "../../utils/trpc";
-import BaseWatchButton from "./BaseWatchButton";
+import BaseWatchButton, { IThemeColor } from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
+
+interface IWatchButtonProps {
+  itemID: number;
+  themeColor: IThemeColor;
+}
 
 const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();

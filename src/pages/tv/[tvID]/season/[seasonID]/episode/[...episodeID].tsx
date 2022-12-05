@@ -1,10 +1,15 @@
 import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../../../../components/pageBlocks/CastBlock";
-import ContentHeader from "../../../../../../components/pageBlocks/ContentHeader";
 import CrewBlock from "../../../../../../components/pageBlocks/CrewBlock";
 import EpisodeSwitcherBlock from "../../../../../../components/pageBlocks/EpisodeSwitcherBlock";
 import { trpc } from "../../../../../../utils/trpc";
+import ContentBackdrop from "../../../../../../components/pageBlocks/ContentBackdrop";
+import ContentPoster from "../../../../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../../../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -29,27 +34,51 @@ const EpisodePage = () => {
   return (
     <LoadingPageComponents status={episodeStatus}>
       {() => (
-        <ContentHeader
-          watchButton={{ itemID: Number(tvID), episodeID: Number(episodeID), seasonID: Number(seasonID) }}
-          cover={tvShow.backdrop_path}
-          poster={tvShow.poster_path}
-          title={episodeData.name}
-          description={episodeData.overview}
-          date={episodeData.air_date}
-          score={episodeData.vote_average}
-          themeColor={tvShow.theme_color}
-          season={episodeData.season_number}
-          justWatch={tvShow["watch/providers"]}
-          episode={episodeData.episode_number}
-          seriesProgression={tvShow.number_of_episodes_watched}
-          amountOfEpisodes={tvShow.number_of_episodes}
-          refetchProgression={refetch}
-          videos={tvShow.videos}
-        >
-          <CastBlock cast={episodeData.credits.cast} />
-          <CrewBlock crew={episodeData.credits.crew} />
-          <EpisodeSwitcherBlock seasons={tvShow.seasons} />
-        </ContentHeader>
+        <>
+          <ContentBackdrop path={tvShow.backdrop_path} />
+
+          <ContentGrid>
+            <ContentPoster
+              title={episodeData.name}
+              poster={tvShow.poster_path}
+              id={Number(tvID)}
+              theme_color={tvShow.theme_color}
+              progression={{
+                number_of_episodes: tvShow.number_of_episodes,
+                number_of_episodes_watched: tvShow.number_of_episodes_watched,
+              }}
+              episode={{
+                episodeID: Number(episodeID),
+                refetch: refetch,
+                seasonID: Number(seasonID),
+              }}
+            />
+
+            <ContentMain>
+              <ContentTitle
+                theme_color={tvShow.theme_color}
+                title={episodeData.name}
+                score={episodeData.vote_average}
+                air_date={episodeData.air_date}
+                episode={{
+                  season_number: episodeData.season_number,
+                  episode_number: episodeData.episode_number,
+                }}
+              />
+              <ContentOverview
+                name={episodeData.name}
+                overview={episodeData.overview}
+                theme_color={tvShow.theme_color}
+                videos={tvShow.videos}
+                justwatch={tvShow["watch/providers"]}
+              />
+
+              <CastBlock cast={episodeData.credits.cast} />
+              <CrewBlock crew={episodeData.credits.crew} />
+              <EpisodeSwitcherBlock seasons={tvShow.seasons} />
+            </ContentMain>
+          </ContentGrid>
+        </>
       )}
     </LoadingPageComponents>
   );
