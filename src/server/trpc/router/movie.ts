@@ -48,7 +48,10 @@ export const movieRouter = router({
                 },
               },
             },
-            take: 6,
+            take: 10,
+            orderBy: {
+              created: "desc",
+            },
           },
         },
       });
