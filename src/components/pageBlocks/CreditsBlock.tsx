@@ -1,0 +1,82 @@
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { MdArrowRightAlt } from "react-icons/md";
+import { PosterImage } from "../../utils/generateImages";
+
+interface CreditsBlockProps {
+  credits: any;
+}
+
+const CreditsBlock = ({ credits }: CreditsBlockProps) => {
+  console.log(credits);
+  return (
+    <div>
+      <h2 className="pb-4 text-3xl font-bold">Known for</h2>
+      <DetailsBlock data={credits.movie.cast} type="movies" name="Movies" />
+      <DetailsBlock data={credits.tv.cast} type="tv" name="TV" />
+    </div>
+  );
+};
+
+interface DetailsBlockProps {
+  data: any;
+  type: "movies" | "tv";
+  name: string;
+}
+
+const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
+  const [showMore, setShowMore] = useState(false);
+
+  return (
+    <div className="p-4 mb-4 border-2 rounded-md border-zinc-800">
+      <button onClick={() => setShowMore(!showMore)} className="flex items-center justify-between w-full text-2xl">
+        <h2>
+          {name} <span className="text-sm">{data.length}</span>
+        </h2>
+        <MdArrowRightAlt />
+      </button>
+      <div
+        className={`
+        ${showMore ? "" : "h-0 overflow-hidden"}
+      `}
+      >
+        {data
+          .sort(
+            (
+              a: { release_date: number; first_air_date: number },
+              b: { release_date: number; first_air_date: number }
+            ) =>
+              new Date(a.release_date || a.first_air_date).setHours(0, 0, 0, 0) -
+              new Date(b.release_date || b.first_air_date).setHours(0, 0, 0, 0)
+          )
+          .reverse()
+          .map((cast: any) => (
+            <Link href={`/${type}/${cast.id}`} key={cast.id}>
+              <a className="flex justify-between">
+                <div className="flex py-2">
+                  <div className="pr-4">
+                    <Image
+                      alt={"Poster for: " + cast.title || cast.name}
+                      src={PosterImage({ path: cast.poster_path, size: "sm" })}
+                      width={50}
+                      height={75}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="pt-2">{cast.title || cast.name}</p>
+                    <p className="text-sm">{cast.character}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm">{cast.release_date || cast.first_air_date}</p>
+                </div>
+              </a>
+            </Link>
+          ))}
+      </div>
+    </div>
+  );
+};
+
+export default CreditsBlock;

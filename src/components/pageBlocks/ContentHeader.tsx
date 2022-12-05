@@ -176,7 +176,7 @@ const ContentHeader = ({
               <GenresBlock genres={genres} themeColor={themeColor} />
             </div>
             <div className="grid-cols-5 lg:grid">
-              <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description}</p>
+              <p className="max-w-full col-span-3 pt-8 lg:pb-12">{description.slice(0, 420)}...</p>
               <div className="col-span-2 max-w-[200px] w-full lg:ml-auto my-5">
                 {videos && <WatchTrailerButton themeColor={themeColor} data={videos} />}
                 {justWatch && <JustWatch justWatch={justWatch} themeColor={themeColor} name={title} />}

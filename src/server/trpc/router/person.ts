@@ -12,6 +12,7 @@ export const personRouter = router({
     .query(async ({ ctx, input }) => {
       const url = new URL(`person/${input?.slug}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      url.searchParams.append("append_to_response", "movie_credits,tv_credits");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const res = await fetch(url);
