@@ -37,7 +37,7 @@ const ImportPage = () => {
   const [currentPercentage, setCurrentPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>();
 
-  const { data, status } = trpc.profile.profileBySession.useQuery();
+  const { data } = trpc.profile.profileBySession.useQuery();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
