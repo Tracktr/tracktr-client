@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MdArrowRightAlt } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
+import { motion } from "framer-motion";
 
 interface CreditsBlockProps {
   credits: any;
@@ -36,10 +37,11 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
         </h2>
         <MdArrowRightAlt />
       </button>
-      <div
-        className={`
-        ${showMore ? "" : "h-0 overflow-hidden"}
-      `}
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: showMore ? "auto" : 0 }}
+        transition={{ duration: 1, ease: "easeInOut" }}
+        className="overflow-hidden"
       >
         {data
           .sort(
@@ -68,13 +70,13 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
                     <p className="text-sm">{cast.character}</p>
                   </div>
                 </div>
-                <div>
+                <div className="self-center">
                   <p className="text-sm">{cast.release_date || cast.first_air_date}</p>
                 </div>
               </a>
             </Link>
           ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
