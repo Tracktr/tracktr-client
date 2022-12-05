@@ -30,8 +30,8 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
   const [showMore, setShowMore] = useState(false);
 
   return (
-    <div className="p-4 mb-4 border-2 rounded-md border-zinc-800">
-      <button onClick={() => setShowMore(!showMore)} className="flex items-center justify-between w-full text-2xl">
+    <div className="mb-4 border-2 rounded-md border-zinc-800">
+      <button onClick={() => setShowMore(!showMore)} className="flex items-center justify-between w-full p-4 text-2xl ">
         <h2>
           {name} <span className="text-sm">{data.length}</span>
         </h2>
@@ -55,7 +55,7 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
           .reverse()
           .map((cast: any) => (
             <Link href={`/${type}/${cast.id}`} key={cast.id}>
-              <a className="flex justify-between">
+              <a className="flex justify-between px-4">
                 <div className="flex py-2">
                   <div className="pr-4">
                     <Image
