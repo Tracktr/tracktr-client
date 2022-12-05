@@ -1,4 +1,5 @@
 import { MdReviews } from "react-icons/md";
+import ReactTooltip from "react-tooltip";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 const ReviewButton = ({ themeColor }: { themeColor: IThemeColor }) => {
@@ -14,7 +15,8 @@ const ReviewButton = ({ themeColor }: { themeColor: IThemeColor }) => {
         ${themeColor.isLight && "text-primaryBackground"}
       `}
       >
-        <span className="px-3 py-2">
+        <span className="px-3 py-2" data-tip="Create a review">
+          <ReactTooltip />
           <MdReviews className="text-2xl" />
         </span>
       </button>
