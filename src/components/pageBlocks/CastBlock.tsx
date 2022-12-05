@@ -24,8 +24,8 @@ const CastBlock = ({ cast }: ICast) => {
         <h2 className="pb-4 text-4xl font-bold">Cast</h2>
         <div>
           <HorizontalScrollContainer>
-            {cast.slice(0, 12).map((item) => (
-              <div key={item.id} className="flex-shrink-0">
+            {cast.slice(0, 12).map((item, i) => (
+              <div key={"cast" + item.id + i} className="flex-shrink-0">
                 <PersonPoster imageSrc={item.profile_path} name={item.original_name} url={`/person/${item.id}`} />
               </div>
             ))}

@@ -25,8 +25,8 @@ const CrewBlock = ({ crew }: ICrew) => {
         <h2 className="pb-4 text-4xl font-bold">Crew</h2>
         <div>
           <HorizontalScrollContainer>
-            {crew.slice(0, 12).map((item) => (
-              <div key={item.id} className="flex-shrink-0">
+            {crew.slice(0, 12).map((item, i) => (
+              <div key={"crew" + item.id + i} className="flex-shrink-0">
                 <PersonPoster
                   imageSrc={item.profile_path}
                   name={item.original_name}
