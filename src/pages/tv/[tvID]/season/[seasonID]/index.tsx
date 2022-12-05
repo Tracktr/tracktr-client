@@ -4,28 +4,14 @@ import CastBlock from "../../../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../../../components/pageBlocks/CrewBlock";
 import EpisodesBlock from "../../../../../components/pageBlocks/EpisodesBlock";
 import { trpc } from "../../../../../utils/trpc";
-import { useScroll, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { PosterImage } from "../../../../../utils/generateImages";
-import Image from "next/image";
-import SeriesProgressionBlock from "../../../../../components/pageBlocks/SeriesProgressionBlock";
 import WatchTrailerButton from "../../../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../../../components/common/JustWatch";
 import Backdrop from "../../../../../components/pageBlocks/Backdrop";
+import PosterButtons from "../../../../../components/pageBlocks/PosterButtons";
 
 const TVPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { tvID, seasonID } = router.query;
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const { scrollY } = useScroll();
-
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setScrollPosition(latest);
-    });
-  }, [scrollY]);
 
   const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery(
     {
@@ -60,40 +46,17 @@ const TVPage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <div className="col-span-1 mx-4 text-center">
-                <div className="sticky inline-block top-16 max-w-[216px] w-full ">
-                  <motion.div
-                    animate={{
-                      overflow: "hidden",
-                      width: scrollPosition > 300 ? "150px" : "auto",
-                      height: "auto",
-                      transition: {
-                        bounce: 0,
-                      },
-                    }}
-                    className="m-auto border-4 rounded-md border-primaryBackground"
-                  >
-                    <Image
-                      alt={"Poster image for:" + data.name}
-                      width="208"
-                      height="311"
-                      src={PosterImage({ path: data.poster_path, size: "lg" })}
-                    />
-                  </motion.div>
-
-                  {tvShow.number_of_episodes_watched &&
-                    tvShow.number_of_episodes &&
-                    session.status === "authenticated" && (
-                      <div className="pt-4 pb-4 md:row-start-auto">
-                        <SeriesProgressionBlock
-                          amountOfEpisodes={tvShow.number_of_episodes}
-                          numberOfEpisodesWatched={tvShow.number_of_episodes_watched}
-                          themeColor={tvShow.theme_color}
-                        />
-                      </div>
-                    )}
-                </div>
-              </div>
+              <PosterButtons
+                hideWatchButton
+                title={data.name}
+                poster={data.poster_path}
+                id={data.id}
+                theme_color={tvShow.theme_color}
+                progression={{
+                  number_of_episodes: tvShow.number_of_episodes,
+                  number_of_episodes_watched: tvShow.number_of_episodes_watched,
+                }}
+              />
 
               <div className="col-span-3 px-4">
                 <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">

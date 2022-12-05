@@ -1,35 +1,20 @@
-import { useScroll, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import WatchTrailerButton from "../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../components/common/JustWatch";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
-import WatchlistButton from "../../../components/common/WatchlistButton";
 import Backdrop from "../../../components/pageBlocks/Backdrop";
 import CastBlock from "../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
 import GenresBlock from "../../../components/pageBlocks/GenresBlock";
+import PosterButton from "../../../components/pageBlocks/PosterButtons";
 import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
-import SeriesProgressionBlock from "../../../components/pageBlocks/SeriesProgressionBlock";
-import { PosterImage } from "../../../utils/generateImages";
 import { trpc } from "../../../utils/trpc";
 
 const TVPage = () => {
   const router = useRouter();
-  const session = useSession();
   const { tvID } = router.query;
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const { scrollY } = useScroll();
-
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setScrollPosition(latest);
-    });
-  }, [scrollY]);
 
   const { data, status } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
 
@@ -41,41 +26,18 @@ const TVPage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <div className="col-span-1 mx-4 text-center">
-                <div className="sticky inline-block top-16 max-w-[216px] w-full ">
-                  <motion.div
-                    animate={{
-                      overflow: "hidden",
-                      width: scrollPosition > 300 ? "150px" : "auto",
-                      height: "auto",
-                      transition: {
-                        bounce: 0,
-                      },
-                    }}
-                    className="m-auto border-4 rounded-md border-primaryBackground"
-                  >
-                    <Image
-                      alt={"Poster image for:" + data.name}
-                      width="208"
-                      height="311"
-                      src={PosterImage({ path: data.poster_path, size: "lg" })}
-                    />
-                  </motion.div>
-
-                  {data.number_of_episodes_watched && data.number_of_episodes && session.status === "authenticated" && (
-                    <div className="pt-4 pb-4 md:row-start-auto">
-                      <SeriesProgressionBlock
-                        amountOfEpisodes={data.number_of_episodes}
-                        numberOfEpisodesWatched={data.number_of_episodes_watched}
-                        themeColor={data.theme_color}
-                      />
-                    </div>
-                  )}
-                  {data.id && session.status === "authenticated" && (
-                    <WatchlistButton themeColor={data.theme_color} seriesID={data.id} />
-                  )}
-                </div>
-              </div>
+              <PosterButton
+                hideWatchButton
+                showWatchlistButton
+                title={data.title}
+                poster={data.poster_path}
+                id={data.id}
+                theme_color={data.theme_color}
+                progression={{
+                  number_of_episodes: data.number_of_episodes,
+                  number_of_episodes_watched: data.number_of_episodes_watched,
+                }}
+              />
 
               <div className="col-span-3 px-4">
                 <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">

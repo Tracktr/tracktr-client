@@ -3,33 +3,18 @@ import LoadingPageComponents from "../../components/common/LoadingPageComponents
 import CastBlock from "../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../components/pageBlocks/DetailsBlock";
-import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
-import { useScroll, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import WatchlistButton from "../../components/common/WatchlistButton";
-import MovieWatchButton from "../../components/watchButton/MovieWatchButton";
 import { AiFillStar } from "react-icons/ai";
 import GenresBlock from "../../components/pageBlocks/GenresBlock";
 import JustWatch from "../../components/common/JustWatch";
 import WatchTrailerButton from "../../components/common/buttons/WatchTrailerButton";
 import Backdrop from "../../components/pageBlocks/Backdrop";
+import PosterButtons from "../../components/pageBlocks/PosterButtons";
 
 const MoviePage = () => {
   const router = useRouter();
-  const session = useSession();
   const { slug } = router.query;
   const { data, status } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const { scrollY } = useScroll();
-
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setScrollPosition(latest);
-    });
-  }, [scrollY]);
 
   return (
     <LoadingPageComponents status={status}>
@@ -39,35 +24,13 @@ const MoviePage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <div className="col-span-1 mx-4 text-center">
-                <div className="sticky inline-block top-16 max-w-[216px] w-full ">
-                  <motion.div
-                    animate={{
-                      overflow: "hidden",
-                      width: scrollPosition > 300 ? "150px" : "auto",
-                      height: "auto",
-                      transition: {
-                        bounce: 0,
-                      },
-                    }}
-                    className="m-auto border-4 rounded-md border-primaryBackground"
-                  >
-                    <Image
-                      alt={"Poster image for:" + data.title}
-                      width="208"
-                      height="311"
-                      src={PosterImage({ path: data.poster_path, size: "lg" })}
-                    />
-                  </motion.div>
-
-                  {data.id && session.status === "authenticated" && (
-                    <MovieWatchButton itemID={data.id} themeColor={data.theme_color} />
-                  )}
-                  {data.id && session.status === "authenticated" && (
-                    <WatchlistButton themeColor={data.theme_color} movieID={data.id} />
-                  )}
-                </div>
-              </div>
+              <PosterButtons
+                showWatchlistButton
+                title={data.title}
+                poster={data.poster_path}
+                id={data.id}
+                theme_color={data.theme_color}
+              />
 
               <div className="col-span-3 px-4">
                 <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">

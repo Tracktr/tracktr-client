@@ -4,30 +4,15 @@ import CastBlock from "../../../../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../../../../components/pageBlocks/CrewBlock";
 import EpisodeSwitcherBlock from "../../../../../../components/pageBlocks/EpisodeSwitcherBlock";
 import { trpc } from "../../../../../../utils/trpc";
-import { useScroll, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { PosterImage } from "../../../../../../utils/generateImages";
-import SeriesProgressionBlock from "../../../../../../components/pageBlocks/SeriesProgressionBlock";
-import EpisodeWatchButton from "../../../../../../components/watchButton/EpisodeWatchButton";
 import { AiFillStar } from "react-icons/ai";
 import WatchTrailerButton from "../../../../../../components/common/buttons/WatchTrailerButton";
 import JustWatch from "../../../../../../components/common/JustWatch";
 import Backdrop from "../../../../../../components/pageBlocks/Backdrop";
+import PosterButtons from "../../../../../../components/pageBlocks/PosterButtons";
 
 const EpisodePage = () => {
   const router = useRouter();
-  const session = useSession();
   const { tvID, seasonID, episodeID } = router.query;
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const { scrollY } = useScroll();
-
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setScrollPosition(latest);
-    });
-  }, [scrollY]);
 
   const { data: tvShow, refetch } = trpc.tv.tvById.useQuery(
     {
@@ -53,49 +38,21 @@ const EpisodePage = () => {
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
-              <div className="col-span-1 mx-4 text-center">
-                <div className="sticky inline-block top-16 max-w-[216px] w-full ">
-                  <motion.div
-                    animate={{
-                      overflow: "hidden",
-                      width: scrollPosition > 300 ? "150px" : "auto",
-                      height: "auto",
-                      transition: {
-                        bounce: 0,
-                      },
-                    }}
-                    className="m-auto border-4 rounded-md border-primaryBackground"
-                  >
-                    <Image
-                      alt={"Poster image for:" + episodeData.name}
-                      width="208"
-                      height="311"
-                      src={PosterImage({ path: tvShow.poster_path, size: "lg" })}
-                    />
-                  </motion.div>
-
-                  {tvShow.number_of_episodes_watched &&
-                    tvShow.number_of_episodes &&
-                    session.status === "authenticated" && (
-                      <div className="pt-4 pb-4 md:row-start-auto">
-                        <SeriesProgressionBlock
-                          amountOfEpisodes={tvShow.number_of_episodes}
-                          numberOfEpisodesWatched={tvShow.number_of_episodes_watched}
-                          themeColor={tvShow.theme_color}
-                        />
-                      </div>
-                    )}
-                  {tvID && session.status === "authenticated" && (
-                    <EpisodeWatchButton
-                      itemID={Number(tvID)}
-                      episodeID={Number(episodeID)}
-                      seasonID={Number(seasonID)}
-                      themeColor={tvShow.theme_color}
-                      refetchProgression={refetch}
-                    />
-                  )}
-                </div>
-              </div>
+              <PosterButtons
+                title={episodeData.name}
+                poster={tvShow.poster_path}
+                id={Number(tvID)}
+                theme_color={tvShow.theme_color}
+                progression={{
+                  number_of_episodes: tvShow.number_of_episodes,
+                  number_of_episodes_watched: tvShow.number_of_episodes_watched,
+                }}
+                episode={{
+                  episodeID: Number(episodeID),
+                  refetch: refetch,
+                  seasonID: Number(seasonID),
+                }}
+              />
 
               <div className="col-span-3 px-4">
                 <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
