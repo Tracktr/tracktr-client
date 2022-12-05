@@ -48,6 +48,7 @@ export const movieRouter = router({
                 },
               },
             },
+            take: 6,
           },
         },
       });

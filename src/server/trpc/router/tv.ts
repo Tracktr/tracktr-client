@@ -32,6 +32,7 @@ export const tvRouter = router({
                 },
               },
             },
+            take: 6,
           },
         },
       });
