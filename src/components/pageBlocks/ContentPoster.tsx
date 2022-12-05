@@ -98,15 +98,15 @@ const ContentPoster = ({
                 {showWatchlistButton && (
                   <WatchlistButton
                     themeColor={theme_color}
-                    movieID={!episode ? id : undefined}
-                    seriesID={episode ? id : undefined}
+                    movieID={!progression ? id : undefined}
+                    seriesID={progression ? id : undefined}
                   />
                 )}
                 {showReviewButton && (
                   <ReviewButton
                     themeColor={theme_color}
-                    movieID={!episode ? id : undefined}
-                    seriesID={episode ? id : undefined}
+                    movieID={!progression ? id : undefined}
+                    seriesID={progression ? id : undefined}
                   />
                 )}
               </div>

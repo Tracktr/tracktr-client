@@ -28,6 +28,7 @@ const TVPage = () => {
             <PosterButton
               hideWatchButton
               showWatchlistButton
+              showReviewButton
               title={data.title}
               poster={data.poster_path}
               id={data.id}
