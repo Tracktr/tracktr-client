@@ -39,4 +39,42 @@ export const reviewRouter = router({
 
       return review;
     }),
+
+  removeMoviesReview: protectedProcedure
+    .input(
+      z.object({
+        moviesID: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.moviesReviews.delete({
+        where: {
+          user_id_movie_id: {
+            movie_id: input.moviesID,
+            user_id: ctx.session.user.id,
+          },
+        },
+      });
+
+      return review;
+    }),
+
+  removeSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        seriesID: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.seriesReviews.delete({
+        where: {
+          user_id_series_id: {
+            series_id: input.seriesID,
+            user_id: ctx.session.user.id,
+          },
+        },
+      });
+
+      return review;
+    }),
 });
