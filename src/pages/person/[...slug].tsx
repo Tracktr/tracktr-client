@@ -7,6 +7,7 @@ import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
+import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 
 const PersonPage = () => {
   const router = useRouter();
@@ -31,6 +32,7 @@ const PersonPage = () => {
             <ContentMain>
               <ContentTitle theme_color={data.theme_color} title={data.name} gender={data.gender} />
               <ContentOverview name={data.name} overview={data.biography} theme_color={data.theme_color} />
+              <CreditsBlock credits={{ movie: data.movie_credits, tv: data.tv_credits }} />
             </ContentMain>
           </ContentGrid>
         </>
