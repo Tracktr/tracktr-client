@@ -153,48 +153,52 @@ const PublicProfile = () => {
             </div>
 
             {profile?.SeriesReviews[0] && (
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Image
-                    alt={"Poster image for:" + profile?.SeriesReviews[0]?.Series.name}
-                    width="100"
-                    height="150"
-                    src={PosterImage({ path: profile?.SeriesReviews[0]?.Series.poster, size: "lg" })}
-                  />
-                  <div>
-                    <p className="text-xl">{profile?.SeriesReviews[0]?.Series.name}</p>
-                    <div className="mb-4 text-sm">
-                      {profile.SeriesReviews[0].created.toLocaleString("en-UK", {
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      })}
+              <Link href={`/tv/${profile?.SeriesReviews[0]?.Series.id}#reviews`}>
+                <a>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Image
+                      alt={"Poster image for:" + profile?.SeriesReviews[0]?.Series.name}
+                      width="100"
+                      height="150"
+                      src={PosterImage({ path: profile?.SeriesReviews[0]?.Series.poster, size: "lg" })}
+                    />
+                    <div>
+                      <p className="text-xl">{profile?.SeriesReviews[0]?.Series.name}</p>
+                      <div className="mb-4 text-sm">
+                        {profile.SeriesReviews[0].created.toLocaleString("en-UK", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </div>
+                      <div>{profile.SeriesReviews[0].content}</div>
                     </div>
-                    <div>{profile.SeriesReviews[0].content}</div>
                   </div>
-                </div>
-              </div>
+                </a>
+              </Link>
             )}
             {profile?.MoviesReviews[0] && (
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Image
-                    alt={"Poster image for:" + profile?.MoviesReviews[0]?.Movies.title}
-                    width="100"
-                    height="150"
-                    src={PosterImage({ path: profile?.MoviesReviews[0]?.Movies.poster, size: "lg" })}
-                  />
-                  <div>
-                    <p className="text-xl">{profile?.MoviesReviews[0]?.Movies.title}</p>
-                    <div className="mb-4 text-sm">
-                      {profile.MoviesReviews[0].created.toLocaleString("en-UK", {
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      })}
+              <Link href={`/movies/${profile?.MoviesReviews[0]?.Movies.id}#reviews`}>
+                <a>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Image
+                      alt={"Poster image for:" + profile?.MoviesReviews[0]?.Movies.title}
+                      width="100"
+                      height="150"
+                      src={PosterImage({ path: profile?.MoviesReviews[0]?.Movies.poster, size: "lg" })}
+                    />
+                    <div>
+                      <p className="text-xl">{profile?.MoviesReviews[0]?.Movies.title}</p>
+                      <div className="mb-4 text-sm">
+                        {profile.MoviesReviews[0].created.toLocaleString("en-UK", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </div>
+                      <div>{profile.MoviesReviews[0].content}</div>
                     </div>
-                    <div>{profile.MoviesReviews[0].content}</div>
                   </div>
-                </div>
-              </div>
+                </a>
+              </Link>
             )}
           </div>
         </div>
