@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PosterImage } from "../../utils/generateImages";
+import ReviewButton from "../common/ReviewButton";
 import WatchlistButton from "../common/WatchlistButton";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import EpisodeWatchButton from "../watchButton/EpisodeWatchButton";
@@ -87,9 +88,12 @@ const ContentPoster = ({
         ) : (
           !hideWatchButton && <MovieWatchButton itemID={id} themeColor={theme_color} />
         )}
-        {showWatchlistButton && session.status === "authenticated" && (
-          <WatchlistButton themeColor={theme_color} movieID={id} />
-        )}
+        <div className="grid grid-cols-4">
+          {showWatchlistButton && session.status === "authenticated" && (
+            <WatchlistButton themeColor={theme_color} movieID={id} />
+          )}
+          <ReviewButton themeColor={theme_color} />
+        </div>
       </div>
     </div>
   );
