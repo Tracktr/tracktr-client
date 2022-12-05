@@ -11,12 +11,16 @@ import ContentOverview from "../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 
 const TVPage = () => {
   const router = useRouter();
   const { tvID } = router.query;
 
-  const { data, status } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
+  const { data, status, refetch, isRefetching } = trpc.tv.tvById.useQuery(
+    { tvID: tvID as string },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={status}>
@@ -36,6 +40,7 @@ const TVPage = () => {
                 number_of_episodes: data.number_of_episodes,
                 number_of_episodes_watched: data.number_of_episodes_watched,
               }}
+              refetchReviews={refetch}
             />
 
             <ContentMain>
@@ -62,6 +67,7 @@ const TVPage = () => {
               <SeasonsBlock seasons={data.seasons} />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
+              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>

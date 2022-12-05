@@ -55,6 +55,8 @@ model User {
   Watchlist       Watchlist[]
   following       User[]            @relation("UserFollowers")
   followers       User[]            @relation("UserFollowers")
+  MoviesReviews   MoviesReviews[]
+  SeriesReviews   SeriesReviews[]
 }
 
 model VerificationToken {
@@ -82,6 +84,7 @@ model Movies {
   poster        String
   MoviesHistory MoviesHistory[]
   WatchlistItem WatchlistItem[]
+  Reviews       MoviesReviews[]
 }
 
 model MoviesHistory {
@@ -96,6 +99,20 @@ model MoviesHistory {
   @@index([movie_id])
 }
 
+model MoviesReviews {
+  id       String   @id @default(cuid())
+  content  String   @db.VarChar(512)
+  created  DateTime @default(now())
+  user_id  String
+  movie_id Int
+  Movies   Movies   @relation(fields: [movie_id], references: [id])
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, movie_id])
+  @@index([movie_id])
+  @@index([user_id])
+}
+
 model Series {
   id              Int               @id
   name            String
@@ -103,6 +120,21 @@ model Series {
   seasons         Seasons[]
   EpisodesHistory EpisodesHistory[]
   WatchlistItem   WatchlistItem[]
+  SeriesReviews   SeriesReviews[]
+}
+
+model SeriesReviews {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(512)
+  created   DateTime @default(now())
+  user_id   String
+  series_id Int
+  Series    Series   @relation(fields: [series_id], references: [id])
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, series_id])
+  @@index([series_id])
+  @@index([user_id])
 }
 
 model Seasons {

@@ -117,6 +117,24 @@ export const profileRouter = router({
             },
           },
         },
+        MoviesReviews: {
+          take: 1,
+          orderBy: {
+            created: "desc",
+          },
+          include: {
+            Movies: true,
+          },
+        },
+        SeriesReviews: {
+          take: 1,
+          orderBy: {
+            created: "desc",
+          },
+          include: {
+            Series: true,
+          },
+        },
         followers: true,
         following: true,
       },

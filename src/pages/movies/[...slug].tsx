@@ -10,11 +10,12 @@ import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
 
 const MoviePage = () => {
   const router = useRouter();
   const { slug } = router.query;
-  const { data, status } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
+  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
 
   return (
     <LoadingPageComponents status={status}>
@@ -29,6 +30,7 @@ const MoviePage = () => {
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
+              refetchReviews={refetch}
             />
 
             <ContentMain>
@@ -56,6 +58,7 @@ const MoviePage = () => {
               />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
+              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>

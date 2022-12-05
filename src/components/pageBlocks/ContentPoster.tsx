@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PosterImage } from "../../utils/generateImages";
+import ReviewButton from "../common/ReviewButton";
 import WatchlistButton from "../common/WatchlistButton";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import EpisodeWatchButton from "../watchButton/EpisodeWatchButton";
@@ -18,6 +19,7 @@ const ContentPoster = ({
   theme_color,
   progression,
   episode,
+  refetchReviews,
 }: {
   hideWatchButton?: boolean;
   showWatchlistButton?: boolean;
@@ -34,6 +36,7 @@ const ContentPoster = ({
     episodeID: number;
     refetch: () => void;
   };
+  refetchReviews?: () => void;
 }) => {
   const session = useSession();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -67,28 +70,49 @@ const ContentPoster = ({
           />
         </motion.div>
 
-        {progression && session.status === "authenticated" && (
-          <div className="pt-4 pb-4 md:row-start-auto">
-            <SeriesProgressionBlock
-              amountOfEpisodes={progression.number_of_episodes}
-              numberOfEpisodesWatched={progression.number_of_episodes_watched}
-              themeColor={theme_color}
-            />
-          </div>
-        )}
-        {episode && session.status === "authenticated" ? (
-          <EpisodeWatchButton
-            itemID={id}
-            episodeID={episode.episodeID}
-            seasonID={episode.seasonID}
-            themeColor={theme_color}
-            refetchProgression={episode.refetch}
-          />
-        ) : (
-          !hideWatchButton && <MovieWatchButton itemID={id} themeColor={theme_color} />
-        )}
-        {showWatchlistButton && session.status === "authenticated" && (
-          <WatchlistButton themeColor={theme_color} movieID={id} />
+        {session.status === "authenticated" && (
+          <>
+            {progression && (
+              <div className="pt-4 pb-4 md:row-start-auto">
+                <SeriesProgressionBlock
+                  amountOfEpisodes={progression.number_of_episodes}
+                  numberOfEpisodesWatched={progression.number_of_episodes_watched}
+                  themeColor={theme_color}
+                />
+              </div>
+            )}
+            {!hideWatchButton &&
+              (episode ? (
+                <EpisodeWatchButton
+                  itemID={id}
+                  episodeID={episode.episodeID}
+                  seasonID={episode.seasonID}
+                  themeColor={theme_color}
+                  refetchProgression={episode.refetch}
+                />
+              ) : (
+                <MovieWatchButton itemID={id} themeColor={theme_color} />
+              ))}
+            {(showWatchlistButton || refetchReviews) && (
+              <div className="grid grid-cols-4">
+                {showWatchlistButton && (
+                  <WatchlistButton
+                    themeColor={theme_color}
+                    movieID={!progression ? id : undefined}
+                    seriesID={progression ? id : undefined}
+                  />
+                )}
+                {refetchReviews && (
+                  <ReviewButton
+                    themeColor={theme_color}
+                    movieID={!progression ? id : undefined}
+                    seriesID={progression ? id : undefined}
+                    refetchReviews={refetchReviews}
+                  />
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

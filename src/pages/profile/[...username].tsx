@@ -146,6 +146,61 @@ const PublicProfile = () => {
               </AnimatePresence>
             </PosterGrid>
           </div>
+          <div className="my-6">
+            <div className="flex items-center text-xl align-middle mb-7 md:text-3xl">
+              <MdOutlineWrapText className="mr-4" />
+              <div>Recent reviews</div>
+            </div>
+
+            {profile?.SeriesReviews[0] && (
+              <Link href={`/tv/${profile?.SeriesReviews[0]?.Series.id}#reviews`}>
+                <a>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Image
+                      alt={"Poster image for:" + profile?.SeriesReviews[0]?.Series.name}
+                      width="100"
+                      height="150"
+                      src={PosterImage({ path: profile?.SeriesReviews[0]?.Series.poster, size: "lg" })}
+                    />
+                    <div>
+                      <p className="text-xl">{profile?.SeriesReviews[0]?.Series.name}</p>
+                      <div className="mb-4 text-sm">
+                        {profile.SeriesReviews[0].created.toLocaleString("en-UK", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </div>
+                      <div>{profile.SeriesReviews[0].content}</div>
+                    </div>
+                  </div>
+                </a>
+              </Link>
+            )}
+            {profile?.MoviesReviews[0] && (
+              <Link href={`/movies/${profile?.MoviesReviews[0]?.Movies.id}#reviews`}>
+                <a>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Image
+                      alt={"Poster image for:" + profile?.MoviesReviews[0]?.Movies.title}
+                      width="100"
+                      height="150"
+                      src={PosterImage({ path: profile?.MoviesReviews[0]?.Movies.poster, size: "lg" })}
+                    />
+                    <div>
+                      <p className="text-xl">{profile?.MoviesReviews[0]?.Movies.title}</p>
+                      <div className="mb-4 text-sm">
+                        {profile.MoviesReviews[0].created.toLocaleString("en-UK", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </div>
+                      <div>{profile.MoviesReviews[0].content}</div>
+                    </div>
+                  </div>
+                </a>
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </LoadingPageComponents>
