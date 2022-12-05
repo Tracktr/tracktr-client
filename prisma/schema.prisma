@@ -85,7 +85,6 @@ model Movies {
   MoviesHistory MoviesHistory[]
   WatchlistItem WatchlistItem[]
   Reviews       MoviesReviews[]
-  SeriesReviews SeriesReviews[]
 }
 
 model MoviesHistory {
@@ -119,6 +118,7 @@ model Series {
   seasons         Seasons[]
   EpisodesHistory EpisodesHistory[]
   WatchlistItem   WatchlistItem[]
+  SeriesReviews   SeriesReviews[]
 }
 
 model SeriesReviews {
@@ -126,8 +126,9 @@ model SeriesReviews {
   content   String @db.VarChar(512)
   user_id   String
   series_id Int
-  Series    Movies @relation(fields: [series_id], references: [id])
+  Series    Series @relation(fields: [series_id], references: [id])
   user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  moviesId  Int?
 
   @@index([series_id])
   @@index([user_id])
