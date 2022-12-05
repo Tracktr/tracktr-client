@@ -40,7 +40,15 @@ export const movieRouter = router({
       const databaseMovie = await ctx.prisma.movies.findFirst({
         where: { id: json.id },
         include: {
-          Reviews: true,
+          Reviews: {
+            include: {
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+            },
+          },
         },
       });
 

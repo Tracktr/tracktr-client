@@ -24,7 +24,15 @@ export const tvRouter = router({
       const databaseSeries = await ctx.prisma.series.findFirst({
         where: { id: json.id },
         include: {
-          SeriesReviews: true,
+          SeriesReviews: {
+            include: {
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+            },
+          },
         },
       });
 
