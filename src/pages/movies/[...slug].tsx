@@ -14,7 +14,7 @@ import ContentMain from "../../components/pageBlocks/ContentMain";
 const MoviePage = () => {
   const router = useRouter();
   const { slug } = router.query;
-  const { data, status } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
+  const { data, status, refetch } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
 
   return (
     <LoadingPageComponents status={status}>
@@ -25,11 +25,11 @@ const MoviePage = () => {
           <ContentGrid>
             <ContentPoster
               showWatchlistButton
-              showReviewButton
               title={data.title}
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
+              refetchReviews={refetch}
             />
 
             <ContentMain>

@@ -13,17 +13,16 @@ import SeriesProgressionBlock from "./SeriesProgressionBlock";
 const ContentPoster = ({
   hideWatchButton,
   showWatchlistButton,
-  showReviewButton,
   title,
   poster,
   id,
   theme_color,
   progression,
   episode,
+  refetchReviews,
 }: {
   hideWatchButton?: boolean;
   showWatchlistButton?: boolean;
-  showReviewButton?: boolean;
   title: string;
   poster: string;
   id: number;
@@ -37,6 +36,7 @@ const ContentPoster = ({
     episodeID: number;
     refetch: () => void;
   };
+  refetchReviews?: () => void;
 }) => {
   const session = useSession();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -93,7 +93,7 @@ const ContentPoster = ({
               ) : (
                 <MovieWatchButton itemID={id} themeColor={theme_color} />
               ))}
-            {(showWatchlistButton || showReviewButton) && (
+            {(showWatchlistButton || refetchReviews) && (
               <div className="grid grid-cols-4">
                 {showWatchlistButton && (
                   <WatchlistButton
@@ -102,11 +102,12 @@ const ContentPoster = ({
                     seriesID={progression ? id : undefined}
                   />
                 )}
-                {showReviewButton && (
+                {refetchReviews && (
                   <ReviewButton
                     themeColor={theme_color}
                     movieID={!progression ? id : undefined}
                     seriesID={progression ? id : undefined}
+                    refetchReviews={refetchReviews}
                   />
                 )}
               </div>

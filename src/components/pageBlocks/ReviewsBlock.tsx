@@ -3,7 +3,7 @@ import ImageWithFallback from "../common/ImageWithFallback";
 
 const ReviewsBlock = ({ reviews }: IReviewsBlock) => {
   return (
-    <div className="relative mx-1 md:mx-0 md:mb-8">
+    <div className="relative mx-1 md:mx-0 md:mb-8" id="reviews">
       <h2 className="pb-4 text-4xl font-bold">Reviews</h2>
       <div className="flex flex-col gap-6">
         {reviews.length > 0 ? (

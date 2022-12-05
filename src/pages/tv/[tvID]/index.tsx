@@ -17,7 +17,7 @@ const TVPage = () => {
   const router = useRouter();
   const { tvID } = router.query;
 
-  const { data, status } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
+  const { data, status, refetch } = trpc.tv.tvById.useQuery({ tvID: tvID as string }, { enabled: router.isReady });
 
   return (
     <LoadingPageComponents status={status}>
@@ -29,7 +29,6 @@ const TVPage = () => {
             <PosterButton
               hideWatchButton
               showWatchlistButton
-              showReviewButton
               title={data.title}
               poster={data.poster_path}
               id={data.id}
@@ -38,6 +37,7 @@ const TVPage = () => {
                 number_of_episodes: data.number_of_episodes,
                 number_of_episodes_watched: data.number_of_episodes_watched,
               }}
+              refetchReviews={refetch}
             />
 
             <ContentMain>

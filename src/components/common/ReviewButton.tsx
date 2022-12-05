@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { MdReviews } from "react-icons/md";
@@ -10,11 +11,14 @@ const ReviewButton = ({
   themeColor,
   movieID,
   seriesID,
+  refetchReviews,
 }: {
   themeColor: IThemeColor;
   movieID?: number | undefined;
   seriesID?: number | undefined;
+  refetchReviews: () => void;
 }) => {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [input, setInput] = useState("");
 
@@ -22,7 +26,11 @@ const ReviewButton = ({
     onSuccess: () => setModalOpen(!modalOpen),
   });
   const addSeriesReview = trpc.review.addSeriesReview.useMutation({
-    onSuccess: () => setModalOpen(!modalOpen),
+    onSuccess: () => {
+      setModalOpen(!modalOpen);
+      refetchReviews();
+      router.push("#reviews");
+    },
   });
 
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
