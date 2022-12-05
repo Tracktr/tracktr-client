@@ -104,6 +104,7 @@ export const tvRouter = router({
           FROM EpisodesHistory
           WHERE series_id = ${input?.tvID}
           AND user_id = ${ctx.session?.user?.id}
+          AND NOT season_number = 0
         `;
 
         if (episodesWatched) {
