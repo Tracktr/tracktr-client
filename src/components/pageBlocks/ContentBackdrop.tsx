@@ -1,6 +1,6 @@
 import { BackdropImage } from "../../utils/generateImages";
 
-const Backdrop = ({ path }: { path: string }) => {
+const ContentBackdrop = ({ path }: { path: string }) => {
   return (
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
@@ -14,4 +14,4 @@ const Backdrop = ({ path }: { path: string }) => {
   );
 };
 
-export default Backdrop;
+export default ContentBackdrop;

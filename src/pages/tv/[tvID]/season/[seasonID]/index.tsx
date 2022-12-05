@@ -4,11 +4,10 @@ import CastBlock from "../../../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../../../components/pageBlocks/CrewBlock";
 import EpisodesBlock from "../../../../../components/pageBlocks/EpisodesBlock";
 import { trpc } from "../../../../../utils/trpc";
-import WatchTrailerButton from "../../../../../components/common/buttons/WatchTrailerButton";
-import JustWatch from "../../../../../components/common/JustWatch";
-import Backdrop from "../../../../../components/pageBlocks/Backdrop";
+import ContentBackdrop from "../../../../../components/pageBlocks/ContentBackdrop";
 import ContentPoster from "../../../../../components/pageBlocks/ContentPoster";
 import ContentOverview from "../../../../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
 
 const TVPage = () => {
   const router = useRouter();
@@ -43,7 +42,7 @@ const TVPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
-          <Backdrop path={tvShow.backdrop_path} />
+          <ContentBackdrop path={tvShow.backdrop_path} />
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
@@ -60,13 +59,7 @@ const TVPage = () => {
               />
 
               <div className="col-span-3 px-4">
-                <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
-                  <div className="items-center justify-between md:flex">
-                    <h1 className="flex items-end max-w-2xl">
-                      <div>{data.name}</div>
-                    </h1>
-                  </div>
-                </div>
+                <ContentTitle theme_color={tvShow.theme_color} title={data.name} score={data.vote_average} />
                 <ContentOverview
                   name={data.name}
                   overview={data.overview}

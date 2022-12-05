@@ -4,13 +4,10 @@ import CastBlock from "../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../components/pageBlocks/CrewBlock";
 import DetailsBlock from "../../components/pageBlocks/DetailsBlock";
 import { trpc } from "../../utils/trpc";
-import { AiFillStar } from "react-icons/ai";
-import GenresBlock from "../../components/pageBlocks/GenresBlock";
-import JustWatch from "../../components/common/JustWatch";
-import WatchTrailerButton from "../../components/common/buttons/WatchTrailerButton";
-import Backdrop from "../../components/pageBlocks/Backdrop";
+import ContentBackdrop from "../../components/pageBlocks/ContentBackdrop";
 import ContentPoster from "../../components/pageBlocks/ContentPoster";
 import ContentOverview from "../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../components/pageBlocks/ContentTitle";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -21,7 +18,7 @@ const MoviePage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
-          <Backdrop path={data.backdrop_path} />
+          <ContentBackdrop path={data.backdrop_path} />
 
           <div className="relative w-full">
             <div className="grid max-w-6xl grid-cols-1 pt-24 m-auto md:grid-cols-4 md:pt-96">
@@ -34,27 +31,13 @@ const MoviePage = () => {
               />
 
               <div className="col-span-3 px-4">
-                <div className="pt-6 text-3xl font-black md:text-6xl drop-shadow-lg">
-                  <div className="items-center justify-between md:flex">
-                    <h1 className="flex items-end max-w-2xl">
-                      <div>
-                        {data.title}
-                        {data.release_date && (
-                          <span className="ml-4 text-xl opacity-75 md:text-4xl drop-shadow-md">
-                            {data.release_date.slice(0, 4)}
-                          </span>
-                        )}
-                      </div>
-                    </h1>
-                    {data.vote_average !== undefined && (
-                      <span className="flex items-center p-2 text-xl">
-                        <AiFillStar className="mr-2 text-primary" size={24} />
-                        {data.vote_average > 0 ? data.vote_average.toPrecision(2) + " / 10" : "N/A"}
-                      </span>
-                    )}
-                  </div>
-                  <GenresBlock genres={data.genres} themeColor={data.theme_color} />
-                </div>
+                <ContentTitle
+                  theme_color={data.theme_color}
+                  title={data.title}
+                  score={data.vote_average}
+                  air_date={data.release_date}
+                  genres={data.genres}
+                />
                 <ContentOverview
                   name={data.name}
                   overview={data.overview}
