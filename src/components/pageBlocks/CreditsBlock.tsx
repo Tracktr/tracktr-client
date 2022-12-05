@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { MdArrowRightAlt } from "react-icons/md";
+import { MdArrowRightAlt, MdKeyboardArrowRight, MdKeyboardArrowUp } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 import { motion } from "framer-motion";
 
@@ -35,7 +35,13 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
         <h2>
           {name} <span className="text-sm">{data.length}</span>
         </h2>
-        <MdArrowRightAlt />
+        <motion.div
+          animate={{
+            rotate: showMore ? 90 : 0,
+          }}
+        >
+          <MdKeyboardArrowRight />
+        </motion.div>
       </button>
       <motion.div
         initial={{ height: 0 }}
