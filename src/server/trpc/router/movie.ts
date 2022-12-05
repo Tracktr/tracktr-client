@@ -37,11 +37,14 @@ export const movieRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
-      const existsInDB = await ctx.prisma.movies.findFirst({
+      const databaseMovie = await ctx.prisma.movies.findFirst({
         where: { id: json.id },
+        include: {
+          Reviews: true,
+        },
       });
 
-      if (!existsInDB) {
+      if (!databaseMovie) {
         await ctx.prisma.movies.create({
           data: {
             id: json.id,
@@ -54,6 +57,7 @@ export const movieRouter = router({
       return {
         ...json,
         theme_color: color,
+        reviews: databaseMovie?.Reviews || [],
       };
     }),
 

@@ -21,11 +21,14 @@ export const tvRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
-      const existsInDB = await ctx.prisma.series.findFirst({
+      const databaseSeries = await ctx.prisma.series.findFirst({
         where: { id: json.id },
+        include: {
+          SeriesReviews: true,
+        },
       });
 
-      if (!existsInDB) {
+      if (!databaseSeries) {
         await ctx.prisma.series.create({
           data: {
             id: json.id,
@@ -96,6 +99,7 @@ export const tvRouter = router({
             ...json,
             number_of_episodes_watched: episodesWatched,
             theme_color: color,
+            reviews: databaseSeries?.SeriesReviews || [],
           };
         }
       }
@@ -103,6 +107,7 @@ export const tvRouter = router({
       return {
         ...json,
         theme_color: color,
+        reviews: databaseSeries?.SeriesReviews || [],
       };
     }),
 
