@@ -13,6 +13,7 @@ import SeriesProgressionBlock from "./SeriesProgressionBlock";
 const ContentPoster = ({
   hideWatchButton,
   showWatchlistButton,
+  showReviewButton,
   title,
   poster,
   id,
@@ -22,6 +23,7 @@ const ContentPoster = ({
 }: {
   hideWatchButton?: boolean;
   showWatchlistButton?: boolean;
+  showReviewButton?: boolean;
   title: string;
   poster: string;
   id: number;
@@ -68,35 +70,48 @@ const ContentPoster = ({
           />
         </motion.div>
 
-        {progression && session.status === "authenticated" && (
-          <div className="pt-4 pb-4 md:row-start-auto">
-            <SeriesProgressionBlock
-              amountOfEpisodes={progression.number_of_episodes}
-              numberOfEpisodesWatched={progression.number_of_episodes_watched}
-              themeColor={theme_color}
-            />
-          </div>
-        )}
-        {!hideWatchButton &&
-          session.status === "authenticated" &&
-          (episode ? (
-            <EpisodeWatchButton
-              itemID={id}
-              episodeID={episode.episodeID}
-              seasonID={episode.seasonID}
-              themeColor={theme_color}
-              refetchProgression={episode.refetch}
-            />
-          ) : (
-            <MovieWatchButton itemID={id} themeColor={theme_color} />
-          ))}
         {session.status === "authenticated" && (
-          <div className="grid grid-cols-4">
-            {showWatchlistButton && session.status === "authenticated" && (
-              <WatchlistButton themeColor={theme_color} movieID={id} />
+          <>
+            {progression && (
+              <div className="pt-4 pb-4 md:row-start-auto">
+                <SeriesProgressionBlock
+                  amountOfEpisodes={progression.number_of_episodes}
+                  numberOfEpisodesWatched={progression.number_of_episodes_watched}
+                  themeColor={theme_color}
+                />
+              </div>
             )}
-            <ReviewButton themeColor={theme_color} />
-          </div>
+            {!hideWatchButton &&
+              (episode ? (
+                <EpisodeWatchButton
+                  itemID={id}
+                  episodeID={episode.episodeID}
+                  seasonID={episode.seasonID}
+                  themeColor={theme_color}
+                  refetchProgression={episode.refetch}
+                />
+              ) : (
+                <MovieWatchButton itemID={id} themeColor={theme_color} />
+              ))}
+            {(showWatchlistButton || showReviewButton) && (
+              <div className="grid grid-cols-4">
+                {showWatchlistButton && (
+                  <WatchlistButton
+                    themeColor={theme_color}
+                    movieID={!episode ? id : undefined}
+                    seriesID={episode ? id : undefined}
+                  />
+                )}
+                {showReviewButton && (
+                  <ReviewButton
+                    themeColor={theme_color}
+                    movieID={!episode ? id : undefined}
+                    seriesID={episode ? id : undefined}
+                  />
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

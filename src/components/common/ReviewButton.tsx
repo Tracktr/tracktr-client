@@ -4,7 +4,15 @@ import ReactTooltip from "react-tooltip";
 import Modal from "../modal/Modal";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
-const ReviewButton = ({ themeColor }: { themeColor: IThemeColor }) => {
+const ReviewButton = ({
+  themeColor,
+  movieID,
+  seriesID,
+}: {
+  themeColor: IThemeColor;
+  movieID?: number | undefined;
+  seriesID?: number | undefined;
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
