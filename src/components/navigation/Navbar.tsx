@@ -9,6 +9,7 @@ import NavMobile from "./NavMobile";
 import ImageWithFallback from "../common/ImageWithFallback";
 import { CgClose, CgSearch } from "react-icons/cg";
 import SearchInput from "../search/SearchInput";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const navLinks = [
   { href: "/movies", text: "Movies", active: false },
@@ -47,6 +48,7 @@ const subMenuAnimate = {
 };
 
 const Navbar = () => {
+  const queryClient = useQueryClient();
   const { data: session, status } = useSession();
   const [profileHover, setProfileHover] = useState(false);
   const [navMobile, setNavMobile] = useState(false);
@@ -140,7 +142,10 @@ const Navbar = () => {
                               </Link>
                             ))}
                             <button
-                              onClick={() => signOut()}
+                              onClick={() => {
+                                queryClient.invalidateQueries();
+                                signOut({ callbackUrl: "/" });
+                              }}
                               className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
                             >
                               Sign Out

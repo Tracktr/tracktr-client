@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const NavMobile = ({
   toggleNavMobile,
@@ -20,6 +21,7 @@ const NavMobile = ({
     text: string;
   }[];
 }) => {
+  const queryClient = useQueryClient();
   const [submenu, setSubMenu] = useState(false);
   const session = useSession();
 
@@ -88,7 +90,13 @@ const NavMobile = ({
                         </a>
                       </Link>
                     ))}
-                    <button onClick={() => signOut()} className="block w-full p-2 rounded-md hover:bg-zinc-800">
+                    <button
+                      onClick={() => {
+                        signOut({ callbackUrl: "/" });
+                        queryClient.invalidateQueries();
+                      }}
+                      className="block w-full p-2 rounded-md hover:bg-zinc-800"
+                    >
                       Sign Out
                     </button>
                   </div>
