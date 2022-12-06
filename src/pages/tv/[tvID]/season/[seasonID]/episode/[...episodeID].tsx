@@ -10,6 +10,7 @@ import ContentOverview from "../../../../../../components/pageBlocks/ContentOver
 import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -22,7 +23,12 @@ const EpisodePage = () => {
     { enabled: router.isReady }
   );
 
-  const { data: episodeData, status: episodeStatus } = trpc.episode.episodeById.useQuery(
+  const {
+    data: episodeData,
+    status: episodeStatus,
+    refetch: episodeRefetch,
+    isRefetching,
+  } = trpc.episode.episodeById.useQuery(
     {
       tvID: tvID as string,
       seasonID: seasonID as string,
@@ -49,9 +55,10 @@ const EpisodePage = () => {
               }}
               episode={{
                 episodeID: Number(episodeID),
-                refetch: refetch,
+                refetch,
                 seasonID: Number(seasonID),
               }}
+              refetchReviews={episodeRefetch}
             />
 
             <ContentMain>
@@ -76,6 +83,7 @@ const EpisodePage = () => {
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <EpisodeSwitcherBlock seasons={tvShow.seasons} />
+              <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>

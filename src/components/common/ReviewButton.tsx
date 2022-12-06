@@ -11,11 +11,15 @@ const ReviewButton = ({
   themeColor,
   movieID,
   seriesID,
+  seasonID,
+  episodeID,
   refetchReviews,
 }: {
   themeColor: IThemeColor;
   movieID?: number | undefined;
   seriesID?: number | undefined;
+  seasonID?: number | undefined;
+  episodeID?: number | undefined;
   refetchReviews: () => void;
 }) => {
   const router = useRouter();
@@ -36,6 +40,20 @@ const ReviewButton = ({
       router.push("#reviews");
     },
   });
+  const addSeasonReview = trpc.review.addSeasonReview.useMutation({
+    onSuccess: () => {
+      setModalOpen(!modalOpen);
+      refetchReviews();
+      router.push("#reviews");
+    },
+  });
+  const addEpisodesReview = trpc.review.addEpisodeReview.useMutation({
+    onSuccess: () => {
+      setModalOpen(!modalOpen);
+      refetchReviews();
+      router.push("#reviews");
+    },
+  });
 
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
@@ -43,7 +61,17 @@ const ReviewButton = ({
   };
 
   const onSubmit = () => {
-    if (seriesID !== undefined) {
+    if (episodeID !== undefined) {
+      addEpisodesReview.mutate({
+        episodeID,
+        content: input,
+      });
+    } else if (seasonID !== undefined) {
+      addSeasonReview.mutate({
+        seasonID,
+        content: input,
+      });
+    } else if (seriesID !== undefined) {
       addSeriesReview.mutate({
         seriesID,
         content: input,

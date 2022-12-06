@@ -134,6 +134,8 @@ const ContentPoster = ({
                   <ReviewButton
                     themeColor={theme_color}
                     movieID={!progression ? id : undefined}
+                    episodeID={episode ? episode.episodeID : undefined}
+                    seasonID={season ? season.seasonID : undefined}
                     seriesID={progression ? id : undefined}
                     refetchReviews={refetchReviews}
                   />

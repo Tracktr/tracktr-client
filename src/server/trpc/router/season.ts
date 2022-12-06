@@ -83,7 +83,7 @@ export const seasonRouter = router({
 
       return {
         ...json,
-        reviews: databaseSeason?.SeriesReviews || [],
+        reviews: databaseSeason?.SeasonsReviews || [],
       };
     }),
 

@@ -11,6 +11,7 @@ import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../components/pageBlocks/ContentMain";
 import { useSession } from "next-auth/react";
+import ReviewsBlock from "../../../../../components/pageBlocks/ReviewsBlock";
 
 const TVPage = () => {
   const router = useRouter();
@@ -75,6 +76,7 @@ const TVPage = () => {
                 seasonID: Number(seasonID),
                 watchHistory,
               }}
+              refetchReviews={seasonRefetch}
             />
 
             <ContentMain>
@@ -94,6 +96,7 @@ const TVPage = () => {
               />
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
+              <ReviewsBlock reviews={data.reviews} refetchReviews={seasonRefetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>
