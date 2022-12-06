@@ -122,14 +122,16 @@ export const seasonRouter = router({
   removeSeasonFromWatched: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        seasonNumber: z.number(),
+        seriesId: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.prisma.episodesHistory.deleteMany({
         where: {
           user_id: ctx.session.user.id,
-          id: input.id,
+          season_number: input.seasonNumber,
+          series_id: input.seriesId,
         },
       });
 
@@ -146,17 +148,26 @@ export const seasonRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      // const result = await ctx.prisma.episodesHistory.findMany({
-      //   where: {
-      //     user_id: ctx.session.user.id,
-      //     series_id: input.seriesId,
-      //     season_number: input.seasonNumber,
-      //   },
-      // });
+      const url = new URL(`tv/${input?.seriesId}/season/${input.seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
+      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-      // return {
-      //   ...result,
-      // };
-      return { result: [] };
+      const season = await fetch(url).then((res) => res.json());
+
+      const result = await ctx.prisma.episodesHistory.findMany({
+        where: {
+          user_id: ctx.session.user.id,
+          series_id: input.seriesId,
+          season_number: input.seasonNumber,
+        },
+        distinct: ["episode_number"],
+        orderBy: {
+          datetime: "desc",
+        },
+      });
+
+      return {
+        results: result,
+        episodeAmount: season.episodes.length,
+      };
     }),
 });

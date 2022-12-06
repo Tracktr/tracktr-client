@@ -50,7 +50,7 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
 
   useEffect(() => {
     if (sessionStatus === "authenticated" && watchHistory.status === "success") {
-      if (Object.keys(watchHistory.data).length > 0) {
+      if (watchHistory.data.results.length > 0) {
         setState("watched");
       } else {
         setState("unwatched");
@@ -74,7 +74,8 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
       setState("loading");
 
       removeFromWatched.mutate({
-        id: Object.values(watchHistory.data as any[])[Object.values(watchHistory.data as any[]).length - 1].id,
+        seasonNumber: seasonID,
+        seriesId: itemID,
       });
     }
   };
@@ -93,13 +94,13 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
   }
 
   if (state === "watched") {
-    const data = Object.values(watchHistory.data as any[]);
-    const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
+    const plays: number = watchHistory?.data?.results?.length || 0;
+    const lastDate = watchHistory?.data?.results[0]?.datetime;
+    const date = new Date(String(lastDate)).toLocaleDateString("en-UK", {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
-    const plays = Object.keys(watchHistory.data as []).length;
 
     return (
       <div
@@ -114,7 +115,9 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
     `}
       >
         <div className="absolute top-0 w-full h-full px-3 py-2">
-          <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
+          <div className="text-sm font-bold">
+            Watched {plays > 0 && `${plays}/${watchHistory?.data?.episodeAmount} episodes`}
+          </div>
           <div className="text-xs italic normal-case">Last on {date}</div>
         </div>
         <div className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow group-hover:opacity-100 backdrop-blur ">
@@ -122,7 +125,7 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
             <span className="text-center text-green-700">
               <AiOutlineCheckCircle />
             </span>
-            <span className="py-1 text-xs font-normal">Watch</span>
+            <span className="py-1 text-xs font-normal">Watch season</span>
           </button>
           <button className="flex flex-col items-center text-3xl" onClick={removeFromHistory}>
             <span className="text-center text-red-700">
