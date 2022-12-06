@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -20,83 +21,89 @@ const FollowersPage = () => {
   }, [session, router]);
 
   return (
-    <div className="max-w-6xl m-auto">
-      <ProfileHeader
-        image={String(session.data?.user?.image)}
-        currentPage="Social"
-        name={String(session.data?.user?.name)}
-      />
-      <LoadingPageComponents status={status}>
-        {() => {
-          return (
-            <div className="mx-4 md:mx-0">
-              <div className="my-10">
-                <div className="items-center align-middle md:flex">
-                  <div className="flex items-center justify-between w-full gap-4 mb-5">
-                    <div className="flex items-center justify-center text-xl md:text-3xl">Following</div>
+    <>
+      <Head>
+        <title>Social - Tracktr.</title>
+      </Head>
+
+      <div className="max-w-6xl m-auto">
+        <ProfileHeader
+          image={String(session.data?.user?.image)}
+          currentPage="Social"
+          name={String(session.data?.user?.name)}
+        />
+        <LoadingPageComponents status={status}>
+          {() => {
+            return (
+              <div className="mx-4 md:mx-0">
+                <div className="my-10">
+                  <div className="items-center align-middle md:flex">
+                    <div className="flex items-center justify-between w-full gap-4 mb-5">
+                      <div className="flex items-center justify-center text-xl md:text-3xl">Following</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 mb-5">
+                    {data?.following && data?.following?.length > 0 ? (
+                      data?.following?.map((user) => {
+                        return (
+                          <Link href={`/profile/${user.profile?.username}`} key={user.name}>
+                            <a className="flex flex-col items-center">
+                              <ImageWithFallback
+                                src={user.image}
+                                fallbackSrc="/placeholder_profile.png"
+                                width="96"
+                                height="96"
+                                alt="Profile picture"
+                                className="rounded-full"
+                              />
+                              <p className="text-sm">{user.profile?.username}</p>
+                            </a>
+                          </Link>
+                        );
+                      })
+                    ) : (
+                      <div>No followers</div>
+                    )}
+                  </div>
+
+                  <Link href="/profile/social/search">
+                    <a className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground">
+                      Search users
+                    </a>
+                  </Link>
+                </div>
+                <div className="my-10">
+                  <h1 className="my-5 text-3xl">Followers</h1>
+                  <div className="flex gap-4">
+                    {data?.followers && data?.followers?.length > 0 ? (
+                      data?.followers?.map((user) => {
+                        return (
+                          <Link href={`/profile/${user.profile?.username}`} key={user.name}>
+                            <a className="flex flex-col items-center">
+                              <ImageWithFallback
+                                src={user.image}
+                                fallbackSrc="/placeholder_profile.png"
+                                width="96"
+                                height="96"
+                                alt="Profile picture"
+                                className="rounded-full"
+                              />
+                              <p className="text-sm">{user.profile?.username}</p>
+                            </a>
+                          </Link>
+                        );
+                      })
+                    ) : (
+                      <div>Not following any users</div>
+                    )}
                   </div>
                 </div>
-                <div className="flex gap-4 mb-5">
-                  {data?.following && data?.following?.length > 0 ? (
-                    data?.following?.map((user) => {
-                      return (
-                        <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                          <a className="flex flex-col items-center">
-                            <ImageWithFallback
-                              src={user.image}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="96"
-                              height="96"
-                              alt="Profile picture"
-                              className="rounded-full"
-                            />
-                            <p className="text-sm">{user.profile?.username}</p>
-                          </a>
-                        </Link>
-                      );
-                    })
-                  ) : (
-                    <div>No followers</div>
-                  )}
-                </div>
-
-                <Link href="/profile/social/search">
-                  <a className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground">
-                    Search users
-                  </a>
-                </Link>
               </div>
-              <div className="my-10">
-                <h1 className="my-5 text-3xl">Followers</h1>
-                <div className="flex gap-4">
-                  {data?.followers && data?.followers?.length > 0 ? (
-                    data?.followers?.map((user) => {
-                      return (
-                        <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                          <a className="flex flex-col items-center">
-                            <ImageWithFallback
-                              src={user.image}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="96"
-                              height="96"
-                              alt="Profile picture"
-                              className="rounded-full"
-                            />
-                            <p className="text-sm">{user.profile?.username}</p>
-                          </a>
-                        </Link>
-                      );
-                    })
-                  ) : (
-                    <div>Not following any users</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        }}
-      </LoadingPageComponents>
-    </div>
+            );
+          }}
+        </LoadingPageComponents>
+      </div>
+    </>
   );
 };
 

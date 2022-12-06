@@ -1,8 +1,13 @@
+import Head from "next/head";
 import TVInfiniteScroll from "../../components/infiniteScroll/TVInfiniteScroll";
 import SearchHeader from "../../components/search/SearchHeader";
 
 const TVPage = () => (
   <div>
+    <Head>
+      <title>Series - Tracktr.</title>
+    </Head>
+
     <SearchHeader
       title="Series"
       type="tv"

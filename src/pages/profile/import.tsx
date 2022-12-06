@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
@@ -99,6 +100,10 @@ const ImportPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Import data from Trakt.tv - Tracktr.</title>
+      </Head>
+
       <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Import" />
 
       <section className="py-10 text-white sm:py-16 lg:py-24">

@@ -11,6 +11,7 @@ import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
+import Head from "next/head";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -41,6 +42,12 @@ const EpisodePage = () => {
     <LoadingPageComponents status={episodeStatus}>
       {() => (
         <>
+          <Head>
+            <title>
+              {tvShow.name} {episodeData.season_number}x{episodeData.episode_number} - {episodeData.name} - Tracktr.
+            </title>
+          </Head>
+
           <ContentBackdrop path={tvShow.backdrop_path} />
 
           <ContentGrid>

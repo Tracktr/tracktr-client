@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -30,39 +31,45 @@ const SearchPage = () => {
   }, [inView, fetchNextPage]);
 
   return (
-    <div className="max-w-6xl px-4 pt-32 m-auto">
-      <div className="z-40 mb-5 text-4xl">Results for: {query}</div>
-      <LoadingPageComponents status={status} posters>
-        {() => (
-          <PosterGrid>
-            <>
-              {data?.pages.map((page) =>
-                page.results.map((content) => {
-                  return (
-                    <MoviePoster
-                      id={content.id}
-                      imageSrc={`${content.poster_path}`}
-                      name={content.title || content.name}
-                      key={content.id}
-                      url={`/movies/${content.id}`}
-                      score={content.vote_average}
-                      watched={content.watched}
-                      refetch={refetch}
-                      watched_id={content.watched_id}
-                      fetchStatus={isRefetching}
-                    />
-                  );
-                })
-              )}
-              <div className="loader" ref={ref}>
-                {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-              </div>
-              {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
-            </>
-          </PosterGrid>
-        )}
-      </LoadingPageComponents>
-    </div>
+    <>
+      <Head>
+        <title>{query} - Search - Tracktr.</title>
+      </Head>
+
+      <div className="max-w-6xl px-4 pt-32 m-auto">
+        <div className="z-40 mb-5 text-4xl">Results for: {query}</div>
+        <LoadingPageComponents status={status} posters>
+          {() => (
+            <PosterGrid>
+              <>
+                {data?.pages.map((page) =>
+                  page.results.map((content) => {
+                    return (
+                      <MoviePoster
+                        id={content.id}
+                        imageSrc={`${content.poster_path}`}
+                        name={content.title || content.name}
+                        key={content.id}
+                        url={`/movies/${content.id}`}
+                        score={content.vote_average}
+                        watched={content.watched}
+                        refetch={refetch}
+                        watched_id={content.watched_id}
+                        fetchStatus={isRefetching}
+                      />
+                    );
+                  })
+                )}
+                <div className="loader" ref={ref}>
+                  {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+                </div>
+                {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
+              </>
+            </PosterGrid>
+          )}
+        </LoadingPageComponents>
+      </div>
+    </>
   );
 };
 
