@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
 import { TmdbEpisode } from "../../../types/tmdb";
+import createNewSeries from "../../../utils/createNewSeries";
 
 export const tvRouter = router({
   tvById: publicProcedure
@@ -41,59 +42,14 @@ export const tvRouter = router({
       });
 
       if (!databaseSeries) {
-        await ctx.prisma.series.create({
-          data: {
-            id: json.id,
-            name: json.name,
-            poster: json.poster_path,
-            seasons: {
-              connectOrCreate: await Promise.all(
-                json.seasons.map(
-                  async (season: {
-                    air_date: string;
-                    episode_count: number;
-                    id: number;
-                    name: string;
-                    overview: string;
-                    poster_path: string;
-                    season_number: number;
-                  }) => {
-                    const url = new URL(
-                      `tv/${json.id}/season/${season.season_number}`,
-                      process.env.NEXT_PUBLIC_TMDB_API
-                    );
-                    url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+        const seriesPoster = json.poster_path ? json.poster_path : "/noimage.png";
 
-                    const seasonWithEpisodes = await fetch(url).then((res) => res.json());
+        const newSeries = await createNewSeries({ show: json, seriesPoster, id: Number(input.tvID) });
 
-                    return {
-                      where: { id: season.id },
-                      create: {
-                        id: season.id,
-                        name: season.name,
-                        poster: season.poster_path ? season.poster_path : json.poster_path,
-                        season_number: season.season_number,
-                        episodes: {
-                          connectOrCreate: seasonWithEpisodes.episodes.map((e: TmdbEpisode) => {
-                            return {
-                              where: { id: e.id },
-                              create: {
-                                id: e.id,
-                                name: e.name,
-                                episode_number: e.episode_number,
-                                season_number: e.season_number,
-                                air_date: e.air_date ? new Date(e.air_date) : null,
-                              },
-                            };
-                          }),
-                        },
-                      },
-                    };
-                  }
-                )
-              ),
-            },
-          },
+        await ctx.prisma.series.upsert({
+          where: { id: Number(input.tvID) },
+          update: newSeries,
+          create: newSeries,
         });
       }
 
