@@ -10,12 +10,22 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
   const removeSeriesReview = trpc.review.removeSeriesReview.useMutation({
     onSuccess: () => refetchReviews(),
   });
+  const removeSeasonReview = trpc.review.removeSeasonReview.useMutation({
+    onSuccess: () => refetchReviews(),
+  });
+  const removeEpisodeReview = trpc.review.removeEpisodeReview.useMutation({
+    onSuccess: () => refetchReviews(),
+  });
 
   const handleDelete = (e: any) => {
     if (e.series_id) {
       removeSeriesReview.mutate({ seriesID: e.series_id });
     } else if (e.movie_id) {
       removeMovieReview.mutate({ movieID: e.movie_id });
+    } else if (e.season_id) {
+      removeSeasonReview.mutate({ seasonID: e.season_id });
+    } else if (e.episode_id) {
+      removeEpisodeReview.mutate({ episodeID: e.episode_id });
     }
   };
 
@@ -84,6 +94,8 @@ interface IReviewsBlock {
     user_id: string;
     series_id?: number;
     moviesId?: number;
+    season_id?: number;
+    episode_id?: number;
     created: Date;
     user: {
       id: string;
