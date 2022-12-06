@@ -36,14 +36,14 @@ const CreditsBlock = ({ credits }: CreditsBlockProps) => {
       <h2 className="pb-8 text-5xl font-bold">Known for</h2>
       <h3 className="pb-4 text-3xl">Movies</h3>
       <DetailsBlock data={credits.movie.cast} type="movies" name="Acting" />
-      {movieCreditsByJob.map((job) => {
-        return <DetailsBlock type="movies" key={job.title} data={job.data} name={job.title} />;
+      {movieCreditsByJob.map((job, index) => {
+        return <DetailsBlock type="movies" key={index} data={job.data} name={job.title} />;
       })}
 
       <h3 className="pb-4 mt-12 text-3xl">TV</h3>
       <DetailsBlock data={credits.tv.cast} type="tv" name="Acting" />
-      {tvCreditsByJob.map((job) => {
-        return <DetailsBlock type="tv" key={job.title} data={job.data} name={job.title} />;
+      {tvCreditsByJob.map((job, index) => {
+        return <DetailsBlock type="tv" key={index} data={job.data} name={job.title} />;
       })}
     </div>
   );
@@ -88,8 +88,8 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
               new Date(b.release_date || b.first_air_date).setHours(0, 0, 0, 0)
           )
           .reverse()
-          .map((cast: any) => (
-            <Link href={`/${type}/${cast.id}`} key={cast.id}>
+          .map((cast: any, index: any) => (
+            <Link href={`/${type}/${cast.id}`} key={index}>
               <a className="flex justify-between px-4">
                 <div className="flex py-2">
                   <div className="pr-4">
