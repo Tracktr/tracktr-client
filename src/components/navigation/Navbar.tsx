@@ -140,7 +140,7 @@ const Navbar = () => {
                               </Link>
                             ))}
                             <button
-                              onClick={() => signOut()}
+                              onClick={() => signOut({ callbackUrl: "/" })}
                               className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
                             >
                               Sign Out

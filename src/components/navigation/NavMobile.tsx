@@ -88,7 +88,10 @@ const NavMobile = ({
                         </a>
                       </Link>
                     ))}
-                    <button onClick={() => signOut()} className="block w-full p-2 rounded-md hover:bg-zinc-800">
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="block w-full p-2 rounded-md hover:bg-zinc-800"
+                    >
                       Sign Out
                     </button>
                   </div>
