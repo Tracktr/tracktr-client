@@ -67,10 +67,10 @@ export const reviewRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const review = ctx.prisma.seriesReviews.create({
+      const review = ctx.prisma.episodesReviews.create({
         data: {
           user_id: ctx.session.user.id,
-          series_id: input.episodeID,
+          episodes_id: input.episodeID,
           content: input.content,
         },
       });

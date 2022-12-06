@@ -1,9 +1,12 @@
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
 import ImageWithFallback from "../common/ImageWithFallback";
 
 const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) => {
+  const session = useSession();
+
   const removeMovieReview = trpc.review.removeMovieReview.useMutation({
     onSuccess: () => refetchReviews(),
   });
@@ -18,14 +21,14 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
   });
 
   const handleDelete = (e: any) => {
-    if (e.series_id) {
+    if (e.seasons_id) {
+      removeSeasonReview.mutate({ seasonID: e.seasons_id });
+    } else if (e.episodes_id) {
+      removeEpisodeReview.mutate({ episodeID: e.episodes_id });
+    } else if (e.series_id) {
       removeSeriesReview.mutate({ seriesID: e.series_id });
     } else if (e.movie_id) {
       removeMovieReview.mutate({ movieID: e.movie_id });
-    } else if (e.season_id) {
-      removeSeasonReview.mutate({ seasonID: e.season_id });
-    } else if (e.episode_id) {
-      removeEpisodeReview.mutate({ episodeID: e.episode_id });
     }
   };
 
@@ -61,12 +64,14 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
                     <p className="text-xl">{review.user.profile.username}</p>
                   </a>
                 </Link>
-                <button
-                  className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                  onClick={() => handleDelete(review)}
-                >
-                  <MdDelete className="text-xl" />
-                </button>
+                {session?.data?.user?.id === review.user_id && (
+                  <button
+                    className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                    onClick={() => handleDelete(review)}
+                  >
+                    <MdDelete className="text-xl" />
+                  </button>
+                )}
                 <div className="text-sm">
                   {review.created.toLocaleString("en-UK", {
                     dateStyle: "medium",

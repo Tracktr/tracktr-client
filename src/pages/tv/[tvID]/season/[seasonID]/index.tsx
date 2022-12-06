@@ -73,7 +73,8 @@ const TVPage = () => {
               }}
               season={{
                 refetch: refetch,
-                seasonID: Number(seasonID),
+                seasonID: Number(data.id),
+                seasonNumber: Number(seasonID),
                 watchHistory,
               }}
               refetchReviews={seasonRefetch}

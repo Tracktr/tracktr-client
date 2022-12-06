@@ -8,12 +8,12 @@ export const episodeRouter = router({
       z.object({
         tvID: z.string().nullish(),
         seasonID: z.string().nullish(),
-        episodeID: z.string().nullish(),
+        episodeNumber: z.string().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
       const url = new URL(
-        `tv/${input?.tvID}/season/${input?.seasonID}/episode/${input?.episodeID}`,
+        `tv/${input?.tvID}/season/${input?.seasonID}/episode/${input?.episodeNumber}`,
         process.env.NEXT_PUBLIC_TMDB_API
       );
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
@@ -24,7 +24,7 @@ export const episodeRouter = router({
       const json = await res.json();
 
       const databaseEpisodes = await ctx.prisma.episodes.findFirst({
-        where: { episode_number: Number(input.episodeID), season_number: Number(input.episodeID) },
+        where: { id: json.id },
         include: {
           EpisodesReviews: {
             include: {

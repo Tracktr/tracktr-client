@@ -32,7 +32,7 @@ const EpisodePage = () => {
     {
       tvID: tvID as string,
       seasonID: seasonID as string,
-      episodeID: episodeID ? episodeID[0] : undefined,
+      episodeNumber: episodeID ? episodeID[0] : undefined,
     },
     { enabled: router.isReady }
   );
@@ -54,7 +54,8 @@ const EpisodePage = () => {
                 number_of_episodes_watched: tvShow.number_of_episodes_watched,
               }}
               episode={{
-                episodeID: Number(episodeID),
+                episodeNumber: Number(episodeID),
+                episodeID: Number(episodeData.id),
                 refetch,
                 seasonID: Number(seasonID),
               }}
@@ -82,8 +83,8 @@ const EpisodePage = () => {
 
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
-              <EpisodeSwitcherBlock seasons={tvShow.seasons} />
               <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
+              <EpisodeSwitcherBlock seasons={tvShow.seasons} />
             </ContentMain>
           </ContentGrid>
         </>
