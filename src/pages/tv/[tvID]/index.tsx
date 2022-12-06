@@ -12,14 +12,26 @@ import ContentTitle from "../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
+import { useSession } from "next-auth/react";
 
 const TVPage = () => {
   const router = useRouter();
+  const session = useSession();
   const { tvID } = router.query;
 
   const { data, status, refetch, isRefetching } = trpc.tv.tvById.useQuery(
     { tvID: tvID as string },
     { enabled: router.isReady }
+  );
+
+  const watchHistory = trpc.tv.watchHistoryByID.useQuery(
+    {
+      seriesId: Number(tvID),
+    },
+    {
+      enabled: session.status !== "loading",
+      refetchOnWindowFocus: false,
+    }
   );
 
   return (
@@ -30,7 +42,6 @@ const TVPage = () => {
 
           <ContentGrid>
             <PosterButton
-              hideWatchButton
               showWatchlistButton
               title={data.title}
               poster={data.poster_path}
@@ -41,6 +52,10 @@ const TVPage = () => {
                 number_of_episodes_watched: data.number_of_episodes_watched,
               }}
               refetchReviews={refetch}
+              series={{
+                refetch: refetch,
+                watchHistory,
+              }}
             />
 
             <ContentMain>
