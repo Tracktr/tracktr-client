@@ -31,13 +31,20 @@ const CreditsBlock = ({ credits }: CreditsBlockProps) => {
     data,
   }));
 
-  console.log(movieCreditsByJob, tvCreditsByJob);
-
   return (
     <div>
-      <h2 className="pb-4 text-3xl font-bold">Known for</h2>
-      <DetailsBlock data={credits.movie.cast} type="movies" name="Movies" />
-      <DetailsBlock data={credits.tv.cast} type="tv" name="TV" />
+      <h2 className="pb-8 text-5xl font-bold">Known for</h2>
+      <h3 className="pb-4 text-3xl">Movies</h3>
+      <DetailsBlock data={credits.movie.cast} type="movies" name="Acting" />
+      {movieCreditsByJob.map((job) => {
+        return <DetailsBlock type="movies" key={job.title} data={job.data} name={job.title} />;
+      })}
+
+      <h3 className="pb-4 mt-12 text-3xl">TV</h3>
+      <DetailsBlock data={credits.tv.cast} type="tv" name="Acting" />
+      {tvCreditsByJob.map((job) => {
+        return <DetailsBlock type="tv" key={job.title} data={job.data} name={job.title} />;
+      })}
     </div>
   );
 };
