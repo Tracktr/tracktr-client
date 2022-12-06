@@ -1,7 +1,6 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
-import { TmdbEpisode } from "../../../types/tmdb";
 import createNewSeries from "../../../utils/createNewSeries";
 
 export const tvRouter = router({

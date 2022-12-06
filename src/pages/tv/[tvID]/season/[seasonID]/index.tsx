@@ -48,7 +48,6 @@ const TVPage = () => {
 
           <ContentGrid>
             <ContentPoster
-              hideWatchButton
               title={data.name}
               poster={data.poster_path}
               id={data.id}
@@ -56,6 +55,10 @@ const TVPage = () => {
               progression={{
                 number_of_episodes: tvShow.number_of_episodes,
                 number_of_episodes_watched: tvShow.number_of_episodes_watched,
+              }}
+              season={{
+                refetch: refetch,
+                seasonID: Number(seasonID),
               }}
             />
 
