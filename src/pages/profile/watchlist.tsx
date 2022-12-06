@@ -102,10 +102,10 @@ const WatchlistPage = () => {
               </button>
             </div>
           </div>
-          <PosterGrid hasScrollContainer={false}>
-            <AnimatePresence mode="popLayout" initial={false}>
-              {watchlist?.WatchlistItem &&
-                watchlist.WatchlistItem.map((item: any) => {
+          {watchlist?.WatchlistItem && watchlist.WatchlistItem.length > 0 ? (
+            <PosterGrid hasScrollContainer={false}>
+              <AnimatePresence mode="popLayout" initial={false}>
+                {watchlist.WatchlistItem.map((item: any) => {
                   return (
                     <motion.div
                       layout
@@ -184,8 +184,11 @@ const WatchlistPage = () => {
                     </motion.div>
                   );
                 })}
-            </AnimatePresence>
-          </PosterGrid>
+              </AnimatePresence>
+            </PosterGrid>
+          ) : (
+            <div>Nothing on your watchlist</div>
+          )}
         </div>
       )}
     </LoadingPageComponents>

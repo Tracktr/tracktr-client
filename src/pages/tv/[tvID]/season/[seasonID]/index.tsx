@@ -10,9 +10,11 @@ import ContentOverview from "../../../../../components/pageBlocks/ContentOvervie
 import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../components/pageBlocks/ContentMain";
+import { useSession } from "next-auth/react";
 
 const TVPage = () => {
   const router = useRouter();
+  const session = useSession();
   const { tvID, seasonID } = router.query;
 
   const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery(
@@ -35,9 +37,21 @@ const TVPage = () => {
     { enabled: router.isReady }
   );
 
+  const watchHistory = trpc.season.watchHistoryByID.useQuery(
+    {
+      seasonNumber: Number(seasonID),
+      seriesId: Number(tvID),
+    },
+    {
+      enabled: session.status !== "loading",
+      refetchOnWindowFocus: false,
+    }
+  );
+
   const refetch = () => {
     tvRefetch();
     seasonRefetch();
+    watchHistory.refetch();
   };
 
   return (
@@ -48,14 +62,18 @@ const TVPage = () => {
 
           <ContentGrid>
             <ContentPoster
-              hideWatchButton
               title={data.name}
               poster={data.poster_path}
-              id={data.id}
+              id={Number(tvID)}
               theme_color={tvShow.theme_color}
               progression={{
                 number_of_episodes: tvShow.number_of_episodes,
                 number_of_episodes_watched: tvShow.number_of_episodes_watched,
+              }}
+              season={{
+                refetch: refetch,
+                seasonID: Number(seasonID),
+                watchHistory,
               }}
             />
 

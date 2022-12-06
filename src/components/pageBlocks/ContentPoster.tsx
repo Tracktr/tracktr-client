@@ -8,6 +8,7 @@ import WatchlistButton from "../common/WatchlistButton";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import EpisodeWatchButton from "../watchButton/EpisodeWatchButton";
 import MovieWatchButton from "../watchButton/MovieWatchButton";
+import SeasonWatchButton from "../watchButton/SeasonWatchButton";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
 
 const ContentPoster = ({
@@ -20,6 +21,7 @@ const ContentPoster = ({
   progression,
   episode,
   refetchReviews,
+  season,
 }: {
   hideWatchButton?: boolean;
   showWatchlistButton?: boolean;
@@ -34,6 +36,11 @@ const ContentPoster = ({
   episode?: {
     seasonID: number;
     episodeID: number;
+    refetch: () => void;
+  };
+  season?: {
+    watchHistory: any;
+    seasonID: number;
     refetch: () => void;
   };
   refetchReviews?: () => void;
@@ -89,6 +96,14 @@ const ContentPoster = ({
                   seasonID={episode.seasonID}
                   themeColor={theme_color}
                   refetchProgression={episode.refetch}
+                />
+              ) : season ? (
+                <SeasonWatchButton
+                  itemID={id}
+                  seasonID={season.seasonID}
+                  themeColor={theme_color}
+                  watchHistory={season.watchHistory}
+                  refetchProgression={season.refetch}
                 />
               ) : (
                 <MovieWatchButton itemID={id} themeColor={theme_color} />
