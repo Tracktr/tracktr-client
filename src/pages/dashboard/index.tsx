@@ -19,9 +19,15 @@ const DashboardPage = () => {
     data: history,
     status: historyStatus,
     refetch: refetchHistory,
-  } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 });
-  const { data: upNext, status: upNextStatus, refetch: refetchUpNext } = trpc.profile.upNext.useQuery();
-  const { data: stats, refetch: refetchStats } = trpc.profile.stats.useQuery();
+  } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 }, { enabled: sessionStatus === "authenticated" });
+  const {
+    data: upNext,
+    status: upNextStatus,
+    refetch: refetchUpNext,
+  } = trpc.profile.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
+  const { data: stats, refetch: refetchStats } = trpc.profile.stats.useQuery(undefined, {
+    enabled: sessionStatus === "authenticated",
+  });
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
