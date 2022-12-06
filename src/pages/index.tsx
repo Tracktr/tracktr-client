@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import { BsFillEmojiHeartEyesFill } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineLiveTv } from "react-icons/md";
 import LoadingPageComponents from "../components/common/LoadingPageComponents";
-import { SignupWindow } from "./google-signin";
 import Head from "next/head";
 
 const Home: NextPage = () => {
@@ -47,7 +46,7 @@ const Home: NextPage = () => {
                     </p>
 
                     <button
-                      onClick={() => SignupWindow()}
+                      onClick={() => signIn()}
                       className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
                       role="button"
                     >
@@ -167,7 +166,7 @@ const Home: NextPage = () => {
 
                       <div className="flex flex-col items-start mt-8 sm:space-x-4 sm:flex-row sm:items-center lg:mt-12">
                         <button
-                          onClick={() => SignupWindow()}
+                          onClick={() => signIn()}
                           title=""
                           className="inline-flex items-center justify-center px-4 py-4 text-base font-semibold text-black transition-all duration-200 border border-transparent rounded-md bg-primary"
                           role="button"

@@ -9,12 +9,42 @@ interface CreditsBlockProps {
   credits: any;
 }
 
+function groupBy<T extends Record<string, any>, K extends keyof T>(
+  array: T[],
+  key: K | { (obj: T): string }
+): Record<string, T[]> {
+  const keyFn = key instanceof Function ? key : (obj: T) => obj[key];
+  return array.reduce((objectsByKeyValue, obj) => {
+    const value = keyFn(obj);
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {} as Record<string, T[]>);
+}
+
 const CreditsBlock = ({ credits }: CreditsBlockProps) => {
+  const movieCreditsByJob = Object.entries(groupBy(credits.movie.crew, "job")).map(([title, data]) => ({
+    title,
+    data,
+  }));
+  const tvCreditsByJob = Object.entries(groupBy(credits.tv.crew, "job")).map(([title, data]) => ({
+    title,
+    data,
+  }));
+
   return (
     <div>
-      <h2 className="pb-4 text-3xl font-bold">Known for</h2>
-      <DetailsBlock data={credits.movie.cast} type="movies" name="Movies" />
-      <DetailsBlock data={credits.tv.cast} type="tv" name="TV" />
+      <h2 className="pb-8 text-5xl font-bold">Known for</h2>
+      <h3 className="pb-4 text-3xl">Movies</h3>
+      <DetailsBlock data={credits.movie.cast} type="movies" name="Acting" />
+      {movieCreditsByJob.map((job, index) => {
+        return <DetailsBlock type="movies" key={index} data={job.data} name={job.title} />;
+      })}
+
+      <h3 className="pb-4 mt-12 text-3xl">TV</h3>
+      <DetailsBlock data={credits.tv.cast} type="tv" name="Acting" />
+      {tvCreditsByJob.map((job, index) => {
+        return <DetailsBlock type="tv" key={index} data={job.data} name={job.title} />;
+      })}
     </div>
   );
 };
@@ -58,8 +88,8 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
               new Date(b.release_date || b.first_air_date).setHours(0, 0, 0, 0)
           )
           .reverse()
-          .map((cast: any) => (
-            <Link href={`/${type}/${cast.id}`} key={cast.id}>
+          .map((cast: any, index: any) => (
+            <Link href={`/${type}/${cast.id}`} key={index}>
               <a className="flex justify-between px-4">
                 <div className="flex py-2">
                   <div className="pr-4">
