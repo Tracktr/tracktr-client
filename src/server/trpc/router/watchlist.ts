@@ -1,4 +1,5 @@
 import { z } from "zod";
+import createNewSeries from "../../../utils/createNewSeries";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
@@ -99,6 +100,28 @@ export const watchlistRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const url = new URL(`tv/${input?.series_id}`, process.env.NEXT_PUBLIC_TMDB_API);
+      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+      const show = await fetch(url).then((res) => res.json());
+
+      const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
+      const existsInDB = await ctx.prisma.series.findFirst({
+        where: { id: input.series_id },
+      });
+
+      if (!existsInDB) {
+        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: Number(input.series_id) });
+
+        await ctx.prisma.series.upsert({
+          where: { id: input.series_id },
+          update: newSeriesCreateUpdate,
+          create: newSeriesCreateUpdate,
+        });
+      }
+
       const watchlist = ctx.prisma.watchlist.upsert({
         where: {
           user_id: ctx.session.user.profile.userId,
