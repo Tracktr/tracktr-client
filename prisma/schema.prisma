@@ -57,6 +57,8 @@ model User {
   followers       User[]            @relation("UserFollowers")
   MoviesReviews   MoviesReviews[]
   SeriesReviews   SeriesReviews[]
+  SeasonsReviews  SeasonsReviews[]
+  EpisodesReviews EpisodesReviews[]
 }
 
 model VerificationToken {
@@ -138,27 +140,57 @@ model SeriesReviews {
 }
 
 model Seasons {
-  id            Int        @id
-  name          String
-  poster        String
-  season_number Int?
-  Series        Series?    @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  series_id     Int?
-  episodes      Episodes[]
+  id             Int              @id
+  name           String
+  poster         String
+  season_number  Int?
+  Series         Series?          @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  series_id      Int?
+  episodes       Episodes[]
+  SeasonsReviews SeasonsReviews[]
 
   @@index([series_id])
 }
 
+model SeasonsReviews {
+  id         String   @id @default(cuid())
+  content    String   @db.VarChar(512)
+  created    DateTime @default(now())
+  user_id    String
+  seasons_id Int
+  Seasons    Seasons  @relation(fields: [seasons_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, seasons_id])
+  @@index([seasons_id])
+  @@index([user_id])
+}
+
 model Episodes {
-  id             Int       @id
-  name           String
-  episode_number Int
-  season_number  Int?
-  Seasons        Seasons?  @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
-  seasons_id     Int?
-  air_date       DateTime?
+  id              Int               @id
+  name            String
+  episode_number  Int
+  season_number   Int?
+  Seasons         Seasons?          @relation(fields: [seasons_id], references: [id], onDelete: Cascade)
+  seasons_id      Int?
+  air_date        DateTime?
+  EpisodesReviews EpisodesReviews[]
 
   @@index([seasons_id])
+}
+
+model EpisodesReviews {
+  id          String   @id @default(cuid())
+  content     String   @db.VarChar(512)
+  created     DateTime @default(now())
+  user_id     String
+  episodes_id Int
+  Episodes    Episodes @relation(fields: [episodes_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, episodes_id])
+  @@index([episodes_id])
+  @@index([user_id])
 }
 
 model EpisodesHistory {
