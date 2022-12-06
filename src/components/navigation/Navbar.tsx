@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Logo from "../common/Logo";
 import NavButton from "./Navbutton";
 import { BiMenuAltRight } from "react-icons/bi";
 import NavMobile from "./NavMobile";
 import ImageWithFallback from "../common/ImageWithFallback";
-import { SignupWindow } from "../../pages/google-signin";
 import { CgClose, CgSearch } from "react-icons/cg";
 import SearchInput from "../search/SearchInput";
 
@@ -151,7 +150,7 @@ const Navbar = () => {
                       </motion.div>
                     ) : (
                       <li className={`inline-block text-white list-none group`}>
-                        <button onClick={() => SignupWindow()}>
+                        <button onClick={() => signIn()}>
                           <a className={`group-hover:text-primary px-4 py-2 inline-block`}>Sign in</a>
                         </button>
                       </li>
