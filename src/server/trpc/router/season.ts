@@ -70,36 +70,52 @@ export const seasonRouter = router({
         where: { id: show.id },
       });
 
-      console.log(show);
-
       if (!existsInDB) {
-        // const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesId });
-        // const newSeries = await ctx.prisma.series.upsert({
-        //   where: { id: input.seriesId },
-        //   update: newSeriesCreateUpdate,
-        //   create: newSeriesCreateUpdate,
-        // });
-        // if (newSeries !== null) {
-        //   const result = await ctx.prisma.episodesHistory.create({
-        //     data: {
-        //       datetime: new Date(),
-        //       user_id: ctx?.session?.user?.id as string,
-        //       series_id: input.seriesId,
-        //       season_number: input.seasonNumber,
-        //     },
-        //   });
-        //   return result;
-        // }
+        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesId });
+        const newSeries = await ctx.prisma.series.upsert({
+          where: { id: input.seriesId },
+          update: newSeriesCreateUpdate,
+          create: newSeriesCreateUpdate,
+        });
+        if (newSeries !== null) {
+          const episodeCount = show.seasons[input.seasonNumber].episode_count;
+          const result = [];
+
+          for (let i = 1; i <= episodeCount; i++) {
+            result.push(
+              await ctx.prisma.episodesHistory.create({
+                data: {
+                  datetime: new Date(),
+                  user_id: ctx?.session?.user?.id as string,
+                  series_id: input.seriesId,
+                  season_number: input.seasonNumber,
+                  episode_number: i,
+                },
+              })
+            );
+          }
+
+          return result;
+        }
       } else {
-        // const result = await ctx.prisma.episodesHistory.create({
-        //   data: {
-        //     datetime: new Date(),
-        //     user_id: ctx?.session?.user?.id as string,
-        //     series_id: input.seriesId,
-        //     season_number: input.seasonNumber,
-        //   },
-        // });
-        // return result;
+        const episodeCount = show.seasons[input.seasonNumber].episode_count;
+        const result = [];
+
+        for (let i = 1; i <= episodeCount; i++) {
+          result.push(
+            await ctx.prisma.episodesHistory.create({
+              data: {
+                datetime: new Date(),
+                user_id: ctx?.session?.user?.id as string,
+                series_id: input.seriesId,
+                season_number: input.seasonNumber,
+                episode_number: i,
+              },
+            })
+          );
+        }
+
+        return result;
       }
     }),
 
@@ -130,16 +146,17 @@ export const seasonRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const result = await ctx.prisma.episodesHistory.findMany({
-        where: {
-          user_id: ctx.session.user.id,
-          series_id: input.seriesId,
-          season_number: input.seasonNumber,
-        },
-      });
+      // const result = await ctx.prisma.episodesHistory.findMany({
+      //   where: {
+      //     user_id: ctx.session.user.id,
+      //     series_id: input.seriesId,
+      //     season_number: input.seasonNumber,
+      //   },
+      // });
 
-      return {
-        ...result,
-      };
+      // return {
+      //   ...result,
+      // };
+      return { result: [] };
     }),
 });

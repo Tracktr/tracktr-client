@@ -50,7 +50,7 @@ const TVPage = () => {
             <ContentPoster
               title={data.name}
               poster={data.poster_path}
-              id={data.id}
+              id={Number(tvID)}
               theme_color={tvShow.theme_color}
               progression={{
                 number_of_episodes: tvShow.number_of_episodes,
