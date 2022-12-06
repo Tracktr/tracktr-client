@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -33,67 +34,73 @@ const SearchPage = () => {
   }, [inView, fetchNextPage]);
 
   return (
-    <div className="max-w-6xl px-4 pt-32 m-auto">
-      <div className="z-40 mb-5 text-4xl">Results for: {query}</div>
-      <LoadingPageComponents status={status} posters>
-        {() => (
-          <PosterGrid>
-            <>
-              {data &&
-                data.pages.map((page: { results: any[] }) =>
-                  page.results.map((content) => {
-                    if (content.media_type === "tv") {
-                      return (
-                        <TVPoster
-                          imageSrc={`${content.poster_path}`}
-                          name={content.title || content.name}
-                          key={content.id}
-                          url={`/tv/${content.id}`}
-                          score={content.vote_average}
-                        />
-                      );
-                    }
+    <>
+      <Head>
+        <title>{query} - Search - Tracktr.</title>
+      </Head>
 
-                    if (content.media_type === "movie") {
-                      return (
-                        <MoviePoster
-                          id={content.id}
-                          imageSrc={`${content.poster_path}`}
-                          name={content.title || content.name}
-                          key={content.id}
-                          url={`/movies/${content.id}`}
-                          score={content.vote_average}
-                          watched={null}
-                          refetch={refetch}
-                          watched_id={null}
-                          fetchStatus={isRefetching}
-                        />
-                      );
-                    }
+      <div className="max-w-6xl px-4 pt-32 m-auto">
+        <div className="z-40 mb-5 text-4xl">Results for: {query}</div>
+        <LoadingPageComponents status={status} posters>
+          {() => (
+            <PosterGrid>
+              <>
+                {data &&
+                  data.pages.map((page: { results: any[] }) =>
+                    page.results.map((content) => {
+                      if (content.media_type === "tv") {
+                        return (
+                          <TVPoster
+                            imageSrc={`${content.poster_path}`}
+                            name={content.title || content.name}
+                            key={content.id}
+                            url={`/tv/${content.id}`}
+                            score={content.vote_average}
+                          />
+                        );
+                      }
 
-                    if (content.media_type === "person") {
-                      return (
-                        <PersonPoster
-                          imageSrc={`${content.poster_path || content.profile_path}`}
-                          name={content.title || content.name}
-                          key={content.id}
-                          url={`/person/${content.id}`}
-                        />
-                      );
-                    }
+                      if (content.media_type === "movie") {
+                        return (
+                          <MoviePoster
+                            id={content.id}
+                            imageSrc={`${content.poster_path}`}
+                            name={content.title || content.name}
+                            key={content.id}
+                            url={`/movies/${content.id}`}
+                            score={content.vote_average}
+                            watched={null}
+                            refetch={refetch}
+                            watched_id={null}
+                            fetchStatus={isRefetching}
+                          />
+                        );
+                      }
 
-                    return <div key={content.id} />;
-                  })
-                )}
-              <div className="loader" ref={ref}>
-                {isFetchingNextPage && hasNextPage && <LoadingPoster />}
-              </div>
-              {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
-            </>
-          </PosterGrid>
-        )}
-      </LoadingPageComponents>
-    </div>
+                      if (content.media_type === "person") {
+                        return (
+                          <PersonPoster
+                            imageSrc={`${content.poster_path || content.profile_path}`}
+                            name={content.title || content.name}
+                            key={content.id}
+                            url={`/person/${content.id}`}
+                          />
+                        );
+                      }
+
+                      return <div key={content.id} />;
+                    })
+                  )}
+                <div className="loader" ref={ref}>
+                  {isFetchingNextPage && hasNextPage && <LoadingPoster />}
+                </div>
+                {!hasNextPage && <p className="py-12 text-center">No more results found...</p>}
+              </>
+            </PosterGrid>
+          )}
+        </LoadingPageComponents>
+      </div>
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ import ContentOverview from "../../components/pageBlocks/ContentOverview";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
 import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
+import Head from "next/head";
 
 const PersonPage = () => {
   const router = useRouter();
@@ -18,6 +19,10 @@ const PersonPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
+          <Head>
+            <title>{data.name} - Tracktr.</title>
+          </Head>
+
           <ContentBackdrop />
 
           <ContentGrid>

@@ -12,6 +12,7 @@ import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../components/pageBlocks/ContentMain";
 import { useSession } from "next-auth/react";
 import ReviewsBlock from "../../../../../components/pageBlocks/ReviewsBlock";
+import Head from "next/head";
 
 const TVPage = () => {
   const router = useRouter();
@@ -59,6 +60,12 @@ const TVPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
+          <Head>
+            <title>
+              {tvShow.name} {data.name} - Tracktr.
+            </title>
+          </Head>
+
           <ContentBackdrop path={tvShow.backdrop_path} />
 
           <ContentGrid>

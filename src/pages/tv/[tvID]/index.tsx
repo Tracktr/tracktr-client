@@ -13,6 +13,7 @@ import ContentGrid from "../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 
 const TVPage = () => {
   const router = useRouter();
@@ -38,12 +39,16 @@ const TVPage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
+          <Head>
+            <title>{data.name} - Tracktr.</title>
+          </Head>
+
           <ContentBackdrop path={data.backdrop_path} />
 
           <ContentGrid>
             <PosterButton
               showWatchlistButton
-              title={data.title}
+              title={data.name}
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
