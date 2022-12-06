@@ -125,7 +125,7 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }:
             <span className="text-center text-green-700">
               <AiOutlineCheckCircle />
             </span>
-            <span className="py-1 text-xs font-normal">Watch season</span>
+            <span className="py-1 text-xs font-normal">Watch</span>
           </button>
           <button className="flex flex-col items-center text-3xl" onClick={removeFromHistory}>
             <span className="text-center text-red-700">
