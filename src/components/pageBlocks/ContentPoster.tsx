@@ -37,12 +37,14 @@ const ContentPoster = ({
   };
   episode?: {
     seasonID: number;
+    episodeNumber: number;
     episodeID: number;
     refetch: () => void;
   };
   season?: {
     watchHistory: any;
     seasonID: number;
+    seasonNumber: number;
     refetch: () => void;
   };
   series?: {
@@ -98,7 +100,7 @@ const ContentPoster = ({
               (episode ? (
                 <EpisodeWatchButton
                   itemID={id}
-                  episodeID={episode.episodeID}
+                  episodeID={episode.episodeNumber}
                   seasonID={episode.seasonID}
                   themeColor={theme_color}
                   refetchProgression={episode.refetch}
@@ -106,7 +108,7 @@ const ContentPoster = ({
               ) : season ? (
                 <SeasonWatchButton
                   itemID={id}
-                  seasonID={season.seasonID}
+                  seasonID={season.seasonNumber}
                   themeColor={theme_color}
                   watchHistory={season.watchHistory}
                   refetchProgression={season.refetch}
@@ -134,6 +136,8 @@ const ContentPoster = ({
                   <ReviewButton
                     themeColor={theme_color}
                     movieID={!progression ? id : undefined}
+                    episodeID={episode ? episode.episodeID : undefined}
+                    seasonID={season ? season.seasonID : undefined}
                     seriesID={progression ? id : undefined}
                     refetchReviews={refetchReviews}
                   />

@@ -20,11 +20,26 @@ export const seasonRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
-      const databaseSeries = await ctx.prisma.series.findFirst({
-        where: { id: Number(input.tvID) },
+      const databaseSeason = await ctx.prisma.seasons.findFirst({
+        where: { series_id: Number(input?.tvID), season_number: input.seasonID },
+        include: {
+          SeasonsReviews: {
+            include: {
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+            },
+            take: 10,
+            orderBy: {
+              created: "desc",
+            },
+          },
+        },
       });
 
-      if (!databaseSeries) {
+      if (!databaseSeason) {
         const showUrl = new URL(`tv/${input?.tvID}`, process.env.NEXT_PUBLIC_TMDB_API);
         showUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
@@ -68,6 +83,7 @@ export const seasonRouter = router({
 
       return {
         ...json,
+        reviews: databaseSeason?.SeasonsReviews || [],
       };
     }),
 
