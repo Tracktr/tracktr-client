@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import HistoryGrid from "../../components/common/HistoryGrid";
@@ -37,38 +38,43 @@ const HistoryPage = () => {
   return (
     <LoadingPageComponents status={status}>
       {() => (
-        <div className="max-w-6xl m-auto">
-          <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
-          <div className="items-center my-5 align-middle md:flex">
-            <h1 className="text-3xl">History</h1>
-            <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
-              <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
-                Previous page
-              </button>
-              <div className="flex items-center gap-4 mx-6">
-                <button onClick={previousPage} className="p-2 text-xs text-gray-200">
-                  {page > 1 && page - 1}
+        <>
+          <Head>
+            <title>{session.data?.user?.name}&apos;s History - Tracktr.</title>
+          </Head>
+          <div className="max-w-6xl m-auto">
+            <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
+            <div className="items-center my-5 align-middle md:flex">
+              <h1 className="text-3xl">History</h1>
+              <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
+                <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                  Previous page
                 </button>
-                <div>{page}</div>
-                <button onClick={nextPage} className="p-2 text-xs text-gray-200">
-                  {page < Number(history?.pagesAmount) && page + 1}
+                <div className="flex items-center gap-4 mx-6">
+                  <button onClick={previousPage} className="p-2 text-xs text-gray-200">
+                    {page > 1 && page - 1}
+                  </button>
+                  <div>{page}</div>
+                  <button onClick={nextPage} className="p-2 text-xs text-gray-200">
+                    {page < Number(history?.pagesAmount) && page + 1}
+                  </button>
+                </div>
+                <button
+                  className="text-sm disabled:text-gray-500"
+                  onClick={nextPage}
+                  disabled={page >= Number(history?.pagesAmount)}
+                >
+                  Next page
                 </button>
               </div>
-              <button
-                className="text-sm disabled:text-gray-500"
-                onClick={nextPage}
-                disabled={page >= Number(history?.pagesAmount)}
-              >
-                Next page
-              </button>
             </div>
+            <HistoryGrid
+              history={history?.history || []}
+              status={isRefetching ? "loading" : historyStatus}
+              refetch={refetch}
+            />
           </div>
-          <HistoryGrid
-            history={history?.history || []}
-            status={isRefetching ? "loading" : historyStatus}
-            refetch={refetch}
-          />
-        </div>
+        </>
       )}
     </LoadingPageComponents>
   );

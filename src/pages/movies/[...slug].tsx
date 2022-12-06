@@ -11,6 +11,7 @@ import ContentTitle from "../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
+import Head from "next/head";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -21,6 +22,10 @@ const MoviePage = () => {
     <LoadingPageComponents status={status}>
       {() => (
         <>
+          <Head>
+            <title>{data.title} - Tracktr.</title>
+          </Head>
+
           <ContentBackdrop path={data.backdrop_path} />
 
           <ContentGrid>

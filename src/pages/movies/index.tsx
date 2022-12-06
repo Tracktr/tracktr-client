@@ -1,8 +1,13 @@
+import Head from "next/head";
 import MoviesInfiniteScroll from "../../components/infiniteScroll/MoviesInfiniteScroll";
 import SearchHeader from "../../components/search/SearchHeader";
 
 const MoviesPage = () => (
   <>
+    <Head>
+      <title>Movies - Tracktr.</title>
+    </Head>
+
     <SearchHeader
       title="Movies"
       type="movie"

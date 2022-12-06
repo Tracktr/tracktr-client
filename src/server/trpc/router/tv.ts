@@ -40,18 +40,6 @@ export const tvRouter = router({
         },
       });
 
-      if (!databaseSeries) {
-        const seriesPoster = json.poster_path ? json.poster_path : "/noimage.png";
-
-        const newSeries = await createNewSeries({ show: json, seriesPoster, id: Number(input.tvID) });
-
-        await ctx.prisma.series.upsert({
-          where: { id: Number(input.tvID) },
-          update: newSeries,
-          create: newSeries,
-        });
-      }
-
       if (ctx && input?.tvID) {
         const episodesWatched = await ctx.prisma.$queryRaw`
           SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_number, EpisodesHistory.season_number) as UNSIGNED)
