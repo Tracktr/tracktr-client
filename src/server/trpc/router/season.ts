@@ -20,6 +20,27 @@ export const seasonRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      const databaseSeries = await ctx.prisma.series.findFirst({
+        where: { id: Number(input.tvID) },
+      });
+
+      if (!databaseSeries) {
+        const showUrl = new URL(`tv/${input?.tvID}`, process.env.NEXT_PUBLIC_TMDB_API);
+        showUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+        const show = await fetch(showUrl).then((res) => res.json());
+
+        const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
+        const newSeries = await createNewSeries({ show, seriesPoster, id: Number(input.tvID) });
+
+        await ctx.prisma.series.upsert({
+          where: { id: Number(input.tvID) },
+          update: newSeries,
+          create: newSeries,
+        });
+      }
+
       if (ctx?.session?.user) {
         json.episodes = await Promise.all(
           json.episodes.map(async (episode: TmdbEpisode) => {
