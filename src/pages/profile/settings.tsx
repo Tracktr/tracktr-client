@@ -70,11 +70,13 @@ const ProfilePage = () => {
                 >
                   {data &&
                     languages &&
-                    Object.values(languages).map(({ english_name, iso_639_1 }: any) => (
-                      <option key={iso_639_1} value={iso_639_1}>
-                        {english_name}
-                      </option>
-                    ))}
+                    Object.values(languages)
+                      .sort((a: any, b: any) => a.english_name.localeCompare(b.english_name))
+                      .map(({ english_name, iso_639_1 }: any) => (
+                        <option key={iso_639_1} value={iso_639_1}>
+                          {english_name}
+                        </option>
+                      ))}
                 </select>
               </label>
 
@@ -87,11 +89,13 @@ const ProfilePage = () => {
                 >
                   {data &&
                     watchRegions &&
-                    Object.values(watchRegions.results).map(({ english_name, iso_3166_1 }: any) => (
-                      <option key={iso_3166_1} value={iso_3166_1}>
-                        {english_name}
-                      </option>
-                    ))}
+                    Object.values(watchRegions.results)
+                      .sort((a: any, b: any) => a.english_name.localeCompare(b.english_name))
+                      .map(({ english_name, iso_3166_1 }: any) => (
+                        <option key={iso_3166_1} value={iso_3166_1}>
+                          {english_name}
+                        </option>
+                      ))}
                 </select>
               </label>
 
