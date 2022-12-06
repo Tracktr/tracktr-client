@@ -23,8 +23,45 @@ export const episodeRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      const databaseEpisodes = await ctx.prisma.episodes.findFirst({
+        where: { episode_number: Number(input.episodeID), season_number: Number(input.episodeID) },
+        include: {
+          EpisodesReviews: {
+            include: {
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+            },
+            take: 10,
+            orderBy: {
+              created: "desc",
+            },
+          },
+        },
+      });
+
+      if (!databaseEpisodes) {
+        const showUrl = new URL(`tv/${input?.tvID}`, process.env.NEXT_PUBLIC_TMDB_API);
+        showUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+        const show = await fetch(showUrl).then((res) => res.json());
+
+        const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
+        const newSeries = await createNewSeries({ show, seriesPoster, id: Number(input.tvID) });
+
+        await ctx.prisma.series.upsert({
+          where: { id: Number(input.tvID) },
+          update: newSeries,
+          create: newSeries,
+        });
+      }
+
       return {
         ...json,
+        reviews: databaseEpisodes?.EpisodesReviews || [],
       };
     }),
 
