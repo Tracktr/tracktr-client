@@ -155,8 +155,6 @@ export const tvRouter = router({
         const seasonsCount = show.number_of_seasons;
         const result = [];
 
-        console.log(seasonsCount);
-
         for (let j = 1; j <= seasonsCount; j++) {
           const episodeCount = show.seasons[j].episode_count;
 
