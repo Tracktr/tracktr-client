@@ -39,6 +39,7 @@ const ContentPoster = ({
     refetch: () => void;
   };
   season?: {
+    watchHistory: any;
     seasonID: number;
     refetch: () => void;
   };
@@ -101,6 +102,7 @@ const ContentPoster = ({
                   itemID={id}
                   seasonID={season.seasonID}
                   themeColor={theme_color}
+                  watchHistory={season.watchHistory}
                   refetchProgression={season.refetch}
                 />
               ) : (

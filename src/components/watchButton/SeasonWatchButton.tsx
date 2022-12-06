@@ -11,22 +11,12 @@ interface IWatchButtonProps {
   seasonID: number;
   themeColor: IThemeColor;
   refetchProgression?: () => void;
+  watchHistory: any;
 }
 
-const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
+const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, watchHistory }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
-
-  const watchHistory = trpc.season.watchHistoryByID.useQuery(
-    {
-      seasonNumber: Number(seasonID),
-      seriesId: itemID,
-    },
-    {
-      enabled: sessionStatus !== "loading",
-      refetchOnWindowFocus: false,
-    }
-  );
 
   const markAsWatched = trpc.season.markSeasonAsWatched.useMutation({
     onMutate: () => {
