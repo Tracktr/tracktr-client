@@ -10,16 +10,17 @@ interface IWatchlistButtonProps {
   themeColor: IThemeColor;
   movieID?: number | undefined;
   seriesID?: number | undefined;
+  name: string;
 }
 
-const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProps) => {
+const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButtonProps) => {
   const { data, refetch, isRefetching } = trpc.watchlist.checkItemInWatchlist.useQuery({
     itemID: Number(movieID || seriesID),
   });
 
   const addToWatchlist = trpc.watchlist.addItem.useMutation({
     onSuccess: () => {
-      toast("Added to watchlist", {
+      toast(`Added ${name} to watchlist`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetch();
@@ -28,7 +29,7 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
 
   const deleteFromWatchlist = trpc.watchlist.removeItem.useMutation({
     onSuccess: () => {
-      toast("Removed from watchlist", {
+      toast(`Removed ${name} from watchlist`, {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetch();

@@ -12,9 +12,10 @@ import LoadingWatchButton from "./LoadingWatchButton";
 interface IWatchButtonProps {
   itemID: number;
   themeColor: IThemeColor;
+  name: string;
 }
 
-const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
+const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
@@ -32,7 +33,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
       setState("loading");
     },
     onSuccess: () => {
-      toast("Added to watched", {
+      toast(`Added ${name} to watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       watchHistory.refetch();
@@ -44,7 +45,7 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
       setState("loading");
     },
     onSuccess: () => {
-      toast("Removed from watched", {
+      toast(`Removed ${name} from watched`, {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       watchHistory.refetch();
