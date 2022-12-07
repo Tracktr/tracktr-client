@@ -50,7 +50,7 @@ const ImportPage = () => {
     if (currentPercentage >= 100) router.push("/profile/history");
   }, [currentPercentage, router]);
 
-  const importRoute = trpc.profile.import.useMutation();
+  const importRoute = trpc.import.trakt.useMutation();
 
   const changeHandler = (event: any) => {
     setLoading(true);

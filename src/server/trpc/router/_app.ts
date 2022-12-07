@@ -11,6 +11,7 @@ import { profileRouter } from "./profile";
 import { watchlistRouter } from "./watchlist";
 import { searchRouter } from "./search";
 import { reviewRouter } from "./review";
+import { importRouter } from "./import";
 
 export const appRouter = router({
   movie: movieRouter,
@@ -24,6 +25,7 @@ export const appRouter = router({
   watchlist: watchlistRouter,
   search: searchRouter,
   review: reviewRouter,
+  import: importRouter,
 });
 
 // export type definition of API
