@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
-export const followers = router({
+export const followersRouter = router({
   createFollowers: protectedProcedure
     .input(
       z.object({
