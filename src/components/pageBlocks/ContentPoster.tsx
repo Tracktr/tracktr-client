@@ -101,8 +101,7 @@ const ContentPoster = ({
               (episode ? (
                 <EpisodeWatchButton
                   itemID={id}
-                  episodeID={episode.episodeNumber}
-                  seasonID={episode.seasonID}
+                  episode={episode}
                   themeColor={theme_color}
                   refetchProgression={episode.refetch}
                 />

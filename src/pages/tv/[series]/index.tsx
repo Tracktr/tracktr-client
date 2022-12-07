@@ -18,16 +18,18 @@ import Head from "next/head";
 const TVPage = () => {
   const router = useRouter();
   const session = useSession();
-  const { tvID } = router.query;
+  const { series: seriesID } = router.query;
 
-  const { data, status, refetch, isRefetching } = trpc.tv.tvById.useQuery(
-    { tvID: tvID as string },
-    { enabled: router.isReady }
-  );
+  const {
+    data: seriesData,
+    status,
+    refetch,
+    isRefetching,
+  } = trpc.tv.seriesById.useQuery({ seriesID: Number(seriesID) }, { enabled: router.isReady });
 
   const watchHistory = trpc.tv.watchHistoryByID.useQuery(
     {
-      seriesId: Number(tvID),
+      seriesId: Number(seriesID),
     },
     {
       enabled: session.status !== "loading",
@@ -40,21 +42,21 @@ const TVPage = () => {
       {() => (
         <>
           <Head>
-            <title>{data.name} - Tracktr.</title>
+            <title>{seriesData.name} - Tracktr.</title>
           </Head>
 
-          <ContentBackdrop path={data.backdrop_path} />
+          <ContentBackdrop path={seriesData.backdrop_path} />
 
           <ContentGrid>
             <PosterButton
               showWatchlistButton
-              title={data.name}
-              poster={data.poster_path}
-              id={data.id}
-              theme_color={data.theme_color}
+              title={seriesData.name}
+              poster={seriesData.poster_path}
+              id={seriesData.id}
+              theme_color={seriesData.theme_color}
               progression={{
-                number_of_episodes: data.number_of_episodes,
-                number_of_episodes_watched: data.number_of_episodes_watched,
+                number_of_episodes: seriesData.number_of_episodes,
+                number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
               refetchReviews={refetch}
               series={{
@@ -65,29 +67,29 @@ const TVPage = () => {
 
             <ContentMain>
               <ContentTitle
-                theme_color={data.theme_color}
-                title={data.name}
-                score={data.vote_average}
-                air_date={data.air_date}
-                genres={data.genres}
+                theme_color={seriesData.theme_color}
+                title={seriesData.name}
+                score={seriesData.vote_average}
+                air_date={seriesData.air_date}
+                genres={seriesData.genres}
               />
               <ContentOverview
-                name={data.name}
-                overview={data.overview}
-                theme_color={data.theme_color}
-                videos={data.videos}
-                justwatch={data["watch/providers"]}
+                name={seriesData.name}
+                overview={seriesData.overview}
+                theme_color={seriesData.theme_color}
+                videos={seriesData.videos}
+                justwatch={seriesData["watch/providers"]}
               />
 
               <DetailsBlock
-                status={data.status}
-                numberOfEpisodes={data.number_of_episodes}
-                numberOfSeasons={data.number_of_seasons}
+                status={seriesData.status}
+                numberOfEpisodes={seriesData.number_of_episodes}
+                numberOfSeasons={seriesData.number_of_seasons}
               />
-              <SeasonsBlock seasons={data.seasons} />
-              <CastBlock cast={data.credits.cast} />
-              <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
+              <SeasonsBlock seasons={seriesData.seasons} />
+              <CastBlock cast={seriesData.credits.cast} />
+              <CrewBlock crew={seriesData.credits.crew} />
+              <ReviewsBlock reviews={seriesData.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
         </>

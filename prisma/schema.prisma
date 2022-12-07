@@ -140,14 +140,15 @@ model SeriesReviews {
 }
 
 model Seasons {
-  id             Int              @id
-  name           String
-  poster         String
-  season_number  Int?
-  Series         Series?          @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  series_id      Int?
-  episodes       Episodes[]
-  SeasonsReviews SeasonsReviews[]
+  id              Int               @id
+  name            String
+  poster          String
+  season_number   Int?
+  Series          Series?           @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  series_id       Int?
+  episodes        Episodes[]
+  SeasonsReviews  SeasonsReviews[]
+  EpisodesHistory EpisodesHistory[]
 
   @@index([series_id])
 }
@@ -175,6 +176,7 @@ model Episodes {
   seasons_id      Int?
   air_date        DateTime?
   EpisodesReviews EpisodesReviews[]
+  EpisodesHistory EpisodesHistory[]
 
   @@index([seasons_id])
 }
@@ -198,11 +200,17 @@ model EpisodesHistory {
   datetime       DateTime
   user_id        String
   series_id      Int
+  season_id      Int
+  episode_id     Int
   season_number  Int
   episode_number Int
   user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  season         Seasons  @relation(fields: [season_id], references: [id], onDelete: Cascade)
+  episode        Episodes @relation(fields: [episode_id], references: [id], onDelete: Cascade)
   series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
 
+  @@index([episode_id])
+  @@index([season_id])
   @@index([series_id])
   @@index([user_id])
 }

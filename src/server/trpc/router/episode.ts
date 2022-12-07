@@ -54,6 +54,8 @@ export const episodeRouter = router({
         episodeNumber: z.number(),
         seasonNumber: z.number(),
         seriesId: z.number(),
+        seasonId: z.number(),
+        episodeId: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -84,6 +86,8 @@ export const episodeRouter = router({
               datetime: new Date(),
               user_id: ctx?.session?.user?.id as string,
               series_id: input.seriesId,
+              season_id: input.seasonId,
+              episode_id: input.episodeId,
               season_number: input.seasonNumber,
               episode_number: input.episodeNumber,
             },
@@ -96,6 +100,8 @@ export const episodeRouter = router({
             datetime: new Date(),
             user_id: ctx?.session?.user?.id as string,
             series_id: input.seriesId,
+            season_id: input.seasonId,
+            episode_id: input.episodeId,
             season_number: input.seasonNumber,
             episode_number: input.episodeNumber,
           },

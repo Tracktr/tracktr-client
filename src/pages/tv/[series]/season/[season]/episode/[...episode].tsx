@@ -15,7 +15,7 @@ import Head from "next/head";
 
 const EpisodePage = () => {
   const router = useRouter();
-  const { tvID, seasonID, episodeID } = router.query;
+  const { tvID, seasonNumber, episodeNumber } = router.query;
 
   const { data: tvShow, refetch } = trpc.tv.tvById.useQuery(
     {
@@ -32,8 +32,8 @@ const EpisodePage = () => {
   } = trpc.episode.episodeById.useQuery(
     {
       tvID: tvID as string,
-      seasonID: seasonID as string,
-      episodeNumber: episodeID ? episodeID[0] : undefined,
+      seasonID: seasonNumber as string,
+      episodeNumber: episodeNumber as string,
     },
     { enabled: router.isReady }
   );
@@ -51,7 +51,7 @@ const EpisodePage = () => {
           <ContentBackdrop path={tvShow.backdrop_path} />
 
           <ContentGrid>
-            <ContentPoster
+            {/* <ContentPoster
               title={episodeData.name}
               poster={tvShow.poster_path}
               id={Number(tvID)}
@@ -61,13 +61,13 @@ const EpisodePage = () => {
                 number_of_episodes_watched: tvShow.number_of_episodes_watched,
               }}
               episode={{
-                episodeNumber: Number(episodeID),
+                episodeNumber: Number(episodeNumber),
                 episodeID: Number(episodeData.id),
                 refetch,
                 seasonID: Number(seasonID),
               }}
               refetchReviews={episodeRefetch}
-            />
+            /> */}
 
             <ContentMain>
               <ContentTitle
