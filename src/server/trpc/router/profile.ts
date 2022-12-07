@@ -1,7 +1,4 @@
-import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { TmdbEpisode } from "../../../types/tmdb";
-import createNewSeries from "../../../utils/createNewSeries";
 import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
@@ -172,49 +169,6 @@ export const profileRouter = router({
 
       return user;
     }),
-
-  createFollowers: protectedProcedure
-    .input(
-      z.object({
-        follower: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.profile.userId },
-        data: { following: { connect: [{ id: input.follower }] } },
-      });
-
-      return {
-        ...user,
-      };
-    }),
-
-  removeFollowers: protectedProcedure
-    .input(
-      z.object({
-        follower: z.string(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.profile.userId },
-        data: { following: { disconnect: [{ id: input.follower }] } },
-      });
-
-      return {
-        ...user,
-      };
-    }),
-
-  getFollowers: protectedProcedure.query(async ({ ctx }) => {
-    const result = await ctx.prisma.user.findFirst({
-      where: { id: ctx.session.user.profile.userId },
-      include: { followers: true },
-    });
-
-    return result;
-  }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {
     const items: {
