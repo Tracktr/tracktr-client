@@ -189,7 +189,13 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchPr
                           <div className="col-span-3">{date}</div>
                           <button
                             className="flex flex-col items-center"
-                            onClick={() => removeFromHistory(undefined, play.id)}
+                            onClick={() => {
+                              removeFromHistory(undefined, play.id);
+
+                              if (data.length === 1) {
+                                setModalOpen(false);
+                              }
+                            }}
                           >
                             <span className="text-center text-red-700">
                               <MdDelete className="text-2xl" />
