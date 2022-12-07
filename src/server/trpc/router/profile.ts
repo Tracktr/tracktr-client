@@ -84,6 +84,8 @@ export const profileRouter = router({
           take: 6,
           include: {
             series: true,
+            season: true,
+            episode: true,
           },
           orderBy: {
             datetime: "desc",

@@ -48,7 +48,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       {() => (
         <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: any) => {
+            {history.map((item: IHistoryItem) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
                 dateStyle: "medium",
                 timeStyle: "short",
@@ -69,7 +69,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                     href={
                       item?.movie_id
                         ? `/movies/${item.movie?.id}`
-                        : `/tv/${item.series_id}/season/${item.season_number}/episode/${item.episode_number}`
+                        : `/tv/${item.series_id}/season/${item?.season?.season_number}/episode/${item?.episode?.episode_number}`
                     }
                   >
                     <a className="relative w-[170px] group">
@@ -89,9 +89,9 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                       />
                       <div>
                         <span className="w-full text-xs truncate line-clamp-2">
-                          {item?.movie_id
-                            ? `${item.movie?.title}`
-                            : `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`}
+                          {item?.season && item?.episode
+                            ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
+                            : `${item?.movie?.title}`}
                         </span>
                         <div className="text-xs opacity-50 line-clamp-1">{date}</div>
                       </div>
@@ -140,6 +140,23 @@ interface ISeries {
   poster: string;
 }
 
+interface ISeason {
+  id: number;
+  name: string;
+  poster: string;
+  season_number: number;
+  series_id: number;
+}
+
+interface IEpisode {
+  id: number;
+  name: string;
+  episode_number: number;
+  season_number: number;
+  seasons_id: number;
+  air_date: Date;
+}
+
 interface IMovie {
   id: number;
   title: string;
@@ -156,6 +173,8 @@ interface IHistoryItem {
   series?: ISeries;
   movie_id?: number;
   movie?: IMovie;
+  season?: ISeason;
+  episode?: IEpisode;
 }
 
 export default HistoryGrid;
