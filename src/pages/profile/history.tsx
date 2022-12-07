@@ -18,6 +18,7 @@ const HistoryPage = () => {
     })
   );
   const [filterInput, setFilterInput] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   const { data, status } = trpc.profile.profileBySession.useQuery();
   const {
@@ -66,9 +67,12 @@ const HistoryPage = () => {
 
           <div className="max-w-6xl m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
-            <div className="items-center my-5 align-middle md:flex">
+            <div className="flex flex-col my-5 align-middle md:flex-row md:items-center">
               <h1 className="text-3xl">History</h1>
-              <div className="flex items-center justify-center gap-4 mx-5 ml-auto align-middle">
+              <button onClick={() => setShowFilters(!showFilters)} className=" md:mr-4 md:ml-auto">
+                Show filters
+              </button>
+              <div className="flex items-center justify-center gap-4 mx-5 align-middle">
                 <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
                   Previous page
                 </button>
@@ -91,60 +95,62 @@ const HistoryPage = () => {
               </div>
             </div>
 
-            <div className="flex gap-4 my-10">
-              <div className="w-full">
-                <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-white">
-                  Order by
-                </label>
-                <select
-                  id="orderBY"
-                  className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                  onChange={handleOrderInput}
-                  value={orderInput}
-                >
-                  <option
-                    value={JSON.stringify({
-                      field: "datetime",
-                      order: "desc",
-                    })}
+            {showFilters && (
+              <div className="flex gap-4 my-10">
+                <div className="w-full">
+                  <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-white">
+                    Order by
+                  </label>
+                  <select
+                    id="orderBY"
+                    className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    onChange={handleOrderInput}
+                    value={orderInput}
                   >
-                    Recently watched
-                  </option>
-                  <option
-                    value={JSON.stringify({
-                      field: "datetime",
-                      order: "asc",
-                    })}
-                  >
-                    Oldest watched
-                  </option>
-                  <option
-                    value={JSON.stringify({
-                      field: "title",
-                      order: "asc",
-                    })}
-                  >
-                    Title
-                  </option>
-                </select>
-              </div>
+                    <option
+                      value={JSON.stringify({
+                        field: "datetime",
+                        order: "desc",
+                      })}
+                    >
+                      Recently watched
+                    </option>
+                    <option
+                      value={JSON.stringify({
+                        field: "datetime",
+                        order: "asc",
+                      })}
+                    >
+                      Oldest watched
+                    </option>
+                    <option
+                      value={JSON.stringify({
+                        field: "title",
+                        order: "asc",
+                      })}
+                    >
+                      Title
+                    </option>
+                  </select>
+                </div>
 
-              <div className="w-full">
-                <label htmlFor="Filter" className="block mb-2 text-sm font-medium text-white">
-                  Filter
-                </label>
-                <select
-                  onChange={handleFilterInput}
-                  value={filterInput}
-                  id="filter"
-                  className="border  text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">No filter</option>
-                  <option value="movies">Only Movies</option>
-                  <option value="episodes">Only Episodes</option>
-                </select>
+                <div className="w-full">
+                  <label htmlFor="Filter" className="block mb-2 text-sm font-medium text-white">
+                    Filter
+                  </label>
+                  <select
+                    onChange={handleFilterInput}
+                    value={filterInput}
+                    id="filter"
+                    className="border  text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">No filter</option>
+                    <option value="movies">Only Movies</option>
+                    <option value="episodes">Only Episodes</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            )}
 
             <HistoryGrid
               history={history?.history || []}
