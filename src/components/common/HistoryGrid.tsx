@@ -48,11 +48,13 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       {() => (
         <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: IHistoryItem) => {
+            {history.map((item: any) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
                 dateStyle: "medium",
                 timeStyle: "short",
               });
+              console.log(item);
+
               return (
                 <motion.div
                   layout
@@ -89,7 +91,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                         <span className="w-full text-xs truncate line-clamp-2">
                           {item?.movie_id
                             ? `${item.movie?.title}`
-                            : `${item.season_number}x${item.episode_number} ${item.series?.name}`}
+                            : `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`}
                         </span>
                         <div className="text-xs opacity-50 line-clamp-1">{date}</div>
                       </div>

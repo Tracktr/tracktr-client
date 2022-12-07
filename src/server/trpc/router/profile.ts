@@ -179,6 +179,8 @@ export const profileRouter = router({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           series: true,
+          season: true,
+          episode: true,
         },
       });
 

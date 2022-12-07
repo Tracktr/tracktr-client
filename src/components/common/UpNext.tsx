@@ -89,8 +89,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                       className="flex text-gray-500 text-opacity-100 hover:text-green-500"
                       onClick={() =>
                         markAsWatched.mutate({
-                          episodeNumber: item.episode_number,
-                          seasonNumber: item.season_number,
+                          episodeID: item.id,
                           seriesID: item.series.id,
                         })
                       }
