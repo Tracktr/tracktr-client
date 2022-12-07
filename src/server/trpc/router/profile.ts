@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import { TmdbEpisode } from "../../../types/tmdb";
 import createNewSeries from "../../../utils/createNewSeries";
 import getDateXDaysAgo from "../../../utils/getDateXAgo";
 import paginate from "../../../utils/paginate";
