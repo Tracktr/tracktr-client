@@ -116,13 +116,14 @@ const ContentPoster = ({
                 />
               ) : series ? (
                 <SeriesWatchButton
+                  name={title}
                   itemID={id}
                   themeColor={theme_color}
                   watchHistory={series.watchHistory}
                   refetchProgression={series.refetch}
                 />
               ) : (
-                <MovieWatchButton itemID={id} themeColor={theme_color} />
+                <MovieWatchButton name={title} itemID={id} themeColor={theme_color} />
               ))}
             {(showWatchlistButton || refetchReviews) && (
               <div className="grid grid-cols-4">
@@ -131,6 +132,7 @@ const ContentPoster = ({
                     themeColor={theme_color}
                     movieID={!progression ? id : undefined}
                     seriesID={progression ? id : undefined}
+                    name={title}
                   />
                 )}
                 {refetchReviews && (

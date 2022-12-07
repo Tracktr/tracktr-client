@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
@@ -30,12 +32,22 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
 
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: (e) => setCurrentLoadingID(e.movieId),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      toast(`Added ${name} to watched`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
+      refetch();
+    },
   });
 
   const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
     onMutate: () => setCurrentLoadingID(id),
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      toast(`Removed ${name} from watched`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetch();
+    },
   });
 
   return (

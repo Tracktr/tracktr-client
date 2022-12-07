@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
 import BaseWatchButton, { IThemeColor } from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
@@ -23,6 +25,9 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Added all episodes for season ${seasonID} to watched`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
@@ -33,6 +38,9 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Removed all episodes for season ${seasonID} from watched`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
