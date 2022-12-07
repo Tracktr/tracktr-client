@@ -1,8 +1,10 @@
 import { ImSpinner2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
-import { MdBookmarkAdd, MdBookmarkRemove } from "react-icons/md";
+import { MdBookmarkAdd, MdBookmarkAdded, MdBookmarkRemove } from "react-icons/md";
 import ReactTooltip from "react-tooltip";
+import { toast } from "react-toastify";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
 
 interface IWatchlistButtonProps {
   themeColor: IThemeColor;
@@ -16,11 +18,19 @@ const WatchlistButton = ({ movieID, seriesID, themeColor }: IWatchlistButtonProp
   });
 
   const addToWatchlist = trpc.watchlist.addItem.useMutation({
-    onSuccess: () => refetch(),
+    onSuccess: () => {
+      toast("Added to watchlist", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
+      refetch();
+    },
   });
 
   const deleteFromWatchlist = trpc.watchlist.removeItem.useMutation({
     onSuccess: () => {
+      toast("Removed from watchlist", {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       refetch();
     },
   });
