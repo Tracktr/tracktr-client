@@ -174,10 +174,11 @@ export const profileRouter = router({
           field: z.string(),
           order: z.string(),
         }),
+        filter: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const episodes = await ctx.prisma.episodesHistory.findMany({
+      let episodes = await ctx.prisma.episodesHistory.findMany({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           series: true,
@@ -186,12 +187,19 @@ export const profileRouter = router({
         },
       });
 
-      const movies = await ctx.prisma.moviesHistory.findMany({
+      let movies = await ctx.prisma.moviesHistory.findMany({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           movie: true,
         },
       });
+
+      if (input.filter === "movies") {
+        episodes = [];
+      }
+      if (input.filter === "episodes") {
+        movies = [];
+      }
 
       const sortedHistory = [...episodes, ...movies].sort((a: any, b: any) => {
         if (input.orderBy.order === "asc") {

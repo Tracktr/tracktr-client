@@ -11,12 +11,13 @@ const HistoryPage = () => {
   const router = useRouter();
   const session = useSession();
   const [page, setPage] = useState<number>(1);
-  const [input, setInput] = useState(
+  const [orderInput, setOrderInput] = useState(
     JSON.stringify({
       field: "datetime",
       order: "desc",
     })
   );
+  const [filterInput, setFilterInput] = useState("");
 
   const { data, status } = trpc.profile.profileBySession.useQuery();
   const {
@@ -25,7 +26,7 @@ const HistoryPage = () => {
     refetch,
     isRefetching,
   } = trpc.profile.watchHistory.useQuery(
-    { page, pageSize: 60, orderBy: JSON.parse(input) },
+    { page, pageSize: 60, orderBy: JSON.parse(orderInput), filter: filterInput },
     { keepPreviousData: true }
   );
 
@@ -45,9 +46,14 @@ const HistoryPage = () => {
     refetch();
   };
 
-  const handleInput = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleOrderInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
-    setInput(value);
+    setOrderInput(value);
+  };
+
+  const handleFilterInput = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.currentTarget;
+    setFilterInput(value);
   };
 
   return (
@@ -85,16 +91,16 @@ const HistoryPage = () => {
               </div>
             </div>
 
-            <div className="flex my-5">
-              <div>
-                <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <div className="flex gap-4 my-10">
+              <div className="w-full">
+                <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-white">
                   Order by
                 </label>
                 <select
                   id="orderBY"
                   className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                  onChange={handleInput}
-                  value={input}
+                  onChange={handleOrderInput}
+                  value={orderInput}
                 >
                   <option
                     value={JSON.stringify({
@@ -112,6 +118,22 @@ const HistoryPage = () => {
                   >
                     Oldest watched
                   </option>
+                </select>
+              </div>
+
+              <div className="w-full">
+                <label htmlFor="Filter" className="block mb-2 text-sm font-medium text-white">
+                  Filter
+                </label>
+                <select
+                  onChange={handleFilterInput}
+                  value={filterInput}
+                  id="filter"
+                  className="border  text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="">No filter</option>
+                  <option value="movies">Only Movies</option>
+                  <option value="episodes">Only Episodes</option>
                 </select>
               </div>
             </div>
