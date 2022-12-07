@@ -202,6 +202,13 @@ export const profileRouter = router({
       }
 
       const sortedHistory = [...episodes, ...movies].sort((a: any, b: any) => {
+        if (input.orderBy.field === "title") {
+          const aField = a[a.series ? "series" : "movie"][a.series ? "name" : "title"];
+          const bField = b[b.series ? "series" : "movie"][b.series ? "name" : "title"];
+
+          return aField.localeCompare(bField);
+        }
+
         if (input.orderBy.order === "asc") {
           if (a[input.orderBy.field] > b[input.orderBy.field]) {
             return 1;

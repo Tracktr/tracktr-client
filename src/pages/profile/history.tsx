@@ -118,6 +118,14 @@ const HistoryPage = () => {
                   >
                     Oldest watched
                   </option>
+                  <option
+                    value={JSON.stringify({
+                      field: "title",
+                      order: "asc",
+                    })}
+                  >
+                    Title
+                  </option>
                 </select>
               </div>
 
