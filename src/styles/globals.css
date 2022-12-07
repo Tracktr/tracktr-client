@@ -28,3 +28,9 @@
   will-change: opacity;
   pointer-events: none;
 }
+
+/* Changes to toastify */
+.Toastify__toast-icon {
+  width: auto !important;
+  display: block !important;
+}

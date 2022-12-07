@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { MdDelete, MdOpenInNew } from "react-icons/md";
+import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
 import Modal from "../modal/Modal";
 import BaseWatchButton, { IThemeColor } from "./BaseWatchButton";
@@ -10,9 +12,10 @@ import LoadingWatchButton from "./LoadingWatchButton";
 interface IWatchButtonProps {
   itemID: number;
   themeColor: IThemeColor;
+  name: string;
 }
 
-const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
+const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
@@ -30,6 +33,9 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Added ${name} to watched`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       watchHistory.refetch();
     },
   });
@@ -39,6 +45,9 @@ const MovieWatchButton = ({ itemID, themeColor }: IWatchButtonProps) => {
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Removed ${name} from watched`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       watchHistory.refetch();
     },
   });
