@@ -130,9 +130,6 @@ export const importRouter = router({
                 }
               }
             } else {
-              console.log("In database");
-              console.log(currentSeason.id, currentEpisode.id);
-
               try {
                 manyEpisodesHistory.push({
                   datetime: item.datetime,
