@@ -15,11 +15,11 @@ import Head from "next/head";
 
 const EpisodePage = () => {
   const router = useRouter();
-  const { tvID, seasonNumber, episodeNumber } = router.query;
+  const { seriesID, seasonNumber, episodeNumber } = router.query;
 
   const { data: tvShow, refetch } = trpc.tv.tvById.useQuery(
     {
-      tvID: tvID as string,
+      seriesID: seriesID as string,
     },
     { enabled: router.isReady }
   );
@@ -31,7 +31,7 @@ const EpisodePage = () => {
     isRefetching,
   } = trpc.episode.episodeById.useQuery(
     {
-      tvID: tvID as string,
+      seriesID: seriesID as string,
       seasonID: seasonNumber as string,
       episodeNumber: episodeNumber as string,
     },
@@ -54,7 +54,7 @@ const EpisodePage = () => {
             {/* <ContentPoster
               title={episodeData.name}
               poster={tvShow.poster_path}
-              id={Number(tvID)}
+              id={Number(seriesID)}
               theme_color={tvShow.theme_color}
               progression={{
                 number_of_episodes: tvShow.number_of_episodes,

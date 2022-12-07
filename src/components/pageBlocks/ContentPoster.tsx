@@ -108,7 +108,8 @@ const ContentPoster = ({
               ) : season ? (
                 <SeasonWatchButton
                   itemID={id}
-                  seasonID={season.seasonNumber}
+                  seasonNumber={season.seasonNumber}
+                  seasonID={season.seasonID}
                   themeColor={theme_color}
                   watchHistory={season.watchHistory}
                   refetchProgression={season.refetch}

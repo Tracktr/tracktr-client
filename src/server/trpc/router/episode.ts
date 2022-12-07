@@ -6,14 +6,14 @@ export const episodeRouter = router({
   episodeById: publicProcedure
     .input(
       z.object({
-        tvID: z.string().nullish(),
+        seriesID: z.string().nullish(),
         seasonID: z.string().nullish(),
         episodeNumber: z.string().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
       const url = new URL(
-        `tv/${input?.tvID}/season/${input?.seasonID}/episode/${input?.episodeNumber}`,
+        `tv/${input?.seriesID}/season/${input?.seasonID}/episode/${input?.episodeNumber}`,
         process.env.NEXT_PUBLIC_TMDB_API
       );
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");

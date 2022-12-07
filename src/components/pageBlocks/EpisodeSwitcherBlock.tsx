@@ -16,7 +16,7 @@ interface EpisodeSwitcherBlockProps {
 
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
-  const { tvID, seasonID, episodeID } = router.query;
+  const { seriesID, seasonID, episodeID } = router.query;
 
   const hasPreviousEpisode = () => {
     return Number(episodeID) > 1 ? true : false;
@@ -32,12 +32,12 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
 
   const previousEpisodePath = () => {
     const previousEpisode = parseInt(episodeID as string) - 1;
-    return `/tv/${tvID}/season/${seasonID}/episode/${previousEpisode}`;
+    return `/tv/${seriesID}/season/${seasonID}/episode/${previousEpisode}`;
   };
 
   const nextEpisodePath = () => {
     const nextEpisode = parseInt(episodeID as string) + 1;
-    return `/tv/${tvID}/season/${seasonID}/episode/${nextEpisode}`;
+    return `/tv/${seriesID}/season/${seasonID}/episode/${nextEpisode}`;
   };
 
   return (

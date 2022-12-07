@@ -7,21 +7,20 @@ export const seasonRouter = router({
   seasonByID: publicProcedure
     .input(
       z.object({
-        tvID: z.string().nullish(),
-        seasonID: z.number(),
+        seriesID: z.number(),
+        seasonNumber: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const url: URL = new URL(`tv/${input?.tvID}/season/${input?.seasonID}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url: URL = new URL(`tv/${input.seriesID}/season/${input.seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("append_to_response", "credits");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
-      const res = await fetch(url);
-      const json = await res.json();
+      const season = await fetch(url).then((res) => res.json());
 
       const databaseSeason = await ctx.prisma.seasons.findFirst({
-        where: { series_id: Number(input?.tvID), season_number: input.seasonID },
+        where: { id: season.id },
         include: {
           SeasonsReviews: {
             include: {
@@ -40,14 +39,13 @@ export const seasonRouter = router({
       });
 
       if (ctx?.session?.user) {
-        json.episodes = await Promise.all(
-          json.episodes.map(async (episode: TmdbEpisode) => {
+        season.episodes = await Promise.all(
+          season.episodes.map(async (episode: TmdbEpisode) => {
             const watched = await ctx.prisma.episodesHistory.findFirst({
               where: {
                 user_id: ctx?.session?.user?.id as string,
                 series_id: episode.show_id,
-                season_number: episode.season_number,
-                episode_number: episode.episode_number,
+                episode_id: episode.id,
               },
             });
 
@@ -59,13 +57,13 @@ export const seasonRouter = router({
           })
         );
       } else {
-        json.episodes = json.episodes.map((episode: TmdbEpisode) => {
+        season.episodes = season.episodes.map((episode: TmdbEpisode) => {
           return { ...episode, watched: false };
         });
       }
 
       return {
-        ...json,
+        ...season,
         reviews: databaseSeason?.SeasonsReviews || [],
       };
     }),
@@ -97,52 +95,39 @@ export const seasonRouter = router({
           update: newSeriesCreateUpdate,
           create: newSeriesCreateUpdate,
         });
+
         if (newSeries !== null) {
-          const episodeCount = show.seasons[input.seasonNumber].episode_count;
-          const result = [];
-
-          for (let i = 1; i <= episodeCount; i++) {
-            result.push(
-              await ctx.prisma.episodesHistory.create({
-                data: {
-                  datetime: new Date(),
-                  user_id: ctx?.session?.user?.id as string,
-                  series_id: input.seriesID,
-                  season_number: input.seasonNumber,
-                  episode_number: i,
-                },
-              })
-            );
+          try {
+            return await ctx.prisma.episodesHistory.createMany({
+              data: await saveHistory({
+                seasonNumber: input.seasonNumber,
+                seriesID: input.seriesID,
+                userID: ctx.session.user.id,
+              }),
+            });
+          } catch (error) {
+            console.error(error);
           }
-
-          return result;
         }
       } else {
-        const episodeCount = show.seasons[input.seasonNumber].episode_count;
-        const result = [];
-
-        for (let i = 1; i <= episodeCount; i++) {
-          result.push(
-            await ctx.prisma.episodesHistory.create({
-              data: {
-                datetime: new Date(),
-                user_id: ctx?.session?.user?.id as string,
-                series_id: input.seriesID,
-                season_number: input.seasonNumber,
-                episode_number: i,
-              },
-            })
-          );
+        try {
+          return await ctx.prisma.episodesHistory.createMany({
+            data: await saveHistory({
+              seasonNumber: input.seasonNumber,
+              seriesID: input.seriesID,
+              userID: ctx.session.user.id,
+            }),
+          });
+        } catch (error) {
+          console.error(error);
         }
-
-        return result;
       }
     }),
 
   removeSeasonFromWatched: protectedProcedure
     .input(
       z.object({
-        seasonNumber: z.number(),
+        seasonID: z.number(),
         seriesID: z.number(),
       })
     )
@@ -150,7 +135,7 @@ export const seasonRouter = router({
       const result = await ctx.prisma.episodesHistory.deleteMany({
         where: {
           user_id: ctx.session.user.id,
-          season_number: input.seasonNumber,
+          season_id: input.seasonID,
           series_id: input.seriesID,
         },
       });
@@ -163,31 +148,67 @@ export const seasonRouter = router({
   watchHistoryByID: protectedProcedure
     .input(
       z.object({
-        seasonNumber: z.number(),
         seriesID: z.number(),
+        seasonID: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesID}/season/${input.seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
-      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-
-      const season = await fetch(url).then((res) => res.json());
-
       const result = await ctx.prisma.episodesHistory.findMany({
         where: {
           user_id: ctx.session.user.id,
           series_id: input.seriesID,
-          season_number: input.seasonNumber,
+          season_id: input.seasonID,
         },
-        distinct: ["episode_number"],
+        distinct: ["episode_id"],
         orderBy: {
           datetime: "desc",
         },
       });
 
+      const amountOfEpisodes = await ctx.prisma.episodes.count({
+        where: {
+          seasons_id: input.seasonID,
+        },
+      });
+
       return {
         results: result,
-        episodeAmount: season.episodes.length,
+        episodeAmount: amountOfEpisodes,
       };
     }),
 });
+
+const saveHistory = async ({
+  seasonNumber,
+  seriesID,
+  userID,
+}: {
+  seasonNumber: number;
+  seriesID: number;
+  userID: string;
+}) => {
+  const results: any[] = [];
+
+  const seasonUrl = new URL(`tv/${seriesID}/season/${seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
+  seasonUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const season = await fetch(seasonUrl).then((res) => res.json());
+
+  for (let i = 0; i <= season.episodes.length; i++) {
+    try {
+      const item = {
+        datetime: new Date(),
+        user_id: userID,
+        series_id: seriesID,
+        season_id: season.id,
+        episode_id: season.episodes[i].id,
+      };
+
+      results.push(item);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return results;
+};

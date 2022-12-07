@@ -15,7 +15,6 @@ interface IWatchButtonProps {
     episodeID: number;
     refetch: () => void;
   };
-  seasonID: number;
   themeColor: IThemeColor;
   refetchProgression?: () => void;
 }

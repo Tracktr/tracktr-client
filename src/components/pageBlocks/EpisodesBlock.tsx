@@ -4,7 +4,7 @@ import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 const EpisodesBlock = ({ episodes, refetch, fetchStatus, themeColor }: IEpisodesBlock) => {
   const router = useRouter();
-  const { tvID } = router.query;
+  const { seriesID } = router.query;
 
   return (
     <div className="space-y-4 mb-14">
@@ -16,7 +16,7 @@ const EpisodesBlock = ({ episodes, refetch, fetchStatus, themeColor }: IEpisodes
           overview={item.overview}
           season={item.season_number}
           episode={item.episode_number}
-          url={`/tv/${tvID}/season/${item.season_number}/episode/${item.episode_number}`}
+          url={`/tv/${seriesID}/season/${item.season_number}/episode/${item.episode_number}`}
           score={item.vote_average}
           series_id={item.show_id}
           watched={item.watched}
