@@ -196,18 +196,16 @@ model EpisodesReviews {
 }
 
 model EpisodesHistory {
-  id             String   @id @default(cuid())
-  datetime       DateTime
-  user_id        String
-  series_id      Int
-  season_id      Int
-  episode_id     Int
-  season_number  Int
-  episode_number Int
-  user           User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  season         Seasons  @relation(fields: [season_id], references: [id], onDelete: Cascade)
-  episode        Episodes @relation(fields: [episode_id], references: [id], onDelete: Cascade)
-  series         Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  datetime   DateTime
+  user_id    String
+  series_id  Int
+  season_id  Int
+  episode_id Int
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  season     Seasons  @relation(fields: [season_id], references: [id], onDelete: Cascade)
+  episode    Episodes @relation(fields: [episode_id], references: [id], onDelete: Cascade)
+  series     Series   @relation(fields: [series_id], references: [id], onDelete: Cascade)
 
   @@index([episode_id])
   @@index([season_id])
