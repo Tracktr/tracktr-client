@@ -87,7 +87,7 @@ export const seasonRouter = router({
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
       const existsInDB = await ctx.prisma.series.findFirst({
-        where: { id: show.id },
+        where: { id: input.seriesId },
       });
 
       if (!existsInDB) {

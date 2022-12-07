@@ -57,19 +57,19 @@ export const episodeRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
-      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-
-      const show = await fetch(url).then((res) => res.json());
-
-      const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
-
       const existsInDB = await ctx.prisma.series.findFirst({
-        where: { id: show.id },
+        where: { id: input?.seriesId },
       });
 
       if (!existsInDB) {
+        const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
+        url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+        if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+        const show = await fetch(url).then((res) => res.json());
+
+        const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
         const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesId });
 
         const newSeries = await ctx.prisma.series.upsert({
