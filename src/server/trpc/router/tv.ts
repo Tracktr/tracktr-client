@@ -92,11 +92,11 @@ export const tvRouter = router({
   markSeriesAsWatched: protectedProcedure
     .input(
       z.object({
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
       const show = await fetch(url).then((res) => res.json());
@@ -111,9 +111,9 @@ export const tvRouter = router({
       });
 
       if (!existsInDB) {
-        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesId });
+        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesID });
         const newSeries = await ctx.prisma.series.upsert({
-          where: { id: input.seriesId },
+          where: { id: input.seriesID },
           update: newSeriesCreateUpdate,
           create: newSeriesCreateUpdate,
         });
@@ -123,7 +123,7 @@ export const tvRouter = router({
               data: await saveHistory({
                 firstSeason,
                 seasonsCount,
-                seriesID: input.seriesId,
+                seriesID: input.seriesID,
                 userID: ctx.session.user.id,
               }),
             });
@@ -137,7 +137,7 @@ export const tvRouter = router({
             data: await saveHistory({
               firstSeason,
               seasonsCount,
-              seriesID: input.seriesId,
+              seriesID: input.seriesID,
               userID: ctx.session.user.id,
             }),
           });
@@ -150,14 +150,14 @@ export const tvRouter = router({
   removeSeriesFromWatched: protectedProcedure
     .input(
       z.object({
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.prisma.episodesHistory.deleteMany({
         where: {
           user_id: ctx.session.user.id,
-          series_id: input.seriesId,
+          series_id: input.seriesID,
         },
       });
 
@@ -169,11 +169,11 @@ export const tvRouter = router({
   watchHistoryByID: protectedProcedure
     .input(
       z.object({
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
       const show = await fetch(url).then((res) => res.json());
@@ -181,7 +181,7 @@ export const tvRouter = router({
       const result = await ctx.prisma.episodesHistory.findMany({
         where: {
           user_id: ctx.session.user.id,
-          series_id: input.seriesId,
+          series_id: input.seriesID,
         },
         distinct: ["season_number", "episode_number"],
         orderBy: {
@@ -225,8 +225,6 @@ const saveHistory = async ({
           series_id: seriesID,
           season_id: season.id,
           episode_id: season.episodes[i].id,
-          season_number: season.season_number,
-          episode_number: season.episodes[i].episode_number,
         };
 
         results.push(item);

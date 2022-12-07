@@ -74,11 +74,11 @@ export const seasonRouter = router({
     .input(
       z.object({
         seasonNumber: z.number(),
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesId}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
@@ -87,13 +87,13 @@ export const seasonRouter = router({
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
       const existsInDB = await ctx.prisma.series.findFirst({
-        where: { id: input.seriesId },
+        where: { id: input.seriesID },
       });
 
       if (!existsInDB) {
-        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesId });
+        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesID });
         const newSeries = await ctx.prisma.series.upsert({
-          where: { id: input.seriesId },
+          where: { id: input.seriesID },
           update: newSeriesCreateUpdate,
           create: newSeriesCreateUpdate,
         });
@@ -107,7 +107,7 @@ export const seasonRouter = router({
                 data: {
                   datetime: new Date(),
                   user_id: ctx?.session?.user?.id as string,
-                  series_id: input.seriesId,
+                  series_id: input.seriesID,
                   season_number: input.seasonNumber,
                   episode_number: i,
                 },
@@ -127,7 +127,7 @@ export const seasonRouter = router({
               data: {
                 datetime: new Date(),
                 user_id: ctx?.session?.user?.id as string,
-                series_id: input.seriesId,
+                series_id: input.seriesID,
                 season_number: input.seasonNumber,
                 episode_number: i,
               },
@@ -143,7 +143,7 @@ export const seasonRouter = router({
     .input(
       z.object({
         seasonNumber: z.number(),
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -151,7 +151,7 @@ export const seasonRouter = router({
         where: {
           user_id: ctx.session.user.id,
           season_number: input.seasonNumber,
-          series_id: input.seriesId,
+          series_id: input.seriesID,
         },
       });
 
@@ -164,11 +164,11 @@ export const seasonRouter = router({
     .input(
       z.object({
         seasonNumber: z.number(),
-        seriesId: z.number(),
+        seriesID: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesId}/season/${input.seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
+      const url = new URL(`tv/${input?.seriesID}/season/${input.seasonNumber}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
       const season = await fetch(url).then((res) => res.json());
@@ -176,7 +176,7 @@ export const seasonRouter = router({
       const result = await ctx.prisma.episodesHistory.findMany({
         where: {
           user_id: ctx.session.user.id,
-          series_id: input.seriesId,
+          series_id: input.seriesID,
           season_number: input.seasonNumber,
         },
         distinct: ["episode_number"],

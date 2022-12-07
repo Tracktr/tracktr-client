@@ -54,7 +54,7 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
 
       markAsWatched.mutate({
         seasonNumber: seasonID,
-        seriesId: itemID,
+        seriesID: itemID,
       });
     }
   };
@@ -65,7 +65,7 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
 
       removeFromWatched.mutate({
         seasonNumber: seasonID,
-        seriesId: itemID,
+        seriesID: itemID,
       });
     }
   };

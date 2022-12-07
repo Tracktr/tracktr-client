@@ -123,7 +123,7 @@ const EpisodePoster = ({
                     markAsWatched.mutate({
                       episodeNumber: episode,
                       seasonNumber: season,
-                      seriesId: series_id,
+                      seriesID: series_id,
                     });
                   }
                 }}

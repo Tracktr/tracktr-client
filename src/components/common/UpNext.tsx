@@ -35,7 +35,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
     onMutate: (e) => {
-      setCurrentLoadingID(e.seriesId);
+      setCurrentLoadingID(e.seriesID);
     },
     onSuccess: () => {
       refetch();
@@ -91,7 +91,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                         markAsWatched.mutate({
                           episodeNumber: item.episode_number,
                           seasonNumber: item.season_number,
-                          seriesId: item.series.id,
+                          seriesID: item.series.id,
                         })
                       }
                     >

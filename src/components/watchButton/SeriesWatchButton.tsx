@@ -52,7 +52,7 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
       setState("loading");
 
       markAsWatched.mutate({
-        seriesId: itemID,
+        seriesID: itemID,
       });
     }
   };
@@ -62,7 +62,7 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
       setState("loading");
 
       removeFromWatched.mutate({
-        seriesId: itemID,
+        seriesID: itemID,
       });
     }
   };

@@ -42,7 +42,7 @@ const TVPage = () => {
   const watchHistory = trpc.season.watchHistoryByID.useQuery(
     {
       seasonNumber: Number(seasonID),
-      seriesId: Number(tvID),
+      seriesID: Number(tvID),
     },
     {
       enabled: session.status !== "loading",

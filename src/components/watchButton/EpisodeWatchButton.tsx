@@ -29,7 +29,7 @@ const EpisodeWatchButton = ({ itemID, episode, seasonID, themeColor, refetchProg
     {
       episodeNumber: Number(episode.episodeNumber),
       seasonNumber: Number(season.seasonNUmber),
-      seriesId: itemID,
+      seriesID: itemID,
     },
     {
       enabled: sessionStatus !== "loading",
@@ -75,7 +75,7 @@ const EpisodeWatchButton = ({ itemID, episode, seasonID, themeColor, refetchProg
       markAsWatched.mutate({
         episodeNumber: episodeID,
         seasonNumber: seasonID,
-        seriesId: itemID,
+        seriesID: itemID,
       });
     }
   };
