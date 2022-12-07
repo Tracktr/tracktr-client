@@ -10,8 +10,8 @@ import LoadingWatchButton from "./LoadingWatchButton";
 interface IWatchButtonProps {
   itemID: number;
   episode: {
-    seasonID: number;
     episodeNumber: number;
+    seasonNumber: number;
     episodeID: number;
     refetch: () => void;
   };
@@ -19,15 +19,14 @@ interface IWatchButtonProps {
   refetchProgression?: () => void;
 }
 
-const EpisodeWatchButton = ({ itemID, episode, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
+const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
   const watchHistory = trpc.episode.watchHistoryByID.useQuery(
     {
-      episodeNumber: Number(episode.episodeNumber),
-      seasonNumber: Number(season.seasonNUmber),
+      episodeID: Number(episode.episodeID),
       seriesID: itemID,
     },
     {
@@ -72,8 +71,7 @@ const EpisodeWatchButton = ({ itemID, episode, seasonID, themeColor, refetchProg
       setState("loading");
 
       markAsWatched.mutate({
-        episodeNumber: episodeID,
-        seasonNumber: seasonID,
+        episodeID: episode.episodeID,
         seriesID: itemID,
       });
     }

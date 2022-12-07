@@ -3,28 +3,27 @@ import { z } from "zod";
 import createNewSeries from "../../../utils/createNewSeries";
 
 export const episodeRouter = router({
-  episodeById: publicProcedure
+  episodeByID: publicProcedure
     .input(
       z.object({
-        seriesID: z.string().nullish(),
-        seasonID: z.string().nullish(),
-        episodeNumber: z.string().nullish(),
+        seriesID: z.number(),
+        seasonNumber: z.number(),
+        episodeNumber: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {
       const url = new URL(
-        `tv/${input?.seriesID}/season/${input?.seasonID}/episode/${input?.episodeNumber}`,
+        `tv/${input?.seriesID}/season/${input.seasonNumber}/episode/${input?.episodeNumber}`,
         process.env.NEXT_PUBLIC_TMDB_API
       );
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
       url.searchParams.append("append_to_response", "credits");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
-      const res = await fetch(url);
-      const json = await res.json();
+      const episode = await fetch(url).then((res) => res.json());
 
       const databaseEpisodes = await ctx.prisma.episodes.findFirst({
-        where: { id: json.id },
+        where: { id: episode.id },
         include: {
           EpisodesReviews: {
             include: {
@@ -39,11 +38,16 @@ export const episodeRouter = router({
               created: "desc",
             },
           },
+          Seasons: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
 
       return {
-        ...json,
+        ...episode,
         reviews: databaseEpisodes?.EpisodesReviews || [],
       };
     }),
@@ -51,28 +55,33 @@ export const episodeRouter = router({
   markEpisodeAsWatched: protectedProcedure
     .input(
       z.object({
-        episodeNumber: z.number(),
-        seasonNumber: z.number(),
         seriesID: z.number(),
-        seasonId: z.number(),
-        episodeId: z.number(),
+        episodeID: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const existsInDB = await ctx.prisma.series.findFirst({
-        where: { id: input?.seriesID },
+      const existsInDB = await ctx.prisma.episodes.findFirst({
+        where: { id: input.episodeID },
+        include: {
+          Seasons: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
 
       if (!existsInDB) {
-        const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
+        const url = new URL(`tv/${input.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
         url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-        if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
         const show = await fetch(url).then((res) => res.json());
 
         const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
         const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesID });
+
+        console.log(show);
 
         const newSeries = await ctx.prisma.series.upsert({
           where: { id: input.seriesID },
@@ -81,33 +90,34 @@ export const episodeRouter = router({
         });
 
         if (newSeries !== null) {
-          const result = await ctx.prisma.episodesHistory.create({
+          try {
+            return await ctx.prisma.episodesHistory.create({
+              data: {
+                datetime: new Date(),
+                user_id: ctx.session.user.id,
+                series_id: input.seriesID,
+                season_id: show.seasons[0].id,
+                episode_id: input.episodeID,
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      } else {
+        try {
+          return await ctx.prisma.episodesHistory.create({
             data: {
               datetime: new Date(),
               user_id: ctx?.session?.user?.id as string,
               series_id: input.seriesID,
-              season_id: input.seasonId,
-              episode_id: input.episodeId,
-              season_number: input.seasonNumber,
-              episode_number: input.episodeNumber,
+              season_id: existsInDB.Seasons?.id,
+              episode_id: input.episodeID,
             },
           });
-          return result;
+        } catch (error) {
+          console.error(error);
         }
-      } else {
-        const result = await ctx.prisma.episodesHistory.create({
-          data: {
-            datetime: new Date(),
-            user_id: ctx?.session?.user?.id as string,
-            series_id: input.seriesID,
-            season_id: input.seasonId,
-            episode_id: input.episodeId,
-            season_number: input.seasonNumber,
-            episode_number: input.episodeNumber,
-          },
-        });
-
-        return result;
       }
     }),
 
@@ -133,8 +143,7 @@ export const episodeRouter = router({
   watchHistoryByID: protectedProcedure
     .input(
       z.object({
-        episodeNumber: z.number(),
-        seasonNumber: z.number(),
+        episodeID: z.number(),
         seriesID: z.number(),
       })
     )
@@ -143,8 +152,7 @@ export const episodeRouter = router({
         where: {
           user_id: ctx.session.user.id,
           series_id: input.seriesID,
-          season_number: input.seasonNumber,
-          episode_number: input.episodeNumber,
+          episode_id: input.episodeID,
         },
       });
 

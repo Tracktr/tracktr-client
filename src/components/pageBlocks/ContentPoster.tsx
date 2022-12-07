@@ -37,7 +37,7 @@ const ContentPoster = ({
     number_of_episodes_watched: { count: number }[];
   };
   episode?: {
-    seasonID: number;
+    seasonNumber: number;
     episodeNumber: number;
     episodeID: number;
     refetch: () => void;

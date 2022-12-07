@@ -4,13 +4,14 @@ import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 const EpisodesBlock = ({ episodes, refetch, fetchStatus, themeColor }: IEpisodesBlock) => {
   const router = useRouter();
-  const { seriesID } = router.query;
+  const { series: seriesID } = router.query;
 
   return (
     <div className="space-y-4 mb-14">
       {episodes.map((item) => (
         <EpisodePoster
           key={item.id}
+          id={item.id}
           imageSrc={item.still_path}
           name={item.name}
           overview={item.overview}

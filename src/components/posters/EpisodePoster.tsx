@@ -10,6 +10,7 @@ import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 export interface IEpisodePoster {
+  id: number;
   imageSrc: string;
   name: string;
   url?: string;
@@ -26,6 +27,7 @@ export interface IEpisodePoster {
 }
 
 const EpisodePoster = ({
+  id,
   imageSrc,
   name,
   url,
@@ -121,8 +123,7 @@ const EpisodePoster = ({
                     deleteFromWatched.mutate({ id: watched_id });
                   } else {
                     markAsWatched.mutate({
-                      episodeNumber: episode,
-                      seasonNumber: season,
+                      episodeID: id,
                       seriesID: series_id,
                     });
                   }
