@@ -168,6 +168,7 @@ export const profileRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
+        orderBy: z.object({}).optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -176,7 +177,7 @@ export const profileRouter = router({
         include: {
           series: true,
         },
-        orderBy: {
+        orderBy: input?.orderBy || {
           datetime: "desc",
         },
       });
@@ -186,7 +187,7 @@ export const profileRouter = router({
         include: {
           movie: true,
         },
-        orderBy: {
+        orderBy: input?.orderBy || {
           datetime: "desc",
         },
       });
