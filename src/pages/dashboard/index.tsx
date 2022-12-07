@@ -24,8 +24,8 @@ const DashboardPage = () => {
     data: upNext,
     status: upNextStatus,
     refetch: refetchUpNext,
-  } = trpc.profile.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
-  const { data: stats, refetch: refetchStats } = trpc.profile.stats.useQuery(undefined, {
+  } = trpc.dashboard.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
+  const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(undefined, {
     enabled: sessionStatus === "authenticated",
   });
 

@@ -29,13 +29,13 @@ const PublicProfile = () => {
     { enabled: router.isReady }
   );
 
-  const addAsFollower = trpc.profile.createFollowers.useMutation({
+  const addAsFollower = trpc.followers.createFollowers.useMutation({
     onSuccess: () => {
       refetch();
     },
   });
 
-  const removeAsFollower = trpc.profile.removeFollowers.useMutation({
+  const removeAsFollower = trpc.followers.removeFollowers.useMutation({
     onSuccess: () => {
       refetch();
     },
