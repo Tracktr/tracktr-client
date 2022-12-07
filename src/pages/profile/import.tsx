@@ -56,7 +56,7 @@ const ImportPage = () => {
       header: true,
       skipEmptyLines: true,
       complete: async function ({ data }: { data: ITraktData[] }) {
-        const formattedData = data.map((item) => {
+        const formattedData = data.slice(0, 200).map((item) => {
           if (!item.tmdb_id) {
             console.error("NO ID", item);
             return {

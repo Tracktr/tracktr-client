@@ -84,6 +84,7 @@ model Movies {
   id            Int             @id
   title         String
   poster        String
+  release_date  DateTime?
   MoviesHistory MoviesHistory[]
   WatchlistItem WatchlistItem[]
   Reviews       MoviesReviews[]

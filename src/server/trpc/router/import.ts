@@ -45,6 +45,7 @@ export const importRouter = router({
                     id: json.id,
                     title: json.title,
                     poster: json.poster_path,
+                    release_date: json.release_date ? new Date(json.release_date) : null,
                   },
                 });
 

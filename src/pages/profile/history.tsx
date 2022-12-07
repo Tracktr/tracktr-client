@@ -131,6 +131,22 @@ const HistoryPage = () => {
                     >
                       Title
                     </option>
+                    <option
+                      value={JSON.stringify({
+                        field: "date",
+                        order: "desc",
+                      })}
+                    >
+                      Recently aired
+                    </option>
+                    <option
+                      value={JSON.stringify({
+                        field: "date",
+                        order: "asc",
+                      })}
+                    >
+                      Previously aired
+                    </option>
                   </select>
                 </div>
 

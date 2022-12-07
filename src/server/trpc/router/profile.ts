@@ -209,6 +209,25 @@ export const profileRouter = router({
           return aField.localeCompare(bField);
         }
 
+        if (input.orderBy.field === "date") {
+          const aField = a[a.series ? "episode" : "movie"][a.series ? "air_date" : "release_date"];
+          const bField = b[b.series ? "episode" : "movie"][b.series ? "air_date" : "release_date"];
+
+          if (input.orderBy.order === "asc") {
+            if (aField > bField) {
+              return 1;
+            } else {
+              return -1;
+            }
+          } else if (input.orderBy.order === "desc") {
+            if (aField < bField) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+        }
+
         if (input.orderBy.order === "asc") {
           if (a[input.orderBy.field] > b[input.orderBy.field]) {
             return 1;
