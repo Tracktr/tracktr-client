@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
@@ -11,13 +11,23 @@ const HistoryPage = () => {
   const router = useRouter();
   const session = useSession();
   const [page, setPage] = useState<number>(1);
+  const [input, setInput] = useState(
+    JSON.stringify({
+      field: "datetime",
+      order: "desc",
+    })
+  );
+
   const { data, status } = trpc.profile.profileBySession.useQuery();
   const {
     data: history,
     status: historyStatus,
     refetch,
     isRefetching,
-  } = trpc.profile.watchHistory.useQuery({ page, pageSize: 60 }, { keepPreviousData: true });
+  } = trpc.profile.watchHistory.useQuery(
+    { page, pageSize: 60, orderBy: JSON.parse(input) },
+    { keepPreviousData: true }
+  );
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -35,6 +45,11 @@ const HistoryPage = () => {
     refetch();
   };
 
+  const handleInput = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.currentTarget;
+    setInput(value);
+  };
+
   return (
     <LoadingPageComponents status={status}>
       {() => (
@@ -42,6 +57,7 @@ const HistoryPage = () => {
           <Head>
             <title>{session.data?.user?.name}&apos;s History - Tracktr.</title>
           </Head>
+
           <div className="max-w-6xl m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
             <div className="items-center my-5 align-middle md:flex">
@@ -68,6 +84,38 @@ const HistoryPage = () => {
                 </button>
               </div>
             </div>
+
+            <div className="flex my-5">
+              <div>
+                <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Order by
+                </label>
+                <select
+                  id="orderBY"
+                  className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                  onChange={handleInput}
+                  value={input}
+                >
+                  <option
+                    value={JSON.stringify({
+                      field: "datetime",
+                      order: "desc",
+                    })}
+                  >
+                    Recently watched
+                  </option>
+                  <option
+                    value={JSON.stringify({
+                      field: "datetime",
+                      order: "asc",
+                    })}
+                  >
+                    Oldest watched
+                  </option>
+                </select>
+              </div>
+            </div>
+
             <HistoryGrid
               history={history?.history || []}
               status={isRefetching ? "loading" : historyStatus}

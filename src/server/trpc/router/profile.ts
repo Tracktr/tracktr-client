@@ -168,7 +168,10 @@ export const profileRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
-        orderBy: z.object({}).optional(),
+        orderBy: z.object({
+          field: z.string(),
+          order: z.string(),
+        }),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -177,9 +180,6 @@ export const profileRouter = router({
         include: {
           series: true,
         },
-        orderBy: input?.orderBy || {
-          datetime: "desc",
-        },
       });
 
       const movies = await ctx.prisma.moviesHistory.findMany({
@@ -187,17 +187,23 @@ export const profileRouter = router({
         include: {
           movie: true,
         },
-        orderBy: input?.orderBy || {
-          datetime: "desc",
-        },
       });
 
-      const sortedHistory = [...episodes, ...movies].sort((a, b) => {
-        if (a.datetime < b.datetime) {
-          return 1;
-        } else {
-          return -1;
+      const sortedHistory = [...episodes, ...movies].sort((a: any, b: any) => {
+        if (input.orderBy.order === "asc") {
+          if (a[input.orderBy.field] > b[input.orderBy.field]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        } else if (input.orderBy.order === "desc") {
+          if (a[input.orderBy.field] < b[input.orderBy.field]) {
+            return 1;
+          } else {
+            return -1;
+          }
         }
+        return 0;
       });
 
       return {

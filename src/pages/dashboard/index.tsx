@@ -19,7 +19,17 @@ const DashboardPage = () => {
     data: history,
     status: historyStatus,
     refetch: refetchHistory,
-  } = trpc.profile.watchHistory.useQuery({ page: 1, pageSize: 6 }, { enabled: sessionStatus === "authenticated" });
+  } = trpc.profile.watchHistory.useQuery(
+    {
+      page: 1,
+      pageSize: 6,
+      orderBy: {
+        field: "datetime",
+        order: "desc",
+      },
+    },
+    { enabled: sessionStatus === "authenticated" }
+  );
   const {
     data: upNext,
     status: upNextStatus,
