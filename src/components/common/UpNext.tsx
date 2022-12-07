@@ -8,6 +8,8 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
+import { IoIosAdd } from "react-icons/io";
+import { toast } from "react-toastify";
 
 interface Series {
   id: number;
@@ -38,6 +40,9 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
       setCurrentLoadingID(e.seriesId);
     },
     onSuccess: () => {
+      toast(`Marked episode as watched`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       refetch();
     },
   });
