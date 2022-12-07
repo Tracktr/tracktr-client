@@ -2,12 +2,13 @@
 
 import type { GetServerSidePropsContext } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { authOptions as nextAuthOptions } from "../../pages/api/auth/[...nextauth]";
+import { authOptions } from "../../pages/api/auth/[...nextauth]";
 
 // Next API route example - /pages/api/restricted.ts
 export const getServerAuthSession = async (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
 }) => {
-  return await unstable_getServerSession(ctx.req, ctx.res, nextAuthOptions);
+  // next-auth 4.18.0 introduced a breaking change to unstable_getServerSession
+  return await unstable_getServerSession(ctx.req, ctx.res, { ...authOptions });
 };
