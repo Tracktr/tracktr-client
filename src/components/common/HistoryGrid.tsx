@@ -53,7 +53,6 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                 dateStyle: "medium",
                 timeStyle: "short",
               });
-              console.log(item);
 
               return (
                 <motion.div

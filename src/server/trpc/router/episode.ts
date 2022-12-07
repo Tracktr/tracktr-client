@@ -81,8 +81,6 @@ export const episodeRouter = router({
 
         const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesID });
 
-        console.log(show);
-
         const newSeries = await ctx.prisma.series.upsert({
           where: { id: input.seriesID },
           update: newSeriesCreateUpdate,

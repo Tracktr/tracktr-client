@@ -68,45 +68,62 @@ export const importRouter = router({
               continue;
             }
           } else if (item.type === "episode") {
+            const url = new URL(`tv/${item?.id}`, process.env.NEXT_PUBLIC_TMDB_API);
+            url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+            url.searchParams.append("append_to_response", `season/${item.season}`);
+
+            const show = await fetch(url)
+              .then((res: any) => res.json())
+              .catch((e: any) => console.error("Failed fetching series from TMDB", e));
+
             const existsInDB = await ctx.prisma.series.findFirst({
               where: { id: Number(item.id) },
             });
 
+            // Getting current season from show cuz append to response does not have season id
+            const currentSeason = show.seasons.filter((season: any) => season.season_number == item.season)[0];
+            const currentEpisode = show["season/1"].episodes.filter(
+              (episode: any) => episode.episode_number == item.episode
+            )[0];
+
             if (!existsInDB) {
-              const url = new URL(`tv/${item?.id}`, process.env.NEXT_PUBLIC_TMDB_API);
-              url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-              if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-
-              const json = await fetch(url)
-                .then((res: any) => res.json())
-                .catch((e: any) => console.error("Failed fetching series from TMDB", e));
-
-              if (json.id && json.name && json.poster_path) {
+              if (show.id && show.name && show.poster_path) {
                 try {
-                  const seriesPoster = json.poster_path ? json.poster_path : "/noimage.png";
+                  const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
-                  const newSeries = await createNewSeries({ show: json, seriesPoster, id: Number(item?.id) });
+                  const newSeriesCreateUpdate = await createNewSeries({
+                    show: show,
+                    seriesPoster,
+                    id: Number(item?.id),
+                  });
+
+                  const newSeries = await ctx.prisma.series.upsert({
+                    where: { id: Number(item.id) },
+                    update: newSeriesCreateUpdate,
+                    create: newSeriesCreateUpdate,
+                  });
 
                   if (newSeries !== null) {
                     manyEpisodesHistory.push({
                       datetime: item.datetime,
                       user_id: ctx?.session?.user?.id as string,
                       series_id: Number(item.id),
-                      season_number: Number(item.season),
-                      episode_number: Number(item.episode),
+                      season_id: currentSeason.id,
+                      episode_id: currentEpisode.id,
                     });
 
                     continue;
                   }
                 } catch (e) {
+                  console.error(e);
                   if (e instanceof Prisma.PrismaClientKnownRequestError) {
                     if (e.code === "P2002") {
                       manyEpisodesHistory.push({
                         datetime: item.datetime,
                         user_id: ctx?.session?.user?.id as string,
                         series_id: Number(item.id),
-                        season_number: Number(item.season),
-                        episode_number: Number(item.episode),
+                        season_id: currentSeason.id,
+                        episode_id: currentEpisode.id,
                       });
 
                       continue;
@@ -119,8 +136,8 @@ export const importRouter = router({
                 datetime: item.datetime,
                 user_id: ctx?.session?.user?.id as string,
                 series_id: Number(item.id),
-                season_number: Number(item.season),
-                episode_number: Number(item.episode),
+                season_id: currentSeason.id,
+                episode_id: currentEpisode.id,
               });
 
               continue;

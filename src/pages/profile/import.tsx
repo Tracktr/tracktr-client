@@ -104,8 +104,6 @@ const ImportPage = () => {
         <title>Import data from Trakt.tv - Tracktr.</title>
       </Head>
 
-      <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Import" />
-
       <section className="py-10 text-white sm:py-16 lg:py-24">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
