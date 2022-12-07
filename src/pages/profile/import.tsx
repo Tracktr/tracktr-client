@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
-import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
 
 export interface ITraktData {
@@ -37,8 +36,6 @@ const ImportPage = () => {
   const session = useSession();
   const [currentPercentage, setCurrentPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>();
-
-  const { data } = trpc.profile.profileBySession.useQuery();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {

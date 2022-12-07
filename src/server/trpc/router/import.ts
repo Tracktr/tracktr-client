@@ -82,28 +82,41 @@ export const importRouter = router({
 
             // Getting current season from show cuz append to response does not have season id
             const currentSeason = show.seasons.filter((season: any) => season.season_number == item.season)[0];
-            const currentEpisode = show["season/1"].episodes.filter(
+            const currentEpisode = show[`season/${item.season}`].episodes.filter(
               (episode: any) => episode.episode_number == item.episode
             )[0];
 
             if (!existsInDB) {
-              if (show.id && show.name && show.poster_path) {
-                try {
-                  const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+              try {
+                const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
-                  const newSeriesCreateUpdate = await createNewSeries({
-                    show: show,
-                    seriesPoster,
-                    id: Number(item?.id),
+                const newSeriesCreateUpdate = await createNewSeries({
+                  show: show,
+                  seriesPoster,
+                  id: Number(item?.id),
+                });
+
+                const newSeries = await ctx.prisma.series.upsert({
+                  where: { id: Number(item.id) },
+                  update: newSeriesCreateUpdate,
+                  create: newSeriesCreateUpdate,
+                });
+
+                if (newSeries !== null) {
+                  manyEpisodesHistory.push({
+                    datetime: item.datetime,
+                    user_id: ctx?.session?.user?.id as string,
+                    series_id: Number(item.id),
+                    season_id: currentSeason.id,
+                    episode_id: currentEpisode.id,
                   });
 
-                  const newSeries = await ctx.prisma.series.upsert({
-                    where: { id: Number(item.id) },
-                    update: newSeriesCreateUpdate,
-                    create: newSeriesCreateUpdate,
-                  });
-
-                  if (newSeries !== null) {
+                  continue;
+                }
+              } catch (e) {
+                console.error("Create new series", e);
+                if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                  if (e.code === "P2002") {
                     manyEpisodesHistory.push({
                       datetime: item.datetime,
                       user_id: ctx?.session?.user?.id as string,
@@ -114,33 +127,25 @@ export const importRouter = router({
 
                     continue;
                   }
-                } catch (e) {
-                  console.error(e);
-                  if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                    if (e.code === "P2002") {
-                      manyEpisodesHistory.push({
-                        datetime: item.datetime,
-                        user_id: ctx?.session?.user?.id as string,
-                        series_id: Number(item.id),
-                        season_id: currentSeason.id,
-                        episode_id: currentEpisode.id,
-                      });
-
-                      continue;
-                    }
-                  }
                 }
               }
             } else {
-              manyEpisodesHistory.push({
-                datetime: item.datetime,
-                user_id: ctx?.session?.user?.id as string,
-                series_id: Number(item.id),
-                season_id: currentSeason.id,
-                episode_id: currentEpisode.id,
-              });
+              console.log("In database");
+              console.log(currentSeason.id, currentEpisode.id);
 
-              continue;
+              try {
+                manyEpisodesHistory.push({
+                  datetime: item.datetime,
+                  user_id: ctx?.session?.user?.id as string,
+                  series_id: Number(item.id),
+                  season_id: currentSeason.id,
+                  episode_id: currentEpisode.id,
+                });
+
+                continue;
+              } catch (error) {
+                console.error(error);
+              }
             }
           }
         } else {
