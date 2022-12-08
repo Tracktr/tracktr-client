@@ -7,6 +7,8 @@ interface RecommendationsProps {
 }
 
 const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) => {
+  console.log(recommendations);
+
   return (
     recommendations.results.length > 6 && (
       <div className="hidden mt-32 lg:block">
@@ -31,7 +33,9 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
                       backgroundSize: "cover",
                     }}
                   >
-                    <p className="pb-4 mx-4 truncate overflow-ellipsis">{recommendation.title}</p>
+                    <p className="pb-4 mx-4 truncate transition-all duration-300 ease-in-out overflow-ellipsis group-hover:pb-8">
+                      {recommendation.title}
+                    </p>
                   </a>
                 </Link>
               );
