@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd } from "react-icons/io";
-import { MdReviews } from "react-icons/md";
+import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import { trpc } from "../../utils/trpc";
@@ -113,7 +113,7 @@ const ReviewButton = ({
       >
         <span className="px-3 py-2" data-tip="Create a review">
           <ReactTooltip />
-          <MdReviews className="text-2xl" />
+          <MdOutlineReviews className="text-2xl" />
         </span>
       </button>
 
