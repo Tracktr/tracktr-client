@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
-import { IoIosAdd } from "react-icons/io";
+import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
@@ -37,6 +37,11 @@ const ReviewButton = ({
       refetchReviews();
       router.push("#reviews");
     },
+    onError: () => {
+      toast("Failed to add review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
   const addSeriesReview = trpc.review.addSeriesReview.useMutation({
     onSuccess: () => {
@@ -46,6 +51,11 @@ const ReviewButton = ({
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");
+    },
+    onError: () => {
+      toast("Failed to add review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
   const addSeasonReview = trpc.review.addSeasonReview.useMutation({
@@ -57,6 +67,11 @@ const ReviewButton = ({
       refetchReviews();
       router.push("#reviews");
     },
+    onError: () => {
+      toast("Failed to add review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
   const addEpisodesReview = trpc.review.addEpisodeReview.useMutation({
     onSuccess: () => {
@@ -66,6 +81,11 @@ const ReviewButton = ({
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");
+    },
+    onError: () => {
+      toast("Failed to add review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 

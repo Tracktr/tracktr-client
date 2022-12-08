@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
-import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import { PosterImage } from "../../utils/generateImages";
@@ -38,6 +38,11 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
       });
       refetch();
     },
+    onError: () => {
+      toast(`Failed to add ${name} to watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
 
   const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
@@ -47,6 +52,11 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetch();
+    },
+    onError: () => {
+      toast(`Failed to remove ${name} from watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 

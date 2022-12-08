@@ -1,6 +1,7 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import createNewSeries from "../../../utils/createNewSeries";
+import { TRPCError } from "@trpc/server";
 
 export const episodeRouter = router({
   episodeByID: publicProcedure
@@ -114,7 +115,11 @@ export const episodeRouter = router({
             },
           });
         } catch (error) {
-          console.error(error);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Could not add to history",
+            cause: error,
+          });
         }
       }
     }),

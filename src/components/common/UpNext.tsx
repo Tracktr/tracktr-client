@@ -8,7 +8,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
-import { IoIosAdd } from "react-icons/io";
+import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
 
 interface Series {
@@ -44,6 +44,11 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetch();
+    },
+    onError: () => {
+      toast("Failed to mark episode as watched", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 
