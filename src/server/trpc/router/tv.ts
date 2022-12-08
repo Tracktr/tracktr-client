@@ -20,6 +20,14 @@ export const tvRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
+
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
       const databaseSeries = await ctx.prisma.series.findFirst({
@@ -89,6 +97,14 @@ export const tvRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
+
       return {
         ...json,
       };
@@ -105,6 +121,14 @@ export const tvRouter = router({
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
       const show = await fetch(url).then((res) => res.json());
+
+      if (show?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: show.status_message,
+          cause: show.status_code,
+        });
+      }
 
       const seasonsCount = show.number_of_seasons;
       const firstSeason: number = show.seasons[0].season_number;
@@ -187,6 +211,14 @@ export const tvRouter = router({
 
       const show = await fetch(url).then((res) => res.json());
 
+      if (show?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: show.status_message,
+          cause: show.status_code,
+        });
+      }
+
       const result = await ctx.prisma.episodesHistory.findMany({
         where: {
           user_id: ctx.session.user.id,
@@ -228,6 +260,10 @@ const saveHistory = async ({
     seasonUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
     const season = await fetch(seasonUrl).then((res) => res.json());
+
+    if (season?.status_code) {
+      console.error("Failed to fetch season", seriesID, seasonNumber);
+    }
 
     if (season.season_number === 0) continue;
 

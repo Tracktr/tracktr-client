@@ -40,6 +40,11 @@ export const importRouter = router({
                   .then((res: any) => res.json())
                   .catch((e: any) => console.error("Failed fetching movie from TMDB", e));
 
+                if (json?.status_code) {
+                  console.error("Failed fetching movie from TMDB", item);
+                  continue;
+                }
+
                 if (json.id && json.title && json.poster_path) {
                   const newMovie = await ctx.prisma.movies.create({
                     data: {
@@ -77,6 +82,11 @@ export const importRouter = router({
               const show = await fetch(url)
                 .then((res: any) => res.json())
                 .catch((e: any) => console.error("Failed fetching series from TMDB", e));
+
+              if (show?.status_code) {
+                console.error("Failed fetching series from TMDB", item);
+                continue;
+              }
 
               const existsInDB = await ctx.prisma.series.findFirst({
                 where: { id: Number(item.id) },

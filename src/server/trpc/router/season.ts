@@ -20,6 +20,14 @@ export const seasonRouter = router({
 
       const season = await fetch(url).then((res) => res.json());
 
+      if (season?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: season.status_message,
+          cause: season.status_code,
+        });
+      }
+
       const databaseSeason = await ctx.prisma.seasons.findFirst({
         where: { id: season.id },
         include: {
@@ -82,6 +90,14 @@ export const seasonRouter = router({
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const show = await fetch(url).then((res) => res.json());
+
+      if (show?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: show.status_message,
+          cause: show.status_code,
+        });
+      }
 
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
@@ -198,6 +214,10 @@ const saveHistory = async ({
   seasonUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
   const season = await fetch(seasonUrl).then((res) => res.json());
+
+  if (season?.status_code) {
+    console.error("Failed to fetch season", seriesID, seasonNumber);
+  }
 
   for (let i = 0; i <= season.episodes.length; i++) {
     try {

@@ -22,6 +22,10 @@ const createNewSeries = async ({ show, seriesPoster, id }: { show: any; seriesPo
 
             const seasonWithEpisodes = await fetch(url).then((res) => res.json());
 
+            if (seasonWithEpisodes?.status_code) {
+              console.error("Failed to fetch season with episode", id, season);
+            }
+
             return {
               where: { id: season.id },
               create: {
