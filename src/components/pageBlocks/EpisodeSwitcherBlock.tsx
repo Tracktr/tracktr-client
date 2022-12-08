@@ -28,13 +28,24 @@ interface IPrevNextSeason {
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
   const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
+  const [currentSeason, setCurrentSeason] = useState<
+    | {
+        air_date: string;
+        episode_count: number;
+        id: number;
+        name: string;
+        overview: string;
+        poster_path: string;
+        season_number: number;
+      }
+    | undefined
+  >();
   const [previousSeason, setPreviousSeason] = useState<false | IPrevNextSeason>();
   const [nextSeason, setNextSeason] = useState<false | IPrevNextSeason>();
 
   useEffect(() => {
     if (router.isReady) {
-      const currentSeason = seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0];
-
+      setCurrentSeason(seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0]);
       setPreviousSeason(
         Number(episodeNumber) <= 1 &&
           seasons.filter((season: any) => season.season_number == Number(seasonNumber) - 1)[0]
@@ -44,7 +55,7 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
           seasons.filter((season: any) => season.season_number == Number(seasonNumber) + 1)[0]
       );
     }
-  }, [router.isReady, episodeNumber, seasonNumber, seasons]);
+  }, [router.isReady, episodeNumber, seasonNumber, seasons, currentSeason]);
 
   const hasPreviousEpisode = () => {
     return Number(episodeNumber) > 1 || previousSeason;
