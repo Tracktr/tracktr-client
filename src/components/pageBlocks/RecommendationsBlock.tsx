@@ -7,8 +7,6 @@ interface RecommendationsProps {
 }
 
 const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) => {
-  console.log(recommendations);
-
   return (
     recommendations.results.length > 6 && (
       <div className="hidden mt-32 lg:block">
