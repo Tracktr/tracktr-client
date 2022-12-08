@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
+import { IoIosAdd } from "react-icons/io";
 import { MdReviews } from "react-icons/md";
+import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import { trpc } from "../../utils/trpc";
 import Modal from "../modal/Modal";
@@ -28,6 +30,9 @@ const ReviewButton = ({
 
   const addMovieReview = trpc.review.addMovieReview.useMutation({
     onSuccess: () => {
+      toast("Review Added", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");
@@ -35,6 +40,9 @@ const ReviewButton = ({
   });
   const addSeriesReview = trpc.review.addSeriesReview.useMutation({
     onSuccess: () => {
+      toast("Review Added", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");
@@ -42,6 +50,9 @@ const ReviewButton = ({
   });
   const addSeasonReview = trpc.review.addSeasonReview.useMutation({
     onSuccess: () => {
+      toast("Review Added", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");
@@ -49,6 +60,9 @@ const ReviewButton = ({
   });
   const addEpisodesReview = trpc.review.addEpisodeReview.useMutation({
     onSuccess: () => {
+      toast("Review Added", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       setModalOpen(!modalOpen);
       refetchReviews();
       router.push("#reviews");

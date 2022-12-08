@@ -1,7 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
 import BaseWatchButton, { IThemeColor } from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
@@ -11,9 +13,10 @@ interface IWatchButtonProps {
   themeColor: IThemeColor;
   refetchProgression?: () => void;
   watchHistory: any;
+  name: string;
 }
 
-const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistory }: IWatchButtonProps) => {
+const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistory, name }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
@@ -22,6 +25,9 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Added all episodes for ${name} to watched`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
       refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
@@ -32,6 +38,9 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
       setState("loading");
     },
     onSuccess: () => {
+      toast(`Removed all episodes ${name} to watched`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       refetchProgression && refetchProgression();
       watchHistory.refetch();
     },

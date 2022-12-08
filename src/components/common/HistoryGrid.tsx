@@ -9,6 +9,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { toast } from "react-toastify";
 
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
@@ -18,6 +20,9 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       setCurrentLoadingID(e.id);
     },
     onSuccess: () => {
+      toast(`Removed episode from history`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       refetch();
     },
   });
@@ -27,6 +32,9 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       setCurrentLoadingID(e.id);
     },
     onSuccess: () => {
+      toast(`Removed Movie from history`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
       refetch();
     },
   });

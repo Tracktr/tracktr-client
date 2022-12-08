@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { IoIosRemove } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
 import ImageWithFallback from "../common/ImageWithFallback";
 
@@ -8,16 +10,36 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
   const session = useSession();
 
   const removeMovieReview = trpc.review.removeMovieReview.useMutation({
-    onSuccess: () => refetchReviews(),
+    onSuccess: () => {
+      toast("Review Removed", {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
   });
   const removeSeriesReview = trpc.review.removeSeriesReview.useMutation({
-    onSuccess: () => refetchReviews(),
+    onSuccess: () => {
+      toast("Review Removed", {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
   });
   const removeSeasonReview = trpc.review.removeSeasonReview.useMutation({
-    onSuccess: () => refetchReviews(),
+    onSuccess: () => {
+      toast("Review Removed", {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
   });
   const removeEpisodeReview = trpc.review.removeEpisodeReview.useMutation({
-    onSuccess: () => refetchReviews(),
+    onSuccess: () => {
+      toast("Review Removed", {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
   });
 
   const handleDelete = (e: any) => {
