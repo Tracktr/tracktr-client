@@ -65,7 +65,6 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
     const currentSeason = seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0];
 
     if (Number(currentSeason?.episode_count) > Number(episodeNumber)) {
-      console.log("episode count > episode number");
       return true;
     } else if (nextSeason) {
       return true;

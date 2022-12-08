@@ -178,4 +178,65 @@ export const dashboardRouter = router({
       ),
     };
   }),
+
+  friendsActivity: protectedProcedure.query(async ({ ctx }) => {
+    const activity = await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      include: {
+        following: {
+          include: {
+            EpisodesHistory: {
+              take: 6,
+              include: {
+                series: true,
+                season: true,
+                episode: true,
+              },
+              orderBy: {
+                datetime: "desc",
+              },
+            },
+            MoviesHistory: {
+              take: 6,
+              include: {
+                movie: true,
+              },
+              orderBy: {
+                datetime: "desc",
+              },
+            },
+          },
+        },
+      },
+    });
+
+    let recentHistory: any[] = [];
+
+    activity?.following.map((friend) => {
+      const sortedHistory = [...friend.MoviesHistory, ...friend.EpisodesHistory].sort((a, b) => {
+        if (a.datetime < b.datetime) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      recentHistory = [
+        ...recentHistory,
+        ...sortedHistory.map((h) => ({
+          ...h,
+          friend: {
+            image: friend.image,
+            name: friend.name,
+          },
+        })),
+      ];
+    });
+
+    return {
+      history: recentHistory?.slice(0, 6),
+    };
+  }),
 });

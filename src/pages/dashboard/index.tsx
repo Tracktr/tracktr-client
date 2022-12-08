@@ -9,7 +9,7 @@ import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
-import { MdOutlineNextWeek, MdOutlineWrapText, MdQueuePlayNext } from "react-icons/md";
+import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline, MdQueuePlayNext } from "react-icons/md";
 import Head from "next/head";
 
 const DashboardPage = () => {
@@ -38,6 +38,11 @@ const DashboardPage = () => {
   const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(undefined, {
     enabled: sessionStatus === "authenticated",
   });
+  const {
+    data: friendsData,
+    status: friendsStatus,
+    refetch: refetchFriends,
+  } = trpc.dashboard.friendsActivity.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
@@ -125,6 +130,23 @@ const DashboardPage = () => {
                   history={history?.history || []}
                   status={historyStatus}
                   refetch={refetch}
+                />
+              </div>
+              <div className="my-6">
+                <div className="items-center align-middle md:flex">
+                  <div className="flex items-center justify-between w-full gap-4 mb-5">
+                    <div className="flex items-center justify-center text-xl md:text-3xl">
+                      <MdPeopleOutline className="mr-4" />
+                      Friend activity
+                    </div>
+                  </div>
+                </div>
+                <HistoryGrid
+                  hasScrollContainer
+                  history={friendsData?.history || []}
+                  status={friendsStatus}
+                  refetch={refetchFriends}
+                  inPublic
                 />
               </div>
             </div>

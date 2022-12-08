@@ -94,7 +94,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                         alt={`Poster image for ${
                           item?.movie_id
                             ? item.movie?.title
-                            : `${item.season_number}x${item.episode_number} ${item.series?.name}`
+                            : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
                         }`}
                         src={PosterImage({
                           path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
@@ -185,11 +185,9 @@ interface IHistoryItem {
   datetime: Date;
   user_id: string;
   series_id?: number;
-  season_number?: number;
-  episode_number?: number;
-  series?: ISeries;
   movie_id?: number;
   movie?: IMovie;
+  series?: ISeries;
   season?: ISeason;
   episode?: IEpisode;
 }
