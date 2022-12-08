@@ -16,28 +16,31 @@ interface EpisodeSwitcherBlockProps {
 
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
-  const { seriesID, seasonID, episodeID } = router.query;
+  const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
+
+  console.log("HI", seasons);
 
   const hasPreviousEpisode = () => {
-    return Number(episodeID) > 1 ? true : false;
+    return Number(episodeNumber) > 1 ? true : false;
   };
 
   const hasNextEpisode = () => {
-    const episode_count = seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`]?.episode_count;
+    const episode_count =
+      seasons[`${Number(seasonNumber) > 0 ? Number(seasonNumber) - 1 : Number(seasonNumber)}`]?.episode_count;
 
-    if (Number(episode_count) > Number(episodeID)) {
+    if (Number(episode_count) > Number(episodeNumber)) {
       return true;
     }
   };
 
   const previousEpisodePath = () => {
-    const previousEpisode = parseInt(episodeID as string) - 1;
-    return `/tv/${seriesID}/season/${seasonID}/episode/${previousEpisode}`;
+    const previousEpisode = parseInt(episodeNumber as string) - 1;
+    return `/tv/${seriesID}/season/${seasonNumber}/episode/${previousEpisode}`;
   };
 
   const nextEpisodePath = () => {
-    const nextEpisode = parseInt(episodeID as string) + 1;
-    return `/tv/${seriesID}/season/${seasonID}/episode/${nextEpisode}`;
+    const nextEpisode = parseInt(episodeNumber as string) + 1;
+    return `/tv/${seriesID}/season/${seasonNumber}/episode/${nextEpisode}`;
   };
 
   return (
