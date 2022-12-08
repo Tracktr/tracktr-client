@@ -51,6 +51,7 @@ export const tvRouter = router({
               },
             },
           },
+          distinct: ["episode_id"],
         });
 
         if (episodesWatched) {
@@ -185,8 +186,13 @@ export const tvRouter = router({
         where: {
           user_id: ctx.session.user.id,
           series_id: input.seriesID,
+          NOT: {
+            season: {
+              season_number: 0,
+            },
+          },
         },
-        distinct: ["season_id", "episode_id"],
+        distinct: ["episode_id"],
         orderBy: {
           datetime: "desc",
         },
