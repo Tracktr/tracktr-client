@@ -8,8 +8,14 @@ const NotFoundPage = () => {
         <title>Something went wrong - Tracktr.</title>
       </Head>
 
-      <div className="pt-24">
-        <div className="py-10 text-white sm:py-16 lg:py-24">
+      <div
+        className="flex flex-col items-center justify-center min-h-screen gap-10 align-middle"
+        style={{
+          background: `linear-gradient(0deg, #1A1A1A 3.79%, rgba(16, 16, 16, 0) 100%), url(https://www.themoviedb.org/t/p/original/2x6P4OGdvf4LVmcwb4ra1AfN3d7.jpg) no-repeat center`,
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="text-white">
           <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Something went wrong</h2>
