@@ -17,9 +17,15 @@ interface EpisodeSwitcherBlockProps {
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
   const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
+  const previousSeason =
+    Number(episodeNumber) <= 1 && seasons.filter((season: any) => season.season_number == Number(seasonNumber) - 1)[0];
 
   const hasPreviousEpisode = () => {
-    return Number(episodeNumber) > 1 ? true : false;
+    if (previousSeason) {
+      return true;
+    }
+
+    return Number(episodeNumber) > 1;
   };
 
   const hasNextEpisode = () => {
@@ -32,8 +38,10 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   };
 
   const previousEpisodePath = () => {
-    const previousEpisode = parseInt(episodeNumber as string) - 1;
-    return `/tv/${seriesID}/season/${seasonNumber}/episode/${previousEpisode}`;
+    if (previousSeason) {
+      return `/tv/${seriesID}/season/${previousSeason.season_number}/episode/${Number(previousSeason.episode_count)}`;
+    }
+    return `/tv/${seriesID}/season/${seasonNumber}/episode/${parseInt(episodeNumber as string) - 1}`;
   };
 
   const nextEpisodePath = () => {
