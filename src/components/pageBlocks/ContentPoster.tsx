@@ -37,7 +37,7 @@ const ContentPoster = ({
     number_of_episodes_watched: { count: number }[];
   };
   episode?: {
-    seasonID: number;
+    seasonNumber: number;
     episodeNumber: number;
     episodeID: number;
     refetch: () => void;
@@ -101,15 +101,15 @@ const ContentPoster = ({
               (episode ? (
                 <EpisodeWatchButton
                   itemID={id}
-                  episodeID={episode.episodeNumber}
-                  seasonID={episode.seasonID}
+                  episode={episode}
                   themeColor={theme_color}
                   refetchProgression={episode.refetch}
                 />
               ) : season ? (
                 <SeasonWatchButton
                   itemID={id}
-                  seasonID={season.seasonNumber}
+                  seasonNumber={season.seasonNumber}
+                  seasonID={season.seasonID}
                   themeColor={theme_color}
                   watchHistory={season.watchHistory}
                   refetchProgression={season.refetch}

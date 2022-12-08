@@ -16,7 +16,7 @@ interface ISeasons {
 
 const SeasonsBlock = ({ seasons }: ISeasons) => {
   const router = useRouter();
-  const { tvID } = router.query;
+  const { series: seriesID } = router.query;
 
   return (
     <div className="relative mb-24">
@@ -31,7 +31,7 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
                 <TVPoster
                   imageSrc={item.poster_path}
                   name={`Season ${item.season_number}`}
-                  url={`${tvID}/season/${item.season_number}`}
+                  url={`${seriesID}/season/${item.season_number}`}
                 />
               </div>
             ))}

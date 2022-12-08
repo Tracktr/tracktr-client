@@ -9,26 +9,119 @@ export const watchlistRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
+        orderBy: z.object({
+          field: z.string(),
+          order: z.string(),
+        }),
+        filter: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const watchlist = await ctx.prisma.watchlist.findFirst({
         where: {
-          user_id: ctx.session.user.profile.userId,
+          user_id: ctx.session.user.id,
         },
         include: {
           WatchlistItem: {
             include: {
-              series: true,
-              movies: true,
+              series: {
+                include: {
+                  EpisodesHistory: {
+                    where: { user_id: ctx.session.user.id },
+                  },
+                },
+              },
+              movies: {
+                include: {
+                  MoviesHistory: {
+                    where: { user_id: ctx.session.user.id },
+                  },
+                },
+              },
             },
           },
         },
       });
 
-      const watchlistLength = watchlist?.WatchlistItem?.length || 0;
-
       if (watchlist?.WatchlistItem) {
+        if (input.filter === "movies") {
+          watchlist.WatchlistItem = watchlist.WatchlistItem.filter((e) => {
+            if (e.series === null) {
+              return true;
+            }
+          });
+        }
+
+        if (input.filter === "series") {
+          watchlist.WatchlistItem = watchlist.WatchlistItem.filter((e) => {
+            if (e.movies === null) {
+              return true;
+            }
+          });
+        }
+
+        if (input.filter === "watched") {
+          watchlist.WatchlistItem = watchlist.WatchlistItem.filter((e) => {
+            if ((e?.movies?.MoviesHistory?.length || 0) < 1 && (e?.series?.EpisodesHistory?.length || 0) < 1) {
+              return true;
+            }
+          });
+        }
+
+        if (input.filter === "notwatched") {
+          watchlist.WatchlistItem = watchlist.WatchlistItem.filter((e) => {
+            if ((e?.movies?.MoviesHistory?.length || 0) > 0 || (e?.series?.EpisodesHistory?.length || 0) > 0) {
+              return true;
+            }
+          });
+        }
+
+        const watchlistLength = watchlist?.WatchlistItem?.length || 0;
+
+        watchlist.WatchlistItem = [...watchlist.WatchlistItem].sort((a: any, b: any) => {
+          if (input.orderBy.field === "title") {
+            const aField = a[a.series ? "series" : "movies"][a.series ? "name" : "title"];
+            const bField = b[b.series ? "series" : "movies"][b.series ? "name" : "title"];
+
+            return aField.localeCompare(bField);
+          }
+
+          if (input.orderBy.field === "date") {
+            // return null for series because getting the last released episode is a pain
+            const aField = a.movies ? a.movies.release_date : null;
+            const bField = b.movies ? b.movies.release_date : null;
+
+            if (input.orderBy.order === "asc") {
+              if (aField > bField) {
+                return 1;
+              } else {
+                return -1;
+              }
+            } else if (input.orderBy.order === "desc") {
+              if (aField < bField) {
+                return 1;
+              } else {
+                return -1;
+              }
+            }
+          }
+
+          if (input.orderBy.order === "asc") {
+            if (a[input.orderBy.field] > b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          } else if (input.orderBy.order === "desc") {
+            if (a[input.orderBy.field] < b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+          return 0;
+        });
+
         watchlist.WatchlistItem = paginate(watchlist?.WatchlistItem, input.pageSize, input.page);
 
         if (ctx?.session?.user) {
@@ -57,12 +150,12 @@ export const watchlistRouter = router({
             return { ...item, watched: false };
           });
         }
-      }
 
-      return {
-        ...watchlist,
-        pagesAmount: Math.ceil(watchlistLength / input.pageSize),
-      };
+        return {
+          ...watchlist,
+          pagesAmount: Math.ceil(watchlistLength / input.pageSize),
+        };
+      }
     }),
 
   checkItemInWatchlist: protectedProcedure

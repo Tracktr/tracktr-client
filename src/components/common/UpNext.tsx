@@ -37,7 +37,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
     onMutate: (e) => {
-      setCurrentLoadingID(e.seriesId);
+      setCurrentLoadingID(e.seriesID);
     },
     onSuccess: () => {
       toast(`Marked episode as watched`, {
@@ -94,9 +94,8 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                       className="flex text-gray-500 text-opacity-100 hover:text-green-500"
                       onClick={() =>
                         markAsWatched.mutate({
-                          episodeNumber: item.episode_number,
-                          seasonNumber: item.season_number,
-                          seriesId: item.series.id,
+                          episodeID: item.id,
+                          seriesID: item.series.id,
                         })
                       }
                     >

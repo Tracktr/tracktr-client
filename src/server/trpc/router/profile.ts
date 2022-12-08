@@ -84,6 +84,8 @@ export const profileRouter = router({
           take: 6,
           include: {
             series: true,
+            season: true,
+            episode: true,
           },
           orderBy: {
             datetime: "desc",
@@ -168,35 +170,78 @@ export const profileRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
+        orderBy: z.object({
+          field: z.string(),
+          order: z.string(),
+        }),
+        filter: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const episodes = await ctx.prisma.episodesHistory.findMany({
+      let episodes = await ctx.prisma.episodesHistory.findMany({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           series: true,
-        },
-        orderBy: {
-          datetime: "desc",
+          season: true,
+          episode: true,
         },
       });
 
-      const movies = await ctx.prisma.moviesHistory.findMany({
+      let movies = await ctx.prisma.moviesHistory.findMany({
         where: { user_id: ctx.session.user.profile.userId },
         include: {
           movie: true,
         },
-        orderBy: {
-          datetime: "desc",
-        },
       });
 
-      const sortedHistory = [...episodes, ...movies].sort((a, b) => {
-        if (a.datetime < b.datetime) {
-          return 1;
-        } else {
-          return -1;
+      if (input.filter === "movies") {
+        episodes = [];
+      }
+      if (input.filter === "episodes") {
+        movies = [];
+      }
+
+      const sortedHistory = [...episodes, ...movies].sort((a: any, b: any) => {
+        if (input.orderBy.field === "title") {
+          const aField = a[a.series ? "series" : "movie"][a.series ? "name" : "title"];
+          const bField = b[b.series ? "series" : "movie"][b.series ? "name" : "title"];
+
+          return aField.localeCompare(bField);
         }
+
+        if (input.orderBy.field === "date") {
+          const aField = a[a.series ? "episode" : "movie"][a.series ? "air_date" : "release_date"];
+          const bField = b[b.series ? "episode" : "movie"][b.series ? "air_date" : "release_date"];
+
+          if (input.orderBy.order === "asc") {
+            if (aField > bField) {
+              return 1;
+            } else {
+              return -1;
+            }
+          } else if (input.orderBy.order === "desc") {
+            if (aField < bField) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+        }
+
+        if (input.orderBy.order === "asc") {
+          if (a[input.orderBy.field] > b[input.orderBy.field]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        } else if (input.orderBy.order === "desc") {
+          if (a[input.orderBy.field] < b[input.orderBy.field]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
+        return 0;
       });
 
       return {

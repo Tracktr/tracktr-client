@@ -90,6 +90,8 @@ export const dashboardRouter = router({
       where: { user_id: ctx.session.user.profile.userId },
       include: {
         series: true,
+        season: true,
+        episode: true,
       },
       orderBy: {
         datetime: "desc",
@@ -102,7 +104,7 @@ export const dashboardRouter = router({
         const season = await ctx.prisma.seasons.findFirst({
           where: {
             series_id: lastEpisode.series_id,
-            season_number: lastEpisode.season_number,
+            season_number: lastEpisode.season.season_number,
           },
           include: {
             episodes: true,
@@ -113,8 +115,8 @@ export const dashboardRouter = router({
         // Removes all episodes that don't have a next episode
         const nextEpisode = season?.episodes.filter((ep) => {
           if (
-            ep.episode_number === lastEpisode.episode_number + 1 &&
-            ep.season_number === lastEpisode.season_number &&
+            ep.episode_number === lastEpisode.episode.episode_number + 1 &&
+            ep.season_number === lastEpisode.season.season_number &&
             ep?.air_date !== null &&
             ep?.air_date <= new Date()
           ) {
@@ -133,7 +135,7 @@ export const dashboardRouter = router({
           const nextSeason = await ctx.prisma.seasons.findFirst({
             where: {
               series_id: lastEpisode.series_id,
-              season_number: lastEpisode.season_number + 1,
+              season_number: lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1,
             },
             include: {
               episodes: true,
@@ -144,7 +146,7 @@ export const dashboardRouter = router({
           const nextEpisode = nextSeason?.episodes.filter((ep) => {
             if (
               ep.episode_number === 1 &&
-              ep.season_number === lastEpisode.season_number + 1 &&
+              ep.season_number === (lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1) &&
               ep?.air_date !== null &&
               ep?.air_date <= new Date()
             ) {
