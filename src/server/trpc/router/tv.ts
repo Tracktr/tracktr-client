@@ -13,7 +13,7 @@ export const tvRouter = router({
     .query(async ({ ctx, input }) => {
       const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
       url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-      url.searchParams.append("append_to_response", "credits,watch/providers,videos");
+      url.searchParams.append("append_to_response", "credits,watch/providers,videos,recommendations");
       if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
 
       const res = await fetch(url);
