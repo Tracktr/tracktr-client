@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ImSpinner2 } from "react-icons/im";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
@@ -108,10 +109,17 @@ const ProfilePage = () => {
                   <button
                     className="px-8 py-3 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
                     type="submit"
+                    disabled={isLoading}
                   >
-                    Save Settings
+                    {isLoading ? (
+                      <div className="flex items-center gap-5">
+                        <ImSpinner2 className="animate-spin" />
+                        <div>Saving...</div>
+                      </div>
+                    ) : (
+                      <div>Save Settings</div>
+                    )}
                   </button>
-                  {isLoading && <p className="ml-4">Saving...</p>}
                 </div>
               </form>
             </div>
