@@ -173,6 +173,30 @@ const HistoryPage = () => {
               status={isRefetching ? "loading" : historyStatus}
               refetch={refetch}
             />
+
+            {(history?.history || [])?.length > 6 && !isRefetching && historyStatus === "success" && (
+              <div className="flex items-center justify-center gap-4 m-5 align-middle">
+                <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                  Previous page
+                </button>
+                <div className="flex items-center gap-4 mx-6">
+                  <button onClick={previousPage} className="p-2 text-xs text-gray-200">
+                    {page > 1 && page - 1}
+                  </button>
+                  <div>{page}</div>
+                  <button onClick={nextPage} className="p-2 text-xs text-gray-200">
+                    {page < Number(history?.pagesAmount) && page + 1}
+                  </button>
+                </div>
+                <button
+                  className="text-sm disabled:text-gray-500"
+                  onClick={nextPage}
+                  disabled={page >= Number(history?.pagesAmount)}
+                >
+                  Next page
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}
