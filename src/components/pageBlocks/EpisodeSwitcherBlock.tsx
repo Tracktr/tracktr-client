@@ -18,8 +18,6 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
   const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
 
-  console.log("HI", seasons);
-
   const hasPreviousEpisode = () => {
     return Number(episodeNumber) > 1 ? true : false;
   };

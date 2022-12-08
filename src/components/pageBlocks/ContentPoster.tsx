@@ -1,6 +1,7 @@
 import { useScroll, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { PosterImage } from "../../utils/generateImages";
@@ -78,12 +79,16 @@ const ContentPoster = ({
           }}
           className="m-auto border-4 rounded-md border-primaryBackground"
         >
-          <Image
-            alt={"Poster image for:" + title}
-            width="208"
-            height="311"
-            src={PosterImage({ path: poster, size: "lg" })}
-          />
+          <Link href={`/tv/${id}`}>
+            <a>
+              <Image
+                alt={"Poster image for:" + title}
+                width="208"
+                height="311"
+                src={PosterImage({ path: poster, size: "lg" })}
+              />
+            </a>
+          </Link>
         </motion.div>
 
         {session.status === "authenticated" ? (

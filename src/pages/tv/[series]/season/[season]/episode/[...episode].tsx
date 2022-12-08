@@ -76,6 +76,7 @@ const EpisodePage = () => {
                 score={episodeData.vote_average}
                 air_date={episodeData.air_date}
                 episode={{
+                  base_url: `/tv/${seriesID}`,
                   season_number: episodeData.season_number,
                   episode_number: episodeData.episode_number,
                 }}

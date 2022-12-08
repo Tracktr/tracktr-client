@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AiFillStar } from "react-icons/ai";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
@@ -13,6 +14,7 @@ const ContentTitle = ({
   gender,
 }: {
   episode?: {
+    base_url: string;
     season_number: number;
     episode_number: number;
   };
@@ -35,7 +37,22 @@ const ContentTitle = ({
 
           <div>
             {episode && (
-              <div className="flex">
+              <div className="flex gap-2">
+                <Link href={`${episode.base_url}/season/${episode.season_number}`}>
+                  <a
+                    title="To season overview"
+                    style={{
+                      background: theme_color?.hex,
+                    }}
+                    className={`
+                            inline-block px-3 py-1 text-xs rounded-full       
+                            ${theme_color.isDark && "text-white"}
+                            ${theme_color.isLight && "text-primaryBackground"}
+                          `}
+                  >
+                    Season {episode.season_number}
+                  </a>
+                </Link>
                 <span
                   style={{
                     background: theme_color?.hex,
@@ -46,7 +63,7 @@ const ContentTitle = ({
                             ${theme_color.isLight && "text-primaryBackground"}
                           `}
                 >
-                  {episode.season_number}x{episode.episode_number}
+                  Episode {episode.episode_number}
                 </span>
               </div>
             )}
