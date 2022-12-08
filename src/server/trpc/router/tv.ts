@@ -41,18 +41,22 @@ export const tvRouter = router({
       });
 
       if (ctx && input.seriesID) {
-        const episodesWatched = await ctx.prisma.$queryRaw`
-          SELECT CAST(COUNT(DISTINCT EpisodesHistory.episode_id, EpisodesHistory.season_id) as UNSIGNED)
-          as "count"
-          FROM EpisodesHistory
-          WHERE series_id = ${input.seriesID}
-          AND user_id = ${ctx.session?.user?.id}
-        `;
+        const episodesWatched = await ctx.prisma.episodesHistory.findMany({
+          where: {
+            series_id: input.seriesID,
+            user_id: ctx.session?.user?.id,
+            NOT: {
+              season: {
+                season_number: 0,
+              },
+            },
+          },
+        });
 
         if (episodesWatched) {
           return {
             ...json,
-            number_of_episodes_watched: episodesWatched,
+            number_of_episodes_watched: [{ count: episodesWatched.length }],
             theme_color: color,
             reviews: databaseSeries?.SeriesReviews || [],
           };
