@@ -23,6 +23,14 @@ export const episodeRouter = router({
 
       const episode = await fetch(url).then((res) => res.json());
 
+      if (episode?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: episode.status_message,
+          cause: episode.status_code,
+        });
+      }
+
       const databaseEpisodes = await ctx.prisma.episodes.findFirst({
         where: { id: episode.id },
         include: {
@@ -77,6 +85,14 @@ export const episodeRouter = router({
         url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
         const show = await fetch(url).then((res) => res.json());
+
+        if (show?.status_code) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: show.status_message,
+            cause: show.status_code,
+          });
+        }
 
         const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
