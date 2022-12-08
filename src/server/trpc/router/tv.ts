@@ -262,7 +262,7 @@ const saveHistory = async ({
     const season = await fetch(seasonUrl).then((res) => res.json());
 
     if (season?.status_code) {
-      console.error("Failed to fetch season", seriesID, seasonNumber);
+      console.error("Failed to fetch season", seriesID, j);
     }
 
     if (season.season_number === 0) continue;
