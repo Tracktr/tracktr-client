@@ -2,6 +2,7 @@ import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
 import createNewSeries from "../../../utils/createNewSeries";
+import { TRPCError } from "@trpc/server";
 
 export const tvRouter = router({
   seriesById: publicProcedure
