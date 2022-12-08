@@ -1,7 +1,6 @@
 import { useScroll, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import ConditionalLink from "../../utils/ConditionalLink";

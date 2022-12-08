@@ -2,6 +2,7 @@ import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { TmdbEpisode } from "../../../types/tmdb";
 import createNewSeries from "../../../utils/createNewSeries";
+import { TRPCError } from "@trpc/server";
 
 export const seasonRouter = router({
   seasonByID: publicProcedure
@@ -119,7 +120,11 @@ export const seasonRouter = router({
             }),
           });
         } catch (error) {
-          console.error(error);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Could not add to history",
+            cause: error,
+          });
         }
       }
     }),
@@ -206,7 +211,7 @@ const saveHistory = async ({
 
       results.push(item);
     } catch (error) {
-      console.error(error);
+      console.error("Could not save series to database ", error);
     }
   }
 

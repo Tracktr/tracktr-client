@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete, MdOpenInNew } from "react-icons/md";
 import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
@@ -38,6 +38,11 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
       });
       watchHistory.refetch();
     },
+    onError: () => {
+      toast(`Failed to remove ${name} from watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
 
   const removeFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
@@ -49,6 +54,11 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       watchHistory.refetch();
+    },
+    onError: () => {
+      toast(`Failed to remove ${name} from watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 
