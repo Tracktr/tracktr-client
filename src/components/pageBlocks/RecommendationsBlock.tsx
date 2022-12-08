@@ -10,11 +10,11 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
   console.log(recommendations);
 
   return (
-    <div className="mt-32">
-      <p className="px-4 pb-1 text-3xl italic font-normal opacity-20">Recommended {type}</p>
-      <div className="grid w-full grid-cols-6">
-        {recommendations.results.length > 0 &&
-          recommendations.results.slice(0, 6).map((recommendation: any) => {
+    recommendations.results.length > 6 && (
+      <div className="mt-32">
+        <p className="px-4 pb-1 text-3xl italic font-normal opacity-20">Recommended {type}</p>
+        <div className="grid w-full grid-cols-6">
+          {recommendations.results.slice(0, 6).map((recommendation: any) => {
             const image = BackdropImage({
               path: recommendation.backdrop_path,
               size: "lg",
@@ -38,8 +38,9 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
               </Link>
             );
           })}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
