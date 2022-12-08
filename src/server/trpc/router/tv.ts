@@ -146,7 +146,11 @@ export const tvRouter = router({
             }),
           });
         } catch (error) {
-          console.error(error);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Could not add to history",
+            cause: error,
+          });
         }
       }
     }),
@@ -238,7 +242,7 @@ const saveHistory = async ({
 
         results.push(item);
       } catch (error) {
-        console.error(error);
+        console.error("Could not save series to database ", error);
       }
     }
   }

@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import createNewSeries from "../../../utils/createNewSeries";
 import paginate from "../../../utils/paginate";
@@ -155,6 +156,11 @@ export const watchlistRouter = router({
           ...watchlist,
           pagesAmount: Math.ceil(watchlistLength / input.pageSize),
         };
+      } else {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No watchlist items found",
+        });
       }
     }),
 

@@ -1,6 +1,7 @@
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
+import { TRPCError } from "@trpc/server";
 
 export interface IMovie {
   adult: boolean;
@@ -203,6 +204,11 @@ export const movieRouter = router({
         });
 
         return result;
+      } else {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not add to history",
+        });
       }
     }),
 
