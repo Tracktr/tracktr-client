@@ -205,6 +205,14 @@ export const watchlistRouter = router({
 
       const show = await fetch(url).then((res) => res.json());
 
+      if (show?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: show.status_message,
+          cause: show.status_code,
+        });
+      }
+
       const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
       const existsInDB = await ctx.prisma.series.findFirst({

@@ -83,6 +83,7 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
         {icon()}
 
         <input
+          autoFocus={hideNav && true}
           className="w-full outline-none"
           type="text"
           placeholder="Search..."

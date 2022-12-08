@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { router, publicProcedure } from "../trpc";
 
 export const commonRouter = router({
@@ -7,6 +8,14 @@ export const commonRouter = router({
 
     const res = await fetch(url);
     const json = await res.json();
+
+    if (json?.status_code) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: json.status_message,
+        cause: json.status_code,
+      });
+    }
 
     return {
       ...json,
@@ -18,6 +27,14 @@ export const commonRouter = router({
 
     const res = await fetch(url);
     const json = await res.json();
+
+    if (json?.status_code) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: json.status_message,
+        cause: json.status_code,
+      });
+    }
 
     return {
       ...json,

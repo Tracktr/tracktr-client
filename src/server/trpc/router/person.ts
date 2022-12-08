@@ -1,6 +1,7 @@
 import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
+import { TRPCError } from "@trpc/server";
 
 export const personRouter = router({
   personById: publicProcedure
@@ -17,6 +18,14 @@ export const personRouter = router({
 
       const res = await fetch(url);
       const json = await res.json();
+
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
 
       const color = await convertImageToPrimaryColor({ image: json.profile_path });
 

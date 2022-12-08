@@ -1,5 +1,6 @@
 import { publicProcedure } from "../trpc";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const searchRouter = publicProcedure
   .input(
@@ -22,6 +23,14 @@ export const searchRouter = publicProcedure
 
     const res = await fetch(url);
     const json = await res.json();
+
+    if (json?.status_code) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: json.status_message,
+        cause: json.status_code,
+      });
+    }
 
     // TODO: specifically for movie
     // if (ctx?.session?.user && type === "movie") {

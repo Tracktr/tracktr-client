@@ -36,6 +36,14 @@ export const movieRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
+
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
       const databaseMovie = await ctx.prisma.movies.findFirst({
@@ -92,6 +100,14 @@ export const movieRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
+
       if (ctx?.session?.user) {
         json.results = await Promise.all(
           json.results.map(async (movie: IMovie) => {
@@ -139,6 +155,14 @@ export const movieRouter = router({
       const res = await fetch(url);
       const json = await res.json();
 
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
+
       if (ctx?.session?.user) {
         json.results = await Promise.all(
           json.results.map(async (movie: IMovie) => {
@@ -180,6 +204,14 @@ export const movieRouter = router({
 
       const res = await fetch(movie);
       const json = await res.json();
+
+      if (json?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: json.status_message,
+          cause: json.status_code,
+        });
+      }
 
       const newMovie = await ctx.prisma.movies.upsert({
         where: {
