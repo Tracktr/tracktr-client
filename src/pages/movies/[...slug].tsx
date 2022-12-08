@@ -20,7 +20,7 @@ const MoviePage = () => {
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
 
   return (
-    <LoadingPageComponents status={status}>
+    <LoadingPageComponents status={status} notFound>
       {() => (
         <>
           <Head>

@@ -40,7 +40,7 @@ const EpisodePage = () => {
   );
 
   return (
-    <LoadingPageComponents status={episodeStatus}>
+    <LoadingPageComponents status={episodeStatus} notFound>
       {() => (
         <>
           <Head>

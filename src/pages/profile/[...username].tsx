@@ -42,7 +42,7 @@ const PublicProfile = () => {
   });
 
   return (
-    <LoadingPageComponents status={profileStatus}>
+    <LoadingPageComponents status={profileStatus} notFound>
       {() => (
         <>
           <Head>
