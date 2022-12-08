@@ -251,7 +251,7 @@ export const watchlistRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const watchlistItem = ctx.prisma.watchlistItem.delete({
+      const watchlistItem = await ctx.prisma.watchlistItem.delete({
         where: {
           id: input.id,
         },
