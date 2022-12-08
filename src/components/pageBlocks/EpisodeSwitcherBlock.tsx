@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
 
 interface EpisodeSwitcherBlockProps {
@@ -17,8 +18,27 @@ interface EpisodeSwitcherBlockProps {
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
   const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
-  const previousSeason =
-    Number(episodeNumber) <= 1 && seasons.filter((season: any) => season.season_number == Number(seasonNumber) - 1)[0];
+  const [previousSeason, setPreviousSeason] = useState<
+    | false
+    | {
+        air_date: string;
+        episode_count: number;
+        id: number;
+        name: string;
+        overview: string;
+        poster_path: string;
+        season_number: number;
+      }
+  >();
+
+  useEffect(() => {
+    if (router.isReady) {
+      setPreviousSeason(
+        Number(episodeNumber) <= 1 &&
+          seasons.filter((season: any) => season.season_number == Number(seasonNumber) - 1)[0]
+      );
+    }
+  }, [router.isReady, episodeNumber, seasonNumber, seasons]);
 
   const hasPreviousEpisode = () => {
     if (previousSeason) {
