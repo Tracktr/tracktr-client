@@ -165,6 +165,17 @@ export const profileRouter = router({
 
       return user;
     }),
+
+  deleteProfile: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.prisma.user.delete({
+      where: {
+        id: ctx.session.user.profile.userId,
+      },
+    });
+
+    return user;
+  }),
+
   watchHistory: protectedProcedure
     .input(
       z.object({

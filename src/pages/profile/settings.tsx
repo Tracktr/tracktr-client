@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
@@ -57,20 +58,21 @@ const ProfilePage = () => {
             <div className="p-4 mx-4 mt-16 text-white rounded-md md:max-w-md bg-zinc-900">
               <form onSubmit={onSubmit}>
                 <p className="pb-6 text-2xl font-bold">Settings</p>
-                <label className="flex items-center w-full pb-3">
+
+                <label className="flex items-center w-full">
                   <span className="w-1/2">Include 18+ content</span>
                   <input
                     type="checkbox"
-                    className="w-6 h-6 ml-auto rounded-md outline-none text-primary"
+                    className="w-6 h-6 my-1 ml-auto rounded-md outline-none text-primary"
                     onChange={() => setAdult(!adult)}
                     checked={adult}
                   />
                 </label>
 
-                <label className="flex items-center w-full pb-3">
+                <label className="flex items-center w-full">
                   <span className="w-1/2">Language</span>
                   <select
-                    className="w-1/2 px-2 py-1 ml-auto rounded-md text-primaryBackground"
+                    className="w-1/2 px-2 py-1 my-1 ml-auto rounded-md text-primaryBackground"
                     onChange={(e) => setSelectedLanguage(e.target.value)}
                     value={selectedLanguage}
                   >
@@ -89,7 +91,7 @@ const ProfilePage = () => {
                 <label className="flex items-center w-full">
                   <span className="w-1/2">Region</span>
                   <select
-                    className="w-1/2 px-2 py-1 ml-auto rounded-md text-primaryBackground"
+                    className="w-1/2 px-2 py-1 my-1 ml-auto rounded-md text-primaryBackground"
                     onChange={(e) => setSelectedLocation(e.target.value)}
                     value={selectedLocation}
                   >
@@ -105,7 +107,7 @@ const ProfilePage = () => {
                   </select>
                 </label>
 
-                <div className="flex items-center mt-12">
+                <div className="flex items-center w-full mt-12">
                   <button
                     className="px-8 py-3 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
                     type="submit"
@@ -120,6 +122,9 @@ const ProfilePage = () => {
                       <div>Save Settings</div>
                     )}
                   </button>
+                  <Link href="/profile/delete">
+                    <a className="ml-auto text-gray-400">Delete account</a>
+                  </Link>
                 </div>
               </form>
             </div>
