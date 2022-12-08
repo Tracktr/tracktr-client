@@ -22,18 +22,15 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
 
             return (
               <Link href={`/${type}/${recommendation.id}`} key={recommendation.id}>
-                <a>
-                  <div
-                    key={recommendation.id}
-                    className="relative flex items-end w-full h-52"
-                    style={{
-                      background: `linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(26,26,26,1) 100%), url(${image})`,
-                      backgroundPosition: "center center",
-                      backgroundSize: "cover",
-                    }}
-                  >
-                    <p className="pb-4 mx-4 truncate overflow-ellipsis">{recommendation.title}</p>
-                  </div>
+                <a
+                  className="relative flex items-end w-full h-52 group"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(26,26,26,1) 100%), url(${image})`,
+                    backgroundPosition: "center center",
+                    backgroundSize: "cover",
+                  }}
+                >
+                  <p className="pb-4 mx-4 truncate overflow-ellipsis">{recommendation.title}</p>
                 </a>
               </Link>
             );
