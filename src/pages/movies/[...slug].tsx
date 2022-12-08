@@ -12,6 +12,7 @@ import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
+import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlock";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -66,6 +67,7 @@ const MoviePage = () => {
               <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
+          <RecommendationsBlock type="movies" recommendations={data.recommendations} />
         </>
       )}
     </LoadingPageComponents>
