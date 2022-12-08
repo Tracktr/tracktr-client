@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
 
 interface EpisodeSwitcherBlockProps {
@@ -14,30 +15,76 @@ interface EpisodeSwitcherBlockProps {
   }[];
 }
 
+interface IPrevNextSeason {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+}
+
 const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   const router = useRouter();
-  const { seriesID, seasonID, episodeID } = router.query;
+  const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
+  const [currentSeason, setCurrentSeason] = useState<
+    | {
+        air_date: string;
+        episode_count: number;
+        id: number;
+        name: string;
+        overview: string;
+        poster_path: string;
+        season_number: number;
+      }
+    | undefined
+  >();
+  const [previousSeason, setPreviousSeason] = useState<false | IPrevNextSeason>();
+  const [nextSeason, setNextSeason] = useState<false | IPrevNextSeason>();
+
+  useEffect(() => {
+    if (router.isReady) {
+      setCurrentSeason(seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0]);
+      setPreviousSeason(
+        Number(episodeNumber) <= 1 &&
+          seasons.filter((season: any) => season.season_number == Number(seasonNumber) - 1)[0]
+      );
+      setNextSeason(
+        currentSeason?.episode_count === Number(episodeNumber) &&
+          seasons.filter((season: any) => season.season_number == Number(seasonNumber) + 1)[0]
+      );
+    }
+  }, [router.isReady, episodeNumber, seasonNumber, seasons, currentSeason]);
 
   const hasPreviousEpisode = () => {
-    return Number(episodeID) > 1 ? true : false;
+    return Number(episodeNumber) > 1 || previousSeason;
   };
 
   const hasNextEpisode = () => {
-    const episode_count = seasons[`${Number(seasonID) > 0 ? Number(seasonID) - 1 : Number(seasonID)}`]?.episode_count;
+    const currentSeason = seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0];
 
-    if (Number(episode_count) > Number(episodeID)) {
+    if (Number(currentSeason?.episode_count) > Number(episodeNumber)) {
+      console.log("episode count > episode number");
+      return true;
+    } else if (nextSeason) {
       return true;
     }
   };
 
   const previousEpisodePath = () => {
-    const previousEpisode = parseInt(episodeID as string) - 1;
-    return `/tv/${seriesID}/season/${seasonID}/episode/${previousEpisode}`;
+    if (previousSeason) {
+      return `/tv/${seriesID}/season/${previousSeason.season_number}/episode/${Number(previousSeason.episode_count)}`;
+    }
+    return `/tv/${seriesID}/season/${seasonNumber}/episode/${Number(episodeNumber) - 1}`;
   };
 
   const nextEpisodePath = () => {
-    const nextEpisode = parseInt(episodeID as string) + 1;
-    return `/tv/${seriesID}/season/${seasonID}/episode/${nextEpisode}`;
+    if (nextSeason) {
+      return `/tv/${seriesID}/season/${nextSeason.season_number}/episode/1`;
+    }
+
+    return `/tv/${seriesID}/season/${seasonNumber}/episode/${Number(episodeNumber) + 1}`;
   };
 
   return (

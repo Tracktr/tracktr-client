@@ -1,8 +1,10 @@
 import { useScroll, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
+import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import ReviewButton from "../common/ReviewButton";
 import WatchlistButton from "../common/WatchlistButton";
@@ -78,12 +80,14 @@ const ContentPoster = ({
           }}
           className="m-auto border-4 rounded-md border-primaryBackground"
         >
-          <Image
-            alt={"Poster image for:" + title}
-            width="208"
-            height="311"
-            src={PosterImage({ path: poster, size: "lg" })}
-          />
+          <ConditionalLink href={`/tv/${id}`} condition={episode || season}>
+            <Image
+              alt={"Poster image for:" + title}
+              width="208"
+              height="311"
+              src={PosterImage({ path: poster, size: "lg" })}
+            />
+          </ConditionalLink>
         </motion.div>
 
         {session.status === "authenticated" ? (
