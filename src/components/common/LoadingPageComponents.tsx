@@ -3,21 +3,27 @@ import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingPosters from "../posters/LoadingPoster";
 import NProgress from "nprogress";
+import { useRouter } from "next/router";
 
 interface ILoadingPageComponents {
   status: "loading" | "error" | "success" | "idle";
   children: () => any;
   posters?: boolean;
+  notFound?: boolean;
 }
 
-const LoadingPageComponents = ({ status, children, posters }: ILoadingPageComponents) =>
-  useMemo(() => {
+const LoadingPageComponents = ({ status, children, posters, notFound }: ILoadingPageComponents) => {
+  const router = useRouter();
+
+  return useMemo(() => {
     typeof window !== "undefined" && NProgress.configure({ showSpinner: false });
 
-    // TODO: Error component
     if (status === "error") {
       typeof window !== "undefined" && NProgress.done();
-      return <p className="max-w-6xl px-4 py-24 m-auto">Error</p>;
+
+      if (notFound) router.push("/404");
+      else if (posters) return <div>Something went wrong, try reloading the page or going back.</div>;
+      else router.push("500");
     }
 
     if (status === "loading") {
@@ -45,6 +51,7 @@ const LoadingPageComponents = ({ status, children, posters }: ILoadingPageCompon
     }
 
     return <></>;
-  }, [status, children, posters]);
+  }, [status, children, posters, router]);
+};
 
 export default LoadingPageComponents;

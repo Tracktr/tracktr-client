@@ -39,7 +39,7 @@ const TVPage = () => {
   );
 
   return (
-    <LoadingPageComponents status={status}>
+    <LoadingPageComponents status={status} notFound>
       {() => (
         <>
           <Head>

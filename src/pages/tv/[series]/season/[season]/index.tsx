@@ -57,7 +57,7 @@ const TVPage = () => {
   };
 
   return (
-    <LoadingPageComponents status={seasonStatus}>
+    <LoadingPageComponents status={seasonStatus} notFound>
       {() => (
         <>
           <Head>
