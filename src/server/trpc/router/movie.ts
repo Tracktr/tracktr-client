@@ -62,7 +62,7 @@ export const movieRouter = router({
             id: json.id,
             title: json.title,
             poster: json.poster_path,
-            release_date: json.release_date ? new Date(e.release_date) : null,
+            release_date: json.release_date ? new Date(json.release_date) : null,
           },
         });
       }
@@ -189,7 +189,7 @@ export const movieRouter = router({
           id: input?.movieId,
           title: json.title,
           poster: json.poster_path,
-          release_date: json.release_date ? new Date(e.release_date) : null,
+          release_date: json.release_date ? new Date(json.release_date) : null,
         },
       });
 

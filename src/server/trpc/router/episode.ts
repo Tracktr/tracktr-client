@@ -107,9 +107,9 @@ export const episodeRouter = router({
           return await ctx.prisma.episodesHistory.create({
             data: {
               datetime: new Date(),
-              user_id: ctx?.session?.user?.id as string,
+              user_id: ctx?.session?.user?.id,
               series_id: input.seriesID,
-              season_id: existsInDB.Seasons?.id,
+              season_id: Number(existsInDB.Seasons?.id),
               episode_id: input.episodeID,
             },
           });

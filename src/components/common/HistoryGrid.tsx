@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
-import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { IoIosRemove } from "react-icons/io";
 import { toast } from "react-toastify";
 
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {

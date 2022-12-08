@@ -1,7 +1,7 @@
 import { ImSpinner2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
-import { MdBookmarkAdd, MdBookmarkAdded, MdBookmarkRemove } from "react-icons/md";
+import { MdBookmarkAdd, MdBookmarkRemove } from "react-icons/md";
 import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";

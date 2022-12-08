@@ -42,7 +42,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
       setState("loading");
     },
     onSuccess: () => {
-      toast(`Added episode ${episodeID} to watched`, {
+      toast(`Added episode ${episode.episodeNumber} to watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchProgression && refetchProgression();
@@ -55,7 +55,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
       setState("loading");
     },
     onSuccess: () => {
-      toast(`Removed episode ${episodeID} from watched`, {
+      toast(`Removed episode ${episode.episodeNumber} from watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchProgression && refetchProgression();
