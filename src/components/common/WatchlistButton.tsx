@@ -1,10 +1,10 @@
 import { ImSpinner2 } from "react-icons/im";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
-import { MdBookmarkAdd, MdBookmarkAdded, MdBookmarkRemove } from "react-icons/md";
 import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { BsBookmarkCheck, BsFillBookmarkDashFill } from "react-icons/bs";
 
 interface IWatchlistButtonProps {
   themeColor: IThemeColor;
@@ -78,12 +78,12 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
           {data?.inWatchlist ? (
             <span className="px-3 py-2" data-tip="Remove from Watchlist">
               <ReactTooltip />
-              <MdBookmarkRemove className="text-2xl" />
+              <BsFillBookmarkDashFill className="text-2xl" />
             </span>
           ) : (
             <span className="px-3 py-2" data-tip="Add to Watchlist">
               <ReactTooltip />
-              <MdBookmarkAdd className="text-2xl" />
+              <BsBookmarkCheck className="text-2xl" />
             </span>
           )}
         </button>
