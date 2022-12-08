@@ -11,22 +11,25 @@ import LoadingWatchButton from "./LoadingWatchButton";
 
 interface IWatchButtonProps {
   itemID: number;
-  episodeID: number;
-  seasonID: number;
+  episode: {
+    episodeNumber: number;
+    seasonNumber: number;
+    episodeID: number;
+    refetch: () => void;
+  };
   themeColor: IThemeColor;
   refetchProgression?: () => void;
 }
 
-const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchProgression }: IWatchButtonProps) => {
+const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [modalOpen, setModalOpen] = useState(false);
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
   const watchHistory = trpc.episode.watchHistoryByID.useQuery(
     {
-      episodeNumber: Number(episodeID),
-      seasonNumber: Number(seasonID),
-      seriesId: itemID,
+      episodeID: Number(episode.episodeID),
+      seriesID: itemID,
     },
     {
       enabled: sessionStatus !== "loading",
@@ -39,7 +42,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchPr
       setState("loading");
     },
     onSuccess: () => {
-      toast(`Added episode ${episodeID} to watched`, {
+      toast(`Added episode ${episode.episodeNumber} to watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchProgression && refetchProgression();
@@ -52,7 +55,7 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchPr
       setState("loading");
     },
     onSuccess: () => {
-      toast(`Removed episode ${episodeID} from watched`, {
+      toast(`Removed episode ${episode.episodeNumber} from watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchProgression && refetchProgression();
@@ -76,9 +79,8 @@ const EpisodeWatchButton = ({ itemID, episodeID, seasonID, themeColor, refetchPr
       setState("loading");
 
       markAsWatched.mutate({
-        episodeNumber: episodeID,
-        seasonNumber: seasonID,
-        seriesId: itemID,
+        episodeID: episode.episodeID,
+        seriesID: itemID,
       });
     }
   };

@@ -17,94 +17,102 @@ import Head from "next/head";
 const TVPage = () => {
   const router = useRouter();
   const session = useSession();
-  const { tvID, seasonID } = router.query;
+  const { series: seriesID, season: seasonNumber } = router.query;
 
-  const { data: tvShow, refetch: tvRefetch } = trpc.tv.tvById.useQuery(
+  const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery(
     {
-      tvID: tvID as string,
+      seriesID: Number(seriesID),
     },
     { enabled: router.isReady }
   );
 
   const {
-    data,
-    status,
+    data: seasonData,
+    status: seasonStatus,
     refetch: seasonRefetch,
-    isRefetching,
+    isRefetching: seasonIsRefetching,
   } = trpc.season.seasonByID.useQuery(
     {
-      tvID: tvID as string,
-      seasonID: Number(seasonID),
+      seriesID: Number(seriesID),
+      seasonNumber: Number(seasonNumber),
     },
     { enabled: router.isReady }
   );
 
   const watchHistory = trpc.season.watchHistoryByID.useQuery(
     {
-      seasonNumber: Number(seasonID),
-      seriesId: Number(tvID),
+      seasonID: seasonData?.id,
+      seriesID: Number(seriesID),
     },
     {
-      enabled: session.status !== "loading",
+      enabled: session.status !== "loading" && seasonData?.id !== undefined,
       refetchOnWindowFocus: false,
     }
   );
 
   const refetch = () => {
-    tvRefetch();
+    seriesRefetch();
     seasonRefetch();
     watchHistory.refetch();
   };
 
   return (
-    <LoadingPageComponents status={status}>
+    <LoadingPageComponents status={seasonStatus}>
       {() => (
         <>
           <Head>
             <title>
-              {tvShow.name} {data.name} - Tracktr.
+              {seriesData.name} {seasonData.name} - Tracktr.
             </title>
           </Head>
 
-          <ContentBackdrop path={tvShow.backdrop_path} />
+          <ContentBackdrop path={seriesData.backdrop_path} />
 
           <ContentGrid>
             <ContentPoster
-              title={data.name}
-              poster={data.poster_path}
-              id={Number(tvID)}
-              theme_color={tvShow.theme_color}
+              title={seasonData.name}
+              poster={seasonData.poster_path}
+              id={Number(seriesID)}
+              theme_color={seriesData.theme_color}
               progression={{
-                number_of_episodes: tvShow.number_of_episodes,
-                number_of_episodes_watched: tvShow.number_of_episodes_watched,
+                number_of_episodes: seriesData.number_of_episodes,
+                number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
               season={{
                 refetch: refetch,
-                seasonID: Number(data.id),
-                seasonNumber: Number(seasonID),
+                seasonID: Number(seasonData.id),
+                seasonNumber: Number(seasonNumber),
                 watchHistory,
               }}
               refetchReviews={seasonRefetch}
             />
 
             <ContentMain>
-              <ContentTitle theme_color={tvShow.theme_color} title={data.name} score={data.vote_average} />
+              <ContentTitle
+                theme_color={seriesData.theme_color}
+                title={seasonData.name}
+                score={seasonData.vote_average}
+              />
               <ContentOverview
-                name={data.name}
-                overview={data.overview}
-                theme_color={tvShow.theme_color}
-                videos={tvShow.videos}
-                justwatch={tvShow["watch/providers"]}
+                name={seasonData.name}
+                overview={seasonData.overview}
+                theme_color={seriesData.theme_color}
+                videos={seriesData.videos}
+                justwatch={seriesData["watch/providers"]}
               />
               <EpisodesBlock
-                episodes={data.episodes}
+                episodes={seasonData.episodes}
                 refetch={refetch}
-                fetchStatus={isRefetching}
-                themeColor={tvShow.theme_color}
+                fetchStatus={seasonIsRefetching}
+                themeColor={seriesData.theme_color}
               />
-              <CastBlock cast={data.credits.cast} />
-              <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock reviews={data.reviews} refetchReviews={seasonRefetch} isRefetching={isRefetching} />
+              <CastBlock cast={seasonData.credits.cast} />
+              <CrewBlock crew={seasonData.credits.crew} />
+              <ReviewsBlock
+                reviews={seasonData.reviews}
+                refetchReviews={seasonRefetch}
+                isRefetching={seasonIsRefetching}
+              />
             </ContentMain>
           </ContentGrid>
         </>

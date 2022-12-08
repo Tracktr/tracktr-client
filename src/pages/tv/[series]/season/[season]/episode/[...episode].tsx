@@ -15,11 +15,11 @@ import Head from "next/head";
 
 const EpisodePage = () => {
   const router = useRouter();
-  const { tvID, seasonID, episodeID } = router.query;
+  const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
 
-  const { data: tvShow, refetch } = trpc.tv.tvById.useQuery(
+  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery(
     {
-      tvID: tvID as string,
+      seriesID: Number(seriesID),
     },
     { enabled: router.isReady }
   );
@@ -29,11 +29,11 @@ const EpisodePage = () => {
     status: episodeStatus,
     refetch: episodeRefetch,
     isRefetching,
-  } = trpc.episode.episodeById.useQuery(
+  } = trpc.episode.episodeByID.useQuery(
     {
-      tvID: tvID as string,
-      seasonID: seasonID as string,
-      episodeNumber: episodeID ? episodeID[0] : undefined,
+      seriesID: Number(seriesID),
+      seasonNumber: Number(seasonNumber),
+      episodeNumber: Number(episodeNumber),
     },
     { enabled: router.isReady }
   );
@@ -44,34 +44,34 @@ const EpisodePage = () => {
         <>
           <Head>
             <title>
-              {tvShow.name} {episodeData.season_number}x{episodeData.episode_number} - {episodeData.name} - Tracktr.
+              {seriesData.name} {episodeData.season_number}x{episodeData.episode_number} - {episodeData.name} - Tracktr.
             </title>
           </Head>
 
-          <ContentBackdrop path={tvShow.backdrop_path} />
+          <ContentBackdrop path={seriesData.backdrop_path} />
 
           <ContentGrid>
             <ContentPoster
               title={episodeData.name}
-              poster={tvShow.poster_path}
-              id={Number(tvID)}
-              theme_color={tvShow.theme_color}
+              poster={seriesData.poster_path}
+              id={Number(seriesID)}
+              theme_color={seriesData.theme_color}
               progression={{
-                number_of_episodes: tvShow.number_of_episodes,
-                number_of_episodes_watched: tvShow.number_of_episodes_watched,
+                number_of_episodes: seriesData.number_of_episodes,
+                number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
               episode={{
-                episodeNumber: Number(episodeID),
+                seasonNumber: Number(seasonNumber),
+                episodeNumber: Number(episodeNumber),
                 episodeID: Number(episodeData.id),
                 refetch,
-                seasonID: Number(seasonID),
               }}
               refetchReviews={episodeRefetch}
             />
 
             <ContentMain>
               <ContentTitle
-                theme_color={tvShow.theme_color}
+                theme_color={seriesData.theme_color}
                 title={episodeData.name}
                 score={episodeData.vote_average}
                 air_date={episodeData.air_date}
@@ -83,15 +83,15 @@ const EpisodePage = () => {
               <ContentOverview
                 name={episodeData.name}
                 overview={episodeData.overview}
-                theme_color={tvShow.theme_color}
-                videos={tvShow.videos}
-                justwatch={tvShow["watch/providers"]}
+                theme_color={seriesData.theme_color}
+                videos={seriesData.videos}
+                justwatch={seriesData["watch/providers"]}
               />
 
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
-              <EpisodeSwitcherBlock seasons={tvShow.seasons} />
+              <EpisodeSwitcherBlock seasons={seriesData.seasons} />
             </ContentMain>
           </ContentGrid>
         </>

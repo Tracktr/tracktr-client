@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
-import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
 
 export interface ITraktData {
@@ -37,8 +36,6 @@ const ImportPage = () => {
   const session = useSession();
   const [currentPercentage, setCurrentPercentage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>();
-
-  const { data } = trpc.profile.profileBySession.useQuery();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -103,8 +100,6 @@ const ImportPage = () => {
       <Head>
         <title>Import data from Trakt.tv - Tracktr.</title>
       </Head>
-
-      <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Import" />
 
       <section className="py-10 text-white sm:py-16 lg:py-24">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">

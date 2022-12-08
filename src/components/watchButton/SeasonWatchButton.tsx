@@ -10,13 +10,21 @@ import LoadingWatchButton from "./LoadingWatchButton";
 
 interface IWatchButtonProps {
   itemID: number;
+  seasonNumber: number;
   seasonID: number;
   themeColor: IThemeColor;
   refetchProgression?: () => void;
   watchHistory: any;
 }
 
-const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, watchHistory }: IWatchButtonProps) => {
+const SeasonWatchButton = ({
+  itemID,
+  seasonNumber,
+  seasonID,
+  themeColor,
+  refetchProgression,
+  watchHistory,
+}: IWatchButtonProps) => {
   const { status: sessionStatus } = useSession();
   const [state, setState] = useState<"watched" | "unwatched" | "loading">("loading");
 
@@ -61,8 +69,8 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
       setState("loading");
 
       markAsWatched.mutate({
-        seasonNumber: seasonID,
-        seriesId: itemID,
+        seasonNumber: seasonNumber,
+        seriesID: itemID,
       });
     }
   };
@@ -72,8 +80,8 @@ const SeasonWatchButton = ({ itemID, seasonID, themeColor, refetchProgression, w
       setState("loading");
 
       removeFromWatched.mutate({
-        seasonNumber: seasonID,
-        seriesId: itemID,
+        seasonID: seasonID,
+        seriesID: itemID,
       });
     }
   };
