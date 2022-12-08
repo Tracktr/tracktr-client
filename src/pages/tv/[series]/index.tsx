@@ -14,6 +14,7 @@ import ContentMain from "../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
 
 const TVPage = () => {
   const router = useRouter();
@@ -92,6 +93,7 @@ const TVPage = () => {
               <ReviewsBlock reviews={seriesData.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
             </ContentMain>
           </ContentGrid>
+          <RecommendationsBlock type="tv" recommendations={seriesData.recommendations} />
         </>
       )}
     </LoadingPageComponents>
