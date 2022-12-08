@@ -25,14 +25,14 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
                 <a>
                   <div
                     key={recommendation.id}
-                    className="relative w-full h-52"
+                    className="relative flex items-end w-full h-52"
                     style={{
-                      backgroundImage: `url(${image})`,
+                      background: `linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(26,26,26,1) 100%), url(${image})`,
                       backgroundPosition: "center center",
                       backgroundSize: "cover",
                     }}
                   >
-                    <p>{recommendation.title}</p>
+                    <p className="pb-4 mx-4 truncate overflow-ellipsis">{recommendation.title}</p>
                   </div>
                 </a>
               </Link>
