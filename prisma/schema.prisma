@@ -224,6 +224,7 @@ model Watchlist {
 model WatchlistItem {
   id           String    @id @default(cuid())
   watchlist_id String
+  created      DateTime  @default(now())
   movie_id     Int?
   series_id    Int?
   movies       Movies?   @relation(fields: [movie_id], references: [id], onDelete: Cascade)

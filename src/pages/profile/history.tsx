@@ -161,8 +161,8 @@ const HistoryPage = () => {
                     className="border  text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">No filter</option>
-                    <option value="movies">Only Movies</option>
-                    <option value="episodes">Only Episodes</option>
+                    <option value="movies">Hide Episodes</option>
+                    <option value="episodes">Hide Movies</option>
                   </select>
                 </div>
               </div>
