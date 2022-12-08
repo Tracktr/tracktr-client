@@ -12,6 +12,7 @@ import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
+import DetailsBlock from "../../../../../../components/pageBlocks/DetailsBlock";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -89,6 +90,7 @@ const EpisodePage = () => {
                 justwatch={seriesData["watch/providers"]}
               />
 
+              <DetailsBlock releaseDate={episodeData.air_date} runtime={episodeData.runtime} />
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
