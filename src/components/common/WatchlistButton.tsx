@@ -3,7 +3,7 @@ import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import ReactTooltip from "react-tooltip";
 import { toast } from "react-toastify";
-import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { BsBookmarkCheck, BsFillBookmarkDashFill } from "react-icons/bs";
 
 interface IWatchlistButtonProps {
@@ -25,6 +25,11 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
       });
       refetch();
     },
+    onError: () => {
+      toast(`Failed to ${name} to watchlist`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
 
   const deleteFromWatchlist = trpc.watchlist.removeItem.useMutation({
@@ -33,6 +38,11 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetch();
+    },
+    onError: () => {
+      toast(`Failed to remove ${name} from watchlist`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 

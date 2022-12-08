@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { trpc } from "../../utils/trpc";
 import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
-import { IoIosRemove } from "react-icons/io";
+import { IoIosRemove, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
 
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {
@@ -25,6 +25,11 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       });
       refetch();
     },
+    onError: () => {
+      toast("Failed to remove episode from history", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
 
   const deleteMovieFromHistory = trpc.movie.removeMovieFromWatched.useMutation({
@@ -32,10 +37,15 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       setCurrentLoadingID(e.id);
     },
     onSuccess: () => {
-      toast(`Removed Movie from history`, {
+      toast(`Removed movie from history`, {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetch();
+    },
+    onError: () => {
+      toast("Failed to remove movie from history", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 

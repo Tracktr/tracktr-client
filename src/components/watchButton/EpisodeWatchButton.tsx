@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { IoIosAdd } from "react-icons/io";
+import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { MdDelete, MdOpenInNew } from "react-icons/md";
 import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
@@ -48,6 +48,11 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
       refetchProgression && refetchProgression();
       watchHistory.refetch();
     },
+    onError: () => {
+      toast(`Failed to add episode ${episode.episodeNumber} to watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
   });
 
   const removeFromWatched = trpc.episode.removeEpisodeFromWatched.useMutation({
@@ -60,6 +65,11 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
       });
       refetchProgression && refetchProgression();
       watchHistory.refetch();
+    },
+    onError: () => {
+      toast(`Failed to remove episode ${episode.episodeNumber} from watched`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
     },
   });
 
