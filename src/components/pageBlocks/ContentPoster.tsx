@@ -166,7 +166,7 @@ const ContentPoster = ({
             </ul>
             <button
               className="flex items-center justify-center w-1/2 px-4 py-2 m-auto font-bold rounded-md text-md text-primaryBackground bg-primary"
-              onClick={() => signIn()}
+              onClick={() => signIn("google")}
             >
               Sign in
             </button>

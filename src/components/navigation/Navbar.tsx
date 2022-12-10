@@ -155,7 +155,7 @@ const Navbar = () => {
                       </motion.div>
                     ) : (
                       <li className={`inline-block text-white list-none group`}>
-                        <button onClick={() => signIn()}>
+                        <button onClick={() => signIn("google")}>
                           <a className={`group-hover:text-primary px-4 py-2 inline-block`}>Sign in</a>
                         </button>
                       </li>
