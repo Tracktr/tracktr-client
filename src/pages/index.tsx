@@ -46,7 +46,7 @@ const Home: NextPage = () => {
                     </p>
 
                     <button
-                      onClick={() => signIn()}
+                      onClick={() => signIn("google")}
                       className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
                       role="button"
                     >
@@ -166,7 +166,7 @@ const Home: NextPage = () => {
 
                       <div className="flex flex-col items-start mt-8 sm:space-x-4 sm:flex-row sm:items-center lg:mt-12">
                         <button
-                          onClick={() => signIn()}
+                          onClick={() => signIn("google")}
                           title=""
                           className="inline-flex items-center justify-center px-4 py-4 text-base font-semibold text-black transition-all duration-200 border border-transparent rounded-md bg-primary"
                           role="button"

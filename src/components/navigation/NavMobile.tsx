@@ -5,7 +5,7 @@ import { navLinks } from "./Navbar";
 import { motion } from "framer-motion";
 import Logo from "../common/Logo";
 import { IoMdClose } from "react-icons/io";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
@@ -103,11 +103,15 @@ const NavMobile = ({
                 </>
               ) : (
                 <li className="text-white list-none group">
-                  <Link href="/api/auth/signin">
-                    <a onClick={toggleNavMobile} className="block px-4 py-2 text-2xl group-hover:text-primary">
-                      Sign in
-                    </a>
-                  </Link>
+                  <button
+                    className="block px-4 py-2 text-2xl group-hover:text-primary"
+                    onClick={() => {
+                      toggleNavMobile();
+                      signIn("google");
+                    }}
+                  >
+                    Sign in
+                  </button>
                 </li>
               )}
             </div>
