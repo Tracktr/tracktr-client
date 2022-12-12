@@ -207,26 +207,70 @@ export const dashboardRouter = router({
                 datetime: "desc",
               },
             },
+            MoviesReviews: {
+              take: 1,
+              include: {
+                Movies: true,
+                user: {
+                  include: {
+                    profile: true,
+                  },
+                },
+              },
+              orderBy: {
+                created: "desc",
+              },
+            },
+            SeriesReviews: {
+              take: 1,
+              orderBy: {
+                created: "desc",
+              },
+              include: {
+                Series: true,
+                user: {
+                  include: {
+                    profile: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
     });
 
     let recentHistory: any[] = [];
+    let recentMovieReviews: any[] = [];
+    let recentSeriesReviews: any[] = [];
 
     activity?.following.map((friend) => {
-      const sortedHistory = [...friend.MoviesHistory, ...friend.EpisodesHistory].sort((a, b) => {
-        if (a.datetime < b.datetime) {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
-
       recentHistory = [
         ...recentHistory,
-        ...sortedHistory.map((h) => ({
+        ...[...friend.MoviesHistory, ...friend.EpisodesHistory].map((h) => ({
           ...h,
+          friend: {
+            image: friend.image,
+            name: friend.name,
+          },
+        })),
+      ];
+
+      recentMovieReviews = [
+        ...recentMovieReviews,
+        ...friend.MoviesReviews.map((r) => ({
+          ...r,
+          friend: {
+            image: friend.image,
+            name: friend.name,
+          },
+        })),
+      ];
+
+      recentSeriesReviews = [
+        ...recentSeriesReviews,
+        ...friend.SeriesReviews.map((r) => ({
+          ...r,
           friend: {
             image: friend.image,
             name: friend.name,
@@ -245,6 +289,24 @@ export const dashboardRouter = router({
           }
         })
         ?.slice(0, 6),
+      movieReviews: recentMovieReviews
+        .sort((a, b) => {
+          if (a.datetime < b.datetime) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
+        ?.slice(0, 1),
+      seriesReviews: recentSeriesReviews
+        .sort((a, b) => {
+          if (a.datetime < b.datetime) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
+        ?.slice(0, 1),
     };
   }),
 });
