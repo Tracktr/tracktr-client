@@ -44,7 +44,6 @@ const CalendarPage = () => {
     () => ({
       ...{
         style: {
-          backgroundColor: "darkgreen",
           fontSize: "12px",
           lineHeight: "16px",
         },
