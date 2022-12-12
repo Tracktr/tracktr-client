@@ -7,6 +7,7 @@ import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Head from "next/head";
 import { useCallback } from "react";
+import { trpc } from "../../utils/trpc";
 
 const locales = {
   "en-US": enUS,
@@ -21,6 +22,8 @@ const localizer = dateFnsLocalizer({
 });
 
 const CalendarPage = () => {
+  const { data, status } = trpc.calendar.get.useQuery();
+
   const dayPropGetter = useCallback(
     (date: Date) => ({
       ...(date.getDate() === new Date().getDate() && {
@@ -45,6 +48,7 @@ const CalendarPage = () => {
 
       <div className="max-w-6xl m-auto">
         <div className="pt-24 m-auto">
+          <h1 className="my-4 text-3xl">Calendar</h1>
           <Calendar
             localizer={localizer}
             events={[
