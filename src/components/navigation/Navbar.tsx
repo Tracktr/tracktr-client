@@ -18,9 +18,10 @@ export const navLinks = [
 
 const subLinks = [
   { href: "/profile", text: "Profile" },
-  { href: "/profile/settings", text: "Settings" },
+  { href: "/calendar", text: "Calendar" },
   { href: "/profile/history", text: "History" },
   { href: "/profile/watchlist", text: "Watchlist" },
+  { href: "/profile/settings", text: "Settings" },
 ];
 
 const subMenuAnimate = {
