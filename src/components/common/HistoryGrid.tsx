@@ -82,6 +82,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                   className="relative w-[170px] group"
                   key={item.id}
                 >
+                  {item?.friend && <div>{item?.friend?.name}</div>}
                   <Link
                     href={
                       item?.movie_id
@@ -190,6 +191,10 @@ interface IHistoryItem {
   series?: ISeries;
   season?: ISeason;
   episode?: IEpisode;
+  friend?: {
+    name: string;
+    image: string;
+  };
 }
 
 export default HistoryGrid;
