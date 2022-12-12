@@ -12,13 +12,13 @@ import SearchInput from "../search/SearchInput";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const navLinks = [
-  { href: "/movies", text: "Movies", active: false },
-  { href: "/tv", text: " Series", active: false },
+  { href: "/movies", text: "Movies", active: false, userOnly: false },
+  { href: "/tv", text: " Series", active: false, userOnly: false },
+  { href: "/calendar", text: "Calendar", active: false, userOnly: true },
 ];
 
 const subLinks = [
   { href: "/profile", text: "Profile" },
-  { href: "/calendar", text: "Calendar" },
   { href: "/profile/history", text: "History" },
   { href: "/profile/watchlist", text: "Watchlist" },
   { href: "/profile/settings", text: "Settings" },
@@ -82,9 +82,16 @@ const Navbar = () => {
           <div className="grid grid-cols-3">
             <Logo textColor="text-white" dotColor="text-primary" signedIn={status === "authenticated"} />
             <ul className="items-center justify-center hidden lg:flex">
-              {navLinks.map((navItem) => (
-                <NavButton key={navItem.text} href={navItem.href} text={navItem.text} active={navItem.active} />
-              ))}
+              {navLinks
+                .filter((navItem) => navItem.userOnly === false)
+                .map((navItem) => (
+                  <NavButton key={navItem.text} href={navItem.href} text={navItem.text} active={navItem.active} />
+                ))}
+              {navLinks
+                .filter((navItem) => navItem.userOnly === true && status === "authenticated")
+                .map((navItem) => (
+                  <NavButton key={navItem.text} href={navItem.href} text={navItem.text} active={navItem.active} />
+                ))}
             </ul>
             <div className="flex items-center justify-end col-span-2 lg:col-span-1">
               <button onClick={toggleNavSearch} className="px-4 py-2 group-hover:text-primary">
