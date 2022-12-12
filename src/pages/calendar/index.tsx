@@ -48,6 +48,8 @@ const CalendarPage = () => {
         style: {
           fontSize: "12px",
           lineHeight: "16px",
+          backgroundColor: "#FAC42C",
+          color: "#000",
         },
       },
     }),
@@ -64,9 +66,9 @@ const CalendarPage = () => {
         <title>Release Calendar - Tracktr.</title>
       </Head>
 
-      <div className="max-w-6xl m-auto text-">
-        <div className="pt-24 m-auto">
-          <h1 className="my-4 text-3xl">Release calendar</h1>
+      <div className="max-w-6xl m-auto">
+        <div className="pt-16 m-auto md:pt-48">
+          <h1 className="my-4 text-4xl">Release calendar</h1>
           <Calendar
             localizer={localizer}
             events={data?.events}
