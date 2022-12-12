@@ -11,6 +11,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 import { IoIosRemove, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
+import ImageWithFallback from "./ImageWithFallback";
 
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
@@ -66,7 +67,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       {() => (
         <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: IHistoryItem) => {
+            {history.map((item: IHistoryItem, i) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
                 dateStyle: "medium",
                 timeStyle: "short",
@@ -82,7 +83,22 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                   className="relative w-[170px] group"
                   key={item.id}
                 >
-                  {item?.friend && <div>{item?.friend?.name}</div>}
+                  {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
+                    <button className="flex h-6">
+                      <ImageWithFallback
+                        unoptimized
+                        src={item?.friend?.image ? item?.friend?.image : ""}
+                        fallbackSrc="/placeholder_profile.png"
+                        width="16px"
+                        height="16px"
+                        className="rounded-full"
+                        alt="User profile image"
+                      />
+                      <p className="ml-2 text-sm">{item?.friend?.name}</p>
+                    </button>
+                  ) : (
+                    <div className="h-6" />
+                  )}
                   <Link
                     href={
                       item?.movie_id
