@@ -22,7 +22,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const CalendarPage = () => {
-  const { data, status } = trpc.calendar.get.useQuery();
+  const { data } = trpc.calendar.get.useQuery();
 
   const dayPropGetter = useCallback(
     (date: Date) => ({
@@ -40,27 +40,35 @@ const CalendarPage = () => {
     []
   );
 
+  const eventPropGetter = useCallback(
+    () => ({
+      ...{
+        style: {
+          backgroundColor: "darkgreen",
+          fontSize: "12px",
+          lineHeight: "16px",
+        },
+      },
+    }),
+    []
+  );
+
   return (
     <>
       <Head>
         <title>Calendar - Tracktr.</title>
       </Head>
 
-      <div className="max-w-6xl m-auto">
+      <div className="max-w-6xl m-auto text-">
         <div className="pt-24 m-auto">
           <h1 className="my-4 text-3xl">Calendar</h1>
           <Calendar
             localizer={localizer}
-            events={[
-              {
-                title: "Hi mom",
-                start: new Date("December 10, 2022 00:00:00"),
-                end: new Date("December 10, 2022 00:00:00"),
-              },
-            ]}
+            events={data?.events}
             style={{ height: 500 }}
             toolbar={false}
             dayPropGetter={dayPropGetter}
+            eventPropGetter={eventPropGetter}
           />
         </div>
       </div>
