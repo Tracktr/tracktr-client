@@ -44,6 +44,7 @@ export const calendarRouter = router({
               title: `${episode.Seasons?.Series?.name} ${episode.season_number}x${episode.episode_number}`,
               start: episode.air_date,
               end: episode.air_date,
+              url: `/tv/${episode.Seasons?.series_id}/season/${episode.season_number}/episode/${episode.episode_number}`,
             };
           })
         );

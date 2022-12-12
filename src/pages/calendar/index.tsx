@@ -8,6 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Head from "next/head";
 import { useCallback } from "react";
 import { trpc } from "../../utils/trpc";
+import { useRouter } from "next/router";
 
 const locales = {
   "en-US": enUS,
@@ -22,6 +23,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const CalendarPage = () => {
+  const router = useRouter();
   const { data } = trpc.calendar.get.useQuery();
 
   const dayPropGetter = useCallback(
@@ -52,15 +54,19 @@ const CalendarPage = () => {
     []
   );
 
+  const selectItem = (event: any) => {
+    router.push(event.url);
+  };
+
   return (
     <>
       <Head>
-        <title>Calendar - Tracktr.</title>
+        <title>Release Calendar - Tracktr.</title>
       </Head>
 
       <div className="max-w-6xl m-auto text-">
         <div className="pt-24 m-auto">
-          <h1 className="my-4 text-3xl">Calendar</h1>
+          <h1 className="my-4 text-3xl">Release calendar</h1>
           <Calendar
             localizer={localizer}
             events={data?.events}
@@ -68,6 +74,7 @@ const CalendarPage = () => {
             toolbar={false}
             dayPropGetter={dayPropGetter}
             eventPropGetter={eventPropGetter}
+            onSelectEvent={selectItem}
           />
         </div>
       </div>

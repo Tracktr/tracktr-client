@@ -52,6 +52,9 @@ const Footer = () => {
                     <Link href="/tv">
                       <a className="block pb-2 text-sm">Series</a>
                     </Link>
+                    <Link href="/calendar">
+                      <a className="block pb-2 text-sm">Release calendar</a>
+                    </Link>
                   </li>
                 </ul>
               </div>
