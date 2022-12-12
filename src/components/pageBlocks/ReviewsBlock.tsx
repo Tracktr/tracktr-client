@@ -114,7 +114,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
                     <MdDelete className="text-xl" />
                   </button>
                 )}
-                <div className="text-sm">
+                <div className={`${session?.data?.user?.id !== review.user_id && "ml-auto"} text-sm`}>
                   {review.created.toLocaleString("en-UK", {
                     dateStyle: "medium",
                     timeStyle: "short",
