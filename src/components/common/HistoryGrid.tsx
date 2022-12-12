@@ -11,6 +11,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 import { IoIosRemove, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
+import ImageWithFallback from "./ImageWithFallback";
 
 const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }: IHistoryGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
@@ -58,7 +59,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
   };
 
   if (history.length < 1 && status !== "loading") {
-    return <div>No history found</div>;
+    return <div>Nothing to see, move along!</div>;
   }
 
   return (
@@ -66,7 +67,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
       {() => (
         <PosterGrid hasScrollContainer={hasScrollContainer}>
           <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: IHistoryItem) => {
+            {history.map((item: IHistoryItem, i) => {
               const date = new Date(item.datetime).toLocaleString("en-UK", {
                 dateStyle: "medium",
                 timeStyle: "short",
@@ -82,6 +83,22 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                   className="relative w-[170px] group"
                   key={item.id}
                 >
+                  {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
+                    <button className="flex h-6">
+                      <ImageWithFallback
+                        unoptimized
+                        src={item?.friend?.image ? item?.friend?.image : ""}
+                        fallbackSrc="/placeholder_profile.png"
+                        width="16px"
+                        height="16px"
+                        className="rounded-full"
+                        alt="User profile image"
+                      />
+                      <p className="ml-2 text-sm">{item?.friend?.name}</p>
+                    </button>
+                  ) : (
+                    <div className="h-6" />
+                  )}
                   <Link
                     href={
                       item?.movie_id
@@ -94,7 +111,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                         alt={`Poster image for ${
                           item?.movie_id
                             ? item.movie?.title
-                            : `${item.season_number}x${item.episode_number} ${item.series?.name}`
+                            : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
                         }`}
                         src={PosterImage({
                           path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
@@ -185,13 +202,15 @@ interface IHistoryItem {
   datetime: Date;
   user_id: string;
   series_id?: number;
-  season_number?: number;
-  episode_number?: number;
-  series?: ISeries;
   movie_id?: number;
   movie?: IMovie;
+  series?: ISeries;
   season?: ISeason;
   episode?: IEpisode;
+  friend?: {
+    name: string;
+    image: string;
+  };
 }
 
 export default HistoryGrid;
