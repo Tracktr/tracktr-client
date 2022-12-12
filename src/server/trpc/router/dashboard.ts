@@ -236,7 +236,15 @@ export const dashboardRouter = router({
     });
 
     return {
-      history: recentHistory?.slice(0, 6),
+      history: recentHistory
+        .sort((a, b) => {
+          if (a.datetime < b.datetime) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
+        ?.slice(0, 6),
     };
   }),
 });
