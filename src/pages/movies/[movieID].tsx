@@ -17,7 +17,7 @@ import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlo
 const MoviePage = () => {
   const router = useRouter();
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery(
-    { slug: String(router.query?.slug) },
+    { slug: String(router.query?.movieID) },
     { enabled: router.isReady }
   );
 
