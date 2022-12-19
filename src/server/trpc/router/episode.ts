@@ -173,6 +173,9 @@ export const episodeRouter = router({
           series_id: input.seriesID,
           episode_id: input.episodeID,
         },
+        orderBy: {
+          datetime: "asc",
+        },
       });
 
       return {
