@@ -60,8 +60,8 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
 
   return (
     <div className="mb-4 border-2 rounded-md border-zinc-800">
-      <button onClick={() => setShowMore(!showMore)} className="flex items-center justify-between w-full p-4 text-2xl ">
-        <h2>
+      <button onClick={() => setShowMore(!showMore)} className="flex items-center justify-between w-full p-4 text-2xl">
+        <h2 className="text-xl md:text-2xl">
           {name} <span className="text-sm">{data.length}</span>
         </h2>
         <motion.div
@@ -92,7 +92,7 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
             <Link href={`/${type}/${cast.id}`} key={index}>
               <a className="flex justify-between px-4">
                 <div className="flex py-2">
-                  <div className="pr-4">
+                  <div className="flex-shrink-0 pr-4">
                     <Image
                       alt={"Poster for: " + cast.title || cast.name}
                       src={PosterImage({ path: cast.poster_path, size: "sm" })}
@@ -105,7 +105,7 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
                     <p className="text-sm">{cast.character}</p>
                   </div>
                 </div>
-                <div className="self-center">
+                <div className="self-center flex-shrink-0">
                   <p className="text-sm">{cast.release_date || cast.first_air_date}</p>
                 </div>
               </a>

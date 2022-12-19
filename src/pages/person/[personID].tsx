@@ -13,7 +13,7 @@ import Head from "next/head";
 const PersonPage = () => {
   const router = useRouter();
   const { data, status } = trpc.person.personById.useQuery(
-    { slug: router.query.personID },
+    { slug: String(router.query.personID) },
     { enabled: router.isReady }
   );
 
