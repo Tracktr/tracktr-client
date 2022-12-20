@@ -67,7 +67,7 @@ const CalendarPage = () => {
       </Head>
 
       <div className="max-w-6xl m-auto">
-        <div className="pt-16 m-auto md:pt-48">
+        <div className="pt-16 m-auto">
           <h1 className="my-4 text-4xl">Release calendar</h1>
           <Calendar
             localizer={localizer}
