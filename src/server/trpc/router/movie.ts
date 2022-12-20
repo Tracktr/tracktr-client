@@ -275,6 +275,9 @@ export const movieRouter = router({
           user_id: ctx.session.user.id,
           movie_id: input?.movieId,
         },
+        orderBy: {
+          datetime: "asc",
+        },
       });
 
       return {

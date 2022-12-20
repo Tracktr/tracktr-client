@@ -191,11 +191,10 @@ export const watchlistRouter = router({
       };
     }),
 
-  addItem: protectedProcedure
+  addSeries: protectedProcedure
     .input(
       z.object({
-        movie_id: z.number().optional(),
-        series_id: z.number().optional(),
+        series_id: z.number(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -237,7 +236,6 @@ export const watchlistRouter = router({
           user_id: ctx.session.user.profile.userId,
           WatchlistItem: {
             create: {
-              movie_id: input.movie_id,
               series_id: input.series_id,
             },
           },
@@ -246,8 +244,69 @@ export const watchlistRouter = router({
           user_id: ctx.session.user.profile.userId,
           WatchlistItem: {
             create: {
-              movie_id: input.movie_id,
               series_id: input.series_id,
+            },
+          },
+        },
+      });
+
+      return {
+        ...watchlist,
+      };
+    }),
+  addMovie: protectedProcedure
+    .input(
+      z.object({
+        movie_id: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const url = new URL(`movie/${input.movie_id}`, process.env.NEXT_PUBLIC_TMDB_API);
+      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+      const movie = await fetch(url).then((res) => res.json());
+
+      if (movie?.status_code) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: movie.status_message,
+          cause: movie.status_code,
+        });
+      }
+
+      const existsInDB = await ctx.prisma.movies.findFirst({
+        where: { id: input.movie_id },
+      });
+
+      if (!existsInDB) {
+        await ctx.prisma.movies.create({
+          data: {
+            id: movie.id,
+            title: movie.title,
+            poster: movie.poster_path,
+            release_date: movie.release_date ? new Date(movie.release_date) : null,
+          },
+        });
+      }
+
+      const watchlist = ctx.prisma.watchlist.upsert({
+        where: {
+          user_id: ctx.session.user.profile.userId,
+        },
+        update: {
+          user_id: ctx.session.user.profile.userId,
+          WatchlistItem: {
+            create: {
+              movie_id: input.movie_id,
+            },
+          },
+        },
+        create: {
+          user_id: ctx.session.user.profile.userId,
+          WatchlistItem: {
+            create: {
+              movie_id: input.movie_id,
             },
           },
         },

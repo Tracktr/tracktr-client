@@ -18,7 +18,20 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
     itemID: Number(movieID || seriesID),
   });
 
-  const addToWatchlist = trpc.watchlist.addItem.useMutation({
+  const addToMovies = trpc.watchlist.addMovie.useMutation({
+    onSuccess: () => {
+      toast(`Added ${name} to watchlist`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
+      refetch();
+    },
+    onError: () => {
+      toast(`Failed to ${name} to watchlist`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+  const addToSeries = trpc.watchlist.addSeries.useMutation({
     onSuccess: () => {
       toast(`Added ${name} to watchlist`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
@@ -48,7 +61,7 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
 
   return (
     <div>
-      {addToWatchlist.isLoading || isRefetching ? (
+      {addToMovies.isLoading || addToSeries.isLoading || isRefetching ? (
         <button
           disabled
           style={{
@@ -70,10 +83,15 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
                 id: data?.id,
               });
             } else {
-              addToWatchlist.mutate({
-                movie_id: movieID,
-                series_id: seriesID,
-              });
+              if (movieID) {
+                addToMovies.mutate({
+                  movie_id: movieID,
+                });
+              } else if (seriesID) {
+                addToSeries.mutate({
+                  series_id: seriesID,
+                });
+              }
             }
           }}
           style={{

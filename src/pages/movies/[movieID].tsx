@@ -16,8 +16,10 @@ import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlo
 
 const MoviePage = () => {
   const router = useRouter();
-  const { slug } = router.query;
-  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: slug ? slug[0] : undefined });
+  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery(
+    { slug: String(router.query?.movieID) },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={status} notFound>

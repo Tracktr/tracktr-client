@@ -12,8 +12,10 @@ import Head from "next/head";
 
 const PersonPage = () => {
   const router = useRouter();
-  const { slug } = router.query;
-  const { data, status } = trpc.person.personById.useQuery({ slug: slug ? slug[0] : undefined });
+  const { data, status } = trpc.person.personById.useQuery(
+    { slug: String(router.query.personID) },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={status} notFound>
