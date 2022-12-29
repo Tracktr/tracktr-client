@@ -159,7 +159,7 @@ const PublicProfile = () => {
               </div>
 
               {(profile?.SeriesReviews && profile?.SeriesReviews.length > 0) ||
-              (profile?.SeriesReviews && profile?.SeriesReviews.length > 0) ? (
+              (profile?.MoviesReviews && profile?.MoviesReviews.length > 0) ? (
                 <div>
                   {profile?.SeriesReviews[0] && (
                     <Link href={`/tv/${profile?.SeriesReviews[0]?.Series.id}#reviews`}>
