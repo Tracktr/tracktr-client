@@ -187,6 +187,7 @@ export const dashboardRouter = router({
       include: {
         following: {
           include: {
+            profile: true,
             EpisodesHistory: {
               take: 6,
               include: {
@@ -211,11 +212,6 @@ export const dashboardRouter = router({
               take: 1,
               include: {
                 Movies: true,
-                user: {
-                  include: {
-                    profile: true,
-                  },
-                },
               },
               orderBy: {
                 created: "desc",
@@ -228,11 +224,6 @@ export const dashboardRouter = router({
               },
               include: {
                 Series: true,
-                user: {
-                  include: {
-                    profile: true,
-                  },
-                },
               },
             },
           },
@@ -251,7 +242,7 @@ export const dashboardRouter = router({
           ...h,
           friend: {
             image: friend.image,
-            name: friend.name,
+            name: friend.profile?.username,
           },
         })),
       ];
@@ -262,7 +253,7 @@ export const dashboardRouter = router({
           ...r,
           friend: {
             image: friend.image,
-            name: friend.name,
+            name: friend.profile?.username,
           },
         })),
       ];
