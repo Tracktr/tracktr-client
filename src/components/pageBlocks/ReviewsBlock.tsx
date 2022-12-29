@@ -75,7 +75,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
   };
 
   return (
-    <div className="relative mx-1 md:mx-0 md:mb-8" id="reviews">
+    <div className="relative mx-1 mb-8 md:mx-0" id="reviews">
       <h2 className="pb-4 text-4xl font-bold">Reviews</h2>
       <div className="flex flex-col gap-6">
         {isRefetching ? (
