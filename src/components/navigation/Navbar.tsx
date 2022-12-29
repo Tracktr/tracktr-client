@@ -112,71 +112,67 @@ const Navbar = () => {
                   </motion.div>
                 )}{" "}
               </AnimatePresence>
-              {status !== "loading" && (
-                <>
-                  <div className="hidden mr-6 lg:mr-0 lg:block">
-                    {session ? (
-                      <motion.div
-                        className="relative flex"
-                        onMouseEnter={toggleProfileHover}
-                        onMouseLeave={toggleProfileHover}
-                      >
-                        <button type="button" className="w-full h-full">
-                          <a className="flex items-center pl-4">
-                            <ImageWithFallback
-                              unoptimized
-                              src={session.user?.image ? session.user.image : ""}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="36px"
-                              height="36px"
-                              className="rounded-full"
-                              alt="User profile image"
-                            />
-                            <p className="ml-2 text-sm">{session.user?.name}</p>
-                          </a>
-                        </button>
-                        <motion.div
-                          initial="exit"
-                          animate={profileHover ? "enter" : "exit"}
-                          variants={subMenuAnimate}
-                          className="absolute z-50 w-full rounded-md shadow-md top-10 bg-primaryBackground"
-                        >
-                          <div className="p-2 text-sm">
-                            {subLinks.map((item) => (
-                              <Link key={item.href} href={item.href}>
-                                <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">
-                                  {item.text}
-                                </a>
-                              </Link>
-                            ))}
-                            <button
-                              onClick={() => {
-                                queryClient.invalidateQueries();
-                                signOut({ callbackUrl: "/" });
-                              }}
-                              className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
-                            >
-                              Sign Out
-                            </button>
-                          </div>
-                        </motion.div>
-                      </motion.div>
-                    ) : (
-                      <li className={`inline-block text-white list-none group`}>
-                        <button onClick={() => signIn("google")}>
-                          <a className={`group-hover:text-primary px-4 py-2 inline-block`}>Sign in</a>
-                        </button>
-                      </li>
-                    )}
-                  </div>
-                  <div className="flex lg:hidden">
-                    <button onClick={() => setNavMobile(!navMobile)}>
-                      <BiMenuAltRight className="text-3xl text-white" />
+              <div className="hidden mr-6 lg:mr-0 lg:block">
+                {session ? (
+                  <motion.div
+                    className="relative flex"
+                    onMouseEnter={toggleProfileHover}
+                    onMouseLeave={toggleProfileHover}
+                  >
+                    <button type="button" className="w-full h-full">
+                      <a className="flex items-center pl-4">
+                        <ImageWithFallback
+                          unoptimized
+                          src={session.user?.image ? session.user.image : ""}
+                          fallbackSrc="/placeholder_profile.png"
+                          width="36px"
+                          height="36px"
+                          className="rounded-full"
+                          alt="User profile image"
+                        />
+                        <p className="ml-2 text-sm">{session.user?.name}</p>
+                      </a>
                     </button>
-                    {navMobile && <NavMobile submenuItems={subLinks} toggleNavMobile={toggleNavMobile} />}
-                  </div>
-                </>
-              )}
+                    <motion.div
+                      initial="exit"
+                      animate={profileHover ? "enter" : "exit"}
+                      variants={subMenuAnimate}
+                      className="absolute z-50 w-full rounded-md shadow-md top-10 bg-primaryBackground"
+                    >
+                      <div className="p-2 text-sm">
+                        {subLinks.map((item) => (
+                          <Link key={item.href} href={item.href}>
+                            <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">{item.text}</a>
+                          </Link>
+                        ))}
+                        <button
+                          onClick={() => {
+                            queryClient.invalidateQueries();
+                            signOut({ callbackUrl: "/" });
+                          }}
+                          className="block w-full p-2 text-left rounded-md hover:bg-zinc-800"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  status === "unauthenticated" && (
+                    <li className={`inline-block text-white list-none group`}>
+                      <button onClick={() => signIn("google")}>
+                        <a className={`group-hover:text-primary px-4 py-2 inline-block`}>Sign in</a>
+                      </button>
+                    </li>
+                  )
+                )}
+              </div>
+              <div className="flex lg:hidden">
+                <button onClick={() => setNavMobile(!navMobile)}>
+                  <BiMenuAltRight className="text-3xl text-white" />
+                </button>
+                {navMobile && <NavMobile submenuItems={subLinks} toggleNavMobile={toggleNavMobile} />}
+              </div>
             </div>
           </div>
         </div>
