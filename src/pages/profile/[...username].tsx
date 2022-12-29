@@ -47,6 +47,8 @@ const PublicProfile = () => {
         <>
           <Head>
             <title>{profile?.profile?.username}&apos;s Profile - Tracktr.</title>
+            <meta property="og:image" content={String(profile?.image)} />
+            <meta name="description" content={`${profile?.profile?.username} uses Tracktr to track movies and shows`} />
           </Head>
 
           <div className="max-w-6xl m-auto">

@@ -9,6 +9,7 @@ import ContentGrid from "../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../components/pageBlocks/ContentMain";
 import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 import Head from "next/head";
+import { PersonImage } from "../../utils/generateImages";
 
 const PersonPage = () => {
   const router = useRouter();
@@ -23,6 +24,9 @@ const PersonPage = () => {
         <>
           <Head>
             <title>{data.name} - Tracktr.</title>
+
+            <meta property="og:image" content={PersonImage({ path: data.profile_path, size: "md" })} />
+            <meta name="description" content={`Track movies & series starring ${data.name} with Tracktr.`} />
           </Head>
 
           <ContentBackdrop />
