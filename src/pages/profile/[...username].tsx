@@ -47,6 +47,8 @@ const PublicProfile = () => {
         <>
           <Head>
             <title>{profile?.profile?.username}&apos;s Profile - Tracktr.</title>
+            <meta property="og:image" content={String(profile?.image)} />
+            <meta name="description" content={`${profile?.profile?.username} uses Tracktr to track movies and shows`} />
           </Head>
 
           <div className="max-w-6xl m-auto">
@@ -159,7 +161,7 @@ const PublicProfile = () => {
               </div>
 
               {(profile?.SeriesReviews && profile?.SeriesReviews.length > 0) ||
-              (profile?.SeriesReviews && profile?.SeriesReviews.length > 0) ? (
+              (profile?.MoviesReviews && profile?.MoviesReviews.length > 0) ? (
                 <div>
                   {profile?.SeriesReviews[0] && (
                     <Link href={`/tv/${profile?.SeriesReviews[0]?.Series.id}#reviews`}>

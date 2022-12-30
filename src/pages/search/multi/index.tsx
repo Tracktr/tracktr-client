@@ -36,7 +36,8 @@ const SearchPage = () => {
   return (
     <>
       <Head>
-        <title>{query} - Search - Tracktr.</title>
+        <title>Search results for {query} - Tracktr.</title>
+        <meta name="description" content={`Track movies and series like ${query} on Tracktr.`} />
       </Head>
 
       <div className="max-w-6xl px-4 pt-32 m-auto">

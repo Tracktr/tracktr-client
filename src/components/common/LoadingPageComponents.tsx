@@ -51,7 +51,7 @@ const LoadingPageComponents = ({ status, children, posters, notFound }: ILoading
     }
 
     return <></>;
-  }, [status, children, posters, router]);
+  }, [status, children, posters, router, notFound]);
 };
 
 export default LoadingPageComponents;

@@ -13,6 +13,7 @@ import ContentMain from "../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlock";
+import { PosterImage } from "../../utils/generateImages";
 
 const MoviePage = () => {
   const router = useRouter();
@@ -27,6 +28,8 @@ const MoviePage = () => {
         <>
           <Head>
             <title>{data.title} - Tracktr.</title>
+            <meta property="og:image" content={PosterImage({ path: data.poster_path, size: "lg" })} />
+            <meta name="description" content={`Track ${data.title} and other movies & series with Tracktr.`} />
           </Head>
 
           <ContentBackdrop path={data.backdrop_path} />

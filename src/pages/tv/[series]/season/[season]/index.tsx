@@ -13,6 +13,7 @@ import ContentMain from "../../../../../components/pageBlocks/ContentMain";
 import { useSession } from "next-auth/react";
 import ReviewsBlock from "../../../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
+import { PosterImage } from "../../../../../utils/generateImages";
 
 const TVPage = () => {
   const router = useRouter();
@@ -64,6 +65,11 @@ const TVPage = () => {
             <title>
               {seriesData.name} {seasonData.name} - Tracktr.
             </title>
+            <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
+            <meta
+              name="description"
+              content={`Track ${seriesData.name} ${seasonData.name} and other series & movies with Tracktr.`}
+            />
           </Head>
 
           <ContentBackdrop path={seriesData.backdrop_path} />

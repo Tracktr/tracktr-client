@@ -13,6 +13,7 @@ import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import DetailsBlock from "../../../../../../components/pageBlocks/DetailsBlock";
+import { PosterImage } from "../../../../../../utils/generateImages";
 
 const EpisodePage = () => {
   const router = useRouter();
@@ -47,6 +48,11 @@ const EpisodePage = () => {
             <title>
               {seriesData.name} {episodeData.season_number}x{episodeData.episode_number} - {episodeData.name} - Tracktr.
             </title>
+            <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
+            <meta
+              name="description"
+              content={`Track ${seriesData.name} Season ${episodeData.season_number}, Episode ${episodeData.episode_number} - ${episodeData.name} and other series & movies with Tracktr.`}
+            />
           </Head>
 
           <ContentBackdrop path={seriesData.backdrop_path} />

@@ -84,18 +84,20 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                   key={item.id}
                 >
                   {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
-                    <button className="flex h-6">
-                      <ImageWithFallback
-                        unoptimized
-                        src={item?.friend?.image ? item?.friend?.image : ""}
-                        fallbackSrc="/placeholder_profile.png"
-                        width="16px"
-                        height="16px"
-                        className="rounded-full"
-                        alt="User profile image"
-                      />
-                      <p className="ml-2 text-sm">{item?.friend?.name}</p>
-                    </button>
+                    <Link href={`/profile/${item?.friend?.name}`}>
+                      <a className="flex h-6">
+                        <ImageWithFallback
+                          unoptimized
+                          src={item?.friend?.image ? item?.friend?.image : ""}
+                          fallbackSrc="/placeholder_profile.png"
+                          width="16px"
+                          height="16px"
+                          className="rounded-full"
+                          alt="User profile image"
+                        />
+                        <p className="ml-2 text-sm">{item?.friend?.name}</p>
+                      </a>
+                    </Link>
                   ) : (
                     <div className="h-6" />
                   )}

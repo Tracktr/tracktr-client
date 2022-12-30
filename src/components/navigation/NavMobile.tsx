@@ -102,17 +102,19 @@ const NavMobile = ({
                   </div>
                 </>
               ) : (
-                <li className="text-white list-none group">
-                  <button
-                    className="block px-4 py-2 text-2xl group-hover:text-primary"
-                    onClick={() => {
-                      toggleNavMobile();
-                      signIn("google");
-                    }}
-                  >
-                    Sign in
-                  </button>
-                </li>
+                session.status === "unauthenticated" && (
+                  <li className="text-white list-none group">
+                    <button
+                      className="block px-4 py-2 text-2xl group-hover:text-primary"
+                      onClick={() => {
+                        toggleNavMobile();
+                        signIn("google");
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </li>
+                )
               )}
             </div>
           </div>
