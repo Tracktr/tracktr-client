@@ -52,15 +52,20 @@ const NavMobile = ({
           <hr className="border-white border-1 border-opacity-10" />
 
           <div className="flex flex-col w-full h-full">
-            {navLinks.map((navItem) => (
-              <li className="text-white list-none group" key={navItem.text}>
-                <Link href={navItem.href}>
-                  <a onClick={toggleNavMobile} className="block px-4 py-2 text-2xl group-hover:text-primary">
-                    {navItem.text}
-                  </a>
-                </Link>
-              </li>
-            ))}
+            {navLinks
+              .filter(
+                (navItem) =>
+                  session.status === "authenticated" || (session.status === "unauthenticated" && !navItem.userOnly)
+              )
+              .map((navItem) => (
+                <li className="text-white list-none group" key={navItem.text}>
+                  <Link href={navItem.href}>
+                    <a onClick={toggleNavMobile} className="block px-4 py-2 text-2xl group-hover:text-primary">
+                      {navItem.text}
+                    </a>
+                  </Link>
+                </li>
+              ))}
             <div className="py-4 mt-auto text-white">
               {session.status === "authenticated" ? (
                 <>
