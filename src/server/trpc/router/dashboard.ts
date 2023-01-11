@@ -33,10 +33,10 @@ export const dashboardRouter = router({
         .then((res) => {
           if (res > 0) episodeCounter += res;
           items.push({
-            date: gte.toLocaleString("en-UK", {
-              month: "short",
+            date: gte.toLocaleDateString("en-UK", {
+              year: "2-digit",
+              month: "2-digit",
               day: "numeric",
-              year: "numeric",
             }),
             count: res,
           });
@@ -55,10 +55,10 @@ export const dashboardRouter = router({
         .then((res) => {
           if (res > 0) movieCounter++;
           items.push({
-            date: gte.toLocaleString("en-UK", {
-              month: "short",
+            date: gte.toLocaleDateString("en-UK", {
+              year: "2-digit",
+              month: "2-digit",
               day: "numeric",
-              year: "numeric",
             }),
             count: res,
           });
