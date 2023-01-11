@@ -34,7 +34,6 @@ export const dashboardRouter = router({
           if (res > 0) episodeCounter += res;
           items.push({
             date: gte.toLocaleDateString("en-UK", {
-              year: "2-digit",
               month: "2-digit",
               day: "numeric",
             }),
@@ -56,7 +55,6 @@ export const dashboardRouter = router({
           if (res > 0) movieCounter++;
           items.push({
             date: gte.toLocaleDateString("en-UK", {
-              year: "2-digit",
               month: "2-digit",
               day: "numeric",
             }),
