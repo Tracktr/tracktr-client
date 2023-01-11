@@ -1,8 +1,8 @@
 import { getFirstDayOfMonth, getLastDayOfMonth } from "../../../utils/getDate";
-import { router, publicProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 
 export const calendarRouter = router({
-  get: publicProcedure.query(async ({ ctx }) => {
+  get: protectedProcedure.query(async ({ ctx }) => {
     const today = new Date();
 
     const series = await ctx.prisma.episodesHistory.findMany({
@@ -10,6 +10,7 @@ export const calendarRouter = router({
         series: true,
         episode: true,
       },
+      where: { user_id: ctx.session.user.id },
       distinct: ["series_id"],
     });
 

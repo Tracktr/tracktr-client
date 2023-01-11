@@ -7,7 +7,7 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/common/UpNext";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, Text, Tooltip, TooltipProps, XAxis, YAxis } from "recharts";
 import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline, MdQueuePlayNext } from "react-icons/md";
 import Head from "next/head";
@@ -70,6 +70,19 @@ const DashboardPage = () => {
     refetchStats();
   };
 
+  const CustomXAxisTick = ({ x, y, payload }: any) => {
+    if (payload && payload.value) {
+      return (
+        <Text fontSize={"0.6rem"} width={"0.6rem"} x={x} y={y} textAnchor="middle" verticalAnchor="start">
+          {payload.value}
+        </Text>
+      );
+    }
+    return null;
+  };
+
+  console.log(friendsData?.movieReviews[0]);
+
   return (
     <>
       <Head>
@@ -107,7 +120,7 @@ const DashboardPage = () => {
                 </div>
                 <ResponsiveContainer width="100%" height={200}>
                   <BarChart data={stats?.history} margin={{ left: -50 }}>
-                    <XAxis dataKey="date" allowDecimals={false} />
+                    <XAxis dataKey="date" allowDecimals={false} interval={0} tick={<CustomXAxisTick />} />
                     <YAxis dataKey="count" allowDecimals={false} tick={false} />
                     <Bar dataKey="count" fill="#f9bd13" />
                     <Tooltip wrapperStyle={{ outline: "none" }} cursor={false} content={<CustomTooltip />} />
@@ -162,7 +175,7 @@ const DashboardPage = () => {
                   </>
                 )}
 
-                {(friendsData?.movieReviews || []).length > 0 && (friendsData?.seriesReviews || []).length > 0 && (
+                {((friendsData?.movieReviews || []).length > 0 || (friendsData?.seriesReviews || []).length > 0) && (
                   <>
                     <h2 className="my-2 text-xl">Reviews</h2>
                     <div className="flex">
