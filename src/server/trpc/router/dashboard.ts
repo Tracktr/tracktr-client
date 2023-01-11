@@ -36,6 +36,7 @@ export const dashboardRouter = router({
             date: gte.toLocaleString("en-UK", {
               month: "short",
               day: "numeric",
+              year: "numeric",
             }),
             count: res,
           });
@@ -57,6 +58,7 @@ export const dashboardRouter = router({
             date: gte.toLocaleString("en-UK", {
               month: "short",
               day: "numeric",
+              year: "numeric",
             }),
             count: res,
           });
