@@ -81,6 +81,8 @@ const DashboardPage = () => {
     return null;
   };
 
+  console.log(friendsData?.movieReviews[0]);
+
   return (
     <>
       <Head>
@@ -173,7 +175,7 @@ const DashboardPage = () => {
                   </>
                 )}
 
-                {(friendsData?.movieReviews || []).length > 0 && (friendsData?.seriesReviews || []).length > 0 && (
+                {((friendsData?.movieReviews || []).length > 0 || (friendsData?.seriesReviews || []).length > 0) && (
                   <>
                     <h2 className="my-2 text-xl">Reviews</h2>
                     <div className="flex">

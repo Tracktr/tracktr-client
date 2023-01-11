@@ -42,7 +42,7 @@ const Footer = () => {
                 </div>
               )}
 
-              <div className="w-full px-4 mt-0 mt-2 ml-auto lg:w-4/12">
+              <div className="w-full px-4 mt-0 ml-auto md:mt-2 lg:w-4/12">
                 <span className="block mb-2 text-sm font-semibold uppercase">Find Content</span>
                 <ul className="list-unstyled">
                   <li>
