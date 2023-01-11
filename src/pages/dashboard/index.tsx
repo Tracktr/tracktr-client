@@ -73,7 +73,7 @@ const DashboardPage = () => {
   const CustomXAxisTick = ({ x, y, payload }: any) => {
     if (payload && payload.value) {
       return (
-        <Text fontSize={"0.6rem"} width={"0.6rem"} x={x} y={y} textAnchor="middle" verticalAnchor="start">
+        <Text fontSize={"0.5rem"} width={"0.5rem"} x={x} y={y} textAnchor="middle" verticalAnchor="start">
           {payload.value}
         </Text>
       );
