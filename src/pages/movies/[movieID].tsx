@@ -28,7 +28,7 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
       {() => (
         <>
           <Head>
-            <title>{data.title} - Tracktr.</title>
+            <title>{`${data.title} - Tracktr.`}</title>
             <meta property="og:image" content={PosterImage({ path: data.poster_path, size: "lg" })} />
             <meta name="description" content={`Track ${data.title} and other movies & series with Tracktr.`} />
           </Head>
