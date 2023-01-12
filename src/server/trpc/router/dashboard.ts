@@ -10,7 +10,7 @@ interface IStatItem {
 export const dashboardRouter = router({
   stats: protectedProcedure.query(async ({ ctx }) => {
     const items: {
-      date: string | Date;
+      date: string;
       count: number;
     }[] = [];
     let episodeCounter = 0;
@@ -33,7 +33,10 @@ export const dashboardRouter = router({
         .then((res) => {
           if (res > 0) episodeCounter += res;
           items.push({
-            date: gte,
+            date: gte.toLocaleDateString("en-UK", {
+              month: "2-digit",
+              day: "numeric",
+            }),
             count: res,
           });
         });
@@ -51,7 +54,10 @@ export const dashboardRouter = router({
         .then((res) => {
           if (res > 0) movieCounter++;
           items.push({
-            date: gte,
+            date: gte.toLocaleDateString("en-UK", {
+              month: "2-digit",
+              day: "numeric",
+            }),
             count: res,
           });
         });

@@ -74,10 +74,7 @@ const DashboardPage = () => {
     if (payload && payload.value) {
       return (
         <Text fontSize={"0.5rem"} width={"0.5rem"} x={x} y={y} textAnchor="middle" verticalAnchor="start">
-          {payload.value.toLocaleDateString("en-UK", {
-            month: "2-digit",
-            day: "numeric",
-          })}
+          {payload.value}
         </Text>
       );
     }
