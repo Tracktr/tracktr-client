@@ -14,13 +14,14 @@ import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlock";
 import { PosterImage } from "../../utils/generateImages";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "../../server/trpc/router/_app";
+import { createContext } from "../../server/trpc/context";
+import SuperJSON from "superjson";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-const MoviePage = () => {
-  const router = useRouter();
-  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery(
-    { slug: String(router.query?.movieID) },
-    { enabled: router.isReady }
-  );
+const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
 
   return (
     <LoadingPageComponents status={status} notFound>
@@ -77,6 +78,22 @@ const MoviePage = () => {
       )}
     </LoadingPageComponents>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: context.req, res: context.res }),
+    transformer: SuperJSON,
+  });
+  await ssg.movie.movieById.prefetch({ slug: String(context.query.movieID) });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      movieID: context.query.movieID,
+    },
+  };
 };
 
 export default MoviePage;
