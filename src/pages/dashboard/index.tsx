@@ -71,17 +71,18 @@ const DashboardPage = () => {
   };
 
   const CustomXAxisTick = ({ x, y, payload }: any) => {
-    if (payload && payload.value) {
+    if (payload && payload.value && payload.value !== "auto") {
       return (
         <Text fontSize={"0.5rem"} width={"0.5rem"} x={x} y={y} textAnchor="middle" verticalAnchor="start">
-          {payload.value}
+          {payload.value.toLocaleDateString("en-UK", {
+            month: "2-digit",
+            day: "numeric",
+          })}
         </Text>
       );
     }
     return null;
   };
-
-  console.log(friendsData?.movieReviews[0]);
 
   return (
     <>
