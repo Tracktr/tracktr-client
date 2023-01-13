@@ -128,6 +128,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     transformer: SuperJSON,
   });
   await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
+  await ssg.season.seasonByID.prefetch({
+    seriesID: Number(context.query.series),
+    seasonNumber: Number(context.query.season),
+  });
 
   return {
     props: {

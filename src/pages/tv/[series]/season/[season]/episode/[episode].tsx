@@ -41,7 +41,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
         <>
           <Head>
             <title>
-              {seriesData.name} {episodeData.season_number}x{episodeData.episode_number} - {episodeData.name} - Tracktr.
+              {`${seriesData.name} ${episodeData.season_number}x${episodeData.episode_number} - ${episodeData.name} - Tracktr.`}
             </title>
             <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
             <meta
@@ -111,6 +111,11 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     transformer: SuperJSON,
   });
   await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
+  await ssg.episode.episodeByID.prefetch({
+    seriesID: Number(context.query.series),
+    seasonNumber: Number(context.query.season),
+    episodeNumber: Number(context.query.episode),
+  });
 
   return {
     props: {
