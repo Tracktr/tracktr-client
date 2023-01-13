@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { ImSpinner2 } from "react-icons/im";
 import { MdOutlineWrapText } from "react-icons/md";
 import HistoryGrid from "../../components/common/HistoryGrid";
@@ -12,9 +11,13 @@ import { trpc } from "../../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import Head from "next/head";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "../../server/trpc/router/_app";
+import { createContext } from "../../server/trpc/context";
+import SuperJSON from "superjson";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-const PublicProfile = () => {
-  const router = useRouter();
+const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
 
   const {
@@ -22,12 +25,9 @@ const PublicProfile = () => {
     status: profileStatus,
     refetch,
     isRefetching,
-  } = trpc.profile.profileByUsername.useQuery(
-    {
-      user: String(router.query.username),
-    },
-    { enabled: router.isReady }
-  );
+  } = trpc.profile.profileByUsername.useQuery({
+    user: props.username,
+  });
 
   const addAsFollower = trpc.followers.createFollowers.useMutation({
     onSuccess: () => {
@@ -46,7 +46,7 @@ const PublicProfile = () => {
       {() => (
         <>
           <Head>
-            <title>{profile?.profile?.username}&apos;s Profile - Tracktr.</title>
+            <title>{`${profile?.profile?.username}'s Profile - Tracktr.`}</title>
             <meta property="og:image" content={String(profile?.image)} />
             <meta name="description" content={`${profile?.profile?.username} uses Tracktr to track movies and shows`} />
           </Head>
@@ -221,6 +221,22 @@ const PublicProfile = () => {
       )}
     </LoadingPageComponents>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: context.req, res: context.res }),
+    transformer: SuperJSON,
+  });
+  await ssg.profile.profileByUsername.prefetch({ user: context.query.username });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      username: context.query.username,
+    },
+  };
 };
 
 export default PublicProfile;

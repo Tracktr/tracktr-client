@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import ContentBackdrop from "../../../components/pageBlocks/ContentBackdrop";
 import CastBlock from "../../../components/pageBlocks/CastBlock";
@@ -16,26 +15,28 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
 import { PosterImage } from "../../../utils/generateImages";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "../../../server/trpc/router/_app";
+import { createContext } from "../../../server/trpc/context";
+import SuperJSON from "superjson";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-const TVPage = () => {
-  const router = useRouter();
+const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
-  const { series: seriesID } = router.query;
 
   const {
     data: seriesData,
     status,
     refetch,
     isRefetching,
-  } = trpc.tv.seriesById.useQuery({ seriesID: Number(seriesID) }, { enabled: router.isReady });
+  } = trpc.tv.seriesById.useQuery({ seriesID: Number(props.seriesID) });
 
   const watchHistory = trpc.tv.watchHistoryByID.useQuery(
     {
-      seriesID: Number(seriesID),
+      seriesID: Number(props.seriesID),
     },
     {
       enabled: session.status !== "loading",
-      refetchOnWindowFocus: false,
     }
   );
 
@@ -44,7 +45,7 @@ const TVPage = () => {
       {() => (
         <>
           <Head>
-            <title>{seriesData.name} - Tracktr.</title>
+            <title>{`${seriesData.name} - Tracktr.`}</title>
             <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
             <meta name="description" content={`Track ${seriesData.name} and other series & movies with Tracktr.`} />
           </Head>
@@ -101,6 +102,22 @@ const TVPage = () => {
       )}
     </LoadingPageComponents>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: context.req, res: context.res }),
+    transformer: SuperJSON,
+  });
+  await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      seriesID: context.query.series,
+    },
+  };
 };
 
 export default TVPage;

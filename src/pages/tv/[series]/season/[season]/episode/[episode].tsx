@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import LoadingPageComponents from "../../../../../../components/common/LoadingPageComponents";
 import CastBlock from "../../../../../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../../../../../components/pageBlocks/CrewBlock";
@@ -14,31 +13,27 @@ import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import DetailsBlock from "../../../../../../components/pageBlocks/DetailsBlock";
 import { PosterImage } from "../../../../../../utils/generateImages";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "../../../../../../server/trpc/router/_app";
+import { createContext } from "../../../../../../server/trpc/context";
+import SuperJSON from "superjson";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-const EpisodePage = () => {
-  const router = useRouter();
-  const { series: seriesID, season: seasonNumber, episode: episodeNumber } = router.query;
-
-  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery(
-    {
-      seriesID: Number(seriesID),
-    },
-    { enabled: router.isReady }
-  );
+const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
+    seriesID: Number(props.seriesID),
+  });
 
   const {
     data: episodeData,
     status: episodeStatus,
     refetch: episodeRefetch,
     isRefetching,
-  } = trpc.episode.episodeByID.useQuery(
-    {
-      seriesID: Number(seriesID),
-      seasonNumber: Number(seasonNumber),
-      episodeNumber: Number(episodeNumber),
-    },
-    { enabled: router.isReady }
-  );
+  } = trpc.episode.episodeByID.useQuery({
+    seriesID: Number(props.seriesID),
+    seasonNumber: Number(props.seasonNumber),
+    episodeNumber: Number(props.episodeNumber),
+  });
 
   return (
     <LoadingPageComponents status={episodeStatus} notFound>
@@ -61,15 +56,15 @@ const EpisodePage = () => {
             <ContentPoster
               title={episodeData.name}
               poster={seriesData.poster_path}
-              id={Number(seriesID)}
+              id={Number(props.seriesID)}
               theme_color={seriesData.theme_color}
               progression={{
                 number_of_episodes: seriesData.number_of_episodes,
                 number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
               episode={{
-                seasonNumber: Number(seasonNumber),
-                episodeNumber: Number(episodeNumber),
+                seasonNumber: Number(props.seasonNumber),
+                episodeNumber: Number(props.episodeNumber),
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
@@ -83,7 +78,7 @@ const EpisodePage = () => {
                 score={episodeData.vote_average}
                 air_date={episodeData.air_date}
                 episode={{
-                  base_url: `/tv/${seriesID}`,
+                  base_url: `/tv/${props.seriesID}`,
                   season_number: episodeData.season_number,
                   episode_number: episodeData.episode_number,
                 }}
@@ -107,6 +102,24 @@ const EpisodePage = () => {
       )}
     </LoadingPageComponents>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: context.req, res: context.res }),
+    transformer: SuperJSON,
+  });
+  await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      seriesID: context.query.series,
+      seasonNumber: context.query.season,
+      episodeNumber: context.query.episode,
+    },
+  };
 };
 
 export default EpisodePage;
