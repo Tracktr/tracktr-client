@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import CastBlock from "../../components/pageBlocks/CastBlock";
 import CrewBlock from "../../components/pageBlocks/CrewBlock";

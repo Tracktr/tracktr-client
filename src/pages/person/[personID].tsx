@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { trpc } from "../../utils/trpc";
 import ContentBackdrop from "../../components/pageBlocks/ContentBackdrop";
@@ -10,20 +9,21 @@ import ContentMain from "../../components/pageBlocks/ContentMain";
 import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 import Head from "next/head";
 import { PersonImage } from "../../utils/generateImages";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import { appRouter } from "../../server/trpc/router/_app";
+import { createContext } from "../../server/trpc/context";
+import SuperJSON from "superjson";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-const PersonPage = () => {
-  const router = useRouter();
-  const { data, status } = trpc.person.personById.useQuery(
-    { slug: String(router.query.personID) },
-    { enabled: router.isReady }
-  );
+const PersonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { data, status } = trpc.person.personById.useQuery({ slug: props.personID }, { enabled: false });
 
   return (
     <LoadingPageComponents status={status} notFound>
       {() => (
         <>
           <Head>
-            <title>{data.name} - Tracktr.</title>
+            <title>{`${data.name} - Tracktr.`}</title>
 
             <meta property="og:image" content={PersonImage({ path: data.profile_path, size: "md" })} />
             <meta name="description" content={`Track movies & series starring ${data.name} with Tracktr.`} />
@@ -50,6 +50,22 @@ const PersonPage = () => {
       )}
     </LoadingPageComponents>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: await createContext({ req: context.req, res: context.res }),
+    transformer: SuperJSON,
+  });
+  await ssg.person.personById.prefetch({ slug: String(context.query.personID) });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      personID: context.query.personID,
+    },
+  };
 };
 
 export default PersonPage;
