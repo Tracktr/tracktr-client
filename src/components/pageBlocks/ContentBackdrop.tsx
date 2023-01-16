@@ -5,7 +5,8 @@ const ContentBackdrop = ({ path }: { path?: string }) => {
     <div
       className="absolute w-screen max-w-full h-64 md:h-[32rem] top-0 left-0"
       style={{
-        background: path && `url("${BackdropImage({ path: path, size: "lg" })}") no-repeat`,
+        backgroundImage: path && `url("${BackdropImage({ path: path, size: "lg" })}")`,
+        backgroundRepeat: "no-repeat1",
         backgroundSize: "cover",
       }}
     >
