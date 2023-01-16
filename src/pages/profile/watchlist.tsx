@@ -36,7 +36,7 @@ const WatchlistPage = () => {
     refetch,
     isRefetching,
   } = trpc.watchlist.getUserWatchlist.useQuery(
-    { page, pageSize: 12, orderBy: JSON.parse(orderInput), filter: filterInput },
+    { page, pageSize: 25, orderBy: JSON.parse(orderInput), filter: filterInput },
     { keepPreviousData: true }
   );
 
