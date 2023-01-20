@@ -49,7 +49,7 @@ const FeedbackPage = () => {
       toast("Feedback Added", {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
-      // router.push("/");
+      router.push("/");
     },
     onError: () => {
       toast("Failed to add feedback", {
@@ -122,6 +122,7 @@ const FeedbackPage = () => {
                   placeholder="Leave a comment..."
                   onChange={handleMessageChange}
                   disabled={addFeedback.isLoading}
+                  aria-describedby="message-helper"
                 ></textarea>
                 <p
                   id="message-helper"
