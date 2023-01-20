@@ -58,6 +58,25 @@ const Footer = () => {
                   </li>
                 </ul>
               </div>
+
+              <div className="w-full px-4 mt-2 ml-auto md:mt-0 lg:w-4/12">
+                <span className="block mb-2 text-sm font-semibold uppercase">About</span>
+                <ul className="list-unstyled">
+                  <li>
+                    <Link href="/feedback">
+                      <a className="block pb-2 text-sm">Feedback form</a>
+                    </Link>
+                    <a
+                      href="https://github.com/Tracktr/tracktr-client"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block pb-2 text-sm"
+                    >
+                      GitHub repository
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
