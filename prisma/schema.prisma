@@ -235,3 +235,9 @@ model WatchlistItem {
   @@index([series_id])
   @@index([watchlist_id])
 }
+
+model Feedback {
+  id      String @id @default(cuid())
+  email   String
+  message String @db.VarChar(512)
+}
