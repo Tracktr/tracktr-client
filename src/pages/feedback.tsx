@@ -1,18 +1,6 @@
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const FeedbackPage = () => {
-  const session = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session.status === "unauthenticated" && status !== "loading") {
-      router.push("/");
-    }
-  });
-
   return (
     <>
       <Head>
@@ -25,9 +13,9 @@ const FeedbackPage = () => {
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Feedback form</h2>
               <p className="mx-auto mt-4 text-base leading-relaxed">
-                If you see something that isn&apos;t working quite right or you have an awesome idea for a new feature
-                you can leave a message on this page and we&apos;ll take a look at it. If you have a GitHub account, you
-                can also create an issue on{" "}
+                If you see something that isn&apos;t working quite right or you have an awesome idea htmlFor a new
+                feature you can leave a message on this page and we&apos;ll take a look at it. If you have a GitHub
+                account, you can also create an issue on{" "}
                 <a
                   className="underline"
                   href="https://github.com/Tracktr/tracktr-client/issues"
@@ -38,6 +26,38 @@ const FeedbackPage = () => {
                 </a>
                 .
               </p>
+
+              <form className="mt-12 text-left">
+                <div className="mb-6">
+                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="name@tracktr.app"
+                    required
+                  />
+                </div>
+
+                <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">
+                  Your message
+                </label>
+                <textarea
+                  id="message"
+                  rows={4}
+                  className="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 mb-6"
+                  placeholder="Leave a comment..."
+                ></textarea>
+
+                <button
+                  type="submit"
+                  className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+                >
+                  Submit
+                </button>
+              </form>
             </div>
           </div>
         </div>
