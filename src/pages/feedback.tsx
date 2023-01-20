@@ -8,22 +8,40 @@ import { trpc } from "../utils/trpc";
 
 const FeedbackPage = () => {
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [message, setMessage] = useState("");
+  const [messageSize, setMessageSize] = useState(0);
+  const [messageError, setMessageError] = useState("");
 
   const router = useRouter();
+  const MAX_MESSAGE_SIZE = 512;
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.currentTarget.value)) {
+      setEmailError("");
+    } else {
+      setEmailError("Incorrect email");
+    }
+
     setEmail(e.currentTarget.value);
   };
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.currentTarget.value.length > MAX_MESSAGE_SIZE) {
+      setMessageError("Message is too long");
+    } else {
+      setMessageError("");
+    }
+
     setMessage(e.currentTarget.value);
+    setMessageSize(e.currentTarget.value.length);
   };
 
   const handleSubmit = () => {
-    addFeedback.mutate({
-      email,
-      message,
-    });
+    if (!emailError && !messageError)
+      addFeedback.mutate({
+        email,
+        message,
+      });
   };
 
   const addFeedback = trpc.feedback.add.useMutation({
@@ -74,14 +92,18 @@ const FeedbackPage = () => {
                   <input
                     type="email"
                     id="email"
-                    className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className={`border text-sm rounded-lg block w-full p-2.5 disabled:cursor-not-allowed ${
+                      emailError
+                        ? "text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 bg-red-100 border-red-400"
+                        : "text-white placeholder-gray-400 bg-gray-700 focus:ring-blue-500 focus:border-blue-500 border-gray-600"
+                    }`}
                     placeholder="name@tracktr.app"
                     required
-                    aria-describedby="helper-text-explanation"
+                    aria-describedby="email-helper"
                     onChange={handleEmailChange}
                     disabled={addFeedback.isLoading}
                   />
-                  <p id="helper-text-explanation" className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  <p id="email-helper" className="mt-2 text-sm text-gray-400">
                     We&apos;ll only use this to contact you if we need more information.
                   </p>
                 </div>
@@ -92,17 +114,27 @@ const FeedbackPage = () => {
                 <textarea
                   id="message"
                   rows={4}
-                  className="block p-2.5 w-full text-sm rounded-lg border bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 mb-6"
+                  className={`block p-2.5 w-full text-sm rounded-lg border disabled:cursor-not-allowed ${
+                    messageError
+                      ? "text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 bg-red-100 border-red-400"
+                      : "text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600"
+                  }`}
                   placeholder="Leave a comment..."
                   onChange={handleMessageChange}
                   disabled={addFeedback.isLoading}
                 ></textarea>
+                <p
+                  id="message-helper"
+                  className={`mt-2 mb-6 text-sm ${messageError ? "text-red-400" : "text-gray-400"}`}
+                >
+                  {messageSize}/{MAX_MESSAGE_SIZE} characters used.
+                </p>
 
                 <button
                   type="submit"
-                  className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+                  className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                   onClick={handleSubmit}
-                  disabled={addFeedback.isLoading}
+                  disabled={addFeedback.isLoading || Boolean(messageError) || Boolean(emailError)}
                 >
                   {addFeedback.isLoading ? (
                     <div className="flex items-center gap-2">
