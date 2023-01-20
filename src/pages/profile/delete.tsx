@@ -46,7 +46,8 @@ const DeleteAccountPage = () => {
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Delete account</h2>
               <p className="max-w-lg mx-auto mt-4 text-base leading-relaxed">
-                You can delete here, this will delete all your data stored by us and cannot be undone. Are you sure?
+                You can delete your account here, this will delete all your data stored by us and cannot be undone. Are
+                you sure?
               </p>
             </div>
           </div>
