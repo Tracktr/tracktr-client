@@ -15,6 +15,7 @@ import { importRouter } from "./import";
 import { followersRouter } from "./followers";
 import { dashboardRouter } from "./dashboard";
 import { calendarRouter } from "./calendar";
+import { feedbackRouter } from "./feedback";
 
 export const appRouter = router({
   movie: movieRouter,
@@ -32,6 +33,7 @@ export const appRouter = router({
   followers: followersRouter,
   dashboard: dashboardRouter,
   calendar: calendarRouter,
+  feedback: feedbackRouter,
 });
 
 // export type definition of API
