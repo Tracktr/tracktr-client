@@ -1,3 +1,5 @@
+import { zonedTimeToUtc } from "date-fns-tz";
+import { z } from "zod";
 import { getDateXDaysAgo } from "../../../utils/getDate";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
@@ -8,76 +10,84 @@ interface IStatItem {
 }
 
 export const dashboardRouter = router({
-  stats: protectedProcedure.query(async ({ ctx }) => {
-    const items: {
-      date: string | Date;
-      count: number;
-    }[] = [];
-    let episodeCounter = 0;
-    let movieCounter = 0;
+  stats: protectedProcedure
+    .input(
+      z.object({
+        timeZone: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const items: {
+        date: string | Date;
+        count: number;
+      }[] = [];
+      let episodeCounter = 0;
+      let movieCounter = 0;
 
-    for (let i = 0; i < 14; i++) {
-      const gte = new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0));
-      const lt = new Date(getDateXDaysAgo(i - 1).setHours(0, 0, 0, 0));
+      for (let i = 0; i < 14; i++) {
+        const gte = zonedTimeToUtc(new Date(getDateXDaysAgo(i).setHours(0, 0, 0, 0)), input.timeZone);
+        const lt = zonedTimeToUtc(new Date(getDateXDaysAgo(i - 1).setHours(0, 0, 0, 0)), input.timeZone);
 
-      await ctx.prisma.episodesHistory
-        .count({
-          where: {
-            user_id: ctx.session.user.profile.userId,
-            datetime: {
-              gte,
-              lt,
+        await ctx.prisma.episodesHistory
+          .findMany({
+            where: {
+              user_id: ctx.session.user.profile.userId,
+              datetime: {
+                gte,
+                lt,
+              },
             },
-          },
-        })
-        .then((res) => {
-          if (res > 0) episodeCounter += res;
-          items.push({
-            date: gte,
-            count: res,
-          });
-        });
+          })
+          .then((res) => {
+            if (res.length > 0) episodeCounter += res.length;
 
-      await ctx.prisma.moviesHistory
-        .count({
-          where: {
-            user_id: ctx.session.user.profile.userId,
-            datetime: {
-              gte,
-              lt,
+            items.push({
+              date: gte,
+              count: res.length,
+            });
+          });
+
+        await ctx.prisma.moviesHistory
+          .findMany({
+            where: {
+              user_id: ctx.session.user.profile.userId,
+              datetime: {
+                gte,
+                lt,
+              },
             },
-          },
-        })
-        .then((res) => {
-          if (res > 0) movieCounter++;
-          items.push({
-            date: gte,
-            count: res,
+          })
+          .then((res) => {
+            if (res.length > 0) movieCounter++;
+
+            items.push({
+              date: gte,
+              count: res.length,
+            });
           });
-        });
-    }
-
-    const result: IStatItem[] = items.reduce((acc: any, { date, count }: any) => {
-      acc[date] ??= { date: date, count: [] };
-      acc[date].count = Number(acc[date].count) + Number(count);
-
-      return acc;
-    }, {});
-
-    const sorted = Object.values(result).sort((a: IStatItem, b: IStatItem) => {
-      if (new Date(a.date) > new Date(b.date)) {
-        return 1;
-      } else {
-        return -1;
       }
-    });
 
-    return {
-      history: sorted,
-      episodeAmount: episodeCounter,
-      movieAmount: movieCounter,
-    };
-  }),
+      const result: IStatItem[] = items.reduce((acc: any, { date, count }: any) => {
+        acc[date] ??= { date: date, count: [] };
+        acc[date].count = Number(acc[date].count) + Number(count);
+
+        return acc;
+      }, {});
+
+      const sorted = Object.values(result).sort((a: IStatItem, b: IStatItem) => {
+        if (new Date(a.date) > new Date(b.date)) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      return {
+        history: sorted,
+        episodeAmount: episodeCounter,
+        movieAmount: movieCounter,
+      };
+    }),
 
   upNext: protectedProcedure.query(async ({ ctx }) => {
     const episodes = await ctx.prisma.episodesHistory.findMany({

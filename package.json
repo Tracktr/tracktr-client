@@ -23,6 +23,7 @@
     "@trpc/server": "10.0.0-proxy-beta.21",
     "@types/recharts": "^1.8.24",
     "date-fns": "^2.29.3",
+    "date-fns-tz": "^1.3.7",
     "fast-average-color-node": "^2.6.0",
     "framer-motion": "^7.10.3",
     "next": "12.3.1",
