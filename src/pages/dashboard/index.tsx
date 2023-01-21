@@ -38,9 +38,12 @@ const DashboardPage = () => {
     status: upNextStatus,
     refetch: refetchUpNext,
   } = trpc.dashboard.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
-  const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(undefined, {
-    enabled: sessionStatus === "authenticated",
-  });
+  const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(
+    { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+    {
+      enabled: sessionStatus === "authenticated",
+    }
+  );
   const {
     data: friendsData,
     status: friendsStatus,

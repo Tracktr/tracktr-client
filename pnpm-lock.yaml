@@ -22,6 +22,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.48.2
   autoprefixer: ^10.4.13
   date-fns: ^2.29.3
+  date-fns-tz: ^1.3.7
   eslint: 7.32.0
   eslint-config-airbnb: ^19.0.4
   eslint-config-next: 12.3.1
@@ -73,6 +74,7 @@ dependencies:
   '@trpc/server': 10.0.0-proxy-beta.21
   '@types/recharts': 1.8.24
   date-fns: 2.29.3
+  date-fns-tz: 1.3.7_date-fns@2.29.3
   fast-average-color-node: 2.6.0
   framer-motion: 7.10.3_biqbaboplfbrettd7655fr4n2y
   next: 12.3.1_biqbaboplfbrettd7655fr4n2y
@@ -1353,6 +1355,14 @@ packages:
 
   /date-arithmetic/4.1.0:
     resolution: {integrity: sha512-QWxYLR5P/6GStZcdem+V1xoto6DMadYWpMXU82ES3/RfR3Wdwr3D0+be7mgOJ+Ov0G9D5Dmb9T17sNLQYj9XOg==}
+    dev: false
+
+  /date-fns-tz/1.3.7_date-fns@2.29.3:
+    resolution: {integrity: sha512-1t1b8zyJo+UI8aR+g3iqr5fkUHWpd58VBx8J/ZSQ+w7YrGlw80Ag4sA86qkfCXRBLmMc4I2US+aPMd4uKvwj5g==}
+    peerDependencies:
+      date-fns: '>=2.0.0'
+    dependencies:
+      date-fns: 2.29.3
     dev: false
 
   /date-fns/2.29.3:
