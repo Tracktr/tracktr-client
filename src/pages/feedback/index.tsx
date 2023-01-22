@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
-import { trpc } from "../utils/trpc";
+import { trpc } from "../../utils/trpc";
 
 const FeedbackPage = () => {
   const [email, setEmail] = useState("");
