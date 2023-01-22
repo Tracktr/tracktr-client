@@ -107,7 +107,7 @@ const ProfilePage = () => {
                   </select>
                 </label>
 
-                <div className="flex items-center w-full mt-12">
+                <div className="flex items-center w-full gap-2 mt-12">
                   <button
                     className="px-8 py-3 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
                     type="submit"
@@ -123,7 +123,7 @@ const ProfilePage = () => {
                     )}
                   </button>
                   <Link href="/profile/delete">
-                    <a className="ml-auto text-gray-400">Delete account</a>
+                    <a className="ml-auto text-center text-gray-400">Delete account</a>
                   </Link>
                 </div>
               </form>
