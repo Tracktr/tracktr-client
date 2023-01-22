@@ -101,7 +101,7 @@ const ImportPage = () => {
         <title>Import data from Trakt.tv - Tracktr.</title>
       </Head>
 
-      <section className="py-10 text-white sm:py-16 lg:py-24">
+      <section className="pt-24 text-white">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Import data from Trakt.tv</h2>
@@ -142,7 +142,7 @@ const ImportPage = () => {
         </div>
       </section>
 
-      <div className="max-w-6xl m-auto">
+      <div className="max-w-6xl mx-2 mt-4 md:mx-auto">
         <div className="flex items-center justify-center w-full">
           <label
             htmlFor="dropzone-file"
