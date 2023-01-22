@@ -157,10 +157,10 @@ export const watchlistRouter = router({
           pagesAmount: Math.ceil(watchlistLength / input.pageSize),
         };
       } else {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No watchlist items found",
-        });
+        return {
+          WatchlistItem: [],
+          pagesAmount: 0,
+        };
       }
     }),
 
