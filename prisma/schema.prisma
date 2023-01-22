@@ -70,12 +70,14 @@ model VerificationToken {
 }
 
 model Profile {
-  username String  @id @unique
-  adult    Boolean @default(false)
-  language String  @default("en")
-  region   String  @default("GB")
-  userId   String  @unique
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username   String   @id @unique
+  adult      Boolean  @default(false)
+  language   String   @default("en")
+  region     String   @default("GB")
+  signUpDate DateTime @default(now())
+  role       String   @default("user")
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@fulltext([username])
 }
@@ -237,7 +239,8 @@ model WatchlistItem {
 }
 
 model Feedback {
-  id      String @id @default(cuid())
+  id      String   @id @default(cuid())
   email   String
-  message String @db.VarChar(512)
+  message String   @db.VarChar(512)
+  created DateTime @default(now())
 }

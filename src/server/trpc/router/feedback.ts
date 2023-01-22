@@ -1,5 +1,6 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { router, publicProcedure } from "../trpc";
+import { router, publicProcedure, protectedProcedure } from "../trpc";
 
 export const feedbackRouter = router({
   add: publicProcedure
@@ -16,5 +17,40 @@ export const feedbackRouter = router({
           message: input.message,
         },
       });
+    }),
+  get: protectedProcedure.query(async ({ ctx }) => {
+    if (ctx.session.user.profile.role === "admin") {
+      return await ctx.prisma.feedback.findMany({
+        take: 10,
+        orderBy: {
+          created: "desc",
+        },
+      });
+    } else {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message:
+          "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+      });
+    }
+  }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "admin") {
+        return await ctx.prisma.feedback.delete({
+          where: { id: input.id },
+        });
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
     }),
 });
