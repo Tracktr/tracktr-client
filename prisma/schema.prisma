@@ -69,13 +69,18 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model Profile {
   username   String   @id @unique
   adult      Boolean  @default(false)
   language   String   @default("en")
   region     String   @default("GB")
   signUpDate DateTime @default(now())
-  role       String   @default("user")
+  role       String   @default("USER")
   userId     String   @unique
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
