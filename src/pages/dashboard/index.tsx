@@ -229,7 +229,7 @@ interface IFriendReview {
 const FriendReview = ({ content, created, item, friend }: IFriendReview) => {
   return (
     <div className="flex items-center w-full gap-2 mb-4">
-      <Link href={`/tv/${item.id}#reviews`}>
+      <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
         <a>
           <Image
             alt={"Poster image for:" + item.name || item.title}
