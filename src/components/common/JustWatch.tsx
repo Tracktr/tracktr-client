@@ -20,14 +20,17 @@ interface Provider {
   "Apple iTunes": IProvider;
   "Microsoft Store": IProvider;
   "Rakuten TV": IProvider;
+  "Google Play Movies": IProvider;
+  "Sky Store": IProvider;
+  Chili: IProvider;
+  YouTube: IProvider;
+  "Pathé Thuis": IProvider;
+  KPN: IProvider;
+  "Netflix basic with Ads": IProvider;
+  meJane: IProvider;
 }
 
 export const providers: Provider = {
-  Netflix: {
-    name: "Netflix",
-    url: "https://www.netflix.com/",
-    searchUrl: "https://www.netflix.com/search?q=",
-  },
   "Amazon Video": {
     name: "Amazon Video",
     url: "https://www.primevideo.com/",
@@ -38,15 +41,60 @@ export const providers: Provider = {
     url: "https://tv.apple.com/",
     searchUrl: "https://tv.apple.com/search?term=",
   },
+  Chili: {
+    name: "Chili",
+    url: "https://uk.chili.com/",
+    searchUrl: "https://uk.chili.com/search?q=",
+  },
+  "Google Play Movies": {
+    name: "Google Play Movies",
+    url: "https://play.google.com/store/movies",
+    searchUrl: "https://play.google.com/store/search?c=movies&q=",
+  },
+  KPN: {
+    name: "KPN",
+    url: "https://tv.kpn.com",
+    searchUrl: "https://tv.kpn.com/zoekresultaten?q=",
+  },
+  "Pathé Thuis": {
+    name: "Pathé Thuis",
+    url: "https://www.pathe-thuis.nl",
+    searchUrl: "https://www.pathe-thuis.nl/zoeken?q=",
+  },
+  "Sky Store": {
+    name: "Sky Store",
+    url: "https://www.skystore.com/",
+    searchUrl: "https://www.skystore.com/search?q=",
+  },
+  meJane: {
+    name: "meJane",
+    url: "https://www.mejane.com",
+    searchUrl: "https://www.mejane.com/films/zoeken.html#",
+  },
   "Microsoft Store": {
     name: "Microsoft Store",
     url: "https://www.microsoft.com/store/movies-and-tv",
     searchUrl: "https://www.microsoft.com/search/explore?q=",
   },
+  Netflix: {
+    name: "Netflix",
+    url: "https://www.netflix.com/",
+    searchUrl: "https://www.netflix.com/search?q=",
+  },
+  "Netflix basic with Ads": {
+    name: "Netflix basic with Ads",
+    url: "https://www.netflix.com/",
+    searchUrl: "https://www.netflix.com/search?q=",
+  },
   "Rakuten TV": {
     name: "Rakuten TV",
     url: "https://rakuten.tv/",
     searchUrl: "https://rakuten.tv/nl/search?q=",
+  },
+  YouTube: {
+    name: "YouTube",
+    url: "https://www.youtube.com",
+    searchUrl: "https://www.youtube.com/results?search_query=",
   },
 };
 
