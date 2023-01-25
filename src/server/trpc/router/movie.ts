@@ -2,6 +2,7 @@ import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
 import { TRPCError } from "@trpc/server";
+import { Movies, MoviesHistory, Profile, User } from "@prisma/client";
 
 export interface IMovie {
   adult: boolean;
@@ -283,5 +284,44 @@ export const movieRouter = router({
       return {
         ...result,
       };
+    }),
+
+  seenBy: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const activity = await ctx.prisma.user.findFirst({
+        where: {
+          id: ctx.session.user.id,
+        },
+        include: {
+          following: {
+            include: {
+              profile: true,
+              MoviesHistory: {
+                where: {
+                  movie_id: input.id,
+                },
+                include: {
+                  movie: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      const response:
+        | (User & {
+            profile: Profile | null;
+            MoviesHistory: (MoviesHistory & { movie: Movies })[];
+          })[]
+        | undefined = [];
+      activity?.following.map((user) => user.MoviesHistory.length > 0 && response.push(user));
+
+      return response;
     }),
 });
