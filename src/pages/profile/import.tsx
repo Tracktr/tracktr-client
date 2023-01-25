@@ -83,7 +83,7 @@ const ImportPage = () => {
           };
         });
 
-        const maxAmount = 250;
+        const maxAmount = 64;
         const amount = Math.ceil(formattedData.length / maxAmount);
 
         for (let i = 1; i <= amount; i++) {
