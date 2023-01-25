@@ -187,7 +187,9 @@ export const watchlistRouter = router({
 
       return {
         inWatchlist: Boolean(watchlist),
-        id: watchlist?.WatchlistItem[0]?.id,
+        id: watchlist?.WatchlistItem.filter(
+          (item) => item.movie_id === input.itemID || item.series_id === input.itemID
+        )[0]?.id,
       };
     }),
 
