@@ -18,6 +18,7 @@ import { appRouter } from "../../../../../server/trpc/router/_app";
 import { createContext } from "../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import SeenByBlock from "../../../../../components/pageBlocks/SeenByBlock";
 
 const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
@@ -35,6 +36,11 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     seriesID: Number(props.seriesID),
     seasonNumber: Number(props.seasonNumber),
   });
+
+  const { data: seenBy, status: seenByStatus } = trpc.season.seenBy.useQuery(
+    { id: Number(seasonData.id) },
+    { enabled: seasonStatus === "success" }
+  );
 
   const watchHistory = trpc.season.watchHistoryByID.useQuery(
     {
@@ -106,6 +112,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 fetchStatus={seasonIsRefetching}
                 themeColor={seriesData.theme_color}
               />
+              <SeenByBlock data={seenBy} />
               <CastBlock cast={seasonData.credits.cast} />
               <CrewBlock crew={seasonData.credits.crew} />
               <ReviewsBlock

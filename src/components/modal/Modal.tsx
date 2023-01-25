@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const Backdrop = ({ children, onClick }: { children: JSX.Element | JSX.Element[]; onClick: () => void }) => {
   return (
@@ -27,8 +28,15 @@ const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) =
 };
 
 const Modal = ({ handleClose, children }: { handleClose: () => void; children: JSX.Element | JSX.Element[] }) => {
+  document.body.style.overflow = "hidden";
+
   return ReactDOM.createPortal(
-    <Backdrop onClick={handleClose}>
+    <Backdrop
+      onClick={() => {
+        document.body.style.overflow = "auto";
+        handleClose();
+      }}
+    >
       <ModalWrapper>{children}</ModalWrapper>
     </Backdrop>,
     document.body

@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
@@ -65,84 +66,94 @@ export const profileRouter = router({
   }),
 
   profileByUsername: publicProcedure.input(z.object({ user: z.string() })).query(async ({ ctx, input }) => {
-    const userResult = await ctx.prisma.user.findFirstOrThrow({
-      where: {
-        profile: {
-          username: input.user,
-        },
-      },
-      select: {
-        id: true,
-        name: true,
-        image: true,
-        email: false,
-        emailVerified: false,
-        accounts: false,
-        sessions: false,
-        profile: true,
-        EpisodesHistory: {
-          take: 6,
-          include: {
-            series: true,
-            season: true,
-            episode: true,
-          },
-          orderBy: {
-            datetime: "desc",
+    try {
+      const userResult = await ctx.prisma.user.findFirstOrThrow({
+        where: {
+          profile: {
+            username: input.user,
+            private: false,
           },
         },
-        MoviesHistory: {
-          take: 6,
-          include: {
-            movie: true,
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          email: false,
+          emailVerified: false,
+          accounts: false,
+          sessions: false,
+          profile: true,
+          EpisodesHistory: {
+            take: 6,
+            include: {
+              series: true,
+              season: true,
+              episode: true,
+            },
+            orderBy: {
+              datetime: "desc",
+            },
           },
-          orderBy: {
-            datetime: "desc",
+          MoviesHistory: {
+            take: 6,
+            include: {
+              movie: true,
+            },
+            orderBy: {
+              datetime: "desc",
+            },
           },
-        },
-        Watchlist: {
-          take: 6,
-          include: {
-            WatchlistItem: {
-              include: {
-                series: true,
-                movies: true,
+          Watchlist: {
+            take: 6,
+            include: {
+              WatchlistItem: {
+                include: {
+                  series: true,
+                  movies: true,
+                },
               },
             },
           },
+          MoviesReviews: {
+            take: 1,
+            orderBy: {
+              created: "desc",
+            },
+            include: {
+              Movies: true,
+            },
+          },
+          SeriesReviews: {
+            take: 1,
+            orderBy: {
+              created: "desc",
+            },
+            include: {
+              Series: true,
+            },
+          },
+          followers: true,
+          following: true,
         },
-        MoviesReviews: {
-          take: 1,
-          orderBy: {
-            created: "desc",
-          },
-          include: {
-            Movies: true,
-          },
-        },
-        SeriesReviews: {
-          take: 1,
-          orderBy: {
-            created: "desc",
-          },
-          include: {
-            Series: true,
-          },
-        },
-        followers: true,
-        following: true,
-      },
-    });
+      });
 
-    return {
-      ...userResult,
-    };
+      return {
+        ...userResult,
+      };
+    } catch (error) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User not found",
+        cause: error,
+      });
+    }
   }),
 
   updateProfile: protectedProcedure
     .input(
       z.object({
         adult: z.boolean(),
+        private: z.boolean(),
         language: z.string(),
         region: z.string(),
       })
@@ -156,6 +167,7 @@ export const profileRouter = router({
           profile: {
             update: {
               adult: input.adult,
+              private: input.private,
               language: input.language,
               region: input.region,
             },

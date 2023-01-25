@@ -2,6 +2,7 @@ import { router, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import createNewSeries from "../../../utils/createNewSeries";
 import { TRPCError } from "@trpc/server";
+import { Episodes, EpisodesHistory, Profile, Seasons, Series, User } from "@prisma/client";
 
 export const episodeRouter = router({
   episodeByID: publicProcedure
@@ -181,5 +182,46 @@ export const episodeRouter = router({
       return {
         ...result,
       };
+    }),
+
+  seenBy: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const activity = await ctx.prisma.user.findFirst({
+        where: {
+          id: ctx.session.user.id,
+        },
+        include: {
+          following: {
+            include: {
+              profile: true,
+              EpisodesHistory: {
+                where: {
+                  episode_id: input.id,
+                },
+                include: {
+                  series: true,
+                  season: true,
+                  episode: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      const response:
+        | (User & {
+            profile: Profile | null;
+            EpisodesHistory: (EpisodesHistory & { series: Series; season: Seasons; episode: Episodes })[];
+          })[]
+        | undefined = [];
+      activity?.following.map((user) => user.EpisodesHistory.length > 0 && response.push(user));
+
+      return response;
     }),
 });

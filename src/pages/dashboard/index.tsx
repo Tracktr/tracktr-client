@@ -161,105 +161,42 @@ const DashboardPage = () => {
                     </div>
                   </div>
                 </div>
-                {(friendsData?.history || []).length < 1 &&
-                  (friendsData?.movieReviews || []).length < 1 &&
-                  (friendsData?.seriesReviews || []).length < 1 && (
-                    <div>Your friends haven&apos;t done anyting yet!</div>
-                  )}
-                {(friendsData?.history || []).length > 0 && (
-                  <>
-                    <h2 className="mb-4 text-xl">Recently watched</h2>
-                    <HistoryGrid
-                      hasScrollContainer
-                      history={friendsData?.history || []}
-                      status={friendsStatus}
-                      refetch={refetchFriends}
-                      inPublic
-                    />
-                  </>
-                )}
+                <h2 className="mb-4 text-xl">Recently watched</h2>
+                <HistoryGrid
+                  hasScrollContainer
+                  history={friendsData?.history || []}
+                  status={friendsStatus}
+                  refetch={refetchFriends}
+                  inPublic
+                />
 
-                {((friendsData?.movieReviews || []).length > 0 || (friendsData?.seriesReviews || []).length > 0) && (
-                  <>
-                    <h2 className="my-2 text-xl">Reviews</h2>
-                    <div className="flex">
-                      {friendsData?.seriesReviews[0] && (
-                        <div className="flex items-center w-full gap-2 mb-4">
-                          <Link href={`/tv/${friendsData?.seriesReviews[0]?.Series.id}#reviews`}>
-                            <a>
-                              <Image
-                                alt={"Poster image for:" + friendsData?.seriesReviews[0]?.Series.name}
-                                width="100"
-                                height="150"
-                                src={PosterImage({ path: friendsData?.seriesReviews[0]?.Series.poster, size: "lg" })}
-                              />
-                            </a>
-                          </Link>
-                          <div>
-                            <Link href={`/profile/${friendsData?.seriesReviews[0].friend.name}`}>
-                              <a className="flex items-center gap-2">
-                                <ImageWithFallback
-                                  src={friendsData?.seriesReviews[0].friend.image}
-                                  fallbackSrc="/placeholder_profile.png"
-                                  width="16"
-                                  height="16"
-                                  alt="Profile picture"
-                                  className="rounded-full"
-                                />
-                                <p className="text-sm">{friendsData?.seriesReviews[0].friend.name}</p>
-                              </a>
-                            </Link>
-                            <p className="text-xl">{friendsData?.seriesReviews[0]?.Series.name}</p>
-                            <div className="mb-4 text-sm">
-                              {friendsData?.seriesReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{friendsData?.seriesReviews[0].content}</div>
-                          </div>
-                        </div>
-                      )}
-                      {(friendsData?.movieReviews || []).length > 0 && (
-                        <div className="flex items-center w-full gap-2 mb-4">
-                          <Link href={`/movies/${friendsData?.movieReviews[0]?.Movies.id}#reviews`}>
-                            <a>
-                              <Image
-                                alt={"Poster image for:" + friendsData?.movieReviews[0]?.Movies.title}
-                                width="100"
-                                height="150"
-                                src={PosterImage({ path: friendsData?.movieReviews[0]?.Movies.poster, size: "lg" })}
-                              />
-                            </a>
-                          </Link>
-                          <div>
-                            <Link href={`/profile/${friendsData?.movieReviews[0].friend.name}`}>
-                              <a className="flex items-center gap-2">
-                                <ImageWithFallback
-                                  src={friendsData?.movieReviews[0].friend.image}
-                                  fallbackSrc="/placeholder_profile.png"
-                                  width="16"
-                                  height="16"
-                                  alt="Profile picture"
-                                  className="rounded-full"
-                                />
-                                <p className="text-sm">{friendsData?.movieReviews[0].friend.name}</p>
-                              </a>
-                            </Link>
-                            <p className="text-xl">{friendsData?.movieReviews[0]?.Movies.title}</p>
-                            <div className="mb-4 text-sm">
-                              {friendsData?.movieReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{friendsData?.movieReviews[0].content}</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                )}
+                <h2 className="my-2 text-xl">Reviews</h2>
+                <div className="flex flex-col md:flex-row">
+                  {friendsStatus === "loading" ? (
+                    <LoadingFriendReview />
+                  ) : (
+                    friendsData?.seriesReviews[0] && (
+                      <FriendReview
+                        content={friendsData?.seriesReviews[0].content}
+                        created={friendsData?.seriesReviews[0].created}
+                        item={friendsData?.seriesReviews[0].Series}
+                        friend={friendsData?.seriesReviews[0].friend}
+                      />
+                    )
+                  )}
+                  {friendsStatus === "loading" ? (
+                    <LoadingFriendReview />
+                  ) : (
+                    friendsData?.movieReviews[0] && (
+                      <FriendReview
+                        content={friendsData?.movieReviews[0].content}
+                        created={friendsData?.movieReviews[0].created}
+                        item={friendsData?.movieReviews[0].Movies}
+                        friend={friendsData?.movieReviews[0].friend}
+                      />
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -268,5 +205,77 @@ const DashboardPage = () => {
     </>
   );
 };
+
+interface IFriendReview {
+  content: string;
+  created: Date;
+  item: {
+    id: number;
+    name?: string;
+    title?: string;
+    poster: string;
+  };
+  friend: {
+    image: string;
+    name: string;
+  };
+}
+
+const FriendReview = ({ content, created, item, friend }: IFriendReview) => {
+  return (
+    <div className="flex items-center w-full gap-2 mb-4">
+      <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
+        <a>
+          <Image
+            alt={"Poster image for:" + item.name || item.title}
+            width="100"
+            height="150"
+            src={PosterImage({ path: item.poster, size: "lg" })}
+          />
+        </a>
+      </Link>
+      <div className="w-[75%]">
+        <Link href={`/profile/${friend.name}`}>
+          <a className="flex items-center gap-2">
+            <ImageWithFallback
+              src={friend.image}
+              fallbackSrc="/placeholder_profile.png"
+              width="16"
+              height="16"
+              alt="Profile picture"
+              className="rounded-full"
+            />
+            <p className="text-sm">{friend.name}</p>
+          </a>
+        </Link>
+        <p className="text-xl">{item.name || item.title}</p>
+        <div className="mb-4 text-sm">
+          {created.toLocaleString("en-UK", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </div>
+        <div>{content}</div>
+      </div>
+    </div>
+  );
+};
+
+const LoadingFriendReview = () => (
+  <div className="flex items-center w-full gap-2 mb-4">
+    <div className="flex items-center w-full gap-2 mb-4">
+      <div className="w-[100px] h-[150px] animate-pulse bg-[#343434]" />
+      <div className="w-[75%]">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="animate-pulse w-[16px] h-[16px] rounded-full bg-[#343434]" />
+          <div className="animate-pulse w-[50%] h-[20px] rounded bg-[#343434]" />
+        </div>
+        <div className="h-[28px] w-full animate-pulse rounded bg-[#343434] mb-1" />
+        <div className="mb-4 h-[20px] w-[50%] animate-pulse rounded bg-[#343434]" />
+        <div className="h-[48px] w-[100%] animate-pulse rounded bg-[#343434]" />
+      </div>
+    </div>
+  </div>
+);
 
 export default DashboardPage;

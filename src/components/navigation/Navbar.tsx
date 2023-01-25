@@ -21,6 +21,7 @@ const subLinks = [
   { href: "/profile", text: "Profile" },
   { href: "/profile/history", text: "History" },
   { href: "/profile/watchlist", text: "Watchlist" },
+  { href: "/profile/social", text: "Social" },
   { href: "/profile/settings", text: "Settings" },
 ];
 

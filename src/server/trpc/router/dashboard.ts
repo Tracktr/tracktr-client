@@ -268,7 +268,7 @@ export const dashboardRouter = router({
           ...r,
           friend: {
             image: friend.image,
-            name: friend.name,
+            name: friend.profile?.username,
           },
         })),
       ];

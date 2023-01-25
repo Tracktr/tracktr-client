@@ -18,6 +18,7 @@ import { appRouter } from "../../../../../../server/trpc/router/_app";
 import { createContext } from "../../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import SeenByBlock from "../../../../../../components/pageBlocks/SeenByBlock";
 
 const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
@@ -34,6 +35,11 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     seasonNumber: Number(props.seasonNumber),
     episodeNumber: Number(props.episodeNumber),
   });
+
+  const { data: seenBy, status: seenByStatus } = trpc.episode.seenBy.useQuery(
+    { id: Number(episodeData.id) },
+    { enabled: episodeStatus === "success" }
+  );
 
   return (
     <LoadingPageComponents status={episodeStatus} notFound>
@@ -92,6 +98,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
               />
 
               <DetailsBlock releaseDate={episodeData.air_date} runtime={episodeData.runtime} />
+              <SeenByBlock data={seenBy} />
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />

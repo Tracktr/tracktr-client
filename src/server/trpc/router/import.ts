@@ -59,7 +59,7 @@ export const importRouter = router({
                     manyMoviesHistory.push({
                       datetime: item.datetime,
                       movie_id: Number(item.id),
-                      user_id: ctx?.session?.user?.id as string,
+                      user_id: ctx.session.user.id,
                     });
 
                     continue;
@@ -69,7 +69,7 @@ export const importRouter = router({
                 manyMoviesHistory.push({
                   datetime: item.datetime,
                   movie_id: Number(item.id),
-                  user_id: ctx?.session?.user?.id as string,
+                  user_id: ctx.session.user.id,
                 });
 
                 continue;
@@ -117,7 +117,7 @@ export const importRouter = router({
                   if (newSeries !== null) {
                     manyEpisodesHistory.push({
                       datetime: item.datetime,
-                      user_id: ctx?.session?.user?.id as string,
+                      user_id: ctx.session.user.id,
                       series_id: Number(item.id),
                       season_id: currentSeason.id,
                       episode_id: currentEpisode.id,
@@ -131,7 +131,7 @@ export const importRouter = router({
                     if (e.code === "P2002") {
                       manyEpisodesHistory.push({
                         datetime: item.datetime,
-                        user_id: ctx?.session?.user?.id as string,
+                        user_id: ctx.session.user.id,
                         series_id: Number(item.id),
                         season_id: currentSeason.id,
                         episode_id: currentEpisode.id,
@@ -144,7 +144,7 @@ export const importRouter = router({
               } else {
                 manyEpisodesHistory.push({
                   datetime: item.datetime,
-                  user_id: ctx?.session?.user?.id as string,
+                  user_id: ctx.session.user.id,
                   series_id: Number(item.id),
                   season_id: currentSeason.id,
                   episode_id: currentEpisode.id,
