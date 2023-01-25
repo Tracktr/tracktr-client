@@ -184,78 +184,20 @@ const DashboardPage = () => {
                     <h2 className="my-2 text-xl">Reviews</h2>
                     <div className="flex flex-col md:flex-row">
                       {friendsData?.seriesReviews[0] && (
-                        <div className="flex items-center w-full gap-2 mb-4">
-                          <Link href={`/tv/${friendsData?.seriesReviews[0]?.Series.id}#reviews`}>
-                            <a>
-                              <Image
-                                alt={"Poster image for:" + friendsData?.seriesReviews[0]?.Series.name}
-                                width="100"
-                                height="150"
-                                src={PosterImage({ path: friendsData?.seriesReviews[0]?.Series.poster, size: "lg" })}
-                              />
-                            </a>
-                          </Link>
-                          <div>
-                            <Link href={`/profile/${friendsData?.seriesReviews[0].friend.name}`}>
-                              <a className="flex items-center gap-2">
-                                <ImageWithFallback
-                                  src={friendsData?.seriesReviews[0].friend.image}
-                                  fallbackSrc="/placeholder_profile.png"
-                                  width="16"
-                                  height="16"
-                                  alt="Profile picture"
-                                  className="rounded-full"
-                                />
-                                <p className="text-sm">{friendsData?.seriesReviews[0].friend.name}</p>
-                              </a>
-                            </Link>
-                            <p className="text-xl">{friendsData?.seriesReviews[0]?.Series.name}</p>
-                            <div className="mb-4 text-sm">
-                              {friendsData?.seriesReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{friendsData?.seriesReviews[0].content}</div>
-                          </div>
-                        </div>
+                        <FriendReview
+                          content={friendsData?.seriesReviews[0].content}
+                          created={friendsData?.seriesReviews[0].created}
+                          item={friendsData?.seriesReviews[0].Series}
+                          friend={friendsData?.seriesReviews[0].friend}
+                        />
                       )}
                       {(friendsData?.movieReviews || []).length > 0 && (
-                        <div className="flex items-center w-full gap-2 mb-4">
-                          <Link href={`/movies/${friendsData?.movieReviews[0]?.Movies.id}#reviews`}>
-                            <a>
-                              <Image
-                                alt={"Poster image for:" + friendsData?.movieReviews[0]?.Movies.title}
-                                width="100"
-                                height="150"
-                                src={PosterImage({ path: friendsData?.movieReviews[0]?.Movies.poster, size: "lg" })}
-                              />
-                            </a>
-                          </Link>
-                          <div>
-                            <Link href={`/profile/${friendsData?.movieReviews[0].friend.name}`}>
-                              <a className="flex items-center gap-2">
-                                <ImageWithFallback
-                                  src={friendsData?.movieReviews[0].friend.image}
-                                  fallbackSrc="/placeholder_profile.png"
-                                  width="16"
-                                  height="16"
-                                  alt="Profile picture"
-                                  className="rounded-full"
-                                />
-                                <p className="text-sm">{friendsData?.movieReviews[0].friend.name}</p>
-                              </a>
-                            </Link>
-                            <p className="text-xl">{friendsData?.movieReviews[0]?.Movies.title}</p>
-                            <div className="mb-4 text-sm">
-                              {friendsData?.movieReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{friendsData?.movieReviews[0].content}</div>
-                          </div>
-                        </div>
+                        <FriendReview
+                          content={friendsData?.movieReviews[0].content}
+                          created={friendsData?.movieReviews[0].created}
+                          item={friendsData?.movieReviews[0].Movies}
+                          friend={friendsData?.movieReviews[0].friend}
+                        />
                       )}
                     </div>
                   </>
@@ -266,6 +208,61 @@ const DashboardPage = () => {
         )}
       </LoadingPageComponents>
     </>
+  );
+};
+
+interface IFriendReview {
+  content: string;
+  created: Date;
+  item: {
+    id: number;
+    name?: string;
+    title?: string;
+    poster: string;
+  };
+  friend: {
+    image: string;
+    name: string;
+  };
+}
+
+const FriendReview = ({ content, created, item, friend }: IFriendReview) => {
+  return (
+    <div className="flex items-center w-full gap-2 mb-4">
+      <Link href={`/tv/${item.id}#reviews`}>
+        <a>
+          <Image
+            alt={"Poster image for:" + item.name || item.title}
+            width="100"
+            height="150"
+            src={PosterImage({ path: item.poster, size: "lg" })}
+          />
+        </a>
+      </Link>
+      <div className="w-[75%]">
+        <Link href={`/profile/${friend.name}`}>
+          <a className="flex items-center gap-2">
+            <ImageWithFallback
+              src={friend.image}
+              fallbackSrc="/placeholder_profile.png"
+              width="16"
+              height="16"
+              alt="Profile picture"
+              className="rounded-full"
+            />
+            <p className="text-sm">{friend.name}</p>
+          </a>
+        </Link>
+        <p className="text-xl">{item.name || item.title}</p>
+        <div className="mb-4 text-sm">
+          {created.toLocaleString("en-UK", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </div>
+        <div>{content}</div>
+      </div>
+    </div>
   );
 };
 
