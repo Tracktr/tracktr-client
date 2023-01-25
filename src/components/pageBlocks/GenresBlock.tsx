@@ -10,7 +10,7 @@ interface GenresBlockProps {
 
 const GenresBlock = ({ genres, themeColor }: GenresBlockProps) => {
   return (
-    <div className="flex">
+    <div className="flex flex-wrap">
       {genres?.map((genre) => (
         <span
           key={genre.id}
