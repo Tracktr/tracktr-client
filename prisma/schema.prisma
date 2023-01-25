@@ -81,6 +81,7 @@ model Profile {
   region     String   @default("GB")
   signUpDate DateTime @default(now())
   role       String   @default("USER")
+  private    Boolean  @default(false)
   userId     String   @unique
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
