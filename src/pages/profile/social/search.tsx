@@ -26,6 +26,7 @@ const FollowersPage = () => {
     { query: searchInput },
     {
       enabled: debouncedValue.length >= 3 && searchInput.length > 0,
+      keepPreviousData: true,
     }
   );
 
