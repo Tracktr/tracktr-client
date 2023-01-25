@@ -53,7 +53,7 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
                 genres={data.genres}
               />
               <ContentOverview
-                name={data.name}
+                name={data.title}
                 overview={data.overview}
                 theme_color={data.theme_color}
                 videos={data.videos}
