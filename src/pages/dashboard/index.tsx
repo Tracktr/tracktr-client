@@ -182,7 +182,7 @@ const DashboardPage = () => {
                 {((friendsData?.movieReviews || []).length > 0 || (friendsData?.seriesReviews || []).length > 0) && (
                   <>
                     <h2 className="my-2 text-xl">Reviews</h2>
-                    <div className="flex">
+                    <div className="flex flex-col md:flex-row">
                       {friendsData?.seriesReviews[0] && (
                         <div className="flex items-center w-full gap-2 mb-4">
                           <Link href={`/tv/${friendsData?.seriesReviews[0]?.Series.id}#reviews`}>
