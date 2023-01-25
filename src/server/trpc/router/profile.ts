@@ -69,6 +69,7 @@ export const profileRouter = router({
       where: {
         profile: {
           username: input.user,
+          private: false,
         },
       },
       select: {
@@ -143,6 +144,7 @@ export const profileRouter = router({
     .input(
       z.object({
         adult: z.boolean(),
+        private: z.boolean(),
         language: z.string(),
         region: z.string(),
       })
@@ -156,6 +158,7 @@ export const profileRouter = router({
           profile: {
             update: {
               adult: input.adult,
+              private: input.private,
               language: input.language,
               region: input.region,
             },

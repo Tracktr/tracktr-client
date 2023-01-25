@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
+import { IoMdInformation } from "react-icons/io";
+import { toast } from "react-toastify";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
@@ -16,16 +18,29 @@ const ProfilePage = () => {
   const { data: watchRegions } = trpc.common.watchProviderRegions.useQuery();
 
   const [adult, setAdult] = useState(false);
+  const [privateProfile, setPrivate] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
-  const { mutate, isLoading } = trpc.profile.updateProfile.useMutation();
+  const { mutate, isLoading } = trpc.profile.updateProfile.useMutation({
+    onSuccess: () => {
+      toast("Updated settings", {
+        icon: <IoMdInformation className="text-3xl text-green-500" />,
+      });
+    },
+    onError: () => {
+      toast("Failed to update settings", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
 
   const onSubmit = (event: any) => {
     event.preventDefault();
 
     mutate({
       adult,
+      private: privateProfile,
       language: selectedLanguage,
       region: selectedLocation,
     });
@@ -34,6 +49,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (status === "success") {
       setAdult(data.profile?.adult ?? false);
+      setPrivate(data.profile?.private ?? false);
 
       setSelectedLanguage(data?.profile?.language ?? "en");
       setSelectedLocation(data?.profile?.region ?? "GB");
@@ -59,9 +75,10 @@ const ProfilePage = () => {
               <form onSubmit={onSubmit}>
                 <p className="pb-6 text-2xl font-bold">Settings</p>
 
-                <label className="flex items-center w-full">
+                <label className="flex items-center w-full" htmlFor="adult">
                   <span className="w-1/2">Include 18+ content</span>
                   <input
+                    id="adult"
                     type="checkbox"
                     className="w-6 h-6 my-1 ml-auto rounded-md outline-none text-primary"
                     onChange={() => setAdult(!adult)}
@@ -69,9 +86,21 @@ const ProfilePage = () => {
                   />
                 </label>
 
-                <label className="flex items-center w-full">
+                <label className="flex items-center w-full" htmlFor="private">
+                  <span className="w-1/2">Private profile</span>
+                  <input
+                    id="private"
+                    type="checkbox"
+                    className="w-6 h-6 my-1 ml-auto rounded-md outline-none text-primary"
+                    onChange={() => setPrivate(!privateProfile)}
+                    checked={privateProfile}
+                  />
+                </label>
+
+                <label className="flex items-center w-full" htmlFor="language">
                   <span className="w-1/2">Language</span>
                   <select
+                    id="language"
                     className="w-1/2 px-2 py-1 my-1 ml-auto rounded-md text-primaryBackground"
                     onChange={(e) => setSelectedLanguage(e.target.value)}
                     value={selectedLanguage}
@@ -88,12 +117,13 @@ const ProfilePage = () => {
                   </select>
                 </label>
 
-                <label className="flex items-center w-full">
+                <label className="flex items-center w-full" htmlFor="region">
                   <span className="w-1/2">Region</span>
                   <select
                     className="w-1/2 px-2 py-1 my-1 ml-auto rounded-md text-primaryBackground"
                     onChange={(e) => setSelectedLocation(e.target.value)}
                     value={selectedLocation}
+                    id="region"
                   >
                     {data &&
                       watchRegions &&
