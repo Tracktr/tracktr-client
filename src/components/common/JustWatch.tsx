@@ -14,9 +14,10 @@ interface IProvider {
   searchUrl: string;
 }
 
-interface Provider {
+interface Providers {
   Netflix: IProvider;
   "Amazon Video": IProvider;
+  "Amazon Prime Video": IProvider;
   "Apple iTunes": IProvider;
   "Microsoft Store": IProvider;
   "Rakuten TV": IProvider;
@@ -28,10 +29,16 @@ interface Provider {
   KPN: IProvider;
   "Netflix basic with Ads": IProvider;
   meJane: IProvider;
+  "Paramount+ Amazon Channel": IProvider;
 }
 
-export const providers: Provider = {
+export const providers: Providers = {
   "Amazon Video": {
+    name: "Amazon Video",
+    url: "https://www.primevideo.com/",
+    searchUrl: "https://www.primevideo.com/search/?phrase=",
+  },
+  "Amazon Prime Video": {
     name: "Amazon Video",
     url: "https://www.primevideo.com/",
     searchUrl: "https://www.primevideo.com/search/?phrase=",
@@ -86,6 +93,11 @@ export const providers: Provider = {
     url: "https://www.netflix.com/",
     searchUrl: "https://www.netflix.com/search?q=",
   },
+  "Paramount+ Amazon Channel": {
+    name: "Paramount+ Amazon Channel",
+    url: "",
+    searchUrl: "https://www.amazon.co.uk/s?i=instant-video&rh=p_n_ways_to_watch%3A7448663031&k=",
+  },
   "Rakuten TV": {
     name: "Rakuten TV",
     url: "https://rakuten.tv/",
@@ -104,8 +116,8 @@ interface ConvertProviderToUrlProps {
 }
 
 const convertProviderToUrl = ({ provider, name }: ConvertProviderToUrlProps) => {
-  if (providers[provider as keyof Provider]) {
-    return providers[provider as keyof Provider].searchUrl + name;
+  if (providers[provider as keyof Providers]) {
+    return providers[provider as keyof Providers].searchUrl + name;
   } else {
     return "#";
   }
