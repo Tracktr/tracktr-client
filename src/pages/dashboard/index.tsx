@@ -161,47 +161,42 @@ const DashboardPage = () => {
                     </div>
                   </div>
                 </div>
-                {(friendsData?.history || []).length < 1 &&
-                  (friendsData?.movieReviews || []).length < 1 &&
-                  (friendsData?.seriesReviews || []).length < 1 && (
-                    <div>Your friends haven&apos;t done anyting yet!</div>
-                  )}
-                {(friendsData?.history || []).length > 0 && (
-                  <>
-                    <h2 className="mb-4 text-xl">Recently watched</h2>
-                    <HistoryGrid
-                      hasScrollContainer
-                      history={friendsData?.history || []}
-                      status={friendsStatus}
-                      refetch={refetchFriends}
-                      inPublic
-                    />
-                  </>
-                )}
+                <h2 className="mb-4 text-xl">Recently watched</h2>
+                <HistoryGrid
+                  hasScrollContainer
+                  history={friendsData?.history || []}
+                  status={friendsStatus}
+                  refetch={refetchFriends}
+                  inPublic
+                />
 
-                {((friendsData?.movieReviews || []).length > 0 || (friendsData?.seriesReviews || []).length > 0) && (
-                  <>
-                    <h2 className="my-2 text-xl">Reviews</h2>
-                    <div className="flex flex-col md:flex-row">
-                      {friendsData?.seriesReviews[0] && (
-                        <FriendReview
-                          content={friendsData?.seriesReviews[0].content}
-                          created={friendsData?.seriesReviews[0].created}
-                          item={friendsData?.seriesReviews[0].Series}
-                          friend={friendsData?.seriesReviews[0].friend}
-                        />
-                      )}
-                      {(friendsData?.movieReviews || []).length > 0 && (
-                        <FriendReview
-                          content={friendsData?.movieReviews[0].content}
-                          created={friendsData?.movieReviews[0].created}
-                          item={friendsData?.movieReviews[0].Movies}
-                          friend={friendsData?.movieReviews[0].friend}
-                        />
-                      )}
-                    </div>
-                  </>
-                )}
+                <h2 className="my-2 text-xl">Reviews</h2>
+                <div className="flex flex-col md:flex-row">
+                  {friendsStatus === "loading" ? (
+                    <LoadingFriendReview />
+                  ) : (
+                    friendsData?.seriesReviews[0] && (
+                      <FriendReview
+                        content={friendsData?.seriesReviews[0].content}
+                        created={friendsData?.seriesReviews[0].created}
+                        item={friendsData?.seriesReviews[0].Series}
+                        friend={friendsData?.seriesReviews[0].friend}
+                      />
+                    )
+                  )}
+                  {friendsStatus === "loading" ? (
+                    <LoadingFriendReview />
+                  ) : (
+                    friendsData?.movieReviews[0] && (
+                      <FriendReview
+                        content={friendsData?.movieReviews[0].content}
+                        created={friendsData?.movieReviews[0].created}
+                        item={friendsData?.movieReviews[0].Movies}
+                        friend={friendsData?.movieReviews[0].friend}
+                      />
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -265,5 +260,22 @@ const FriendReview = ({ content, created, item, friend }: IFriendReview) => {
     </div>
   );
 };
+
+const LoadingFriendReview = () => (
+  <div className="flex items-center w-full gap-2 mb-4">
+    <div className="flex items-center w-full gap-2 mb-4">
+      <div className="w-[100px] h-[150px] animate-pulse bg-[#343434]" />
+      <div className="w-[75%]">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="animate-pulse w-[16px] h-[16px] rounded-full bg-[#343434]" />
+          <div className="animate-pulse w-[50%] h-[20px] rounded bg-[#343434]" />
+        </div>
+        <div className="h-[28px] w-full animate-pulse rounded bg-[#343434] mb-1" />
+        <div className="mb-4 h-[20px] w-[50%] animate-pulse rounded bg-[#343434]" />
+        <div className="h-[48px] w-[100%] animate-pulse rounded bg-[#343434]" />
+      </div>
+    </div>
+  </div>
+);
 
 export default DashboardPage;
