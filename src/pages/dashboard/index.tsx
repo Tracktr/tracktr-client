@@ -171,6 +171,8 @@ const DashboardPage = () => {
                 />
 
                 <h2 className="my-2 text-xl">Reviews</h2>
+
+                {(friendsData?.seriesReviews || friendsData?.movieReviews) && <div>No reviews found</div>}
                 <div className="flex flex-col md:flex-row">
                   {friendsStatus === "loading" ? (
                     <LoadingFriendReview />
