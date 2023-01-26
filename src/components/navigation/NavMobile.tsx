@@ -85,7 +85,7 @@ const NavMobile = ({
                   </div>
                   <div
                     className={`text-sm text-center ${
-                      submenu ? "h-36" : "h-0 overflow-hidden"
+                      submenu ? "max-h-96" : "max-h-0 overflow-hidden"
                     } transition-all duration-300 ease-in-out`}
                   >
                     {submenuItems.map((item: { href: string; text: string }) => (

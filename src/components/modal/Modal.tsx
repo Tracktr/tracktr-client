@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 
 const Backdrop = ({ children, onClick }: { children: JSX.Element | JSX.Element[]; onClick: () => void }) => {
   return (

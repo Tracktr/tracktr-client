@@ -41,7 +41,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   );
 
-  const { data: seenBy, status: seenByStatus } = trpc.tv.seenBy.useQuery(
+  const { data: seenBy } = trpc.tv.seenBy.useQuery(
     { id: Number(props.seriesID) },
     { enabled: status === "success" }
   );
