@@ -42,7 +42,7 @@ const FollowersPage = () => {
                       <div className="flex items-center justify-center text-xl md:text-3xl">Following</div>
                     </div>
                   </div>
-                  <div className="flex gap-4 mb-5">
+                  <div className="flex flex-wrap gap-4 mb-5">
                     {data?.following && data?.following?.length > 0 ? (
                       data?.following?.map((user) => {
                         return (
@@ -74,7 +74,7 @@ const FollowersPage = () => {
                 </div>
                 <div className="my-10">
                   <h1 className="my-5 text-3xl">Followers</h1>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
                     {data?.followers && data?.followers?.length > 0 ? (
                       data?.followers?.map((user) => {
                         return (
