@@ -38,6 +38,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
+      document.body.style.overflow = "visible";
       router.push("#reviews");
     },
     onError: () => {
@@ -53,6 +54,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
+      document.body.style.overflow = "visible";
       router.push("#reviews");
     },
     onError: () => {
@@ -68,6 +70,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
+      document.body.style.overflow = "visible";
       router.push("#reviews");
     },
     onError: () => {
@@ -83,6 +86,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
+      document.body.style.overflow = "visible";
       router.push("#reviews");
     },
     onError: () => {
