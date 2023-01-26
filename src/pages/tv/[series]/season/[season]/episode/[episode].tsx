@@ -36,7 +36,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     episodeNumber: Number(props.episodeNumber),
   });
 
-  const { data: seenBy, status: seenByStatus } = trpc.episode.seenBy.useQuery(
+  const { data: seenBy } = trpc.episode.seenBy.useQuery(
     { id: Number(episodeData.id) },
     { enabled: episodeStatus === "success" }
   );

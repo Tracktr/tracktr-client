@@ -22,7 +22,7 @@ import SeenByBlock from "../../components/pageBlocks/SeenByBlock";
 
 const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
-  const { data: seenBy, status: seenByStatus } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) });
+  const { data: seenBy } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) });
 
   return (
     <LoadingPageComponents status={status} notFound>
