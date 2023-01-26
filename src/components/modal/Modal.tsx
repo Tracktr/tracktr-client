@@ -32,7 +32,7 @@ const Modal = ({ handleClose, children }: { handleClose: () => void; children: J
   return ReactDOM.createPortal(
     <Backdrop
       onClick={() => {
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "visible";
         handleClose();
       }}
     >
