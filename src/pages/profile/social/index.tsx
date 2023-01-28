@@ -64,7 +64,7 @@ const FollowersPage = () => {
                         );
                       })
                     ) : (
-                      <div>No followers</div>
+                      <div>Not following any users</div>
                     )}
                   </div>
 
@@ -75,7 +75,7 @@ const FollowersPage = () => {
                   </Link>
                 </div>
                 <div className="my-10">
-                  <h1 className="my-5 text-3xl">Followers ({data?.followers?.length})</h1>
+                  <h1 className="my-5 text-xl md:text-3xl">Followers ({data?.followers?.length})</h1>
                   <div className="flex flex-wrap gap-4">
                     {data?.followers && data?.followers?.length > 0 ? (
                       data?.followers?.map((user) => {
@@ -96,7 +96,7 @@ const FollowersPage = () => {
                         );
                       })
                     ) : (
-                      <div>Not following any users</div>
+                      <div>No followers</div>
                     )}
                   </div>
                 </div>

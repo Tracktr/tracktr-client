@@ -19,6 +19,8 @@ const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) =
   return (
     <div
       onClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation}
+      role="none"
       className="w-full h-auto max-w-xl px-4 text-white rounded-md shadow-xl bg-primaryBackground"
     >
       {children}

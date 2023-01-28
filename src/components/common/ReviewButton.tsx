@@ -145,6 +145,7 @@ const ReviewButton = ({
         ${themeColor.isDark && "text-white"}
         ${themeColor.isLight && "text-primaryBackground"}
       `}
+        aria-label="Create a review"
       >
         <span className="px-3 py-2" data-tip="Create a review">
           <ReactTooltip />
@@ -183,6 +184,7 @@ const ReviewButton = ({
                 className={`flex items-center justify-between px-3 py-2 mt-3 rounded-md ${
                   themeColor.isDark && "text-white"
                 } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
+                aria-label="Submit review"
               >
                 {addSeriesReview.isLoading || addMovieReview.isLoading ? (
                   <div className="flex items-center gap-3">

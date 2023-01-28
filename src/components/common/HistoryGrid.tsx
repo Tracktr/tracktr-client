@@ -146,6 +146,7 @@ const HistoryGrid = ({ history, status, hasScrollContainer, refetch, inPublic }:
                             e.stopPropagation();
                             handleDelete(item.id, item.movie_id ? "movie" : "episode");
                           }}
+                          aria-label="Remove item"
                         >
                           <MdDelete className="text-2xl" />
                         </button>

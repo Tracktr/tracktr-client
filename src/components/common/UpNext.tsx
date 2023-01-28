@@ -103,6 +103,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                           seriesID: item.series.id,
                         })
                       }
+                      aria-label="Mark as watched"
                     >
                       <AiOutlineCheckCircle className="text-2xl" />
                     </button>

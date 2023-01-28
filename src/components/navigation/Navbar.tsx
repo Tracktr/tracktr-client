@@ -95,7 +95,11 @@ const Navbar = () => {
                 ))}
             </ul>
             <div className="flex items-center justify-end col-span-2 lg:col-span-1">
-              <button onClick={toggleNavSearch} className="px-4 py-2 group-hover:text-primary">
+              <button
+                onClick={toggleNavSearch}
+                className="px-4 py-2 group-hover:text-primary"
+                aria-label="Search button"
+              >
                 <CgSearch className="text-2xl" />
               </button>
               <AnimatePresence>
@@ -120,8 +124,8 @@ const Navbar = () => {
                     onMouseEnter={toggleProfileHover}
                     onMouseLeave={toggleProfileHover}
                   >
-                    <button type="button" className="w-full h-full">
-                      <a className="flex items-center pl-4">
+                    <div className="w-full h-full">
+                      <div className="flex items-center pl-4">
                         <ImageWithFallback
                           unoptimized
                           src={session.user?.image ? session.user.image : ""}
@@ -132,8 +136,8 @@ const Navbar = () => {
                           alt="User profile image"
                         />
                         <p className="ml-2 text-sm">{session.user?.name}</p>
-                      </a>
-                    </button>
+                      </div>
+                    </div>
                     <motion.div
                       initial="exit"
                       animate={profileHover ? "enter" : "exit"}

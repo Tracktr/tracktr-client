@@ -57,7 +57,6 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
             {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && (
               <button
                 className="inline-flex items-center px-6 py-4 mt-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
-                role="button"
                 onClick={() => {
                   if (profile?.followers?.length !== 1) {
                     addAsFollower.mutate({ follower: String(profile?.id) });

@@ -2,11 +2,13 @@ import { BiCameraMovie } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
 import Link from "next/link";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import Modal from "../modal/Modal";
+import dynamic from "next/dynamic";
+
+const HorizontalScrollContainer = dynamic(() => import("./HorizontalScrollContainer"), { ssr: false });
 
 interface IProvider {
   name: string;
