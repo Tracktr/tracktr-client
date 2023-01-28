@@ -64,7 +64,7 @@ const FollowersPage = () => {
                         );
                       })
                     ) : (
-                      <div>No followers</div>
+                      <div>Not following any users</div>
                     )}
                   </div>
 
@@ -96,7 +96,7 @@ const FollowersPage = () => {
                         );
                       })
                     ) : (
-                      <div>Not following any users</div>
+                      <div>No followers</div>
                     )}
                   </div>
                 </div>
