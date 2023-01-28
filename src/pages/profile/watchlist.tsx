@@ -102,11 +102,12 @@ const WatchlistPage = () => {
           <Head>
             <title>{session.data?.user?.name}&apos;s Watchlist - Tracktr.</title>
           </Head>
-          <div className="max-w-6xl m-auto">
+
+          <div className="max-w-6xl p-4 m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Watchlist" />
             <div className="items-center my-5 align-middle md:flex">
               <h1 className="text-3xl">Watchlist</h1>
-              <button onClick={() => setShowFilters(!showFilters)} className=" md:mr-4 md:ml-auto">
+              <button onClick={() => setShowFilters(!showFilters)} className="my-2 md:mr-4 md:ml-auto">
                 Show filters
               </button>
               <div className="flex items-center justify-center gap-4 mx-5 align-middle">
