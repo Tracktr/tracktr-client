@@ -1,5 +1,7 @@
-import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import PersonPoster from "../posters/PersonPoster";
+import dynamic from "next/dynamic";
+
+const HorizontalScrollContainer = dynamic(() => import("../common/HorizontalScrollContainer"), { ssr: false });
 
 interface ICrew {
   crew: {

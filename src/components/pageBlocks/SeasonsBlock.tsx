@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
-import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import TVPoster from "../posters/TVPoster";
+import dynamic from "next/dynamic";
+
+const HorizontalScrollContainer = dynamic(() => import("../common/HorizontalScrollContainer"), { ssr: false });
 
 interface ISeasons {
   seasons: {
