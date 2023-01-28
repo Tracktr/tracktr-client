@@ -4,7 +4,7 @@ import { getDateXDaysAgo } from "../../../utils/getDate";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
 
-interface IStatItem {
+export interface IStatItem {
   date: string;
   count: number;
 }
