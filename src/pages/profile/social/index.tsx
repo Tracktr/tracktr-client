@@ -39,7 +39,9 @@ const FollowersPage = () => {
                 <div className="my-10">
                   <div className="items-center align-middle md:flex">
                     <div className="flex items-center justify-between w-full gap-4 mb-5">
-                      <div className="flex items-center justify-center text-xl md:text-3xl">Following</div>
+                      <div className="flex items-center justify-center text-xl md:text-3xl">
+                        Following ({data?.following?.length})
+                      </div>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-4 mb-5">
@@ -47,7 +49,7 @@ const FollowersPage = () => {
                       data?.following?.map((user) => {
                         return (
                           <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                            <a className="flex flex-col items-center">
+                            <a className="flex flex-col items-center max-w-[100px] justify-center">
                               <ImageWithFallback
                                 src={user.image}
                                 fallbackSrc="/placeholder_profile.png"
@@ -73,13 +75,13 @@ const FollowersPage = () => {
                   </Link>
                 </div>
                 <div className="my-10">
-                  <h1 className="my-5 text-3xl">Followers</h1>
+                  <h1 className="my-5 text-3xl">Followers ({data?.followers?.length})</h1>
                   <div className="flex flex-wrap gap-4">
                     {data?.followers && data?.followers?.length > 0 ? (
                       data?.followers?.map((user) => {
                         return (
                           <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                            <a className="flex flex-col items-center">
+                            <a className="flex flex-col items-center max-w-[100px]">
                               <ImageWithFallback
                                 src={user.image}
                                 fallbackSrc="/placeholder_profile.png"
