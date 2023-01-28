@@ -1,6 +1,4 @@
-import dynamic from "next/dynamic";
-
-const HorizontalScrollContainer = dynamic(() => import("./HorizontalScrollContainer"), { ssr: false });
+import HorizontalScrollContainer from "./HorizontalScrollContainer";
 
 interface IPosterGrid {
   children: JSX.Element | JSX.Element[];
