@@ -1,5 +1,4 @@
 import { AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import ReactDOM from "react-dom";
 import { navLinks } from "./Navbar";
 import { motion } from "framer-motion";
@@ -10,6 +9,7 @@ import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 const NavMobile = ({
   toggleNavMobile,
@@ -24,6 +24,7 @@ const NavMobile = ({
   const queryClient = useQueryClient();
   const [submenu, setSubMenu] = useState(false);
   const session = useSession();
+  const router = useRouter();
 
   return ReactDOM.createPortal(
     <AnimatePresence>
@@ -45,7 +46,7 @@ const NavMobile = ({
               <Logo textColor="text-white" dotColor="text-primary" signedIn={session.status === "authenticated"} />
             </div>
 
-            <button onClick={toggleNavMobile} className="pr-4 text-3xl text-primary">
+            <button onClick={toggleNavMobile} className="pr-4 text-3xl text-primary" aria-label="Close navigation">
               <IoMdClose />
             </button>
           </div>
@@ -59,17 +60,26 @@ const NavMobile = ({
               )
               .map((navItem) => (
                 <li className="text-white list-none group" key={navItem.text}>
-                  <Link href={navItem.href}>
-                    <a onClick={toggleNavMobile} className="block px-4 py-2 text-2xl group-hover:text-primary">
-                      {navItem.text}
-                    </a>
-                  </Link>
+                  <button
+                    onClick={() => {
+                      toggleNavMobile();
+                      router.push(navItem.href);
+                    }}
+                    className="block px-4 py-2 text-2xl group-hover:text-primary"
+                  >
+                    {navItem.text}
+                  </button>
                 </li>
               ))}
             <div className="py-4 mt-auto text-white">
               {session.status === "authenticated" ? (
                 <>
-                  <div onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4">
+                  <div
+                    onClick={() => setSubMenu(!submenu)}
+                    onKeyDown={() => setSubMenu(!submenu)}
+                    role="none"
+                    className="flex items-center w-full pl-4"
+                  >
                     <Image
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
@@ -89,11 +99,16 @@ const NavMobile = ({
                     } transition-all duration-300 ease-in-out`}
                   >
                     {submenuItems.map((item: { href: string; text: string }) => (
-                      <Link key={item.href} href={item.href}>
-                        <a onClick={toggleNavMobile} className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">
-                          {item.text}
-                        </a>
-                      </Link>
+                      <button
+                        key={item.href}
+                        onClick={() => {
+                          toggleNavMobile();
+                          router.push(item.href);
+                        }}
+                        className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800"
+                      >
+                        {item.text}
+                      </button>
                     ))}
                     <button
                       onClick={() => {

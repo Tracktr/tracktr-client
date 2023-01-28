@@ -95,7 +95,11 @@ const Navbar = () => {
                 ))}
             </ul>
             <div className="flex items-center justify-end col-span-2 lg:col-span-1">
-              <button onClick={toggleNavSearch} className="px-4 py-2 group-hover:text-primary">
+              <button
+                onClick={toggleNavSearch}
+                className="px-4 py-2 group-hover:text-primary"
+                aria-label="Search button"
+              >
                 <CgSearch className="text-2xl" />
               </button>
               <AnimatePresence>

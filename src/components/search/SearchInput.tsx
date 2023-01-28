@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { CgSearch } from "react-icons/cg";
@@ -83,6 +82,7 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
         {icon()}
 
         <input
+          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus={hideNav && true}
           className="w-full outline-none"
           type="text"
@@ -95,35 +95,34 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
       {data && (
         <div className="absolute grid w-full grid-cols-4 py-4 bg-white shadow-lg rounded-b-md text-primaryBackground">
           {data.results.slice(0, 4).map((item: any) => (
-            <Link
-              href={`${url({
-                id: item.id,
-                media_type: item.media_type,
-              })}`}
+            <button
               key={item.id}
+              className="w-full text-center group"
+              onClick={() => {
+                router.push(
+                  `${url({
+                    id: item.id,
+                    media_type: item.media_type,
+                  })}`
+                );
+                if (hideNav) hideNav();
+              }}
             >
-              <a
-                className="w-full text-center group"
-                onClick={() => {
-                  if (hideNav) hideNav();
-                }}
-              >
-                <div className="relative group">
-                  <Image
-                    alt={"image for" + item.original_title || item.original_name || item.name}
-                    src={
-                      (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||
-                      (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
-                      "/noimage.png"
-                    }
-                    width="85px"
-                    height="120px"
-                    className="rounded"
-                  />
-                </div>
-                <div className="px-2 text-xs">{item.original_title || item.original_name || item.name}</div>
-              </a>
-            </Link>
+              <div className="relative group">
+                <Image
+                  alt={"image for" + item.original_title || item.original_name || item.name}
+                  src={
+                    (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||
+                    (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
+                    "/noimage.png"
+                  }
+                  width="85px"
+                  height="120px"
+                  className="rounded"
+                />
+              </div>
+              <div className="px-2 text-xs">{item.original_title || item.original_name || item.name}</div>
+            </button>
           ))}
         </div>
       )}

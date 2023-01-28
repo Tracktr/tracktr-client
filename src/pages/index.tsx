@@ -48,7 +48,6 @@ const Home: NextPage = () => {
                     <button
                       onClick={() => signIn("google")}
                       className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
-                      role="button"
                     >
                       Create or sign in
                       <svg
@@ -169,7 +168,6 @@ const Home: NextPage = () => {
                           onClick={() => signIn("google")}
                           title=""
                           className="inline-flex items-center justify-center px-4 py-4 text-base font-semibold text-black transition-all duration-200 border border-transparent rounded-md bg-primary"
-                          role="button"
                         >
                           Create an account
                         </button>
