@@ -1,4 +1,5 @@
 import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import ReactDOM from "react-dom";
 import { navLinks } from "./Navbar";
 import { motion } from "framer-motion";
@@ -9,7 +10,6 @@ import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/router";
 
 const NavMobile = ({
   toggleNavMobile,
@@ -24,7 +24,6 @@ const NavMobile = ({
   const queryClient = useQueryClient();
   const [submenu, setSubMenu] = useState(false);
   const session = useSession();
-  const router = useRouter();
 
   return ReactDOM.createPortal(
     <AnimatePresence>
@@ -46,7 +45,7 @@ const NavMobile = ({
               <Logo textColor="text-white" dotColor="text-primary" signedIn={session.status === "authenticated"} />
             </div>
 
-            <button onClick={toggleNavMobile} className="pr-4 text-3xl text-primary" aria-label="Close navigation">
+            <button onClick={toggleNavMobile} className="pr-4 text-3xl text-primary">
               <IoMdClose />
             </button>
           </div>
@@ -59,27 +58,22 @@ const NavMobile = ({
                   session.status === "authenticated" || (session.status === "unauthenticated" && !navItem.userOnly)
               )
               .map((navItem) => (
-                <li className="text-white list-none group" key={navItem.text}>
-                  <button
-                    onClick={() => {
-                      toggleNavMobile();
-                      router.push(navItem.href);
-                    }}
-                    className="block px-4 py-2 text-2xl group-hover:text-primary"
-                  >
-                    {navItem.text}
-                  </button>
+                <li
+                  className="text-white list-none group"
+                  key={navItem.text}
+                  onClick={toggleNavMobile}
+                  onKeyDown={toggleNavMobile}
+                  role="none"
+                >
+                  <Link href={navItem.href}>
+                    <a className="block px-4 py-2 text-2xl group-hover:text-primary">{navItem.text}</a>
+                  </Link>
                 </li>
               ))}
             <div className="py-4 mt-auto text-white">
               {session.status === "authenticated" ? (
                 <>
-                  <div
-                    onClick={() => setSubMenu(!submenu)}
-                    onKeyDown={() => setSubMenu(!submenu)}
-                    role="none"
-                    className="flex items-center w-full pl-4"
-                  >
+                  <div onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4" role="none">
                     <Image
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
@@ -95,20 +89,15 @@ const NavMobile = ({
                   </div>
                   <div
                     className={`text-sm text-center ${
-                      submenu ? "max-h-96" : "max-h-0 overflow-hidden"
+                      submenu ? "max-h-screen" : "max-h-0 overflow-hidden"
                     } transition-all duration-300 ease-in-out`}
                   >
                     {submenuItems.map((item: { href: string; text: string }) => (
-                      <button
-                        key={item.href}
-                        onClick={() => {
-                          toggleNavMobile();
-                          router.push(item.href);
-                        }}
-                        className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800"
-                      >
-                        {item.text}
-                      </button>
+                      <div key={item.href} onClick={toggleNavMobile} role="none">
+                        <Link href={item.href}>
+                          <a className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">{item.text}</a>
+                        </Link>
+                      </div>
                     ))}
                     <button
                       onClick={() => {
