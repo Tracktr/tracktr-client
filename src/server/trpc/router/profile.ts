@@ -51,7 +51,7 @@ export const profileRouter = router({
           include: {
             followers: {
               where: {
-                id: ctx.session.user.profile.userId,
+                id: ctx.session.user.id,
               },
             },
           },
@@ -149,6 +149,45 @@ export const profileRouter = router({
     }
   }),
 
+  checkUsernameUnique: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const usernameAmount = await ctx.prisma.profile.count({
+        where: {
+          username: input.username,
+        },
+      });
+
+      console.log(usernameAmount);
+
+      return { usernameUnique: usernameAmount < 1 };
+    }),
+
+  updateUsername: protectedProcedure
+    .input(
+      z.object({
+        username: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          profile: {
+            update: {
+              username: input.username,
+            },
+          },
+        },
+      });
+    }),
+
   updateProfile: protectedProcedure
     .input(
       z.object({
@@ -161,7 +200,7 @@ export const profileRouter = router({
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: {
-          id: ctx.session.user.profile.userId,
+          id: ctx.session.user.id,
         },
         data: {
           profile: {
@@ -181,7 +220,7 @@ export const profileRouter = router({
   deleteProfile: protectedProcedure.mutation(async ({ ctx }) => {
     const user = await ctx.prisma.user.delete({
       where: {
-        id: ctx.session.user.profile.userId,
+        id: ctx.session.user.id,
       },
     });
 
@@ -202,7 +241,7 @@ export const profileRouter = router({
     )
     .query(async ({ ctx, input }) => {
       let episodes = await ctx.prisma.episodesHistory.findMany({
-        where: { user_id: ctx.session.user.profile.userId },
+        where: { user_id: ctx.session.user.id },
         include: {
           series: true,
           season: true,
@@ -211,7 +250,7 @@ export const profileRouter = router({
       });
 
       let movies = await ctx.prisma.moviesHistory.findMany({
-        where: { user_id: ctx.session.user.profile.userId },
+        where: { user_id: ctx.session.user.id },
         include: {
           movie: true,
         },
