@@ -54,11 +54,11 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
           <div className="max-w-6xl m-auto">
             <ProfileHeader image={String(profile?.image)} name={String(profile?.profile?.username)} />
 
-            {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && (
+            {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && profile?.followers && (
               <button
                 className="inline-flex items-center px-6 py-4 mt-6 font-semibold text-black transition-all duration-200 rounded-full bg-primary lg:mt-16"
                 onClick={() => {
-                  if (profile?.followers?.length !== 1) {
+                  if (profile.followers.filter((p) => p?.id === session?.data?.user?.id)) {
                     addAsFollower.mutate({ follower: String(profile?.id) });
                   }
                   removeAsFollower.mutate({ follower: String(profile?.id) });
@@ -70,7 +70,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                     Loading
                   </div>
-                ) : profile?.followers?.length === 1 ? (
+                ) : profile.followers.filter((p) => p?.id === session?.data?.user?.id).length === 1 ? (
                   <div>Unfollow</div>
                 ) : (
                   <div>Follow</div>
