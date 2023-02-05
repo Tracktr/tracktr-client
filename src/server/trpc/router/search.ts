@@ -1,8 +1,6 @@
 import { publicProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { IMovie } from "./movie";
-import { ISeries } from "./tv";
 
 export const searchRouter = publicProcedure
   .input(
