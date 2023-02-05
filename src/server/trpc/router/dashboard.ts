@@ -183,125 +183,154 @@ export const dashboardRouter = router({
     };
   }),
 
-  friendsActivity: protectedProcedure.query(async ({ ctx }) => {
-    const activity = await ctx.prisma.user.findFirst({
-      where: {
-        id: ctx.session.user.id,
-      },
-      include: {
-        following: {
-          include: {
-            profile: true,
-            EpisodesHistory: {
-              take: 6,
-              include: {
-                series: true,
-                season: true,
-                episode: true,
+  friendsActivity: protectedProcedure
+    .input(
+      z.object({
+        timeZone: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const twoWeeksAgo = zonedTimeToUtc(new Date(getDateXDaysAgo(14).setHours(0, 0, 0, 0)), input.timeZone);
+      console.log(twoWeeksAgo);
+
+      const activity = await ctx.prisma.user.findFirst({
+        where: {
+          id: ctx.session.user.id,
+        },
+        include: {
+          following: {
+            include: {
+              profile: true,
+              EpisodesHistory: {
+                where: {
+                  datetime: {
+                    gte: twoWeeksAgo,
+                  },
+                },
+                take: 6,
+                include: {
+                  series: true,
+                  season: true,
+                  episode: true,
+                },
+                orderBy: {
+                  datetime: "desc",
+                },
               },
-              orderBy: {
-                datetime: "desc",
+              MoviesHistory: {
+                where: {
+                  datetime: {
+                    gte: twoWeeksAgo,
+                  },
+                },
+                take: 6,
+                include: {
+                  movie: true,
+                },
+                orderBy: {
+                  datetime: "desc",
+                },
               },
-            },
-            MoviesHistory: {
-              take: 6,
-              include: {
-                movie: true,
+              MoviesReviews: {
+                where: {
+                  created: {
+                    gte: twoWeeksAgo,
+                  },
+                },
+                take: 1,
+                include: {
+                  Movies: true,
+                },
+                orderBy: {
+                  created: "desc",
+                },
               },
-              orderBy: {
-                datetime: "desc",
-              },
-            },
-            MoviesReviews: {
-              take: 1,
-              include: {
-                Movies: true,
-              },
-              orderBy: {
-                created: "desc",
-              },
-            },
-            SeriesReviews: {
-              take: 1,
-              orderBy: {
-                created: "desc",
-              },
-              include: {
-                Series: true,
+              SeriesReviews: {
+                where: {
+                  created: {
+                    gte: twoWeeksAgo,
+                  },
+                },
+                take: 1,
+                orderBy: {
+                  created: "desc",
+                },
+                include: {
+                  Series: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    let recentHistory: any[] = [];
-    let recentMovieReviews: any[] = [];
-    let recentSeriesReviews: any[] = [];
+      let recentHistory: any[] = [];
+      let recentMovieReviews: any[] = [];
+      let recentSeriesReviews: any[] = [];
 
-    activity?.following.map((friend) => {
-      recentHistory = [
-        ...recentHistory,
-        ...[...friend.MoviesHistory, ...friend.EpisodesHistory].map((h) => ({
-          ...h,
-          friend: {
-            image: friend.image,
-            name: friend.profile?.username,
-          },
-        })),
-      ];
+      activity?.following.map((friend) => {
+        recentHistory = [
+          ...recentHistory,
+          ...[...friend.MoviesHistory, ...friend.EpisodesHistory].map((h) => ({
+            ...h,
+            friend: {
+              image: friend.image,
+              name: friend.profile?.username,
+            },
+          })),
+        ];
 
-      recentMovieReviews = [
-        ...recentMovieReviews,
-        ...friend.MoviesReviews.map((r) => ({
-          ...r,
-          friend: {
-            image: friend.image,
-            name: friend.profile?.username,
-          },
-        })),
-      ];
+        recentMovieReviews = [
+          ...recentMovieReviews,
+          ...friend.MoviesReviews.map((r) => ({
+            ...r,
+            friend: {
+              image: friend.image,
+              name: friend.profile?.username,
+            },
+          })),
+        ];
 
-      recentSeriesReviews = [
-        ...recentSeriesReviews,
-        ...friend.SeriesReviews.map((r) => ({
-          ...r,
-          friend: {
-            image: friend.image,
-            name: friend.profile?.username,
-          },
-        })),
-      ];
-    });
+        recentSeriesReviews = [
+          ...recentSeriesReviews,
+          ...friend.SeriesReviews.map((r) => ({
+            ...r,
+            friend: {
+              image: friend.image,
+              name: friend.profile?.username,
+            },
+          })),
+        ];
+      });
 
-    return {
-      history: recentHistory
-        .sort((a, b) => {
-          if (a.datetime < b.datetime) {
-            return 1;
-          } else {
-            return -1;
-          }
-        })
-        ?.slice(0, 6),
-      movieReviews: recentMovieReviews
-        .sort((a, b) => {
-          if (a.datetime < b.datetime) {
-            return 1;
-          } else {
-            return -1;
-          }
-        })
-        ?.slice(0, 1),
-      seriesReviews: recentSeriesReviews
-        .sort((a, b) => {
-          if (a.datetime < b.datetime) {
-            return 1;
-          } else {
-            return -1;
-          }
-        })
-        ?.slice(0, 1),
-    };
-  }),
+      return {
+        history: recentHistory
+          .sort((a, b) => {
+            if (a.datetime < b.datetime) {
+              return 1;
+            } else {
+              return -1;
+            }
+          })
+          ?.slice(0, 6),
+        movieReviews: recentMovieReviews
+          .sort((a, b) => {
+            if (a.datetime < b.datetime) {
+              return 1;
+            } else {
+              return -1;
+            }
+          })
+          ?.slice(0, 1),
+        seriesReviews: recentSeriesReviews
+          .sort((a, b) => {
+            if (a.datetime < b.datetime) {
+              return 1;
+            } else {
+              return -1;
+            }
+          })
+          ?.slice(0, 1),
+      };
+    }),
 });
