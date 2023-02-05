@@ -24,17 +24,18 @@ const WelcomeSeriesPage = () => {
     }
   }, [sessionStatus, session, router]);
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.infiniteTV.useInfiniteQuery(
-    {
-      filter: "top_rated",
-    },
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
+    trpc.tv.infiniteTV.useInfiniteQuery(
+      {
+        filter: "top_rated",
       },
-    }
-  );
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     if (inView) {
@@ -59,7 +60,7 @@ const WelcomeSeriesPage = () => {
             icon.
           </div>
 
-          <div className="max-w-6xl m-auto mt-6">
+          <div className="max-w-6xl min-h-screen m-auto mt-6">
             <LoadingPageComponents status={status} posters>
               {() => (
                 <PosterGrid>
@@ -68,10 +69,14 @@ const WelcomeSeriesPage = () => {
                       page.results.map((content: InfiniteShow) => {
                         return (
                           <TVPoster
+                            id={content.id}
                             imageSrc={`${content.poster_path}`}
                             name={content.name}
                             key={content.id}
                             score={content.vote_average}
+                            watched={content.watched}
+                            refetch={refetch}
+                            fetchStatus={isRefetching}
                           />
                         );
                       })

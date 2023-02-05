@@ -60,7 +60,7 @@ const WelcomeMoviesPage = () => {
             icon.
           </div>
 
-          <div className="max-w-6xl m-auto mt-6">
+          <div className="max-w-6xl min-h-screen m-auto mt-6">
             <LoadingPageComponents status={status} posters>
               {() => (
                 <PosterGrid>

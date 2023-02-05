@@ -30,6 +30,8 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
     if (!fetchStatus) setCurrentLoadingID(undefined);
   }, [fetchStatus]);
 
+  console.log(id);
+
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: (e) => setCurrentLoadingID(e.movieId),
     onSuccess: () => {
@@ -64,7 +66,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
     <div className="group">
       <div className="relative">
         <ConditionalLink href={url} condition={Boolean(url)}>
-          <a className={`relative ${url ? "" : "pointer-events-none"}`}>
+          <div className={`relative ${url ? "" : "pointer-events-none"}`}>
             <Image
               alt={"Poster image for" + name}
               src={PosterImage({ path: imageSrc, size: "sm" })}
@@ -82,7 +84,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
                 </div>
               )}
             </div>
-          </a>
+          </div>
         </ConditionalLink>
       </div>
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
