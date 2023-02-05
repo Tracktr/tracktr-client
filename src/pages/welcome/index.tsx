@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
-import { IoIosAdd, IoMdInformation } from "react-icons/io";
+import { IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
 import slugify from "slugify";
 import { trpc } from "../../utils/trpc";
@@ -18,11 +18,11 @@ const WelcomePage = () => {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      setUsername(slugify(String(session?.user?.name), ""));
+      setUsername(String(session.user?.profile.username));
     } else if (sessionStatus === "unauthenticated") {
       router.push("/");
     }
-  }, [sessionStatus, session?.user?.name, router]);
+  }, [sessionStatus, session, router]);
 
   const checkUsernameUnique = trpc.profile.checkUsernameUnique.useQuery(
     {
@@ -55,7 +55,7 @@ const WelcomePage = () => {
 
   const updateUsername = trpc.profile.updateUsername.useMutation({
     onSuccess: () => {
-      router.push("/");
+      // router.push("/");
     },
     onError: () => {
       toast("Failed to update username", {
@@ -67,7 +67,7 @@ const WelcomePage = () => {
   return (
     <>
       <Head>
-        <title>Feedback form - Tracktr.</title>
+        <title>Tracktr.</title>
       </Head>
 
       <div className="pt-24">
