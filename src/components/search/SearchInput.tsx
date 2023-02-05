@@ -121,7 +121,9 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
                   className="rounded"
                 />
               </div>
-              <div className="px-2 text-xs">{item.original_title || item.original_name || item.name}</div>
+              <div className="h-8 px-2 text-xs line-clamp-2">
+                {item.original_title || item.original_name || item.name}
+              </div>
             </button>
           ))}
         </div>
