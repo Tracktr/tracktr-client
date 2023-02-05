@@ -103,9 +103,10 @@ const WatchlistPage = () => {
             <title>{session.data?.user?.name}&apos;s Watchlist - Tracktr.</title>
           </Head>
 
-          <div className="max-w-6xl p-4 m-auto">
+          <div className="max-w-6xl m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Watchlist" />
-            <div className="items-center my-5 align-middle md:flex">
+
+            <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
               <h1 className="text-3xl">Watchlist</h1>
               <button onClick={() => setShowFilters(!showFilters)} className="my-2 md:mr-4 md:ml-auto">
                 Show filters
@@ -134,7 +135,7 @@ const WatchlistPage = () => {
             </div>
 
             {showFilters && (
-              <div className="flex gap-4 my-10">
+              <div className="flex gap-4 p-4 mb-4">
                 <div className="w-full">
                   <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-white">
                     Order by
@@ -293,7 +294,7 @@ const WatchlistPage = () => {
                 </AnimatePresence>
               </PosterGrid>
             ) : (
-              <div>Nothing on your watchlist</div>
+              <div className="p-4">Nothing on your watchlist</div>
             )}
 
             {(watchlist?.WatchlistItem || [])?.length > 6 && !isRefetching && status === "success" && (

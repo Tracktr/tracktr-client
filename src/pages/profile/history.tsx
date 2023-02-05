@@ -67,9 +67,10 @@ const HistoryPage = () => {
 
           <div className="max-w-6xl m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
-            <div className="flex flex-col my-5 align-middle md:flex-row md:items-center">
+
+            <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
               <h1 className="text-3xl">History</h1>
-              <button onClick={() => setShowFilters(!showFilters)} className=" md:mr-4 md:ml-auto">
+              <button onClick={() => setShowFilters(!showFilters)} className="my-2 md:mr-4 md:ml-auto">
                 Show filters
               </button>
               <div className="flex items-center justify-center gap-4 mx-5 align-middle">
@@ -96,7 +97,7 @@ const HistoryPage = () => {
             </div>
 
             {showFilters && (
-              <div className="flex gap-4 my-10">
+              <div className="flex gap-4 p-4 mb-4">
                 <div className="w-full">
                   <label htmlFor="orderBy" className="block mb-2 text-sm font-medium text-white">
                     Order by
@@ -168,11 +169,13 @@ const HistoryPage = () => {
               </div>
             )}
 
-            <HistoryGrid
-              history={history?.history || []}
-              status={isRefetching ? "loading" : historyStatus}
-              refetch={refetch}
-            />
+            <div className="p-4">
+              <HistoryGrid
+                history={history?.history || []}
+                status={isRefetching ? "loading" : historyStatus}
+                refetch={refetch}
+              />
+            </div>
 
             {(history?.history || [])?.length > 6 && !isRefetching && historyStatus === "success" && (
               <div className="flex items-center justify-center gap-4 m-5 align-middle">
