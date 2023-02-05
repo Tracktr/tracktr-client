@@ -18,8 +18,7 @@ const WelcomeSeriesPage = () => {
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (sessionStatus === "authenticated") {
-    } else if (sessionStatus === "unauthenticated") {
+    if (sessionStatus === "unauthenticated") {
       router.push("/");
     }
   }, [sessionStatus, session, router]);
@@ -91,7 +90,7 @@ const WelcomeSeriesPage = () => {
           </div>
 
           <div className="sticky bottom-0">
-            <Link href="/welcome/series">
+            <Link href="/welcome/end">
               <a className="w-full px-10 py-5 font-medium text-center text-white bg-gray-700 rounded-t-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800">
                 Next step
               </a>

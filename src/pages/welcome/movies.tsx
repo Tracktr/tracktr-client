@@ -18,8 +18,7 @@ const WelcomeMoviesPage = () => {
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (sessionStatus === "authenticated") {
-    } else if (sessionStatus === "unauthenticated") {
+    if (sessionStatus === "unauthenticated") {
       router.push("/");
     }
   }, [sessionStatus, session, router]);
