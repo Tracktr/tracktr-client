@@ -55,7 +55,7 @@ const WelcomePage = () => {
 
   const updateUsername = trpc.profile.updateUsername.useMutation({
     onSuccess: () => {
-      // router.push("/");
+      router.push("/");
     },
     onError: () => {
       toast("Failed to update username", {
