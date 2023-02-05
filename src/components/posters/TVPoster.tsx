@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import { AiFillStar } from "react-icons/ai";
+import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 
 export interface IPoster {
@@ -11,7 +11,7 @@ export interface IPoster {
 }
 
 const TVPoster = ({ imageSrc, name, url, score }: IPoster) => (
-  <Link href={url || "#"}>
+  <ConditionalLink href={url} condition={Boolean(url)}>
     <a className={`${url ? "" : "pointer-events-none"} group w-[170px]`}>
       <div className="relative group">
         <Image
@@ -32,7 +32,7 @@ const TVPoster = ({ imageSrc, name, url, score }: IPoster) => (
       </div>
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
     </a>
-  </Link>
+  </ConditionalLink>
 );
 
 export default TVPoster;

@@ -7,7 +7,7 @@ import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import TVPoster from "../posters/TVPoster";
 
-interface IShow {
+export interface InfiniteShow {
   backdrop_path: string;
   first_air_date: string;
   id: number;
@@ -66,7 +66,7 @@ const TVInfiniteScroll = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: IShow) => {
+                page.results.map((content: InfiniteShow) => {
                   return (
                     <TVPoster
                       imageSrc={`${content.poster_path}`}

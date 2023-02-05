@@ -6,13 +6,13 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import { LoadingPoster } from "../../components/posters/LoadingPoster";
-import MoviePoster from "../../components/posters/MoviePoster";
 import { trpc } from "../../utils/trpc";
 import { useInView } from "react-intersection-observer";
-import { InfiniteMovie } from "../../components/infiniteScroll/MoviesInfiniteScroll";
 import Link from "next/link";
+import TVPoster from "../../components/posters/TVPoster";
+import { InfiniteShow } from "../../components/infiniteScroll/TVInfiniteScroll";
 
-const WelcomeMoviesPage = () => {
+const WelcomeSeriesPage = () => {
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const { ref, inView } = useInView();
@@ -24,18 +24,17 @@ const WelcomeMoviesPage = () => {
     }
   }, [sessionStatus, session, router]);
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
-    trpc.movie.infiniteMovies.useInfiniteQuery(
-      {
-        filter: "top_rated",
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.infiniteTV.useInfiniteQuery(
+    {
+      filter: "top_rated",
+    },
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = allPages.length + 1;
+        return lastPage.results.length !== 0 ? nextPage : undefined;
       },
-      {
-        getNextPageParam: (lastPage, allPages) => {
-          const nextPage = allPages.length + 1;
-          return lastPage.results.length !== 0 ? nextPage : undefined;
-        },
-      }
-    );
+    }
+  );
 
   useEffect(() => {
     if (inView) {
@@ -51,9 +50,9 @@ const WelcomeMoviesPage = () => {
 
       <div className="pt-24">
         <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
-          <div className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Add movies</div>
+          <div className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Add series</div>
           <div>
-            Add movies that you&apos;ve seen by pressing the{" "}
+            Add series that you&apos;ve seen by pressing the{" "}
             <span className="inline-block">
               <AiOutlineCheckCircle />
             </span>{" "}
@@ -66,18 +65,13 @@ const WelcomeMoviesPage = () => {
                 <PosterGrid>
                   <>
                     {data?.pages.map((page) =>
-                      page.results.map((content: InfiniteMovie) => {
+                      page.results.map((content: InfiniteShow) => {
                         return (
-                          <MoviePoster
-                            id={content.id}
+                          <TVPoster
                             imageSrc={`${content.poster_path}`}
-                            name={content.title}
+                            name={content.name}
                             key={content.id}
                             score={content.vote_average}
-                            watched={content.watched}
-                            watched_id={content.watched_id}
-                            refetch={refetch}
-                            fetchStatus={isRefetching}
                           />
                         );
                       })
@@ -104,4 +98,4 @@ const WelcomeMoviesPage = () => {
   );
 };
 
-export default WelcomeMoviesPage;
+export default WelcomeSeriesPage;

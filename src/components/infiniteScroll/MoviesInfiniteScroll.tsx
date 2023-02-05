@@ -7,7 +7,7 @@ import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import MoviePoster from "../posters/MoviePoster";
 
-interface IMovie {
+export interface InfiniteMovie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -72,7 +72,7 @@ const MoviesInfiniteScroll = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: IMovie) => {
+                page.results.map((content: InfiniteMovie) => {
                   return (
                     <MoviePoster
                       id={content.id}
