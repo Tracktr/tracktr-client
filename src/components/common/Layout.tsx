@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
         <Navbar />
       )}
       <main className="min-h-screen">{children}</main>
-      <Footer />
+      {!noNavbarRoutes.includes(router.route) && <Footer />}
     </div>
   );
 };

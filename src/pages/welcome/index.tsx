@@ -72,6 +72,7 @@ const WelcomePage = () => {
       <div className="pt-24">
         <div className="px-4 mx-auto text-center max-w-7xl sm:px-6 lg:px-8">
           <div className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">Welcome to tracktr</div>
+          <div>Please choose a username</div>
 
           <div className="max-w-2xl mx-auto mt-8 text-left text-black">
             <div className="mb-6">
