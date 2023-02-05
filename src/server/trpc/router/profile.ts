@@ -162,8 +162,6 @@ export const profileRouter = router({
         },
       });
 
-      console.log(usernameAmount);
-
       return { usernameUnique: usernameAmount < 1 };
     }),
 

@@ -191,7 +191,6 @@ export const dashboardRouter = router({
     )
     .query(async ({ ctx, input }) => {
       const twoWeeksAgo = zonedTimeToUtc(new Date(getDateXDaysAgo(14).setHours(0, 0, 0, 0)), input.timeZone);
-      console.log(twoWeeksAgo);
 
       const activity = await ctx.prisma.user.findFirst({
         where: {

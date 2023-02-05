@@ -14,7 +14,6 @@ const WelcomePage = () => {
   const [username, setUsername] = useState<string>("");
   const [usernameError, setUsernameError] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [usernameUnique, setUsernameUnique] = useState<boolean | undefined>();
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -55,7 +54,7 @@ const WelcomePage = () => {
 
   const updateUsername = trpc.profile.updateUsername.useMutation({
     onSuccess: () => {
-      router.push("/");
+      router.push("/welcome/import");
     },
     onError: () => {
       toast("Failed to update username", {
@@ -67,7 +66,7 @@ const WelcomePage = () => {
   return (
     <>
       <Head>
-        <title>Tracktr.</title>
+        <title>Welcome to Tracktr.</title>
       </Head>
 
       <div className="pt-24">

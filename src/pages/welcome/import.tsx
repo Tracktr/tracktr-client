@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
@@ -108,6 +109,14 @@ const ImportPage = () => {
             <p className="max-w-lg mx-auto mt-4 text-base leading-relaxed">
               As a premium Trakt.tv member you can export your data and import it here!
             </p>
+          </div>
+
+          <div className="flex justify-end mt-4">
+            <Link href="/welcome/movies">
+              <a className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-blue-700 focus:ring-blue-800 bg-gray-700">
+                Manually add items
+              </a>
+            </Link>
           </div>
 
           <div className="relative mt-12 lg:mt-20">
