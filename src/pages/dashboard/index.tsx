@@ -47,7 +47,10 @@ const DashboardPage = () => {
     data: friendsData,
     status: friendsStatus,
     refetch: refetchFriends,
-  } = trpc.dashboard.friendsActivity.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
+  } = trpc.dashboard.friendsActivity.useQuery(
+    { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+    { enabled: sessionStatus === "authenticated" }
+  );
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
@@ -139,7 +142,7 @@ const DashboardPage = () => {
                   inPublic
                 />
 
-                <h2 className="my-2 text-xl">Reviews</h2>
+                <h2 className="mt-4 mb-2 text-xl">Reviews</h2>
 
                 {!friendsData?.seriesReviews[0] && !friendsData?.movieReviews[0] && <div>No reviews found</div>}
                 <div className="flex flex-col md:flex-row">

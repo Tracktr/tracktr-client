@@ -79,7 +79,7 @@ const ContentPoster = ({
           }}
           className="m-auto border-4 rounded-md border-primaryBackground"
         >
-          <ConditionalLink href={`/tv/${id}`} condition={episode || season}>
+          <ConditionalLink href={`/tv/${id}`} condition={Boolean(episode) || Boolean(season)}>
             <Image
               alt={"Poster image for:" + title}
               width="208"

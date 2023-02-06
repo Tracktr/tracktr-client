@@ -41,10 +41,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   );
 
-  const { data: seenBy } = trpc.tv.seenBy.useQuery(
-    { id: Number(props.seriesID) },
-    { enabled: status === "success" }
-  );
+  const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
 
   return (
     <LoadingPageComponents status={status} notFound>
@@ -98,7 +95,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 numberOfSeasons={seriesData.number_of_seasons}
               />
               <SeenByBlock data={seenBy} />
-              <SeasonsBlock seasons={seriesData.seasons} />
+              <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
               <CastBlock cast={seriesData.credits.cast} />
               <CrewBlock crew={seriesData.credits.crew} />
               <ReviewsBlock reviews={seriesData.reviews} refetchReviews={refetch} isRefetching={isRefetching} />

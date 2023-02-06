@@ -32,29 +32,47 @@ export const searchRouter = publicProcedure
       });
     }
 
-    // TODO: specifically for movie
-    // if (ctx?.session?.user && type === "movie") {
-    //   json.results = await Promise.all(
-    //     json.results.map(async (movie: IMovie) => {
-    //       const watched = await ctx.prisma.moviesHistory.findFirst({
-    //         where: {
-    //           user_id: ctx?.session?.user?.id as string,
-    //           movie_id: movie.id,
-    //         },
-    //       });
+    if (ctx?.session?.user) {
+      json.results = await Promise.all(
+        json.results.map(async (item: any) => {
+          if (item.title) {
+            const watched = await ctx.prisma.moviesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id as string,
+                movie_id: item.id,
+              },
+            });
 
-    //       if (watched) {
-    //         return { ...movie, watched: true, watched_id: watched.id };
-    //       } else {
-    //         return { ...movie, watched: false, watched_id: null };
-    //       }
-    //     })
-    //   );
-    // } else if (type === "movie") {
-    //   json.results = json.results.map((movie: IMovie) => {
-    //     return { ...movie, watched: false };
-    //   });
-    // }
+            if (watched) {
+              return { ...item, watched: true, watched_id: watched.id };
+            } else {
+              return { ...item, watched: false, watched_id: null };
+            }
+          } else if (item.name) {
+            const watched = await ctx.prisma.episodesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id,
+                series_id: item.id,
+                NOT: {
+                  season: {
+                    season_number: 0,
+                  },
+                },
+              },
+              distinct: ["episode_id"],
+            });
+
+            if (watched) {
+              return { ...item, watched: true };
+            } else {
+              return { ...item, watched: false };
+            }
+          } else {
+            return item;
+          }
+        })
+      );
+    }
 
     return {
       ...json,

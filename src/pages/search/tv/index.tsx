@@ -14,15 +14,16 @@ const SearchPage = () => {
   const { query } = router.query;
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.search.useInfiniteQuery(
-    { query: query as string, type: "tv" },
-    {
-      getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
+    trpc.search.useInfiniteQuery(
+      { query: query as string, type: "tv" },
+      {
+        getNextPageParam: (lastPage: IPage, allPages: IPage[]) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     if (inView) {
@@ -50,11 +51,15 @@ const SearchPage = () => {
                     page.results.map((content) => {
                       return (
                         <TVPoster
+                          id={content.id}
                           imageSrc={`${content.poster_path}`}
                           name={content.title || content.name}
                           key={content.id}
                           url={`/tv/${content.id}`}
                           score={content.vote_average}
+                          watched={content.watched}
+                          refetch={refetch}
+                          fetchStatus={isRefetching}
                         />
                       );
                     })

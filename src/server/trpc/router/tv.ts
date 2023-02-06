@@ -5,6 +5,32 @@ import createNewSeries from "../../../utils/createNewSeries";
 import { TRPCError } from "@trpc/server";
 import { Episodes, EpisodesHistory, Profile, Seasons, Series, User } from "@prisma/client";
 
+export interface ISeries {
+  backdrop_path: string;
+  first_air_date: string;
+  genre_ids: number[];
+  id: number;
+  name: string;
+  origin_country: string[];
+  original_language: string;
+  original_name: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+}
+
+interface ISeason {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+}
+
 export const tvRouter = router({
   seriesById: publicProcedure
     .input(
@@ -49,6 +75,31 @@ export const tvRouter = router({
           },
         },
       });
+
+      if (ctx.session?.user) {
+        json.seasons = await Promise.all(
+          json.seasons.map(async (season: ISeason) => {
+            const watched = await ctx.prisma.episodesHistory.findFirst({
+              where: {
+                user_id: ctx.session?.user?.id,
+                series_id: input.seriesID,
+                season_id: season.id,
+              },
+              distinct: ["episode_id"],
+            });
+
+            if (watched) {
+              return { ...season, watched: true };
+            } else {
+              return { ...season, watched: false };
+            }
+          })
+        );
+      } else {
+        json.seasons = json.seasons.map((season: ISeries) => {
+          return { ...season, watched: false };
+        });
+      }
 
       if (ctx && input.seriesID) {
         const episodesWatched = await ctx.prisma.episodesHistory.findMany({
@@ -103,6 +154,35 @@ export const tvRouter = router({
           code: "NOT_FOUND",
           message: json.status_message,
           cause: json.status_code,
+        });
+      }
+
+      if (ctx.session?.user) {
+        json.results = await Promise.all(
+          json.results.map(async (series: ISeries) => {
+            const watched = await ctx.prisma.episodesHistory.findFirst({
+              where: {
+                user_id: ctx?.session?.user?.id,
+                series_id: series.id,
+                NOT: {
+                  season: {
+                    season_number: 0,
+                  },
+                },
+              },
+              distinct: ["episode_id"],
+            });
+
+            if (watched) {
+              return { ...series, watched: true };
+            } else {
+              return { ...series, watched: false };
+            }
+          })
+        );
+      } else {
+        json.results = json.results.map((series: ISeries) => {
+          return { ...series, watched: false };
         });
       }
 

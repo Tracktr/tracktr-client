@@ -29,12 +29,9 @@ const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) =
 };
 
 const Modal = ({ handleClose, children }: { handleClose: () => void; children: JSX.Element | JSX.Element[] }) => {
-  document.body.style.overflow = "hidden";
-
   return ReactDOM.createPortal(
     <Backdrop
       onClick={() => {
-        document.body.style.overflow = "visible";
         handleClose();
       }}
     >

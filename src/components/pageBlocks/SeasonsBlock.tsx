@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
-import TVPoster from "../posters/TVPoster";
+import SeasonPoster from "../posters/SeasonPoster";
 
 interface ISeasons {
   seasons: {
@@ -11,10 +11,13 @@ interface ISeasons {
     overview: string;
     poster_path: string;
     season_number: number;
+    watched: boolean;
   }[];
+  refetch: () => void;
+  isRefetching: boolean;
 }
 
-const SeasonsBlock = ({ seasons }: ISeasons) => {
+const SeasonsBlock = ({ seasons, refetch, isRefetching }: ISeasons) => {
   const router = useRouter();
   const { series: seriesID } = router.query;
 
@@ -28,10 +31,16 @@ const SeasonsBlock = ({ seasons }: ISeasons) => {
             .reverse()
             .map((item) => (
               <div key={item.id} className="flex-shrink-0">
-                <TVPoster
+                <SeasonPoster
+                  id={item.id}
+                  seasonNumber={item.season_number}
+                  seriesID={Number(seriesID)}
                   imageSrc={item.poster_path}
                   name={`Season ${item.season_number}`}
                   url={`${seriesID}/season/${item.season_number}`}
+                  watched={item.watched}
+                  refetch={refetch}
+                  fetchStatus={isRefetching}
                 />
               </div>
             ))}

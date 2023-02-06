@@ -7,7 +7,7 @@ import SortPill from "../common/SortPill";
 import { LoadingPoster } from "../posters/LoadingPoster";
 import TVPoster from "../posters/TVPoster";
 
-interface IShow {
+export interface InfiniteShow {
   backdrop_path: string;
   first_air_date: string;
   id: number;
@@ -20,23 +20,25 @@ interface IShow {
   poster_path: string;
   vote_average: number;
   vote_count: number;
+  watched: boolean;
 }
 
 const TVInfiniteScroll = () => {
   const [filter, setFilter] = useState("popular");
   const { ref, inView } = useInView();
 
-  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage } = trpc.tv.infiniteTV.useInfiniteQuery(
-    {
-      filter: filter,
-    },
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
-        return lastPage.results.length !== 0 ? nextPage : undefined;
+  const { data, status, isFetchingNextPage, hasNextPage, fetchNextPage, refetch, isRefetching } =
+    trpc.tv.infiniteTV.useInfiniteQuery(
+      {
+        filter: filter,
       },
-    }
-  );
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const nextPage = allPages.length + 1;
+          return lastPage.results.length !== 0 ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     if (inView) {
@@ -66,14 +68,18 @@ const TVInfiniteScroll = () => {
           <PosterGrid>
             <>
               {data?.pages.map((page) =>
-                page.results.map((content: IShow) => {
+                page.results.map((content: InfiniteShow) => {
                   return (
                     <TVPoster
+                      id={content.id}
                       imageSrc={`${content.poster_path}`}
                       name={content.name}
                       key={content.id}
                       url={`tv/${content.id}`}
                       score={content.vote_average}
+                      watched={content.watched}
+                      refetch={refetch}
+                      fetchStatus={isRefetching}
                     />
                   );
                 })

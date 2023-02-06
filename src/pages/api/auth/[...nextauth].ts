@@ -4,6 +4,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import slugify from "slugify";
 import { prisma } from "../../../server/db/client";
+import makeID from "../../../utils/makeID";
 
 const createUserProfile = async ({ user }: any) => {
   const { id, name } = user;
@@ -12,7 +13,7 @@ const createUserProfile = async ({ user }: any) => {
     await prisma.profile.create({
       data: {
         userId: id,
-        username: slugify(name, ""),
+        username: slugify(name, "") + makeID(6),
       },
     });
   } catch (error) {
@@ -45,6 +46,10 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: { createUser: createUserProfile },
+  pages: {
+    error: "/500",
+    newUser: "/welcome",
+  },
 };
 
 export default NextAuth(authOptions);

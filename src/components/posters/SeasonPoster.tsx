@@ -10,7 +10,7 @@ import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
-export interface IPoster {
+interface IPoster {
   imageSrc: string;
   name: string;
   url?: string;
@@ -19,9 +19,22 @@ export interface IPoster {
   watched: boolean | null;
   refetch: () => void;
   fetchStatus: boolean;
+  seasonNumber: number;
+  seriesID: number;
 }
 
-const TVPoster = ({ imageSrc, name, url, score, id, watched, refetch, fetchStatus }: IPoster) => {
+const SeasonPoster = ({
+  imageSrc,
+  name,
+  url,
+  score,
+  id,
+  watched,
+  refetch,
+  fetchStatus,
+  seasonNumber,
+  seriesID,
+}: IPoster) => {
   const { status } = useSession();
   const [currentLoadingID, setCurrentLoadingID] = useState<number>();
 
@@ -29,31 +42,29 @@ const TVPoster = ({ imageSrc, name, url, score, id, watched, refetch, fetchStatu
     if (!fetchStatus) setCurrentLoadingID(undefined);
   }, [fetchStatus]);
 
-  const markAsWatched = trpc.tv.markSeriesAsWatched.useMutation({
-    onMutate: (e) => setCurrentLoadingID(e.seriesID),
+  const markAsWatched = trpc.season.markSeasonAsWatched.useMutation({
     onSuccess: () => {
-      toast(`Added ${name} to watched`, {
+      toast(`Added all episodes for season ${seasonNumber} to watched`, {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetch();
     },
     onError: () => {
-      toast(`Failed to add ${name} to watched`, {
+      toast(`Failed to add all episodes for season ${seasonNumber} to watched`, {
         icon: <IoMdInformation className="text-3xl text-blue-500" />,
       });
     },
   });
 
-  const deleteFromWatched = trpc.tv.removeSeriesFromWatched.useMutation({
-    onMutate: () => setCurrentLoadingID(id),
+  const deleteFromWatched = trpc.season.removeSeasonFromWatched.useMutation({
     onSuccess: () => {
-      toast(`Removed ${name} from watched`, {
+      toast(`Removed all episodes for ${name} from watched`, {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetch();
     },
     onError: () => {
-      toast(`Failed to remove ${name} from watched`, {
+      toast(`Failed to remove all episodes for ${name} to watched`, {
         icon: <IoMdInformation className="text-3xl text-blue-500" />,
       });
     },
@@ -95,11 +106,11 @@ const TVPoster = ({ imageSrc, name, url, score, id, watched, refetch, fetchStatu
             }`}
             onClick={() => {
               if (watched && id) {
-                deleteFromWatched.mutate({ seriesID: id });
+                setCurrentLoadingID(id);
+                deleteFromWatched.mutate({ seriesID, seasonID: id });
               } else {
-                markAsWatched.mutate({
-                  seriesID: id,
-                });
+                setCurrentLoadingID(id);
+                markAsWatched.mutate({ seriesID, seasonNumber });
               }
             }}
           >
@@ -117,4 +128,4 @@ const TVPoster = ({ imageSrc, name, url, score, id, watched, refetch, fetchStatu
   );
 };
 
-export default TVPoster;
+export default SeasonPoster;

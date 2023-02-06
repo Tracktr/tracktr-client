@@ -1,12 +1,12 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
+import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 
@@ -29,6 +29,8 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
   useEffect(() => {
     if (!fetchStatus) setCurrentLoadingID(undefined);
   }, [fetchStatus]);
+
+  console.log(id);
 
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: (e) => setCurrentLoadingID(e.movieId),
@@ -63,8 +65,8 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
   return (
     <div className="group">
       <div className="relative">
-        <Link href={url || "#"}>
-          <a className={`relative ${url ? "" : "pointer-events-none"}`}>
+        <ConditionalLink href={url} condition={Boolean(url)}>
+          <div className={`relative ${url ? "" : "pointer-events-none"}`}>
             <Image
               alt={"Poster image for" + name}
               src={PosterImage({ path: imageSrc, size: "sm" })}
@@ -82,8 +84,8 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
                 </div>
               )}
             </div>
-          </a>
-        </Link>
+          </div>
+        </ConditionalLink>
       </div>
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
 

@@ -24,6 +24,7 @@ const SearchPage = () => {
           const nextPage = allPages.length + 1;
           return lastPage.results.length !== 0 ? nextPage : undefined;
         },
+        enabled: router.isReady,
       }
     );
 
@@ -36,7 +37,7 @@ const SearchPage = () => {
   return (
     <>
       <Head>
-        <title>Search results for {query} - Tracktr.</title>
+        <title>{`Search results for ${query} - Tracktr.`}</title>
         <meta name="description" content={`Track movies and series like ${query} on Tracktr.`} />
       </Head>
 
@@ -52,11 +53,15 @@ const SearchPage = () => {
                       if (content.media_type === "tv") {
                         return (
                           <TVPoster
+                            id={content.id}
                             imageSrc={`${content.poster_path}`}
                             name={content.title || content.name}
                             key={content.id}
                             url={`/tv/${content.id}`}
                             score={content.vote_average}
+                            watched={content.watched}
+                            refetch={refetch}
+                            fetchStatus={isRefetching}
                           />
                         );
                       }
@@ -66,13 +71,13 @@ const SearchPage = () => {
                           <MoviePoster
                             id={content.id}
                             imageSrc={`${content.poster_path}`}
-                            name={content.title || content.name}
+                            name={content.title}
                             key={content.id}
                             url={`/movies/${content.id}`}
                             score={content.vote_average}
-                            watched={null}
+                            watched={content.watched}
                             refetch={refetch}
-                            watched_id={null}
+                            watched_id={content.watched_id}
                             fetchStatus={isRefetching}
                           />
                         );
