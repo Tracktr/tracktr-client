@@ -65,15 +65,21 @@ const WatchlistPage = () => {
     },
   });
 
-  const handleDelete = (id: string) => {
-    deleteItem.mutate({ id });
-  };
-
-  const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
+  const markMovieAsWatched = trpc.movie.markMovieAsWatched.useMutation({
     onSuccess: () => refetch(),
   });
 
-  const deleteFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
+  const deleteMovieFromWatched = trpc.movie.removeMovieFromWatched.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const markSeriesAsWatched = trpc.tv.markSeriesAsWatched.useMutation({
+    onSuccess: () => refetch(),
+  });
+
+  const deleteSeriesFromWatched = trpc.tv.removeSeriesFromWatched.useMutation({
     onSuccess: () => {
       refetch();
     },
@@ -103,7 +109,7 @@ const WatchlistPage = () => {
             <title>{session.data?.user?.name}&apos;s Watchlist - Tracktr.</title>
           </Head>
 
-          <div className="max-w-6xl m-auto">
+          <div className="max-w-6xl pb-4 m-auto">
             <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Watchlist" />
 
             <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
@@ -243,23 +249,23 @@ const WatchlistPage = () => {
                           </a>
                         </Link>
                         <div className="flex pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                          {item.movie_id &&
-                            ((markAsWatched.isLoading || deleteFromWatched.isLoading || isRefetching) &&
+                          {item.movie_id ? (
+                            (markMovieAsWatched.isLoading || deleteMovieFromWatched.isLoading || isRefetching) &&
                             item.movies.id === currentLoadingID ? (
                               <ImSpinner2 className="w-6 h-6 animate-spin" />
                             ) : (
                               <button
-                                disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
+                                disabled={markMovieAsWatched.isLoading || deleteMovieFromWatched.isLoading}
                                 className={`text-2xl transition-all duration-300 ease-in-out ${
                                   item.watched ? "hover:text-red-500" : "hover:text-white"
                                 }`}
                                 onClick={() => {
                                   if (item.watched && item.watched_id) {
                                     setCurrentLoadingID(item.movies.id);
-                                    deleteFromWatched.mutate({ id: item.watched_id });
+                                    deleteMovieFromWatched.mutate({ id: item.watched_id });
                                   } else {
                                     setCurrentLoadingID(item.movies.id);
-                                    markAsWatched.mutate({
+                                    markMovieAsWatched.mutate({
                                       movieId: item.movies.id,
                                     });
                                   }
@@ -271,8 +277,39 @@ const WatchlistPage = () => {
                                   <AiOutlineCheckCircle className="text-2xl" />
                                 )}
                               </button>
-                            ))}
-                          {(deleteItem.isLoading || markAsWatched.isLoading) && item.id === currentLoadingID ? (
+                            )
+                          ) : item.series.id &&
+                            (markSeriesAsWatched.isLoading || deleteSeriesFromWatched.isLoading || isRefetching) &&
+                            item.series.id === currentLoadingID ? (
+                            <ImSpinner2 className="w-6 h-6 animate-spin" />
+                          ) : (
+                            <button
+                              disabled={markSeriesAsWatched.isLoading || deleteSeriesFromWatched.isLoading}
+                              className={`text-2xl transition-all duration-300 ease-in-out ${
+                                item.watched ? "hover:text-red-500" : "hover:text-white"
+                              }`}
+                              onClick={() => {
+                                if (item.watched) {
+                                  setCurrentLoadingID(item.series.id);
+                                  deleteSeriesFromWatched.mutate({ seriesID: item.series.id });
+                                } else {
+                                  setCurrentLoadingID(item.series.id);
+                                  markSeriesAsWatched.mutate({
+                                    seriesID: item.series.id,
+                                  });
+                                }
+                              }}
+                            >
+                              {item.watched ? (
+                                <MdDelete className="text-2xl" />
+                              ) : (
+                                <AiOutlineCheckCircle className="text-2xl" />
+                              )}
+                            </button>
+                          )}
+
+                          {(deleteItem.isLoading || markMovieAsWatched.isLoading || markSeriesAsWatched.isLoading) &&
+                          item.id === currentLoadingID ? (
                             <ImSpinner2 className="w-6 h-6 animate-spin" />
                           ) : (
                             <button
@@ -280,7 +317,7 @@ const WatchlistPage = () => {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                handleDelete(item.id);
+                                deleteItem.mutate({ id: item.id });
                               }}
                               title="Remove from watchlist"
                             >
