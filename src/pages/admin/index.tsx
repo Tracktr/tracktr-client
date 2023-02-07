@@ -161,7 +161,7 @@ const AdminPage = () => {
 
       <LoadingPageComponents status={isLoading ? "loading" : "success"}>
         {() => (
-          <div className="max-w-6xl px-4 pt-24 m-auto">
+          <div className="max-w-6xl px-4 pt-24 pb-4 m-auto">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="md:w-[50%] bg-[#1A1A1A] p-4 rounded">
                 <div className="text-xl font-bold">Stats</div>

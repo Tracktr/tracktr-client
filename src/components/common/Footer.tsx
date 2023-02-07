@@ -37,6 +37,11 @@ const Footer = () => {
                       <Link href="/profile/watchlist">
                         <a className="block pb-2 text-sm">Watchlist</a>
                       </Link>
+                      {session.data.user?.profile.role === "ADMIN" && (
+                        <Link href="/admin">
+                          <a className="block pb-2 text-sm">Admin panel</a>
+                        </Link>
+                      )}
                     </li>
                   </ul>
                 </div>
