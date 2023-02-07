@@ -105,4 +105,52 @@ export const adminRouter = router({
       });
     }
   }),
+
+  removeMovieReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.moviesReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  removeSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seriesReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
 });

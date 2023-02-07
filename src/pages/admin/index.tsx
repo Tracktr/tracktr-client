@@ -1,8 +1,9 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { IoIosAdd, IoMdInformation } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { ImSpinner2 } from "react-icons/im";
+import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import FriendReview from "../../components/common/FriendReviews";
@@ -10,6 +11,7 @@ import LoadingPageComponents from "../../components/common/LoadingPageComponents
 import { trpc } from "../../utils/trpc";
 
 const AdminPage = () => {
+  const [currentLoadingID, setCurrentLoadingID] = useState("");
   const { status: sessionStatus, data: sessionData } = useSession();
   const router = useRouter();
 
@@ -39,17 +41,38 @@ const AdminPage = () => {
     enabled: sessionStatus === "authenticated",
   });
 
+  const removeMoviesReview = trpc.admin.removeMovieReview.useMutation({
+    onSuccess: () => {
+      toast(`Removed review`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
+    onError: () => {
+      toast("Failed to remove review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+  const removeSeriesReview = trpc.admin.removeSeriesReview.useMutation({
+    onSuccess: () => {
+      toast(`Removed review`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
+    onError: () => {
+      toast("Failed to remove review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionData?.user?.profile?.role !== "ADMIN") {
       router.push("/");
     }
   });
-
-  const handleDelete = (id: string) => {
-    removeFeedback.mutate({
-      id,
-    });
-  };
 
   return (
     <>
@@ -89,7 +112,11 @@ const AdminPage = () => {
                           <div>{item.message}</div>
                           <button
                             className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                            onClick={() => handleDelete(item.id)}
+                            onClick={() =>
+                              removeFeedback.mutate({
+                                id: item.id,
+                              })
+                            }
                           >
                             <MdDelete className="text-xl" />
                           </button>
@@ -120,6 +147,26 @@ const AdminPage = () => {
                           item={review.Movies}
                           hideImage
                         />
+                        <button className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700">
+                          Approve
+                        </button>
+                        <button
+                          className="w-full px-2 py-1 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          onClick={() => {
+                            setCurrentLoadingID(review.id);
+                            removeMoviesReview.mutate({
+                              reviewID: review.id,
+                            });
+                          }}
+                        >
+                          {removeMoviesReview.isLoading && currentLoadingID === review.id ? (
+                            <div className="flex items-center gap-2">
+                              <ImSpinner2 className="animate-spin" />
+                            </div>
+                          ) : (
+                            <div>Remove</div>
+                          )}
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -144,6 +191,27 @@ const AdminPage = () => {
                           item={review.Series}
                           hideImage
                         />
+
+                        <button className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700">
+                          Approve
+                        </button>
+                        <button
+                          className="w-full px-2 py-1 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          onClick={() => {
+                            setCurrentLoadingID(review.id);
+                            removeSeriesReview.mutate({
+                              reviewID: review.id,
+                            });
+                          }}
+                        >
+                          {removeSeriesReview.isLoading && currentLoadingID === review.id ? (
+                            <div className="flex items-center gap-2">
+                              <ImSpinner2 className="animate-spin" />
+                            </div>
+                          ) : (
+                            <div>Remove</div>
+                          )}
+                        </button>
                       </div>
                     ))}
                   </div>
