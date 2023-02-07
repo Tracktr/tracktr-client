@@ -68,6 +68,33 @@ const AdminPage = () => {
     },
   });
 
+  const approveMoviesReview = trpc.admin.approveMoviesReview.useMutation({
+    onSuccess: () => {
+      toast(`Approved review`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
+    onError: () => {
+      toast("Failed to approve review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+  const approveSeriesReview = trpc.admin.approveSeriesReview.useMutation({
+    onSuccess: () => {
+      toast(`Approved review`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+    },
+    onError: () => {
+      toast("Failed to approve review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionData?.user?.profile?.role !== "ADMIN") {
       router.push("/");
@@ -147,8 +174,23 @@ const AdminPage = () => {
                           item={review.Movies}
                           hideImage
                         />
-                        <button className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700">
-                          Approve
+                        <button
+                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          onClick={() => {
+                            setCurrentLoadingID(review.id);
+                            approveMoviesReview.mutate({
+                              reviewID: review.id,
+                            });
+                          }}
+                          disabled={approveMoviesReview.isLoading && currentLoadingID === review.id}
+                        >
+                          {approveMoviesReview.isLoading && currentLoadingID === review.id ? (
+                            <div className="flex items-center gap-2">
+                              <ImSpinner2 className="animate-spin" />
+                            </div>
+                          ) : (
+                            <div>Approve</div>
+                          )}
                         </button>
                         <button
                           className="w-full px-2 py-1 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
@@ -158,6 +200,7 @@ const AdminPage = () => {
                               reviewID: review.id,
                             });
                           }}
+                          disabled={removeMoviesReview.isLoading && currentLoadingID === review.id}
                         >
                           {removeMoviesReview.isLoading && currentLoadingID === review.id ? (
                             <div className="flex items-center gap-2">
@@ -171,7 +214,7 @@ const AdminPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <div>No movie reviews</div>
+                  <div>No (unapproved) movie reviews</div>
                 )}
               </div>
 
@@ -192,8 +235,23 @@ const AdminPage = () => {
                           hideImage
                         />
 
-                        <button className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700">
-                          Approve
+                        <button
+                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          onClick={() => {
+                            setCurrentLoadingID(review.id);
+                            approveSeriesReview.mutate({
+                              reviewID: review.id,
+                            });
+                          }}
+                          disabled={approveSeriesReview.isLoading && currentLoadingID === review.id}
+                        >
+                          {approveSeriesReview.isLoading && currentLoadingID === review.id ? (
+                            <div className="flex items-center gap-2">
+                              <ImSpinner2 className="animate-spin" />
+                            </div>
+                          ) : (
+                            <div>Approve</div>
+                          )}
                         </button>
                         <button
                           className="w-full px-2 py-1 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
@@ -203,6 +261,7 @@ const AdminPage = () => {
                               reviewID: review.id,
                             });
                           }}
+                          disabled={removeSeriesReview.isLoading && currentLoadingID === review.id}
                         >
                           {removeSeriesReview.isLoading && currentLoadingID === review.id ? (
                             <div className="flex items-center gap-2">
@@ -216,7 +275,7 @@ const AdminPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <div>No series reviews</div>
+                  <div>No (unapproved) series reviews</div>
                 )}
               </div>
             </div>

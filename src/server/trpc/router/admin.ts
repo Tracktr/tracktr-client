@@ -57,6 +57,9 @@ export const adminRouter = router({
   getReviews: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.session.user.profile.role === "ADMIN") {
       const moviesReviews = await ctx.prisma.moviesReviews.findMany({
+        where: {
+          approved: false,
+        },
         take: 10,
         orderBy: {
           created: "desc",
@@ -75,6 +78,9 @@ export const adminRouter = router({
         },
       });
       const seriesReviews = await ctx.prisma.seriesReviews.findMany({
+        where: {
+          approved: false,
+        },
         take: 10,
         orderBy: {
           created: "desc",
@@ -141,6 +147,60 @@ export const adminRouter = router({
         const review = ctx.prisma.seriesReviews.delete({
           where: {
             id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveMoviesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.moviesReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seriesReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
           },
         });
 
