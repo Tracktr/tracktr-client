@@ -19,7 +19,7 @@ export const feedbackRouter = router({
       });
     }),
   get: protectedProcedure.query(async ({ ctx }) => {
-    if (ctx.session.user.profile.role === "admin") {
+    if (ctx.session.user.profile.role === "ADMIN") {
       return await ctx.prisma.feedback.findMany({
         take: 10,
         orderBy: {
@@ -41,7 +41,7 @@ export const feedbackRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (ctx.session.user.profile.role === "admin") {
+      if (ctx.session.user.profile.role === "ADMIN") {
         return await ctx.prisma.feedback.delete({
           where: { id: input.id },
         });

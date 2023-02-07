@@ -13,25 +13,28 @@ interface IFriendReview {
     poster: string;
   };
   friend: {
-    image: string;
-    name: string;
+    image: string | null;
+    name: string | undefined;
   };
+  hideImage?: boolean;
 }
 
-const FriendReview = ({ content, created, item, friend }: IFriendReview) => {
+const FriendReview = ({ content, created, item, friend, hideImage }: IFriendReview) => {
   return (
     <div className="flex items-center w-full gap-2 mb-4">
-      <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
-        <a>
-          <Image
-            alt={"Poster image for:" + item.name || item.title}
-            width="100"
-            height="150"
-            src={PosterImage({ path: item.poster, size: "lg" })}
-          />
-        </a>
-      </Link>
-      <div className="w-[75%]">
+      {!hideImage && (
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
+          <a>
+            <Image
+              alt={"Poster image for:" + item.name || item.title}
+              width="100"
+              height="150"
+              src={PosterImage({ path: item.poster, size: "lg" })}
+            />
+          </a>
+        </Link>
+      )}
+      <div className={hideImage ? "w-full" : "w-[75%]"}>
         <Link href={`/profile/${friend.name}`}>
           <a className="flex items-center gap-2">
             <ImageWithFallback
