@@ -11,7 +11,7 @@ export const adminRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      if (ctx.session.user.profile.role === "admin") {
+      if (ctx.session.user.profile.role === "ADMIN") {
         const gte = zonedTimeToUtc(new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), input.timeZone);
 
         const userCount = await ctx.prisma.user.count();
@@ -46,6 +46,323 @@ export const adminRouter = router({
           episodesWatched,
           moviesWatched,
         };
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+  getReviews: protectedProcedure.query(async ({ ctx }) => {
+    if (ctx.session.user.profile.role === "ADMIN") {
+      const moviesReviews = await ctx.prisma.moviesReviews.findMany({
+        where: {
+          approved: false,
+        },
+        take: 10,
+        orderBy: {
+          created: "desc",
+        },
+        include: {
+          Movies: true,
+          user: {
+            include: {
+              profile: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      const seriesReviews = await ctx.prisma.seriesReviews.findMany({
+        where: {
+          approved: false,
+        },
+        take: 10,
+        orderBy: {
+          created: "desc",
+        },
+        include: {
+          Series: true,
+          user: {
+            include: {
+              profile: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      const seasonsReviews = await ctx.prisma.seasonsReviews.findMany({
+        where: {
+          approved: false,
+        },
+        take: 10,
+        orderBy: {
+          created: "desc",
+        },
+        include: {
+          Seasons: {
+            include: {
+              Series: true,
+            },
+          },
+          user: {
+            include: {
+              profile: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      const episodesReviews = await ctx.prisma.episodesReviews.findMany({
+        where: {
+          approved: false,
+        },
+        take: 10,
+        orderBy: {
+          created: "desc",
+        },
+        include: {
+          Episodes: {
+            include: {
+              Seasons: {
+                include: {
+                  Series: true,
+                },
+              },
+            },
+          },
+          user: {
+            include: {
+              profile: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return {
+        movies: moviesReviews,
+        series: seriesReviews,
+        seasons: seasonsReviews,
+        episodes: episodesReviews,
+      };
+    } else {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message:
+          "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+      });
+    }
+  }),
+
+  removeMovieReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.moviesReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  removeSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seriesReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  removeSeasonsReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seasonsReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  removeEpisodesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.episodesReviews.delete({
+          where: {
+            id: input.reviewID,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveMoviesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.moviesReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seriesReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveSeasonsReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.seasonsReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
+          },
+        });
+
+        return review;
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message:
+            "The client request has not been completed because it lacks valid authentication credentials for the requested resource.",
+        });
+      }
+    }),
+
+  approveEpisodesReview: protectedProcedure
+    .input(
+      z.object({
+        reviewID: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.user.profile.role === "ADMIN") {
+        const review = ctx.prisma.episodesReviews.update({
+          where: {
+            id: input.reviewID,
+          },
+          data: {
+            approved: true,
+          },
+        });
+
+        return review;
       } else {
         throw new TRPCError({
           code: "UNAUTHORIZED",

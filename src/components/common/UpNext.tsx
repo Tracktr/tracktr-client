@@ -86,9 +86,8 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                       />
                     </a>
                   </Link>
-                  <div className="pb-2 text-xs">
-                    {`${item.season_number}x${item.episode_number}`}
-                    {` `}
+                  <div className="h-4 pb-2 text-xs line-clamp-1">
+                    {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.series.name}
                   </div>
                   {markAsWatched.isLoading && item.series.id === currentLoadingID ? (

@@ -80,7 +80,7 @@ model Profile {
   language   String   @default("en")
   region     String   @default("GB")
   signUpDate DateTime @default(now())
-  role       String   @default("USER")
+  role       Role     @default(USER)
   private    Boolean  @default(false)
   userId     String   @unique
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -114,6 +114,7 @@ model MoviesReviews {
   id       String   @id @default(cuid())
   content  String   @db.VarChar(512)
   created  DateTime @default(now())
+  approved Boolean  @default(false)
   user_id  String
   movie_id Int
   Movies   Movies   @relation(fields: [movie_id], references: [id])
@@ -138,6 +139,7 @@ model SeriesReviews {
   id        String   @id @default(cuid())
   content   String   @db.VarChar(512)
   created   DateTime @default(now())
+  approved  Boolean  @default(false)
   user_id   String
   series_id Int
   Series    Series   @relation(fields: [series_id], references: [id])
@@ -149,12 +151,13 @@ model SeriesReviews {
 }
 
 model Seasons {
-  id              Int               @id
-  name            String
-  poster          String
-  season_number   Int?
-  Series          Series?           @relation(fields: [series_id], references: [id], onDelete: Cascade)
-  series_id       Int?
+  id            Int     @id
+  name          String
+  poster        String
+  season_number Int?
+  series_id     Int?
+  Series        Series? @relation(fields: [series_id], references: [id], onDelete: Cascade)
+
   episodes        Episodes[]
   SeasonsReviews  SeasonsReviews[]
   EpisodesHistory EpisodesHistory[]
@@ -166,6 +169,7 @@ model SeasonsReviews {
   id         String   @id @default(cuid())
   content    String   @db.VarChar(512)
   created    DateTime @default(now())
+  approved   Boolean  @default(false)
   user_id    String
   seasons_id Int
   Seasons    Seasons  @relation(fields: [seasons_id], references: [id])
@@ -194,6 +198,7 @@ model EpisodesReviews {
   id          String   @id @default(cuid())
   content     String   @db.VarChar(512)
   created     DateTime @default(now())
+  approved    Boolean  @default(false)
   user_id     String
   episodes_id Int
   Episodes    Episodes @relation(fields: [episodes_id], references: [id])

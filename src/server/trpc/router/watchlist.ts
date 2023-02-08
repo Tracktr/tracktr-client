@@ -142,7 +142,18 @@ export const watchlistRouter = router({
                   return { ...item, watched: false, watched_id: null };
                 }
               } else {
-                return { ...item, watched: false, watched_id: null };
+                const watched = await ctx.prisma.episodesHistory.findFirst({
+                  where: {
+                    user_id: ctx?.session?.user?.id as string,
+                    series_id: item?.series?.id,
+                  },
+                });
+
+                if (watched) {
+                  return { ...item, watched: true };
+                } else {
+                  return { ...item, watched: false };
+                }
               }
             })
           );

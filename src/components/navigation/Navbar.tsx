@@ -119,7 +119,7 @@ const Navbar = () => {
                   onMouseEnter={toggleProfileHover}
                   onMouseLeave={toggleProfileHover}
                 >
-                  <div className="w-full h-full">
+                  <div className="w-full h-full cursor-pointer select-none">
                     <div className="flex items-center pl-4">
                       <ImageWithFallback
                         unoptimized
