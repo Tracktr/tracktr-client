@@ -30,8 +30,6 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
     if (!fetchStatus) setCurrentLoadingID(undefined);
   }, [fetchStatus]);
 
-  console.log(id);
-
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
     onMutate: (e) => setCurrentLoadingID(e.movieId),
     onSuccess: () => {
