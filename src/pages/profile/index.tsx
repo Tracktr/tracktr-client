@@ -9,6 +9,8 @@ const ProfilePage = () => {
   useEffect(() => {
     if (session.status === "authenticated") {
       router.push(`/profile/${session.data.user?.profile.username}`);
+    } else if (session.status === "unauthenticated") {
+      router.push("/404");
     }
   }, [session, router]);
 
