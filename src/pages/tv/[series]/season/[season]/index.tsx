@@ -112,7 +112,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 fetchStatus={seasonIsRefetching}
                 themeColor={seriesData.theme_color}
               />
-              <SeenByBlock data={seenBy} />
+              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={seasonData.credits.cast} />
               <CrewBlock crew={seasonData.credits.crew} />
               <ReviewsBlock

@@ -19,8 +19,10 @@ import { createContext } from "../../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../../../../components/pageBlocks/SeenByBlock";
+import { useSession } from "next-auth/react";
 
 const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const session = useSession();
   const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
   });
@@ -98,7 +100,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
               />
 
               <DetailsBlock releaseDate={episodeData.air_date} runtime={episodeData.runtime} />
-              <SeenByBlock data={seenBy} />
+              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={episodeData.credits.cast} />
               <CrewBlock crew={episodeData.credits.crew} />
               <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
