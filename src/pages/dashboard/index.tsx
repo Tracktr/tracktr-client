@@ -21,6 +21,7 @@ const DashboardPage = () => {
     data: history,
     status: historyStatus,
     refetch: refetchHistory,
+    isRefetching: isRefetchingHistory,
   } = trpc.profile.watchHistory.useQuery(
     {
       page: 1,
@@ -48,6 +49,7 @@ const DashboardPage = () => {
     data: friendsData,
     status: friendsStatus,
     refetch: refetchFriends,
+    isRefetching: isRefetchingFriends,
   } = trpc.dashboard.friendsActivity.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
     { enabled: sessionStatus === "authenticated" }
@@ -127,6 +129,7 @@ const DashboardPage = () => {
                   history={history?.history || []}
                   status={historyStatus}
                   refetch={refetch}
+                  isRefetching={isRefetchingHistory}
                 />
               </div>
 
@@ -146,6 +149,7 @@ const DashboardPage = () => {
                   status={friendsStatus}
                   refetch={refetchFriends}
                   inPublic
+                  isRefetching={isRefetchingFriends}
                 />
 
                 <h2 className="mt-4 mb-2 text-xl">Reviews</h2>
