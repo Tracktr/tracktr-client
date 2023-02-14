@@ -15,8 +15,8 @@ const FollowersPage = () => {
   const { data, status } = trpc.profile.profileBySession.useQuery();
 
   useEffect(() => {
-    if (session.status !== "loading" && session.status === "unauthenticated") {
-      router.push(`/`);
+    if (session.status === "unauthenticated") {
+      router.push(`/404`);
     }
   }, [session, router]);
 
