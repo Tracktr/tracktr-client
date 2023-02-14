@@ -232,40 +232,66 @@ export const watchlistRouter = router({
       });
 
       if (!existsInDB) {
-        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: Number(input.series_id) });
+        const newSeries = await createNewSeries({ show, seriesPoster, id: Number(input.series_id), ctx });
 
-        await ctx.prisma.series.upsert({
-          where: { id: input.series_id },
-          update: newSeriesCreateUpdate,
-          create: newSeriesCreateUpdate,
-        });
+        if (newSeries !== null) {
+          try {
+            return ctx.prisma.watchlist.upsert({
+              where: {
+                user_id: ctx.session.user.profile.userId,
+              },
+              update: {
+                user_id: ctx.session.user.profile.userId,
+                WatchlistItem: {
+                  create: {
+                    series_id: input.series_id,
+                  },
+                },
+              },
+              create: {
+                user_id: ctx.session.user.profile.userId,
+                WatchlistItem: {
+                  create: {
+                    series_id: input.series_id,
+                  },
+                },
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      } else {
+        try {
+          return await ctx.prisma.watchlist.upsert({
+            where: {
+              user_id: ctx.session.user.profile.userId,
+            },
+            update: {
+              user_id: ctx.session.user.profile.userId,
+              WatchlistItem: {
+                create: {
+                  series_id: input.series_id,
+                },
+              },
+            },
+            create: {
+              user_id: ctx.session.user.profile.userId,
+              WatchlistItem: {
+                create: {
+                  series_id: input.series_id,
+                },
+              },
+            },
+          });
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Could not add to watchlist",
+            cause: error,
+          });
+        }
       }
-
-      const watchlist = ctx.prisma.watchlist.upsert({
-        where: {
-          user_id: ctx.session.user.profile.userId,
-        },
-        update: {
-          user_id: ctx.session.user.profile.userId,
-          WatchlistItem: {
-            create: {
-              series_id: input.series_id,
-            },
-          },
-        },
-        create: {
-          user_id: ctx.session.user.profile.userId,
-          WatchlistItem: {
-            create: {
-              series_id: input.series_id,
-            },
-          },
-        },
-      });
-
-      return {
-        ...watchlist,
-      };
     }),
   addMovie: protectedProcedure
     .input(
