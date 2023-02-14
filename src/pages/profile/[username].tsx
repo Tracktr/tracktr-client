@@ -102,7 +102,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 history={profile?.MoviesHistory || []}
                 status={profileStatus}
                 refetch={refetch}
-                inPublic=
+                inPublic
                 isRefetching={isRefetching}
               />
             </div>
