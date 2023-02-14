@@ -19,7 +19,7 @@ const WelcomePage = () => {
     if (sessionStatus === "authenticated") {
       setUsername(String(session.user?.profile.username));
     } else if (sessionStatus === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   }, [sessionStatus, session, router]);
 

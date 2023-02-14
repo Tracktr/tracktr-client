@@ -55,7 +55,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionStatus === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   });
 

@@ -30,7 +30,7 @@ const DeleteAccountPage = () => {
 
   useEffect(() => {
     if (session.status === "unauthenticated" && status !== "loading") {
-      router.push("/");
+      router.push("/404");
     }
   });
 
