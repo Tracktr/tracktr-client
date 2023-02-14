@@ -30,9 +30,10 @@ interface IEpisodesGrid {
   episodes: IEpisode[];
   status: "error" | "success" | "loading";
   refetch: () => void;
+  isRefetching: boolean;
 }
 
-const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
+const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX.Element => {
   const [currentLoadingID, setCurrentLoadingID] = useState<number | undefined>();
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
@@ -90,7 +91,7 @@ const UpNext = ({ episodes, status, refetch }: IEpisodesGrid): JSX.Element => {
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.series.name}
                   </div>
-                  {markAsWatched.isLoading && item.series.id === currentLoadingID ? (
+                  {(markAsWatched.isLoading || isRefetching) && item.series.id === currentLoadingID ? (
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                   ) : (
                     <button

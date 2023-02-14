@@ -36,6 +36,7 @@ const DashboardPage = () => {
     data: upNext,
     status: upNextStatus,
     refetch: refetchUpNext,
+    isRefetching: isRefetchingUpNext,
   } = trpc.dashboard.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
   const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
@@ -88,7 +89,12 @@ const DashboardPage = () => {
                     </div>
                   </div>
                 </div>
-                <UpNext episodes={upNext?.result || []} status={upNextStatus} refetch={refetch} />
+                <UpNext
+                  episodes={upNext?.result || []}
+                  status={upNextStatus}
+                  refetch={refetch}
+                  isRefetching={isRefetchingUpNext}
+                />
               </div>
 
               <div className="mt-6 mb-12">
