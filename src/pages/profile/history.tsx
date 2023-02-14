@@ -174,6 +174,7 @@ const HistoryPage = () => {
                 history={history?.history || []}
                 status={isRefetching ? "loading" : historyStatus}
                 refetch={refetch}
+                isRefetching={isRefetching}
               />
             </div>
 
