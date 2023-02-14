@@ -30,7 +30,7 @@ const ProfilePage = () => {
     if (session.status === "authenticated") {
       setUsername(String(session.data.user?.profile.username));
     } else if (session.status === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   }, [session, router]);
 

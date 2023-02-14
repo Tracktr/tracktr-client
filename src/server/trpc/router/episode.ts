@@ -97,13 +97,7 @@ export const episodeRouter = router({
 
         const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
 
-        const newSeriesCreateUpdate = await createNewSeries({ show, seriesPoster, id: input.seriesID });
-
-        const newSeries = await ctx.prisma.series.upsert({
-          where: { id: input.seriesID },
-          update: newSeriesCreateUpdate,
-          create: newSeriesCreateUpdate,
-        });
+        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
 
         if (newSeries !== null) {
           try {

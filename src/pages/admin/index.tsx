@@ -149,7 +149,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     if (sessionStatus !== "loading" && sessionData?.user?.profile?.role !== "ADMIN") {
-      router.push("/");
+      router.push("/404");
     }
   });
 

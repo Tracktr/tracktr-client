@@ -19,7 +19,7 @@ const WelcomeMoviesPage = () => {
 
   useEffect(() => {
     if (sessionStatus === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   }, [sessionStatus, session, router]);
 

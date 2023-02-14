@@ -94,7 +94,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 numberOfEpisodes={seriesData.number_of_episodes}
                 numberOfSeasons={seriesData.number_of_seasons}
               />
-              <SeenByBlock data={seenBy} />
+              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
               <CastBlock cast={seriesData.credits.cast} />
               <CrewBlock crew={seriesData.credits.crew} />

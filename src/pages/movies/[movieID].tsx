@@ -19,8 +19,10 @@ import { createContext } from "../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../components/pageBlocks/SeenByBlock";
+import { useSession } from "next-auth/react";
 
 const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const session = useSession();
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
   const { data: seenBy } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) });
 
@@ -69,7 +71,7 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
                 runtime={data.runtime}
                 status={data.status}
               />
-              <SeenByBlock data={seenBy} />
+              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
               <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />

@@ -40,12 +40,12 @@ const ImportPage = () => {
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   }, [session, router]);
 
   useEffect(() => {
-    if (currentPercentage >= 100) router.push("/");
+    if (currentPercentage >= 100) router.push("/profile");
   }, [currentPercentage, router]);
 
   const importRoute = trpc.import.trakt.useMutation();

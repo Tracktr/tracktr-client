@@ -33,7 +33,7 @@ const HistoryPage = () => {
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
-      router.push("/");
+      router.push("/404");
     }
   }, [session, router]);
 
