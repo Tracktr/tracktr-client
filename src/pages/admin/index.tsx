@@ -6,8 +6,8 @@ import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
-import FriendReview from "../../components/common/FriendReviews";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
+import Review from "../../components/reviews/Review";
 import { trpc } from "../../utils/trpc";
 
 const AdminPage = () => {
@@ -216,7 +216,7 @@ const AdminPage = () => {
                   <div className="flex flex-col gap-6">
                     {reviews.movies.map((review) => (
                       <div key={review.id}>
-                        <FriendReview
+                        <Review
                           content={review.content}
                           created={review.created}
                           friend={{
@@ -276,7 +276,7 @@ const AdminPage = () => {
                   <div className="flex flex-col gap-6">
                     {reviews.series.map((review) => (
                       <div key={review.id}>
-                        <FriendReview
+                        <Review
                           content={review.content}
                           created={review.created}
                           friend={{
@@ -339,7 +339,7 @@ const AdminPage = () => {
                   <div className="flex flex-col gap-6">
                     {reviews.seasons.map((review) => (
                       <div key={review.id}>
-                        <FriendReview
+                        <Review
                           content={review.content}
                           created={review.created}
                           friend={{
@@ -403,7 +403,7 @@ const AdminPage = () => {
                   <div className="flex flex-col gap-6">
                     {reviews.episodes.map((review) => (
                       <div key={review.id}>
-                        <FriendReview
+                        <Review
                           content={review.content}
                           created={review.created}
                           friend={{
