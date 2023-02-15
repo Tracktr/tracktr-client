@@ -12,7 +12,7 @@ interface IReview {
     title?: string;
     poster: string;
   };
-  friend: {
+  friend?: {
     image: string | null;
     name: string | undefined;
   };
@@ -35,19 +35,21 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
         </Link>
       )}
       <div className={hideImage ? "w-full" : "w-[75%]"}>
-        <Link href={`/profile/${friend.name}`}>
-          <a className="flex items-center gap-2">
-            <ImageWithFallback
-              src={friend.image}
-              fallbackSrc="/placeholder_profile.png"
-              width="16"
-              height="16"
-              alt="Profile picture"
-              className="rounded-full"
-            />
-            <p className="text-sm">{friend.name}</p>
-          </a>
-        </Link>
+        {friend && (
+          <Link href={`/profile/${friend.name}`}>
+            <a className="flex items-center gap-2">
+              <ImageWithFallback
+                src={friend.image}
+                fallbackSrc="/placeholder_profile.png"
+                width="16"
+                height="16"
+                alt="Profile picture"
+                className="rounded-full"
+              />
+              <p className="text-sm">{friend.name}</p>
+            </a>
+          </Link>
+        )}
         <p className="text-xl">{item.name || item.title}</p>
         <div className="mb-4 text-sm">
           {created.toLocaleString("en-UK", {

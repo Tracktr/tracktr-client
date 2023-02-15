@@ -7,7 +7,7 @@ import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
-import Review from "../../components/reviews/Review";
+import Review from "../../components/common/Review";
 import { trpc } from "../../utils/trpc";
 
 const AdminPage = () => {

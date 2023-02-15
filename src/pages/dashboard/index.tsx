@@ -10,7 +10,7 @@ import UpNext from "../../components/dashboard/UpNext";
 import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline, MdQueuePlayNext } from "react-icons/md";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import Review, { LoadingReview } from "../../components/reviews/Review";
+import Review, { LoadingReview } from "../../components/common/Review";
 
 const DashboardChart = dynamic(() => import("../../components/dashboard/DashboardChart"), { ssr: false });
 
