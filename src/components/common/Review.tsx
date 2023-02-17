@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
-import ImageWithFallback from "./ImageWithFallback";
+import ImageWithFallback from "../common/ImageWithFallback";
 
-interface IFriendReview {
+interface IReview {
   content: string;
   created: Date;
   item: {
@@ -12,14 +12,14 @@ interface IFriendReview {
     title?: string;
     poster: string;
   };
-  friend: {
+  friend?: {
     image: string | null;
     name: string | undefined;
   };
   hideImage?: boolean;
 }
 
-const FriendReview = ({ content, created, item, friend, hideImage }: IFriendReview) => {
+const Review = ({ content, created, item, friend, hideImage }: IReview) => {
   return (
     <div className="flex items-center w-full gap-2 mb-4">
       {!hideImage && (
@@ -35,19 +35,21 @@ const FriendReview = ({ content, created, item, friend, hideImage }: IFriendRevi
         </Link>
       )}
       <div className={hideImage ? "w-full" : "w-[75%]"}>
-        <Link href={`/profile/${friend.name}`}>
-          <a className="flex items-center gap-2">
-            <ImageWithFallback
-              src={friend.image}
-              fallbackSrc="/placeholder_profile.png"
-              width="16"
-              height="16"
-              alt="Profile picture"
-              className="rounded-full"
-            />
-            <p className="text-sm">{friend.name}</p>
-          </a>
-        </Link>
+        {friend && (
+          <Link href={`/profile/${friend.name}`}>
+            <a className="flex items-center gap-2">
+              <ImageWithFallback
+                src={friend.image}
+                fallbackSrc="/placeholder_profile.png"
+                width="16"
+                height="16"
+                alt="Profile picture"
+                className="rounded-full"
+              />
+              <p className="text-sm">{friend.name}</p>
+            </a>
+          </Link>
+        )}
         <p className="text-xl">{item.name || item.title}</p>
         <div className="mb-4 text-sm">
           {created.toLocaleString("en-UK", {
@@ -61,7 +63,7 @@ const FriendReview = ({ content, created, item, friend, hideImage }: IFriendRevi
   );
 };
 
-export const LoadingFriendReview = () => (
+export const LoadingReview = () => (
   <div className="flex items-center w-full gap-2 mb-4">
     <div className="flex items-center w-full gap-2 mb-4">
       <div className="w-[100px] h-[150px] animate-pulse bg-[#343434]" />
@@ -78,4 +80,4 @@ export const LoadingFriendReview = () => (
   </div>
 );
 
-export default FriendReview;
+export default Review;

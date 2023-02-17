@@ -16,6 +16,7 @@ import { appRouter } from "../../server/trpc/router/_app";
 import { createContext } from "../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Review from "../../components/common/Review";
 
 const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
@@ -165,52 +166,18 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
               (profile?.MoviesReviews && profile?.MoviesReviews.length > 0) ? (
                 <div>
                   {profile?.SeriesReviews[0] && (
-                    <Link href={`/tv/${profile?.SeriesReviews[0]?.Series.id}#reviews`}>
-                      <a>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Image
-                            alt={"Poster image for:" + profile?.SeriesReviews[0]?.Series.name}
-                            width="100"
-                            height="150"
-                            src={PosterImage({ path: profile?.SeriesReviews[0]?.Series.poster, size: "lg" })}
-                          />
-                          <div>
-                            <p className="text-xl">{profile?.SeriesReviews[0]?.Series.name}</p>
-                            <div className="mb-4 text-sm">
-                              {profile.SeriesReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{profile.SeriesReviews[0].content}</div>
-                          </div>
-                        </div>
-                      </a>
-                    </Link>
+                    <Review
+                      content={profile.SeriesReviews[0].content}
+                      created={profile.SeriesReviews[0].created}
+                      item={profile?.SeriesReviews[0]?.Series}
+                    />
                   )}
                   {profile?.MoviesReviews[0] && (
-                    <Link href={`/movies/${profile?.MoviesReviews[0]?.Movies.id}#reviews`}>
-                      <a>
-                        <div className="flex items-center gap-2 mb-4">
-                          <Image
-                            alt={"Poster image for:" + profile?.MoviesReviews[0]?.Movies.title}
-                            width="100"
-                            height="150"
-                            src={PosterImage({ path: profile?.MoviesReviews[0]?.Movies.poster, size: "lg" })}
-                          />
-                          <div>
-                            <p className="text-xl">{profile?.MoviesReviews[0]?.Movies.title}</p>
-                            <div className="mb-4 text-sm">
-                              {profile.MoviesReviews[0].created.toLocaleString("en-UK", {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                              })}
-                            </div>
-                            <div>{profile.MoviesReviews[0].content}</div>
-                          </div>
-                        </div>
-                      </a>
-                    </Link>
+                    <Review
+                      content={profile.MoviesReviews[0].content}
+                      created={profile.MoviesReviews[0].created}
+                      item={profile?.MoviesReviews[0]?.Movies}
+                    />
                   )}
                 </div>
               ) : (

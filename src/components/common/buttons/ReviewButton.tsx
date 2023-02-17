@@ -5,9 +5,9 @@ import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
 import ReactTooltip from "react-tooltip";
-import { trpc } from "../../utils/trpc";
-import Modal from "../modal/Modal";
-import { IThemeColor } from "../watchButton/BaseWatchButton";
+import { trpc } from "../../../utils/trpc";
+import Modal from "../../modal/Modal";
+import { IThemeColor } from "../../watchButton/BaseWatchButton";
 
 const ReviewButton = ({
   themeColor,

@@ -96,7 +96,7 @@ const SeasonWatchButton = ({
     }
   };
 
-  if (state === "unwatched") {
+  if (state === "unwatched" && !watchHistory.isRefetching) {
     return (
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div className="flex items-center justify-between">
@@ -109,7 +109,7 @@ const SeasonWatchButton = ({
     );
   }
 
-  if (state === "watched") {
+  if (state === "watched" && !watchHistory.isRefetching) {
     const plays: number = watchHistory?.data?.results?.length || 0;
     const lastDate = watchHistory?.data?.results[0]?.datetime;
     const date = new Date(String(lastDate)).toLocaleDateString("en-UK", {

@@ -105,7 +105,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
     }
   };
 
-  if (state === "unwatched") {
+  if (state === "unwatched" && !watchHistory.isRefetching) {
     return (
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div className="flex items-center justify-between">
@@ -118,7 +118,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
     );
   }
 
-  if ((state === "watched" || modalOpen) && watchHistory.data) {
+  if ((state === "watched" || modalOpen) && watchHistory.data && !watchHistory.isRefetching) {
     const data = Object.values(watchHistory.data as any[]);
 
     if (data[data.length - 1]) {

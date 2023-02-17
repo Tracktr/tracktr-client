@@ -6,13 +6,13 @@ import { trpc } from "../../utils/trpc";
 import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
-import UpNext from "../../components/common/UpNext";
+import UpNext from "../../components/dashboard/UpNext";
 import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline, MdQueuePlayNext } from "react-icons/md";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import FriendReview, { LoadingFriendReview } from "../../components/common/FriendReviews";
+import Review, { LoadingReview } from "../../components/common/Review";
 
-const DashboardChart = dynamic(() => import("../../components/common/DashboardChart"), { ssr: false });
+const DashboardChart = dynamic(() => import("../../components/dashboard/DashboardChart"), { ssr: false });
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -157,10 +157,10 @@ const DashboardPage = () => {
                 {!friendsData?.seriesReviews[0] && !friendsData?.movieReviews[0] && <div>No reviews found</div>}
                 <div className="flex flex-col md:flex-row">
                   {friendsStatus === "loading" ? (
-                    <LoadingFriendReview />
+                    <LoadingReview />
                   ) : (
                     friendsData?.seriesReviews[0] && (
-                      <FriendReview
+                      <Review
                         content={friendsData?.seriesReviews[0].content}
                         created={friendsData?.seriesReviews[0].created}
                         item={friendsData?.seriesReviews[0].Series}
@@ -169,10 +169,10 @@ const DashboardPage = () => {
                     )
                   )}
                   {friendsStatus === "loading" ? (
-                    <LoadingFriendReview />
+                    <LoadingReview />
                   ) : (
                     friendsData?.movieReviews[0] && (
-                      <FriendReview
+                      <Review
                         content={friendsData?.movieReviews[0].content}
                         created={friendsData?.movieReviews[0].created}
                         item={friendsData?.movieReviews[0].Movies}

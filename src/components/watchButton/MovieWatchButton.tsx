@@ -92,7 +92,7 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
     }
   };
 
-  if (state === "unwatched") {
+  if (state === "unwatched" && !watchHistory.isRefetching) {
     return (
       <BaseWatchButton onClick={addToHistory} themeColor={themeColor}>
         <div className="flex items-center justify-between">
@@ -105,7 +105,7 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
     );
   }
 
-  if (state === "watched" || modalOpen) {
+  if (state === "watched" || (modalOpen && !watchHistory.isRefetching)) {
     const data = Object.values(watchHistory.data as any[]);
     const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
       year: "numeric",
