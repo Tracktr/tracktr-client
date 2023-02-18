@@ -227,7 +227,7 @@ const AdminPage = () => {
                           hideImage
                         />
                         <button
-                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          className="w-full px-2 py-1 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                           onClick={() => {
                             setCurrentLoadingID(review.id);
                             approveMoviesReview.mutate({
@@ -288,7 +288,7 @@ const AdminPage = () => {
                         />
 
                         <button
-                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          className="w-full px-2 py-1 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                           onClick={() => {
                             setCurrentLoadingID(review.id);
                             approveSeriesReview.mutate({
@@ -354,7 +354,7 @@ const AdminPage = () => {
                           hideImage
                         />
                         <button
-                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          className="w-full px-2 py-1 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                           onClick={() => {
                             setCurrentLoadingID(review.id);
                             approveSeasonsReview.mutate({
@@ -419,7 +419,7 @@ const AdminPage = () => {
                         />
 
                         <button
-                          className="w-full px-2 py-1 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                          className="w-full px-2 py-1 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                           onClick={() => {
                             setCurrentLoadingID(review.id);
                             approveEpisodesReview.mutate({
