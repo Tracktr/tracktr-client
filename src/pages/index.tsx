@@ -188,7 +188,7 @@ const Home: NextPage = () => {
 
                 <div className="max-w-3xl mx-auto mt-8 space-y-4 text-black md:mt-16">
                   <div
-                    className={`overflow-hidden transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
+                    className={`overflow-hidden transition-all duration-300 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
                       openFAQ.faq1 === true ? "max-h-96" : "max-h-16 md:max-h-20"
                     }`}
                   >
@@ -217,7 +217,7 @@ const Home: NextPage = () => {
 
                 <div className="max-w-3xl mx-auto mt-8 space-y-4 text-black md:mt-4">
                   <div
-                    className={`overflow-hidden transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
+                    className={`overflow-hidden transition-all duration-300 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${
                       openFAQ.faq2 === true ? "max-h-96" : "max-h-16 md:max-h-20"
                     }`}
                   >
