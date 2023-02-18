@@ -57,7 +57,7 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
             timeStyle: "short",
           })}
         </div>
-        <div>{content}</div>
+        <div className="whitespace-pre-wrap">{content}</div>
       </div>
     </div>
   );
