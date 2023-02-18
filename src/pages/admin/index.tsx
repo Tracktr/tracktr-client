@@ -167,8 +167,9 @@ const AdminPage = () => {
                   {stats?.newUsersCount || 0} new users in the past week ({stats?.userCount || 0} in total)
                 </div>
                 <div>
-                  In total, users watched {stats?.episodesWatched || 0} episodes and {stats?.moviesWatched || 0} movies
-                  in the past week.
+                  In total, {stats?.uniqueEpisodeViewers || 0} user(s) watched {stats?.episodesWatched || 0} episodes
+                  and {stats?.uniqueMovieViewers || 0} user(s) watched {stats?.moviesWatched || 0} movies in the past
+                  week. They also left {stats?.reviewCount || 0} reviews.
                 </div>
               </div>
 
