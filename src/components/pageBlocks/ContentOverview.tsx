@@ -2,7 +2,6 @@ import { useState } from "react";
 import WatchTrailerButton from "../common/buttons/WatchTrailerButton";
 import JustWatch, { IJustWatchProps } from "../common/JustWatch";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
-import { AnimatePresence, motion } from "framer-motion";
 
 const ContentOverview = ({
   overview,
