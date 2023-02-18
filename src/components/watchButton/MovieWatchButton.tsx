@@ -105,7 +105,7 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
     );
   }
 
-  if (state === "watched" || (modalOpen && !watchHistory.isRefetching)) {
+  if ((state === "watched" || modalOpen) && watchHistory.data && !watchHistory.isRefetching) {
     const data = Object.values(watchHistory.data as any[]);
     const date = new Date(data[data.length - 1].datetime).toLocaleDateString("en-UK", {
       year: "numeric",
