@@ -17,9 +17,11 @@ export const searchRouter = publicProcedure
     url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
     url.searchParams.append("query", query || "");
     url.searchParams.append("page", cursor?.toString() || "1");
-    if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-    if (ctx) url.searchParams.append("include_adult", ctx.session?.user?.profile?.adult ? "true" : "false");
-    if (ctx) url.searchParams.append("region", ctx.session?.user?.profile?.region as string);
+    if (ctx.session?.user) {
+      url.searchParams.append("language", ctx.session?.user?.profile.language);
+      url.searchParams.append("include_adult", ctx.session?.user?.profile?.adult ? "true" : "false");
+      url.searchParams.append("region", ctx.session?.user?.profile?.region);
+    }
 
     const res = await fetch(url);
     const json = await res.json();

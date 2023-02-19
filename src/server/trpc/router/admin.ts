@@ -40,10 +40,68 @@ export const adminRouter = router({
           },
         });
 
+        const uniqueEpisodeViewers = await ctx.prisma.episodesHistory.findMany({
+          where: {
+            datetime: {
+              gte,
+            },
+          },
+          select: {
+            id: true,
+          },
+          distinct: ["user_id"],
+        });
+        const uniqueMovieViewers = await ctx.prisma.moviesHistory.findMany({
+          where: {
+            datetime: {
+              gte,
+            },
+          },
+          select: {
+            id: true,
+          },
+          distinct: ["user_id"],
+        });
+
+        const movieReviews = await ctx.prisma.moviesReviews.count({
+          where: {
+            created: {
+              gte,
+            },
+          },
+        });
+
+        const seriesReviews = await ctx.prisma.seriesReviews.count({
+          where: {
+            created: {
+              gte,
+            },
+          },
+        });
+
+        const seasonReviews = await ctx.prisma.seasonsReviews.count({
+          where: {
+            created: {
+              gte,
+            },
+          },
+        });
+
+        const episodesReviews = await ctx.prisma.episodesReviews.count({
+          where: {
+            created: {
+              gte,
+            },
+          },
+        });
+
         return {
           userCount,
           newUsersCount,
+          reviewCount: movieReviews || 0 + seriesReviews || 0 + seasonReviews || 0 + episodesReviews || 0,
           episodesWatched,
+          uniqueEpisodeViewers: uniqueEpisodeViewers.length,
+          uniqueMovieViewers: uniqueMovieViewers.length,
           moviesWatched,
         };
       } else {
@@ -60,7 +118,7 @@ export const adminRouter = router({
         where: {
           approved: false,
         },
-        take: 10,
+        take: 3,
         orderBy: {
           created: "desc",
         },
@@ -81,7 +139,7 @@ export const adminRouter = router({
         where: {
           approved: false,
         },
-        take: 10,
+        take: 3,
         orderBy: {
           created: "desc",
         },
@@ -102,7 +160,7 @@ export const adminRouter = router({
         where: {
           approved: false,
         },
-        take: 10,
+        take: 3,
         orderBy: {
           created: "desc",
         },
@@ -127,7 +185,7 @@ export const adminRouter = router({
         where: {
           approved: false,
         },
-        take: 10,
+        take: 3,
         orderBy: {
           created: "desc",
         },

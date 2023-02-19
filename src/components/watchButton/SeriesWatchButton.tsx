@@ -99,7 +99,7 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
     );
   }
 
-  if (state === "watched" && !watchHistory.isRefetching) {
+  if (state === "watched" && watchHistory.data && !watchHistory.isRefetching) {
     const plays: number = watchHistory?.data?.results?.length || 0;
     const lastDate = watchHistory?.data?.results[0]?.datetime;
     const date = new Date(String(lastDate)).toLocaleDateString("en-UK", {

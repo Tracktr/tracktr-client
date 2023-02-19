@@ -1,7 +1,7 @@
 import Head from "next/head";
 import SearchInput from "../components/search/SearchInput";
 
-const NotFoundPage = () => {
+const ServerErrorPage = () => {
   return (
     <>
       <Head>
@@ -33,4 +33,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default ServerErrorPage;

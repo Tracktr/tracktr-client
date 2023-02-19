@@ -121,7 +121,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching }: IReviewsBlock) 
                   })}
                 </div>
               </div>
-              <div>{review.content}</div>
+              <div className="whitespace-pre-wrap">{review.content}</div>
             </div>
           ))
         ) : (
