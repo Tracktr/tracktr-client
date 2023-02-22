@@ -94,7 +94,7 @@ const EpisodePoster = ({
                 </span>
                 {name}
                 {score !== undefined && (
-                  <span className="flex ml-auto text-white">
+                  <span className="flex ml-auto text-white min-w-[25%]">
                     <span className="flex items-center text-sm">
                       <AiFillStar className="mr-1 text-primary" size={18} />
                       {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
