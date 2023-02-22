@@ -37,7 +37,11 @@ const WatchTrailerButton = ({ themeColor, data }: WatchTrailerButtonProps) => {
           {trailer.length >= 1 ? (
             trailer.map((item: any) => {
               const site = item.site === "YouTube" && "https://youtube.com/watch?v=" + item.key;
-              return <ReactPlayer url={`${site}`} key={item.key} />;
+              return (
+                <div className="relative h-auto aspect-video" key={item.key}>
+                  <ReactPlayer url={`${site}`} width="100%" height="100%" />
+                </div>
+              );
             })
           ) : (
             <p className="p-4">Something went wrong finding a video...</p>

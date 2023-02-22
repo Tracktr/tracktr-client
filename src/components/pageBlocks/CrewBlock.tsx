@@ -56,20 +56,18 @@ const CrewBlock = ({ crew }: ICrew) => {
         <AnimatePresence initial={false} mode="wait">
           {modalOpen && (
             <Modal handleClose={() => setModalOpen(!modalOpen)}>
-              <div className="py-4">
-                <div className="pb-4 text-2xl">Main cast</div>
-                <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
-                  {crew.map((item, i) => (
-                    <div key={"cast" + item.id + i} className="flex-shrink-0">
-                      <PersonPoster
-                        imageSrc={item.profile_path}
-                        name={item.original_name}
-                        url={`/person/${item.id}`}
-                        job={item?.job}
-                      />
-                    </div>
-                  ))}
-                </div>
+              <div className="pb-4 text-2xl">Crew</div>
+              <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
+                {crew.map((item, i) => (
+                  <div key={"cast" + item.id + i} className="flex-shrink-0">
+                    <PersonPoster
+                      imageSrc={item.profile_path}
+                      name={item.original_name}
+                      url={`/person/${item.id}`}
+                      job={item?.job}
+                    />
+                  </div>
+                ))}
               </div>
             </Modal>
           )}

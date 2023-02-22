@@ -18,7 +18,7 @@ interface ICast {
     credit_id: string;
     order: number;
   }[];
-  guestStars: {
+  guestStars?: {
     character: string;
     credit_id: string;
     order: number;
@@ -68,7 +68,7 @@ const CastBlock = ({ cast, guestStars }: ICast) => {
         <AnimatePresence initial={false} mode="wait">
           {modalOpen && (
             <Modal handleClose={() => setModalOpen(!modalOpen)}>
-              <div className="py-4">
+              <div>
                 <div className="pb-4 text-2xl">Main cast</div>
                 <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
                   {cast.map((item, i) => (
@@ -83,19 +83,23 @@ const CastBlock = ({ cast, guestStars }: ICast) => {
                   ))}
                 </div>
 
-                <div className="py-4 text-2xl">Guest stars</div>
-                <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
-                  {guestStars.map((item, i) => (
-                    <div key={"guestStars" + item.id + i} className="flex-shrink-0">
-                      <PersonPoster
-                        imageSrc={item.profile_path}
-                        name={item.original_name}
-                        url={`/person/${item.id}`}
-                        job={item?.character}
-                      />
+                {guestStars && guestStars.length > 0 && (
+                  <>
+                    <div className="py-4 text-2xl">Guest stars</div>
+                    <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
+                      {guestStars.map((item, i) => (
+                        <div key={"guestStars" + item.id + i} className="flex-shrink-0">
+                          <PersonPoster
+                            imageSrc={item.profile_path}
+                            name={item.original_name}
+                            url={`/person/${item.id}`}
+                            job={item?.character}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </>
+                )}
               </div>
             </Modal>
           )}
