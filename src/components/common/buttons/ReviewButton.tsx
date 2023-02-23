@@ -151,47 +151,45 @@ const ReviewButton = ({
 
       {modalOpen && (
         <Modal handleClose={() => setModalOpen(!modalOpen)}>
-          <div className="py-4">
-            <div className="text-2xl">Write a review</div>
-            <div className="mt-2">
-              <textarea
-                id="review"
-                rows={4}
-                className={`block p-2.5 w-full text-sm rounded-lg border disabled:cursor-not-allowed ${
-                  inputError
-                    ? "text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 bg-red-100 border-red-400"
-                    : "text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600"
-                }`}
-                placeholder="Leave a comment..."
-                onChange={handleInput}
-                disabled={addSeasonReview.isLoading || addMovieReview.isLoading}
-                aria-describedby="review-helper"
-              ></textarea>
-              <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
-                {inputSize}/{MAX_MESSAGE_SIZE} characters used.
-              </p>
+          <div className="text-2xl">Write a review</div>
+          <div className="mt-2">
+            <textarea
+              id="review"
+              rows={4}
+              className={`block p-2.5 w-full text-sm rounded-lg border disabled:cursor-not-allowed ${
+                inputError
+                  ? "text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 bg-red-100 border-red-400"
+                  : "text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600"
+              }`}
+              placeholder="Leave a comment..."
+              onChange={handleInput}
+              disabled={addSeasonReview.isLoading || addMovieReview.isLoading}
+              aria-describedby="review-helper"
+            ></textarea>
+            <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
+              {inputSize}/{MAX_MESSAGE_SIZE} characters used.
+            </p>
 
-              <button
-                onClick={onSubmit}
-                disabled={addSeriesReview.isLoading || addMovieReview.isLoading || Boolean(inputError)}
-                style={{
-                  backgroundColor: themeColor.hex,
-                }}
-                className={`flex items-center justify-between px-3 py-2 mt-3 rounded-md ${
-                  themeColor.isDark && "text-white"
-                } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
-                aria-label="Submit review"
-              >
-                {addSeriesReview.isLoading || addMovieReview.isLoading ? (
-                  <div className="flex items-center gap-3">
-                    <ImSpinner2 className="animate-spin" />
-                    <div>Loading</div>
-                  </div>
-                ) : (
-                  <div>Submit</div>
-                )}
-              </button>
-            </div>
+            <button
+              onClick={onSubmit}
+              disabled={addSeriesReview.isLoading || addMovieReview.isLoading || Boolean(inputError)}
+              style={{
+                backgroundColor: themeColor.hex,
+              }}
+              className={`flex items-center justify-between px-3 py-2 mt-3 rounded-md ${
+                themeColor.isDark && "text-white"
+              } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
+              aria-label="Submit review"
+            >
+              {addSeriesReview.isLoading || addMovieReview.isLoading ? (
+                <div className="flex items-center gap-3">
+                  <ImSpinner2 className="animate-spin" />
+                  <div>Loading</div>
+                </div>
+              ) : (
+                <div>Submit</div>
+              )}
+            </button>
           </div>
         </Modal>
       )}
