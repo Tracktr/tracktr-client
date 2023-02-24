@@ -89,7 +89,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                   </Link>
                   <div className="h-4 pb-2 text-xs line-clamp-1">
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
-                    {item.series.name}
+                    {item.name}
                   </div>
                   {(markAsWatched.isLoading || isRefetching) && item.series.id === currentLoadingID ? (
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
