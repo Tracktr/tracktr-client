@@ -6,6 +6,7 @@ import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import Modal from "../modal/Modal";
+import ModalTitle from "../modal/ModalTitle";
 
 interface IProvider {
   name: string;
@@ -150,101 +151,107 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
       <AnimatePresence initial={false} mode="wait">
         {modalOpen && (
           <Modal handleClose={close}>
-            {currentLocation ? (
-              <div className="pt-2 text-left">
-                {"flatrate" in currentLocation && (
-                  <div className="pt-4">
-                    <p className="pb-2 font-bold">Streaming</p>
-                    <HorizontalScrollContainer>
-                      {currentLocation.flatrate.map((item) => (
-                        <a
-                          key={item.provider_name}
-                          className="flex-shrink-0"
-                          href={convertProviderToUrl({
-                            provider: item.provider_name,
-                            name: name,
-                          })}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Image
-                            className="rounded-md"
-                            alt={item.provider_name}
-                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                            width={56}
-                            height={56}
-                          />
-                        </a>
-                      ))}
-                    </HorizontalScrollContainer>
-                  </div>
-                )}
+            <div className="px-4 pb-4">
+              <ModalTitle title="Available on" onExit={() => setModalOpen(!modalOpen)} />
 
-                {"rent" in currentLocation && (
-                  <div className="pt-4">
-                    <p className="pb-2 font-bold">Rent</p>
-                    <HorizontalScrollContainer>
-                      {currentLocation.rent.map((item) => (
-                        <a
-                          href={convertProviderToUrl({
-                            provider: item.provider_name,
-                            name: name,
-                          })}
-                          key={item.provider_name}
-                          className="flex-shrink-0"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Image
-                            className="rounded-md"
-                            alt={item.provider_name}
-                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                            width={56}
-                            height={56}
-                          />
-                        </a>
-                      ))}
-                    </HorizontalScrollContainer>
-                  </div>
-                )}
+              {currentLocation ? (
+                <div className="text-left">
+                  {"flatrate" in currentLocation && (
+                    <div className="pt-4">
+                      <p className="pb-2 font-bold">Streaming</p>
+                      <HorizontalScrollContainer>
+                        {currentLocation.flatrate.map((item) => (
+                          <a
+                            key={item.provider_name}
+                            className="flex-shrink-0"
+                            href={convertProviderToUrl({
+                              provider: item.provider_name,
+                              name: name,
+                            })}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Image
+                              className="rounded-md"
+                              alt={item.provider_name}
+                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                              width={56}
+                              height={56}
+                            />
+                          </a>
+                        ))}
+                      </HorizontalScrollContainer>
+                    </div>
+                  )}
 
-                {"buy" in currentLocation && (
-                  <div className="pt-4">
-                    <p className="pb-2 font-bold">Purchase</p>
-                    <HorizontalScrollContainer>
-                      {currentLocation.buy.map((item) => (
-                        <a
-                          href={convertProviderToUrl({
-                            provider: item.provider_name,
-                            name: name,
-                          })}
-                          key={item.provider_name}
-                          className="flex-shrink-0"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Image
-                            className="rounded-md"
-                            alt={item.provider_name}
-                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                            width={56}
-                            height={56}
-                          />
-                        </a>
-                      ))}
-                    </HorizontalScrollContainer>
-                  </div>
-                )}
-                <p className="pb-2 text-sm italic text-right opacity-25">
-                  Powered by{" "}
-                  <a href="https://www.justwatch.com/" target="_blank" rel="noreferrer">
-                    JustWatch
-                  </a>
+                  {"rent" in currentLocation && (
+                    <div>
+                      <p className="pb-2 font-bold">Rent</p>
+                      <HorizontalScrollContainer>
+                        {currentLocation.rent.map((item) => (
+                          <a
+                            href={convertProviderToUrl({
+                              provider: item.provider_name,
+                              name: name,
+                            })}
+                            key={item.provider_name}
+                            className="flex-shrink-0"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Image
+                              className="rounded-md"
+                              alt={item.provider_name}
+                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                              width={56}
+                              height={56}
+                            />
+                          </a>
+                        ))}
+                      </HorizontalScrollContainer>
+                    </div>
+                  )}
+
+                  {"buy" in currentLocation && (
+                    <div className="pt-4">
+                      <p className="pb-2 font-bold">Purchase</p>
+                      <HorizontalScrollContainer>
+                        {currentLocation.buy.map((item) => (
+                          <a
+                            href={convertProviderToUrl({
+                              provider: item.provider_name,
+                              name: name,
+                            })}
+                            key={item.provider_name}
+                            className="flex-shrink-0"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Image
+                              className="rounded-md"
+                              alt={item.provider_name}
+                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                              width={56}
+                              height={56}
+                            />
+                          </a>
+                        ))}
+                      </HorizontalScrollContainer>
+                    </div>
+                  )}
+                  <p className="pb-2 text-sm italic text-right opacity-25">
+                    Powered by{" "}
+                    <a href="https://www.justwatch.com/" target="_blank" rel="noreferrer">
+                      JustWatch
+                    </a>
+                  </p>
+                </div>
+              ) : (
+                <p className="py-4 text-white">
+                  This is not currently available on any known services in your location.
                 </p>
-              </div>
-            ) : (
-              <p className="py-4 text-white">This is not currently available on any known services in your location.</p>
-            )}
+              )}
+            </div>
           </Modal>
         )}
       </AnimatePresence>

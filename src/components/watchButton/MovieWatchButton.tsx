@@ -6,6 +6,7 @@ import { MdDelete, MdOpenInNew } from "react-icons/md";
 import { toast } from "react-toastify";
 import { trpc } from "../../utils/trpc";
 import Modal from "../modal/Modal";
+import ModalTitle from "../modal/ModalTitle";
 import BaseWatchButton, { IThemeColor } from "./BaseWatchButton";
 import LoadingWatchButton from "./LoadingWatchButton";
 
@@ -165,50 +166,52 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
 
         {modalOpen && (
           <Modal handleClose={() => setModalOpen(!modalOpen)}>
-            <div className="mb-2 text-2xl">History</div>
+            <div className="px-4 pb-4">
+              <ModalTitle title="History" onExit={() => setModalOpen(!modalOpen)} />
 
-            <div className="flex flex-col gap-2">
-              <div className="grid items-center grid-cols-4 gap-4 font-bold align-middle">
-                <div className="col-span-3">Date watched</div>
-                <div className="flex flex-col items-center">Remove</div>
-              </div>
-              {removeFromWatched.isLoading
-                ? data.map((play) => {
-                    return (
-                      <div key={play.id} className="grid items-center grid-cols-4 gap-4 font-bold align-middle">
-                        <div className="animate-pulse col-span-3 h-[24px] rounded bg-[#343434]" />
-                        <div className="flex flex-col items-center">
-                          <div className="animate-pulse w-[24px] h-[24px] rounded-full bg-[#343434]" />
+              <div className="flex flex-col gap-2">
+                <div className="grid items-center grid-cols-4 gap-4 font-bold align-middle">
+                  <div className="col-span-3">Date watched</div>
+                  <div className="flex flex-col items-center">Remove</div>
+                </div>
+                {removeFromWatched.isLoading
+                  ? data.map((play) => {
+                      return (
+                        <div key={play.id} className="grid items-center grid-cols-4 gap-4 font-bold align-middle">
+                          <div className="animate-pulse col-span-3 h-[24px] rounded bg-[#343434]" />
+                          <div className="flex flex-col items-center">
+                            <div className="animate-pulse w-[24px] h-[24px] rounded-full bg-[#343434]" />
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })
-                : data.map((play) => {
-                    const date = new Date(play.datetime).toLocaleString("en-UK", {
-                      dateStyle: "long",
-                      timeStyle: "medium",
-                    });
+                      );
+                    })
+                  : data.map((play) => {
+                      const date = new Date(play.datetime).toLocaleString("en-UK", {
+                        dateStyle: "long",
+                        timeStyle: "medium",
+                      });
 
-                    return (
-                      <div key={play.id} className="grid items-center grid-cols-4 gap-4 align-middle">
-                        <div className="col-span-3">{date}</div>
-                        <button
-                          className="flex flex-col items-center"
-                          onClick={() => {
-                            removeFromHistory(undefined, play.id);
+                      return (
+                        <div key={play.id} className="grid items-center grid-cols-4 gap-4 align-middle">
+                          <div className="col-span-3">{date}</div>
+                          <button
+                            className="flex flex-col items-center"
+                            onClick={() => {
+                              removeFromHistory(undefined, play.id);
 
-                            if (data.length === 1) {
-                              setModalOpen(false);
-                            }
-                          }}
-                        >
-                          <span className="text-center text-red-700">
-                            <MdDelete className="text-2xl" />
-                          </span>
-                        </button>
-                      </div>
-                    );
-                  })}
+                              if (data.length === 1) {
+                                setModalOpen(false);
+                              }
+                            }}
+                          >
+                            <span className="text-center text-red-700">
+                              <MdDelete className="text-2xl" />
+                            </span>
+                          </button>
+                        </div>
+                      );
+                    })}
+              </div>
             </div>
           </Modal>
         )}
