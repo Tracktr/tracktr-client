@@ -1,6 +1,5 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ImCross } from "react-icons/im";
 import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import Modal from "../modal/Modal";
 import ModalTitle from "../modal/ModalTitle";
