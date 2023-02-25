@@ -57,6 +57,7 @@ export const tvRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
+      // Get Reviews
       const databaseSeries = await ctx.prisma.series.findFirst({
         where: { id: json.id },
         include: {
@@ -77,8 +78,15 @@ export const tvRouter = router({
       });
 
       if (ctx.session?.user) {
+        let airedEpisodes = 0;
+
+        // Check if user has watched an episode of a season
         json.seasons = await Promise.all(
           json.seasons.map(async (season: ISeason) => {
+            if (new Date(season.air_date) <= new Date()) {
+              airedEpisodes += season.episode_count;
+            }
+
             const watched = await ctx.prisma.episodesHistory.findFirst({
               where: {
                 user_id: ctx.session?.user?.id,
@@ -95,13 +103,8 @@ export const tvRouter = router({
             }
           })
         );
-      } else {
-        json.seasons = json.seasons.map((season: ISeries) => {
-          return { ...season, watched: false };
-        });
-      }
 
-      if (ctx && input.seriesID) {
+        // Check how many episodes a user has watched
         const episodesWatched = await ctx.prisma.episodesHistory.findMany({
           where: {
             series_id: input.seriesID,
@@ -118,18 +121,21 @@ export const tvRouter = router({
         if (episodesWatched) {
           return {
             ...json,
+            number_of_episodes: airedEpisodes,
             number_of_episodes_watched: [{ count: episodesWatched.length }],
             theme_color: color,
             reviews: databaseSeries?.SeriesReviews || [],
           };
         }
+      } else {
+        return {
+          ...json.seasons.map((season: ISeries) => {
+            return { ...season, watched: false };
+          }),
+          theme_color: color,
+          reviews: databaseSeries?.SeriesReviews || [],
+        };
       }
-
-      return {
-        ...json,
-        theme_color: color,
-        reviews: databaseSeries?.SeriesReviews || [],
-      };
     }),
 
   infiniteTV: publicProcedure
