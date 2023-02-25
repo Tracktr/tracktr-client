@@ -38,7 +38,13 @@ const DashboardPage = () => {
     status: upNextStatus,
     refetch: refetchUpNext,
     isRefetching: isRefetchingUpNext,
-  } = trpc.dashboard.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
+  } = trpc.dashboard.upNext.useQuery(
+    {
+      page: 1,
+      pageSize: 6,
+    },
+    { enabled: sessionStatus === "authenticated" }
+  );
   const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
     {
