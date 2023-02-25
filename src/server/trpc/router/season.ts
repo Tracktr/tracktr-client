@@ -86,43 +86,11 @@ export const seasonRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
-      url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-      if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-
-      const show = await fetch(url).then((res) => res.json());
-
-      if (show?.status_code) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: show.status_message,
-          cause: show.status_code,
-        });
-      }
-
-      const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
-
-      const existsInDB = await ctx.prisma.series.findFirst({
-        where: { id: input.seriesID },
+      const existsInDB = await ctx.prisma.seasons.findFirst({
+        where: { season_number: input.seasonNumber, series_id: input.seriesID },
       });
 
-      if (!existsInDB) {
-        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
-
-        if (newSeries !== null) {
-          try {
-            return await ctx.prisma.episodesHistory.createMany({
-              data: await saveHistory({
-                seasonNumber: input.seasonNumber,
-                seriesID: input.seriesID,
-                userID: ctx.session.user.id,
-              }),
-            });
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      } else {
+      const createHistory = async () => {
         try {
           return await ctx.prisma.episodesHistory.createMany({
             data: await saveHistory({
@@ -138,6 +106,31 @@ export const seasonRouter = router({
             cause: error,
           });
         }
+      };
+
+      if (!existsInDB) {
+        const url = new URL(`tv/${input?.seriesID}`, process.env.NEXT_PUBLIC_TMDB_API);
+        url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+        if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+        const show = await fetch(url).then((res) => res.json());
+
+        if (show?.status_code) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: show.status_message,
+            cause: show.status_code,
+          });
+        }
+        const seriesPoster = show.poster_path ? show.poster_path : "/noimage.png";
+
+        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
+
+        if (newSeries !== null) {
+          createHistory();
+        }
+      } else {
+        createHistory();
       }
     }),
 
@@ -256,7 +249,7 @@ const saveHistory = async ({
     console.error("Failed to fetch season", seriesID, seasonNumber);
   }
 
-  for (let i = 0; i <= season.episodes.length; i++) {
+  for (let i = 0; i < season.episodes.length; i++) {
     try {
       const item = {
         datetime: new Date(),
@@ -268,7 +261,7 @@ const saveHistory = async ({
 
       results.push(item);
     } catch (error) {
-      console.error("Could not save series to database ", error);
+      console.error("Could not add season to history ", error);
     }
   }
 
