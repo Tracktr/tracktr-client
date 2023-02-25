@@ -10,7 +10,7 @@ export interface IPoster {
 }
 
 const PersonPoster = ({ imageSrc, name, url, job }: IPoster) => (
-  <ConditionalLink condition={Boolean(url)} href={url} className={"pointer-events-none"}>
+  <ConditionalLink condition={Boolean(url)} href={url}>
     <Image
       src={PersonImage({ path: imageSrc, size: "sm" })}
       width={170}
