@@ -391,7 +391,7 @@ const saveHistory = async ({
 
     if (season.season_number === 0) continue;
 
-    for (let i = 0; i <= season.episodes.length; i++) {
+    for (let i = 0; i < season.episodes.length; i++) {
       try {
         const item = {
           datetime: new Date(),
