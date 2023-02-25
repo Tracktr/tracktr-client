@@ -4,7 +4,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { MdOutlineReviews } from "react-icons/md";
 import { toast } from "react-toastify";
-import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import { trpc } from "../../../utils/trpc";
 import Modal from "../../modal/Modal";
 import { IThemeColor } from "../../watchButton/BaseWatchButton";
@@ -133,21 +133,21 @@ const ReviewButton = ({
     <div>
       <button
         onClick={() => setModalOpen(!modalOpen)}
+        data-tooltip-id="review"
+        data-tooltip-content="Create a review"
+        className={`flex items-center justify-between mt-2 rounded-md          
+          ${themeColor.isDark && "text-white"}
+          ${themeColor.isLight && "text-primaryBackground"}`}
         style={{
           backgroundColor: themeColor.hex,
         }}
-        className={`
-        flex items-center justify-between mt-2 rounded-md          
-        ${themeColor.isDark && "text-white"}
-        ${themeColor.isLight && "text-primaryBackground"}
-      `}
         aria-label="Create a review"
       >
-        <span className="px-3 py-2" data-tip="Create a review">
-          <ReactTooltip />
+        <span className="px-3 py-2">
           <MdOutlineReviews className="text-2xl" />
         </span>
       </button>
+      <Tooltip id="review" />
 
       {modalOpen && (
         <Modal handleClose={() => setModalOpen(!modalOpen)}>
