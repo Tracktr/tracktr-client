@@ -127,10 +127,10 @@ export const seasonRouter = router({
         const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
 
         if (newSeries !== null) {
-          createHistory();
+          await createHistory();
         }
       } else {
-        createHistory();
+        await createHistory();
       }
     }),
 

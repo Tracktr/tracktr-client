@@ -78,13 +78,13 @@ export const tvRouter = router({
       });
 
       if (ctx.session?.user) {
-        let airedEpisodes = 0;
+        json.number_of_episodes = 0;
 
         // Check if user has watched an episode of a season
         json.seasons = await Promise.all(
           json.seasons.map(async (season: ISeason) => {
             if (new Date(season.air_date) <= new Date()) {
-              airedEpisodes += season.episode_count;
+              json.number_of_episodes += season.episode_count;
             }
 
             const watched = await ctx.prisma.episodesHistory.findFirst({
@@ -121,7 +121,6 @@ export const tvRouter = router({
         if (episodesWatched) {
           return {
             ...json,
-            number_of_episodes: airedEpisodes,
             number_of_episodes_watched: [{ count: episodesWatched.length }],
             theme_color: color,
             reviews: databaseSeries?.SeriesReviews || [],
@@ -226,24 +225,7 @@ export const tvRouter = router({
         where: { id: show.id },
       });
 
-      if (!existsInDB) {
-        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
-
-        if (newSeries !== null) {
-          try {
-            return await ctx.prisma.episodesHistory.createMany({
-              data: await saveHistory({
-                firstSeason,
-                seasonsCount,
-                seriesID: input.seriesID,
-                userID: ctx.session.user.id,
-              }),
-            });
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      } else {
+      const createHistory = async () => {
         try {
           return await ctx.prisma.episodesHistory.createMany({
             data: await saveHistory({
@@ -260,6 +242,16 @@ export const tvRouter = router({
             cause: error,
           });
         }
+      };
+
+      if (!existsInDB) {
+        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
+
+        if (newSeries !== null) {
+          await createHistory();
+        }
+      } else {
+        await createHistory();
       }
     }),
 
@@ -316,6 +308,13 @@ export const tvRouter = router({
         orderBy: {
           datetime: "desc",
         },
+      });
+
+      show.number_of_episodes = 0;
+      show.seasons.map((season: ISeason) => {
+        if (new Date(season.air_date) <= new Date()) {
+          show.number_of_episodes += season.episode_count;
+        }
       });
 
       return {
@@ -389,7 +388,7 @@ const saveHistory = async ({
       console.error("Failed to fetch season", seriesID, j);
     }
 
-    if (season.season_number === 0) continue;
+    if (season.season_number === 0 || new Date(season.air_date) >= new Date()) continue;
 
     for (let i = 0; i < season.episodes.length; i++) {
       try {

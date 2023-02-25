@@ -66,7 +66,7 @@ const EpisodePoster = ({
       <div className="relative flex flex-wrap justify-center flex-shrink-0">
         <ConditionalLink condition={Boolean(url)} href={url}>
           <Image
-            alt={"still image for" + name}
+            alt={"Still image for" + name}
             src={PosterImage({ path: imageSrc, size: "md" })}
             width={300}
             height={168}
