@@ -82,8 +82,8 @@ const ContentPoster = ({
           <ConditionalLink href={`/tv/${id}`} condition={Boolean(episode) || Boolean(season)}>
             <Image
               alt={"Poster image for:" + title}
-              width="208"
-              height="311"
+              width={208}
+              height={311}
               src={PosterImage({ path: poster, size: "lg" })}
             />
           </ConditionalLink>

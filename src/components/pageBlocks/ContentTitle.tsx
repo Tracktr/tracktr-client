@@ -38,20 +38,19 @@ const ContentTitle = ({
           <div>
             {episode && (
               <div className="flex gap-2">
-                <Link href={`${episode.base_url}/season/${episode.season_number}`}>
-                  <a
-                    title="To season overview"
-                    style={{
-                      background: theme_color?.hex,
-                    }}
-                    className={`
+                <Link
+                  href={`${episode.base_url}/season/${episode.season_number}`}
+                  title="To season overview"
+                  style={{
+                    background: theme_color?.hex,
+                  }}
+                  className={`
                             inline-block px-3 py-1 text-xs rounded-full       
                             ${theme_color.isDark && "text-white"}
                             ${theme_color.isLight && "text-primaryBackground"}
                           `}
-                  >
-                    Season {episode.season_number}
-                  </a>
+                >
+                  Season {episode.season_number}
                 </Link>
                 <span
                   style={{

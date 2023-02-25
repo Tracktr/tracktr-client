@@ -74,18 +74,16 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                   transition={{ type: "spring" }}
                 >
                   <Link href={`/tv/${item.series.id}/season/${item.season_number}/episode/${item.episode_number}`}>
-                    <a>
-                      <Image
-                        alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
-                        src={PosterImage({
-                          path: item.series.poster,
-                          size: "sm",
-                        })}
-                        width="170px"
-                        height="240px"
-                        className="rounded"
-                      />
-                    </a>
+                    <Image
+                      alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
+                      src={PosterImage({
+                        path: item.series.poster,
+                        size: "sm",
+                      })}
+                      width={170}
+                      height={240}
+                      className="rounded"
+                    />
                   </Link>
                   <div className="h-4 pb-2 text-xs line-clamp-1">
                     {`${item.season_number}x${item.episode_number}`}&nbsp;

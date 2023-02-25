@@ -116,8 +116,8 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
                     (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
                     "/noimage.png"
                   }
-                  width="85px"
-                  height="120px"
+                  width={85}
+                  height={120}
                   className="rounded"
                 />
               </div>

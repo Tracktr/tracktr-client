@@ -117,10 +117,11 @@ const DashboardPage = () => {
                       <MdOutlineWrapText className="mr-4" />
                       Recently watched
                     </div>
-                    <Link href="/profile/history">
-                      <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
-                        See all history
-                      </a>
+                    <Link
+                      href="/profile/history"
+                      className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground"
+                    >
+                      See all history
                     </Link>
                   </div>
                 </div>

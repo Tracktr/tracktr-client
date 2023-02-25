@@ -67,8 +67,8 @@ const TVPoster = ({ imageSrc, name, url, score, id, watched, refetch, fetchStatu
             <Image
               alt={"Poster image for" + name}
               src={PosterImage({ path: imageSrc, size: "sm" })}
-              width="170px"
-              height="240px"
+              width={170}
+              height={240}
               className="rounded"
             />
             <div className="absolute bottom-0 left-0 z-10 flex items-center justify-center w-full max-w-[170px] transition-all duration-300 ease-in-out opacity-0 select-none group-hover:opacity-100 bg-gradient-to-t from-primaryBackground">

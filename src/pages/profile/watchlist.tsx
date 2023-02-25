@@ -229,24 +229,25 @@ const WatchlistPage = () => {
                         className="relative w-[170px] group"
                         key={item.id}
                       >
-                        <Link href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}>
-                          <a className="relative w-[170px] group">
-                            <Image
-                              alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
-                              src={PosterImage({
-                                path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),
-                                size: "sm",
-                              })}
-                              width="170px"
-                              height="240px"
-                              className="rounded"
-                            />
-                            <div>
-                              <span className="w-full text-xs truncate line-clamp-2">
-                                {item?.movie_id ? item.movies?.title : item.series?.name}
-                              </span>
-                            </div>
-                          </a>
+                        <Link
+                          href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}
+                          className="relative w-[170px] group"
+                        >
+                          <Image
+                            alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
+                            src={PosterImage({
+                              path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),
+                              size: "sm",
+                            })}
+                            width={170}
+                            height={240}
+                            className="rounded"
+                          />
+                          <div>
+                            <span className="w-full text-xs truncate line-clamp-2">
+                              {item?.movie_id ? item.movies?.title : item.series?.name}
+                            </span>
+                          </div>
                         </Link>
                         <div className="flex pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
                           {item.movie_id ? (

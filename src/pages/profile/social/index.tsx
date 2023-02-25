@@ -48,18 +48,20 @@ const FollowersPage = () => {
                     {data?.following && data?.following?.length > 0 ? (
                       data?.following?.map((user) => {
                         return (
-                          <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                            <a className="flex flex-col items-center max-w-[100px] justify-center">
-                              <ImageWithFallback
-                                src={user.image}
-                                fallbackSrc="/placeholder_profile.png"
-                                width="96"
-                                height="96"
-                                alt="Profile picture"
-                                className="rounded-full"
-                              />
-                              <p className="text-sm">{user.profile?.username}</p>
-                            </a>
+                          <Link
+                            href={`/profile/${user.profile?.username}`}
+                            key={user.name}
+                            className="flex flex-col items-center max-w-[100px] justify-center"
+                          >
+                            <ImageWithFallback
+                              src={user.image}
+                              fallbackSrc="/placeholder_profile.png"
+                              width={96}
+                              height={96}
+                              alt="Profile picture"
+                              className="rounded-full"
+                            />
+                            <p className="text-sm">{user.profile?.username}</p>
                           </Link>
                         );
                       })
@@ -68,10 +70,11 @@ const FollowersPage = () => {
                     )}
                   </div>
 
-                  <Link href="/profile/social/search">
-                    <a className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground">
-                      Search users
-                    </a>
+                  <Link
+                    href="/profile/social/search"
+                    className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground"
+                  >
+                    Search users
                   </Link>
                 </div>
                 <div className="my-10">
@@ -80,18 +83,20 @@ const FollowersPage = () => {
                     {data?.followers && data?.followers?.length > 0 ? (
                       data?.followers?.map((user) => {
                         return (
-                          <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                            <a className="flex flex-col items-center max-w-[100px]">
-                              <ImageWithFallback
-                                src={user.image}
-                                fallbackSrc="/placeholder_profile.png"
-                                width="96"
-                                height="96"
-                                alt="Profile picture"
-                                className="rounded-full"
-                              />
-                              <p className="text-sm">{user.profile?.username}</p>
-                            </a>
+                          <Link
+                            href={`/profile/${user.profile?.username}`}
+                            key={user.name}
+                            className="flex flex-col items-center max-w-[100px]"
+                          >
+                            <ImageWithFallback
+                              src={user.image}
+                              fallbackSrc="/placeholder_profile.png"
+                              width={96}
+                              height={96}
+                              alt="Profile picture"
+                              className="rounded-full"
+                            />
+                            <p className="text-sm">{user.profile?.username}</p>
                           </Link>
                         );
                       })

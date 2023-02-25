@@ -23,18 +23,16 @@ const SeenByBlock = ({
         {data && data.length > 0 ? (
           data.map((user) => {
             return (
-              <Link href={`/profile/${user.profile?.username}`} key={user.name}>
-                <a className="flex flex-col items-center">
-                  <ImageWithFallback
-                    src={user.image}
-                    fallbackSrc="/placeholder_profile.png"
-                    width="64"
-                    height="64"
-                    alt="Profile picture"
-                    className="rounded-full"
-                  />
-                  <p className="text-sm">{user.profile?.username}</p>
-                </a>
+              <Link href={`/profile/${user.profile?.username}`} key={user.name} className="flex flex-col items-center">
+                <ImageWithFallback
+                  src={user.image}
+                  fallbackSrc="/placeholder_profile.png"
+                  width={64}
+                  height={64}
+                  alt="Profile picture"
+                  className="rounded-full"
+                />
+                <p className="text-sm">{user.profile?.username}</p>
               </Link>
             );
           })

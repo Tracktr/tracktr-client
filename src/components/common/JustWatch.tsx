@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import HorizontalScrollContainer from "./HorizontalScrollContainer";
 import Image from "next/image";
-import Link from "next/link";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import Modal from "../modal/Modal";
 
@@ -158,24 +157,24 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                     <p className="pb-2 font-bold">Streaming</p>
                     <HorizontalScrollContainer>
                       {currentLocation.flatrate.map((item) => (
-                        <Link
+                        <a
+                          key={item.provider_name}
+                          className="flex-shrink-0"
                           href={convertProviderToUrl({
                             provider: item.provider_name,
                             name: name,
                           })}
-                          key={item.provider_name}
-                          className="flex-shrink-0"
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          <a target="_blank">
-                            <Image
-                              className="rounded-md"
-                              alt={item.provider_name}
-                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                              width={56}
-                              height={56}
-                            />
-                          </a>
-                        </Link>
+                          <Image
+                            className="rounded-md"
+                            alt={item.provider_name}
+                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                            width={56}
+                            height={56}
+                          />
+                        </a>
                       ))}
                     </HorizontalScrollContainer>
                   </div>
@@ -186,24 +185,24 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                     <p className="pb-2 font-bold">Rent</p>
                     <HorizontalScrollContainer>
                       {currentLocation.rent.map((item) => (
-                        <Link
+                        <a
                           href={convertProviderToUrl({
                             provider: item.provider_name,
                             name: name,
                           })}
                           key={item.provider_name}
                           className="flex-shrink-0"
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          <a target="_blank">
-                            <Image
-                              className="rounded-md"
-                              alt={item.provider_name}
-                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                              width={56}
-                              height={56}
-                            />
-                          </a>
-                        </Link>
+                          <Image
+                            className="rounded-md"
+                            alt={item.provider_name}
+                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                            width={56}
+                            height={56}
+                          />
+                        </a>
                       ))}
                     </HorizontalScrollContainer>
                   </div>
@@ -214,33 +213,33 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                     <p className="pb-2 font-bold">Purchase</p>
                     <HorizontalScrollContainer>
                       {currentLocation.buy.map((item) => (
-                        <Link
+                        <a
                           href={convertProviderToUrl({
                             provider: item.provider_name,
                             name: name,
                           })}
                           key={item.provider_name}
                           className="flex-shrink-0"
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          <a target="_blank">
-                            <Image
-                              className="rounded-md"
-                              alt={item.provider_name}
-                              src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
-                              width={56}
-                              height={56}
-                            />
-                          </a>
-                        </Link>
+                          <Image
+                            className="rounded-md"
+                            alt={item.provider_name}
+                            src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
+                            width={56}
+                            height={56}
+                          />
+                        </a>
                       ))}
                     </HorizontalScrollContainer>
                   </div>
                 )}
                 <p className="pb-2 text-sm italic text-right opacity-25">
                   Powered by{" "}
-                  <Link href="https://www.justwatch.com/" target="_blank">
-                    <a>JustWatch</a>
-                  </Link>
+                  <a href="https://www.justwatch.com/" target="_blank" rel="noreferrer">
+                    JustWatch
+                  </a>
                 </p>
               </div>
             ) : (

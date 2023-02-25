@@ -90,22 +90,24 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
     <div>
       <div className="flex items-center justify-between">
         {hasPreviousEpisode() ? (
-          <Link href={`${previousEpisodePath()}`}>
-            <a className="block py-6 transition-all duration-300 ease-in-out opacity-25 group hover:opacity-100">
-              <IoIosArrowRoundBack className="ml-6 text-6xl transition-all duration-300 ease-in-out group-hover:ml-0" />
-              <span>Previous Episode</span>
-            </a>
+          <Link
+            href={`${previousEpisodePath()}`}
+            className="block py-6 transition-all duration-300 ease-in-out opacity-25 group hover:opacity-100"
+          >
+            <IoIosArrowRoundBack className="ml-6 text-6xl transition-all duration-300 ease-in-out group-hover:ml-0" />
+            <span>Previous Episode</span>
           </Link>
         ) : (
           <div></div>
         )}
 
         {hasNextEpisode() ? (
-          <Link href={`${nextEpisodePath()}`}>
-            <a className="block py-6 transition-all duration-300 ease-in-out opacity-25 group hover:opacity-100">
-              <IoIosArrowRoundForward className="ml-auto mr-6 text-6xl transition-all duration-300 ease-in-out group-hover:mr-0" />
-              <span className="block text-right">Next Episode</span>
-            </a>
+          <Link
+            href={`${nextEpisodePath()}`}
+            className="block py-6 transition-all duration-300 ease-in-out opacity-25 group hover:opacity-100"
+          >
+            <IoIosArrowRoundForward className="ml-auto mr-6 text-6xl transition-all duration-300 ease-in-out group-hover:mr-0" />
+            <span className="block text-right">Next Episode</span>
           </Link>
         ) : (
           <div></div>
