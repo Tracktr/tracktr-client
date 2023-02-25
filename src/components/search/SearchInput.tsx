@@ -86,7 +86,7 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus={hideNav && true}
           className="w-full outline-none"
-          type="search"
+          type="text"
           placeholder="Search..."
           value={searchInput}
           onChange={handleInput}
