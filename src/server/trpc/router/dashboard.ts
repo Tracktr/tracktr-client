@@ -58,7 +58,7 @@ export const dashboardRouter = router({
             },
           })
           .then((res) => {
-            if (res.length > 0) movieCounter++;
+            if (res.length > 0) movieCounter += res.length;
 
             items.push({
               date: gte,
