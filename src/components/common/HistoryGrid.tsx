@@ -91,19 +91,17 @@ const HistoryGrid = ({
                   key={item.id}
                 >
                   {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
-                    <Link href={`/profile/${item?.friend?.name}`}>
-                      <a className="flex h-6">
-                        <ImageWithFallback
-                          unoptimized
-                          src={item?.friend?.image ? item?.friend?.image : ""}
-                          fallbackSrc="/placeholder_profile.png"
-                          width="16px"
-                          height="16px"
-                          className="rounded-full"
-                          alt="User profile image"
-                        />
-                        <p className="ml-2 text-sm">{item?.friend?.name}</p>
-                      </a>
+                    <Link href={`/profile/${item?.friend?.name}`} className="flex h-6">
+                      <ImageWithFallback
+                        unoptimized
+                        src={item?.friend?.image ? item?.friend?.image : ""}
+                        fallbackSrc="/placeholder_profile.png"
+                        width={16}
+                        height={16}
+                        className="rounded-full"
+                        alt="User profile image"
+                      />
+                      <p className="ml-2 text-sm">{item?.friend?.name}</p>
                     </Link>
                   ) : (
                     <div className="h-6" />
@@ -114,31 +112,30 @@ const HistoryGrid = ({
                         ? `/movies/${item.movie?.id}`
                         : `/tv/${item.series_id}/season/${item?.season?.season_number}/episode/${item?.episode?.episode_number}`
                     }
+                    className="relative w-[170px] group"
                   >
-                    <a className="relative w-[170px] group">
-                      <Image
-                        alt={`Poster image for ${
-                          item?.movie_id
-                            ? item.movie?.title
-                            : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
-                        }`}
-                        src={PosterImage({
-                          path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
-                          size: "sm",
-                        })}
-                        width="170px"
-                        height="240px"
-                        className="rounded"
-                      />
-                      <div>
-                        <span className="w-full text-xs truncate line-clamp-2">
-                          {item?.season && item?.episode
-                            ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
-                            : `${item?.movie?.title}`}
-                        </span>
-                        <div className="text-xs opacity-50 line-clamp-1">{date}</div>
-                      </div>
-                    </a>
+                    <Image
+                      alt={`Poster image for ${
+                        item?.movie_id
+                          ? item.movie?.title
+                          : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
+                      }`}
+                      src={PosterImage({
+                        path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
+                        size: "sm",
+                      })}
+                      width={170}
+                      height={240}
+                      className="rounded"
+                    />
+                    <div>
+                      <span className="w-full text-xs truncate line-clamp-2">
+                        {item?.season && item?.episode
+                          ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
+                          : `${item?.movie?.title}`}
+                      </span>
+                      <div className="text-xs opacity-50 line-clamp-1">{date}</div>
+                    </div>
                   </Link>
                   {!inPublic && (
                     <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">

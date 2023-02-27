@@ -1,10 +1,10 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
+import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
@@ -64,52 +64,46 @@ const EpisodePoster = ({
   return (
     <div className="md:flex group">
       <div className="relative flex flex-wrap justify-center flex-shrink-0">
-        <Link href={url || "#"}>
-          <a>
-            <Image
-              alt={"still image for" + name}
-              src={PosterImage({ path: imageSrc, size: "md" })}
-              width="300px"
-              height="168px"
-              className="rounded"
-            />
-          </a>
-        </Link>
+        <ConditionalLink condition={Boolean(url)} href={url}>
+          <Image
+            alt={"Still image for" + name}
+            src={PosterImage({ path: imageSrc, size: "md" })}
+            width={300}
+            height={168}
+            className="rounded w-[300px] h-[168px]"
+          />
+        </ConditionalLink>
         <div className="absolute bottom-0 left-0 z-10 flex items-center w-full select-none bg-gradient-to-t from-primaryBackground"></div>
         <div className="flex flex-col max-w-md py-4 md:py-0 md:pl-2">
-          <Link href={url || "#"}>
-            <a>
-              <p className="flex items-center justify-center pb-2 font-bold text-md">
-                <span
-                  style={{
-                    background: themeColor?.hex,
-                  }}
-                  className={`
+          <ConditionalLink condition={Boolean(url)} href={url}>
+            <p className="flex items-center justify-center pb-2 font-bold text-md">
+              <span
+                style={{
+                  background: themeColor?.hex,
+                }}
+                className={`
                     px-3 py-1 mr-2 rounded-full
                     ${themeColor.isDark && "text-white"}
                     ${themeColor.isLight && "text-primaryBackground"}
                   `}
-                >
-                  {season}x{episode}
-                </span>
-                {name}
-                {score !== undefined && (
-                  <span className="flex ml-auto text-white min-w-[25%]">
-                    <span className="flex items-center text-sm">
-                      <AiFillStar className="mr-1 text-primary" size={18} />
-                      {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
-                    </span>
+              >
+                {season}x{episode}
+              </span>
+              {name}
+              {score !== undefined && (
+                <span className="flex ml-auto text-white min-w-[25%]">
+                  <span className="flex items-center text-sm">
+                    <AiFillStar className="mr-1 text-primary" size={18} />
+                    {score > 0 ? score.toPrecision(2) + " / 10" : "N/A"}
                   </span>
-                )}
-              </p>
-            </a>
-          </Link>
+                </span>
+              )}
+            </p>
+          </ConditionalLink>
 
-          <Link href={url || "#"}>
-            <a>
-              <p className="text-sm line-clamp-4">{overview}</p>
-            </a>
-          </Link>
+          <ConditionalLink condition={Boolean(url)} href={url}>
+            <p className="text-sm line-clamp-4">{overview}</p>
+          </ConditionalLink>
 
           {status === "authenticated" && (
             <div className="flex pt-1 mt-auto mb-4 text-gray-500 opacity-25 group-hover:opacity-100">

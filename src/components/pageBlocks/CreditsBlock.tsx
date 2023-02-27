@@ -88,26 +88,24 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
               new Date(a.release_date || a.first_air_date).setHours(0, 0, 0, 0)
           )
           .map((cast: any, index: any) => (
-            <Link href={`/${type}/${cast.id}`} key={index}>
-              <a className="flex justify-between px-4">
-                <div className="flex py-2">
-                  <div className="flex-shrink-0 pr-4">
-                    <Image
-                      alt={"Poster for: " + cast.title || cast.name}
-                      src={PosterImage({ path: cast.poster_path, size: "sm" })}
-                      width={50}
-                      height={75}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <p className="pt-2">{cast.title || cast.name}</p>
-                    <p className="text-sm">{cast.character}</p>
-                  </div>
+            <Link href={`/${type}/${cast.id}`} key={index} className="flex justify-between px-4">
+              <div className="flex py-2">
+                <div className="flex-shrink-0 pr-4">
+                  <Image
+                    alt={"Poster for: " + cast.title || cast.name}
+                    src={PosterImage({ path: cast.poster_path, size: "sm" })}
+                    width={50}
+                    height={75}
+                  />
                 </div>
-                <div className="self-center flex-shrink-0">
-                  <p className="text-sm">{cast.release_date || cast.first_air_date}</p>
+                <div className="flex flex-col">
+                  <p className="pt-2">{cast.title || cast.name}</p>
+                  <p className="text-sm">{cast.character}</p>
                 </div>
-              </a>
+              </div>
+              <div className="self-center flex-shrink-0">
+                <p className="text-sm">{cast.release_date || cast.first_air_date}</p>
+              </div>
             </Link>
           ))}
       </motion.div>

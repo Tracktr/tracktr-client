@@ -7,13 +7,11 @@ interface ILogo {
 }
 
 const Logo = ({ textColor, dotColor, signedIn }: ILogo) => (
-  <Link href={signedIn ? "/dashboard" : "/"}>
-    <a className="col-span-1">
-      <h1 className={`text-3xl font-black select-none ${textColor}`}>
-        TRACKTR
-        <span className={dotColor}>.</span>
-      </h1>
-    </a>
+  <Link href={signedIn ? "/dashboard" : "/"} className="col-span-1">
+    <h1 className={`text-3xl font-black select-none ${textColor}`}>
+      TRACKTR
+      <span className={dotColor}>.</span>
+    </h1>
   </Link>
 );
 

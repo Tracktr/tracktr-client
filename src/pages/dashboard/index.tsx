@@ -38,7 +38,13 @@ const DashboardPage = () => {
     status: upNextStatus,
     refetch: refetchUpNext,
     isRefetching: isRefetchingUpNext,
-  } = trpc.dashboard.upNext.useQuery(undefined, { enabled: sessionStatus === "authenticated" });
+  } = trpc.dashboard.upNext.useQuery(
+    {
+      page: 1,
+      pageSize: 6,
+    },
+    { enabled: sessionStatus === "authenticated" }
+  );
   const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
     {
@@ -117,10 +123,11 @@ const DashboardPage = () => {
                       <MdOutlineWrapText className="mr-4" />
                       Recently watched
                     </div>
-                    <Link href="/profile/history">
-                      <a className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground">
-                        See all history
-                      </a>
+                    <Link
+                      href="/profile/history"
+                      className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground"
+                    >
+                      See all history
                     </Link>
                   </div>
                 </div>

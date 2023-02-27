@@ -125,8 +125,8 @@ const Navbar = () => {
                         unoptimized
                         src={session.user?.image ? session.user.image : ""}
                         fallbackSrc="/placeholder_profile.png"
-                        width="36px"
-                        height="36px"
+                        width={36}
+                        height={36}
                         className="rounded-full"
                         alt="User profile image"
                       />
@@ -141,8 +141,12 @@ const Navbar = () => {
                   >
                     <div className="p-2 text-sm">
                       {subLinks.map((item) => (
-                        <Link key={item.href} href={item.href}>
-                          <a className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800">{item.text}</a>
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="block w-full p-2 mb-1 text-left rounded-md hover:bg-zinc-800"
+                        >
+                          {item.text}
                         </Link>
                       ))}
                       <button

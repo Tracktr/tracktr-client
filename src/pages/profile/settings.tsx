@@ -209,8 +209,8 @@ const ProfilePage = () => {
                         <div>Save Settings</div>
                       )}
                     </button>
-                    <Link href="/profile/delete">
-                      <a className="ml-auto text-center text-gray-400">Delete account</a>
+                    <Link href="/profile/delete" className="ml-auto text-center text-gray-400">
+                      Delete account
                     </Link>
                   </div>
                 </div>

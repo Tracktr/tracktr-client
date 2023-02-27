@@ -9,8 +9,8 @@ interface iNavButton {
 
 const NavButton = ({ href, text, active, className }: iNavButton) => (
   <li className={`inline-block text-white list-none group ${className}`}>
-    <Link href={href}>
-      <a className={`group-hover:text-primary px-4 py-2 inline-block ${active ? "font-bold" : ""}`}>{text}</a>
+    <Link href={href} className={`group-hover:text-primary px-4 py-2 inline-block ${active ? "font-bold" : ""}`}>
+      {text}
     </Link>
   </li>
 );

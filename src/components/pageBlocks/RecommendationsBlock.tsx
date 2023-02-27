@@ -21,19 +21,19 @@ const RecommendationsBlock = ({ recommendations, type }: RecommendationsProps) =
             });
 
             return (
-              <Link href={`/${type}/${recommendation.id}`} key={recommendation.id}>
-                <a
-                  className="relative flex items-end w-full h-52 group"
-                  style={{
-                    background: `linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(26,26,26,1) 100%), url(${image})`,
-                    backgroundPosition: "center center",
-                    backgroundSize: "cover",
-                  }}
-                >
-                  <p className="pb-4 mx-4 truncate transition-all duration-300 ease-in-out overflow-ellipsis group-hover:pb-8">
-                    {recommendation.title || recommendation.name}
-                  </p>
-                </a>
+              <Link
+                href={`/${type}/${recommendation.id}`}
+                key={recommendation.id}
+                className="relative flex items-end w-full h-52 group"
+                style={{
+                  background: `linear-gradient(180deg, rgba(26,26,26,0) 0%, rgba(26,26,26,1) 100%), url(${image})`,
+                  backgroundPosition: "center center",
+                  backgroundSize: "cover",
+                }}
+              >
+                <p className="pb-4 mx-4 truncate transition-all duration-300 ease-in-out overflow-ellipsis group-hover:pb-8">
+                  {recommendation.title || recommendation.name}
+                </p>
               </Link>
             );
           })}

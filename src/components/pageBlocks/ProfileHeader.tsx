@@ -7,8 +7,8 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
       <ImageWithFallback
         src={image}
         fallbackSrc="/placeholder_profile.png"
-        width="128"
-        height="128"
+        width={128}
+        height={128}
         alt="Profile picture"
         className="rounded-full"
       />
@@ -28,14 +28,13 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
 
 const Button = ({ name, currentPage, link }: { currentPage: string; name: string; link: string }) => {
   return (
-    <Link href={link}>
-      <a
-        className={`items-center px-3 py-1 text-xs text-center rounded-full ${
-          name === currentPage ? "bg-primary text-primaryBackground" : "text-primary"
-        }`}
-      >
-        {name}
-      </a>
+    <Link
+      href={link}
+      className={`items-center px-3 py-1 text-xs text-center rounded-full ${
+        name === currentPage ? "bg-primary text-primaryBackground" : "text-primary"
+      }`}
+    >
+      {name}
     </Link>
   );
 };

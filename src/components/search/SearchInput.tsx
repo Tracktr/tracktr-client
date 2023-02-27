@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { CgSearch } from "react-icons/cg";
@@ -95,36 +96,33 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
       {data && (
         <div className="absolute grid w-full grid-cols-4 py-4 bg-white shadow-lg rounded-b-md text-primaryBackground">
           {data.results.slice(0, 4).map((item: any) => (
-            <button
+            <Link
               key={item.id}
+              href={
+                url({
+                  id: item.id,
+                  media_type: item.media_type,
+                }) || ""
+              }
               className="w-full text-center group"
-              onClick={() => {
-                router.push(
-                  `${url({
-                    id: item.id,
-                    media_type: item.media_type,
-                  })}`
-                );
-                if (hideNav) hideNav();
-              }}
             >
-              <div className="relative group">
+              <div className="relative flex justify-center group">
                 <Image
-                  alt={"image for" + item.original_title || item.original_name || item.name}
+                  alt={"Poster for " + item.original_title || item.original_name || item.name}
                   src={
                     (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||
                     (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
                     "/noimage.png"
                   }
-                  width="85px"
-                  height="120px"
+                  width={85}
+                  height={120}
                   className="rounded"
                 />
               </div>
               <div className="h-8 px-2 text-xs line-clamp-2">
                 {item.original_title || item.original_name || item.name}
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       )}

@@ -2,6 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import HorizontalScrollContainer from "../common/HorizontalScrollContainer";
 import Modal from "../modal/Modal";
+import ModalTitle from "../modal/ModalTitle";
 import PersonPoster from "../posters/PersonPoster";
 
 interface ICast {
@@ -68,24 +69,26 @@ const CastBlock = ({ cast, guestStars }: ICast) => {
         <AnimatePresence initial={false} mode="wait">
           {modalOpen && (
             <Modal handleClose={() => setModalOpen(!modalOpen)}>
-              <div>
-                <div className="pb-4 text-2xl">Main cast</div>
-                <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
-                  {cast.map((item, i) => (
-                    <div key={"cast" + item.id + i} className="flex-shrink-0">
-                      <PersonPoster
-                        imageSrc={item.profile_path}
-                        name={item.original_name}
-                        url={`/person/${item.id}`}
-                        job={item?.character}
-                      />
-                    </div>
-                  ))}
+              <div className="px-4 pb-4">
+                <div>
+                  <ModalTitle title="Main cast" onExit={() => setModalOpen(!modalOpen)} />
+                  <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
+                    {cast.map((item, i) => (
+                      <div key={"cast" + item.id + i} className="flex-shrink-0">
+                        <PersonPoster
+                          imageSrc={item.profile_path}
+                          name={item.original_name}
+                          url={`/person/${item.id}`}
+                          job={item?.character}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {guestStars && guestStars.length > 0 && (
-                  <>
-                    <div className="py-4 text-2xl">Guest stars</div>
+                  <div>
+                    <ModalTitle title="Guest stars" onExit={() => setModalOpen(!modalOpen)} />
                     <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
                       {guestStars.map((item, i) => (
                         <div key={"guestStars" + item.id + i} className="flex-shrink-0">
@@ -98,7 +101,7 @@ const CastBlock = ({ cast, guestStars }: ICast) => {
                         </div>
                       ))}
                     </div>
-                  </>
+                  </div>
                 )}
               </div>
             </Modal>

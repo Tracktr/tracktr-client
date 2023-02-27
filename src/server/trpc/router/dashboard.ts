@@ -58,7 +58,7 @@ export const dashboardRouter = router({
             },
           })
           .then((res) => {
-            if (res.length > 0) movieCounter++;
+            if (res.length > 0) movieCounter += res.length;
 
             items.push({
               date: gte,
@@ -89,57 +89,33 @@ export const dashboardRouter = router({
       };
     }),
 
-  upNext: protectedProcedure.query(async ({ ctx }) => {
-    const episodes = await ctx.prisma.episodesHistory.findMany({
-      where: { user_id: ctx.session.user.profile.userId },
-      include: {
-        series: true,
-        season: true,
-        episode: true,
-      },
-      orderBy: {
-        datetime: "desc",
-      },
-      distinct: ["series_id"],
-    });
+  upNext: protectedProcedure
+    .input(
+      z.object({
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const episodes = await ctx.prisma.episodesHistory.findMany({
+        where: { user_id: ctx.session.user.profile.userId },
+        include: {
+          series: true,
+          season: true,
+          episode: true,
+        },
+        orderBy: {
+          datetime: "desc",
+        },
+        distinct: ["series_id"],
+      });
 
-    const result = await Promise.all(
-      episodes.flatMap(async (lastEpisode) => {
-        const season = await ctx.prisma.seasons.findFirst({
-          where: {
-            series_id: lastEpisode.series_id,
-            season_number: lastEpisode.season.season_number,
-          },
-          include: {
-            episodes: true,
-            Series: true,
-          },
-        });
-
-        // Removes all episodes that don't have a next episode
-        const nextEpisode = season?.episodes.filter((ep) => {
-          if (
-            ep.episode_number === lastEpisode.episode.episode_number + 1 &&
-            ep.season_number === lastEpisode.season.season_number &&
-            ep?.air_date !== null &&
-            ep?.air_date <= new Date()
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-
-        if (nextEpisode !== undefined && nextEpisode?.length > 0) {
-          return {
-            ...nextEpisode[0],
-            series: season?.Series,
-          };
-        } else {
-          const nextSeason = await ctx.prisma.seasons.findFirst({
+      const result = await Promise.all(
+        episodes.flatMap(async (lastEpisode) => {
+          const season = await ctx.prisma.seasons.findFirst({
             where: {
               series_id: lastEpisode.series_id,
-              season_number: lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1,
+              season_number: lastEpisode.season.season_number,
             },
             include: {
               episodes: true,
@@ -147,10 +123,11 @@ export const dashboardRouter = router({
             },
           });
 
-          const nextEpisode = nextSeason?.episodes.filter((ep) => {
+          // Removes all episodes that don't have a next episode
+          const nextEpisode = season?.episodes.filter((ep) => {
             if (
-              ep.episode_number === 1 &&
-              ep.season_number === (lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1) &&
+              ep.episode_number === lastEpisode.episode.episode_number + 1 &&
+              ep.season_number === lastEpisode.season.season_number &&
               ep?.air_date !== null &&
               ep?.air_date <= new Date()
             ) {
@@ -165,23 +142,53 @@ export const dashboardRouter = router({
               ...nextEpisode[0],
               series: season?.Series,
             };
-          }
-        }
-      })
-    );
+          } else {
+            const nextSeason = await ctx.prisma.seasons.findFirst({
+              where: {
+                series_id: lastEpisode.series_id,
+                season_number: lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1,
+              },
+              include: {
+                episodes: true,
+                Series: true,
+              },
+            });
 
-    return {
-      result: paginate(
-        result.filter((el) => {
-          if (el !== undefined) {
-            return true;
+            const nextEpisode = nextSeason?.episodes.filter((ep) => {
+              if (
+                ep.episode_number === 1 &&
+                ep.season_number === (lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1) &&
+                ep?.air_date !== null &&
+                ep?.air_date <= new Date()
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+
+            if (nextEpisode !== undefined && nextEpisode?.length > 0) {
+              return {
+                ...nextEpisode[0],
+                series: season?.Series,
+              };
+            }
           }
-        }),
-        6,
-        1
-      ),
-    };
-  }),
+        })
+      );
+
+      return {
+        result: paginate(
+          result.filter((el) => {
+            if (el !== undefined) {
+              return true;
+            }
+          }),
+          input.pageSize,
+          input.page
+        ),
+      };
+    }),
 
   friendsActivity: protectedProcedure
     .input(

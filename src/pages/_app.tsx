@@ -1,7 +1,7 @@
-// src/pages/_app.tsx
 import "../styles/globals.css";
 import "../styles/nprogress.css";
 import "react-toastify/dist/ReactToastify.min.css";
+import "react-tooltip/dist/react-tooltip.css";
 
 import { SessionProvider } from "next-auth/react";
 import type { Session } from "next-auth";

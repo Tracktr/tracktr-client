@@ -56,6 +56,7 @@ const createNewSeries = async ({
             name: season.name,
             poster: season.poster_path ? season.poster_path : seriesPoster,
             season_number: season.season_number,
+            series_id: show.id,
           };
 
           try {

@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import { motion } from "framer-motion";
+import { useCallback, useEffect } from "react";
 
 const Backdrop = ({ children, onClick }: { children: JSX.Element | JSX.Element[]; onClick: () => void }) => {
   return (
@@ -21,7 +22,7 @@ const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) =
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation}
       role="none"
-      className="w-full h-auto max-w-xl p-4 max-h-[80%] overflow-auto text-white rounded-md shadow-xl bg-primaryBackground"
+      className="w-full h-auto max-w-xl max-h-[80%] overflow-auto text-white rounded-md shadow-xl bg-primaryBackground"
     >
       {children}
     </div>
@@ -29,6 +30,23 @@ const ModalWrapper = ({ children }: { children: JSX.Element | JSX.Element[] }) =
 };
 
 const Modal = ({ handleClose, children }: { handleClose: () => void; children: JSX.Element | JSX.Element[] }) => {
+  const escFunction = useCallback(
+    (event: any) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    },
+    [handleClose]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, [escFunction]);
+
   return ReactDOM.createPortal(
     <Backdrop
       onClick={() => {

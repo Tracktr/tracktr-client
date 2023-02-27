@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MdOndemandVideo } from "react-icons/md";
 import ReactPlayer from "react-player";
 import Modal from "../../modal/Modal";
+import ModalTitle from "../../modal/ModalTitle";
 import { IThemeColor } from "../../watchButton/BaseWatchButton";
 
 interface WatchTrailerButtonProps {
@@ -34,18 +35,21 @@ const WatchTrailerButton = ({ themeColor, data }: WatchTrailerButtonProps) => {
 
       {modalOpen && (
         <Modal handleClose={close}>
-          {trailer.length >= 1 ? (
-            trailer.map((item: any) => {
-              const site = item.site === "YouTube" && "https://youtube.com/watch?v=" + item.key;
-              return (
-                <div className="relative h-auto aspect-video" key={item.key}>
-                  <ReactPlayer url={`${site}`} width="100%" height="100%" />
-                </div>
-              );
-            })
-          ) : (
-            <p className="p-4">Something went wrong finding a video...</p>
-          )}
+          <div className="px-4 pb-4">
+            <ModalTitle title="Trailer" onExit={() => setModalOpen(!modalOpen)} />
+            {trailer.length >= 1 ? (
+              trailer.map((item: any) => {
+                const site = item.site === "YouTube" && "https://youtube.com/watch?v=" + item.key;
+                return (
+                  <div className="relative h-auto aspect-video" key={item.key}>
+                    <ReactPlayer url={`${site}`} width="100%" height="100%" />
+                  </div>
+                );
+              })
+            ) : (
+              <p className="p-4">Something went wrong finding a video...</p>
+            )}
+          </div>
         </Modal>
       )}
     </button>

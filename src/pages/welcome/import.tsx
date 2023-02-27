@@ -112,10 +112,11 @@ const ImportPage = () => {
           </div>
 
           <div className="flex justify-end mt-4">
-            <Link href="/welcome/movies">
-              <a className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-blue-700 focus:ring-blue-800 bg-gray-700">
-                Manually add items
-              </a>
+            <Link
+              href="/welcome/movies"
+              className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-blue-700 focus:ring-blue-800 bg-gray-700"
+            >
+              Manually add items
             </Link>
           </div>
 

@@ -57,6 +57,7 @@ export const tvRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
+      // Get Reviews
       const databaseSeries = await ctx.prisma.series.findFirst({
         where: { id: json.id },
         include: {
@@ -77,8 +78,15 @@ export const tvRouter = router({
       });
 
       if (ctx.session?.user) {
+        json.number_of_episodes = 0;
+
+        // Check if user has watched an episode of a season
         json.seasons = await Promise.all(
           json.seasons.map(async (season: ISeason) => {
+            if (new Date(season.air_date) <= new Date()) {
+              json.number_of_episodes += season.episode_count;
+            }
+
             const watched = await ctx.prisma.episodesHistory.findFirst({
               where: {
                 user_id: ctx.session?.user?.id,
@@ -95,13 +103,8 @@ export const tvRouter = router({
             }
           })
         );
-      } else {
-        json.seasons = json.seasons.map((season: ISeries) => {
-          return { ...season, watched: false };
-        });
-      }
 
-      if (ctx && input.seriesID) {
+        // Check how many episodes a user has watched
         const episodesWatched = await ctx.prisma.episodesHistory.findMany({
           where: {
             series_id: input.seriesID,
@@ -123,13 +126,15 @@ export const tvRouter = router({
             reviews: databaseSeries?.SeriesReviews || [],
           };
         }
+      } else {
+        return {
+          ...json.seasons.map((season: ISeries) => {
+            return { ...season, watched: false };
+          }),
+          theme_color: color,
+          reviews: databaseSeries?.SeriesReviews || [],
+        };
       }
-
-      return {
-        ...json,
-        theme_color: color,
-        reviews: databaseSeries?.SeriesReviews || [],
-      };
     }),
 
   infiniteTV: publicProcedure
@@ -220,24 +225,7 @@ export const tvRouter = router({
         where: { id: show.id },
       });
 
-      if (!existsInDB) {
-        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
-
-        if (newSeries !== null) {
-          try {
-            return await ctx.prisma.episodesHistory.createMany({
-              data: await saveHistory({
-                firstSeason,
-                seasonsCount,
-                seriesID: input.seriesID,
-                userID: ctx.session.user.id,
-              }),
-            });
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      } else {
+      const createHistory = async () => {
         try {
           return await ctx.prisma.episodesHistory.createMany({
             data: await saveHistory({
@@ -254,6 +242,16 @@ export const tvRouter = router({
             cause: error,
           });
         }
+      };
+
+      if (!existsInDB) {
+        const newSeries = await createNewSeries({ show, seriesPoster, id: input.seriesID, ctx });
+
+        if (newSeries !== null) {
+          await createHistory();
+        }
+      } else {
+        await createHistory();
       }
     }),
 
@@ -310,6 +308,13 @@ export const tvRouter = router({
         orderBy: {
           datetime: "desc",
         },
+      });
+
+      show.number_of_episodes = 0;
+      show.seasons.map((season: ISeason) => {
+        if (new Date(season.air_date) <= new Date()) {
+          show.number_of_episodes += season.episode_count;
+        }
       });
 
       return {
@@ -383,9 +388,9 @@ const saveHistory = async ({
       console.error("Failed to fetch season", seriesID, j);
     }
 
-    if (season.season_number === 0) continue;
+    if (season.season_number === 0 || new Date(season.air_date) >= new Date()) continue;
 
-    for (let i = 0; i <= season.episodes.length; i++) {
+    for (let i = 0; i < season.episodes.length; i++) {
       try {
         const item = {
           datetime: new Date(),

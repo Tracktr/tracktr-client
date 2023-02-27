@@ -12,9 +12,7 @@ const Footer = () => {
           <div className="max-w-xl px-4 m-auto lg:w-6/12">
             <div className="mb-6 lg:mb-0">
               <Link href="https://www.themoviedb.org/" target="_blank">
-                <a>
-                  <Image src="/tmdb_logo.svg" width="128" height="64" alt="TMDB Logo" />
-                </a>
+                <Image src="/tmdb_logo.svg" width={128} height={64} alt="TMDB Logo" />
               </Link>
             </div>
           </div>
@@ -25,21 +23,21 @@ const Footer = () => {
                   <span className="block mb-2 text-sm font-semibold uppercase">Account</span>
                   <ul className="list-unstyled">
                     <li>
-                      <Link href="/profile">
-                        <a className="block pb-2 text-sm">Profile</a>
+                      <Link href="/profile" className="block pb-2 text-sm">
+                        Profile
                       </Link>
-                      <Link href="/profile/history">
-                        <a className="block pb-2 text-sm">History</a>
+                      <Link href="/profile/history" className="block pb-2 text-sm">
+                        History
                       </Link>
-                      <Link href="/profile/social">
-                        <a className="block pb-2 text-sm">Social</a>
+                      <Link href="/profile/social" className="block pb-2 text-sm">
+                        Social
                       </Link>
-                      <Link href="/profile/watchlist">
-                        <a className="block pb-2 text-sm">Watchlist</a>
+                      <Link href="/profile/watchlist" className="block pb-2 text-sm">
+                        Watchlist
                       </Link>
                       {session.data.user?.profile.role === "ADMIN" && (
-                        <Link href="/admin">
-                          <a className="block pb-2 text-sm">Admin panel</a>
+                        <Link href="/admin" className="block pb-2 text-sm">
+                          Admin panel
                         </Link>
                       )}
                     </li>
@@ -51,14 +49,14 @@ const Footer = () => {
                 <span className="block mb-2 text-sm font-semibold uppercase">Find Content</span>
                 <ul className="list-unstyled">
                   <li>
-                    <Link href="/movies">
-                      <a className="block pb-2 text-sm">Movies</a>
+                    <Link href="/movies" className="block pb-2 text-sm">
+                      Movies
                     </Link>
-                    <Link href="/tv">
-                      <a className="block pb-2 text-sm">Series</a>
+                    <Link href="/tv" className="block pb-2 text-sm">
+                      Series
                     </Link>
-                    <Link href="/calendar">
-                      <a className="block pb-2 text-sm">Release calendar</a>
+                    <Link href="/calendar" className="block pb-2 text-sm">
+                      Release calendar
                     </Link>
                   </li>
                 </ul>
@@ -68,8 +66,8 @@ const Footer = () => {
                 <span className="block mb-2 text-sm font-semibold uppercase">About</span>
                 <ul className="list-unstyled">
                   <li>
-                    <Link href="/feedback">
-                      <a className="block pb-2 text-sm">Feedback form</a>
+                    <Link href="/feedback" className="block pb-2 text-sm">
+                      Feedback form
                     </Link>
                     <a
                       href="https://github.com/Tracktr/tracktr-client"
@@ -90,11 +88,11 @@ const Footer = () => {
             <div className="py-1 text-sm">
               Copyright © {new Date().getFullYear()} - Developed by{" "}
               <Link href="https://rowanpaulflynn.com/" target="_blank">
-                <a>Rowan</a>
+                Rowan
               </Link>
               <span className="px-1">&</span>
               <Link href="https://patrickroelofs.com/" target="_blank">
-                <a>Patrick</a>
+                Patrick
               </Link>
             </div>
           </div>

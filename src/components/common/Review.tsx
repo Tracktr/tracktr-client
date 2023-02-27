@@ -24,30 +24,26 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
     <div className="flex items-center w-full gap-2 mb-4">
       {!hideImage && (
         <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
-          <a>
-            <Image
-              alt={"Poster image for:" + item.name || item.title}
-              width="100"
-              height="150"
-              src={PosterImage({ path: item.poster, size: "lg" })}
-            />
-          </a>
+          <Image
+            alt={`Poster image for: ${item.name || item.title}`}
+            width={100}
+            height={150}
+            src={PosterImage({ path: item.poster, size: "lg" })}
+          />
         </Link>
       )}
       <div className={hideImage ? "w-full" : "w-[75%]"}>
         {friend && (
-          <Link href={`/profile/${friend.name}`}>
-            <a className="flex items-center gap-2">
-              <ImageWithFallback
-                src={friend.image}
-                fallbackSrc="/placeholder_profile.png"
-                width="16"
-                height="16"
-                alt="Profile picture"
-                className="rounded-full"
-              />
-              <p className="text-sm">{friend.name}</p>
-            </a>
+          <Link href={`/profile/${friend.name}`} className="flex items-center gap-2">
+            <ImageWithFallback
+              src={friend.image}
+              fallbackSrc="/placeholder_profile.png"
+              width={16}
+              height={16}
+              alt="Profile picture"
+              className="rounded-full"
+            />
+            <p className="text-sm">{friend.name}</p>
           </Link>
         )}
         <p className="text-xl">{item.name || item.title}</p>

@@ -65,8 +65,8 @@ const NavMobile = ({
                   onKeyDown={toggleNavMobile}
                   role="none"
                 >
-                  <Link href={navItem.href}>
-                    <a className="block px-4 py-2 text-2xl group-hover:text-primary">{navItem.text}</a>
+                  <Link href={navItem.href} className="block px-4 py-2 text-2xl group-hover:text-primary">
+                    {navItem.text}
                   </Link>
                 </li>
               ))}
@@ -77,8 +77,8 @@ const NavMobile = ({
                     <Image
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
-                      width="36px"
-                      height="36px"
+                      width={36}
+                      height={36}
                       className="rounded-full"
                       alt="User profile image"
                     />
@@ -94,8 +94,8 @@ const NavMobile = ({
                   >
                     {submenuItems.map((item: { href: string; text: string }) => (
                       <div key={item.href} onClick={toggleNavMobile} role="none">
-                        <Link href={item.href}>
-                          <a className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">{item.text}</a>
+                        <Link href={item.href} className="block w-full p-2 mb-1 rounded-md hover:bg-zinc-800">
+                          {item.text}
                         </Link>
                       </div>
                     ))}

@@ -98,18 +98,16 @@ const FollowersPage = () => {
                   {searchResults.results?.map((profile) => {
                     return (
                       <div key={profile?.username} className="flex flex-col items-center">
-                        <Link href={`/profile/${profile?.username}`}>
-                          <a className="flex flex-col items-center">
-                            <ImageWithFallback
-                              src={profile.user.image}
-                              fallbackSrc="/placeholder_profile.png"
-                              width="96"
-                              height="96"
-                              alt="Profile picture"
-                              className="rounded-full"
-                            />
-                            <p className="text-sm">{profile?.username}</p>
-                          </a>
+                        <Link href={`/profile/${profile?.username}`} className="flex flex-col items-center">
+                          <ImageWithFallback
+                            src={profile.user.image}
+                            fallbackSrc="/placeholder_profile.png"
+                            width={96}
+                            height={96}
+                            alt="Profile picture"
+                            className="rounded-full"
+                          />
+                          <p className="text-sm">{profile?.username}</p>
                         </Link>
                         <button
                           className="px-3 py-1 text-sm text-center rounded-full bg-primary text-primaryBackground"
