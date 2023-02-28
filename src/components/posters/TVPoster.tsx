@@ -146,6 +146,7 @@ const TVPoster = ({
                 });
               }
             }}
+            title="Add to history"
           >
             {(markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus) && id === currentLoadingID ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
@@ -172,6 +173,7 @@ const TVPoster = ({
                 });
               }
             }}
+            title="Add to watchlist"
           >
             {(addToWatchlist.isLoading || deleteFromWatchlist.isLoading || fetchStatus) && id === currentLoadingID ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />

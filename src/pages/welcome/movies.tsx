@@ -77,6 +77,8 @@ const WelcomeMoviesPage = () => {
                             watched_id={content.watched_id}
                             refetch={refetch}
                             fetchStatus={isRefetching}
+                            watchlist={content.watchlist}
+                            watchlist_id={content.watchlist_id}
                           />
                         );
                       })

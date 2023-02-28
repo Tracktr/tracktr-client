@@ -60,6 +60,8 @@ const SearchPage = () => {
                           watched={content.watched}
                           refetch={refetch}
                           fetchStatus={isRefetching}
+                          watchlist={content.watchlist}
+                          watchlist_id={content.watchlist_id}
                         />
                       );
                     })
