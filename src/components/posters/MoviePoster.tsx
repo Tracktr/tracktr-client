@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
+import { BsBookmarkCheck, BsFillBookmarkDashFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
@@ -18,11 +19,25 @@ export interface IPoster {
   id: number;
   watched: boolean | null;
   watched_id: string | null;
+  watchlist: boolean;
+  watchlist_id: string | null;
   refetch: () => void;
   fetchStatus: boolean;
 }
 
-const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refetch, fetchStatus }: IPoster) => {
+const MoviePoster = ({
+  imageSrc,
+  name,
+  url,
+  score,
+  id,
+  watched,
+  watched_id,
+  watchlist,
+  watchlist_id,
+  refetch,
+  fetchStatus,
+}: IPoster) => {
   const { status } = useSession();
   const [currentLoadingID, setCurrentLoadingID] = useState<number>();
 
@@ -60,6 +75,36 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
     },
   });
 
+  const addToWatchlist = trpc.watchlist.addMovie.useMutation({
+    onMutate: () => setCurrentLoadingID(id),
+    onSuccess: () => {
+      toast(`Added ${name} to watchlist`, {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
+      refetch();
+    },
+    onError: () => {
+      toast(`Failed to ${name} to watchlist`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
+  const deleteFromWatchlist = trpc.watchlist.removeItem.useMutation({
+    onMutate: () => setCurrentLoadingID(id),
+    onSuccess: () => {
+      toast(`Removed ${name} from watchlist`, {
+        icon: <IoIosRemove className="text-3xl text-red-500" />,
+      });
+      refetch();
+    },
+    onError: () => {
+      toast(`Failed to remove ${name} from watchlist`, {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
   return (
     <div className="group">
       <div className="relative">
@@ -88,7 +133,7 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
       <div className="text-xs max-w-[170px] px-1 truncate">{name}</div>
 
       {status === "authenticated" && watched !== null && (
-        <div className="flex pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+        <div className="flex gap-2 pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
           <button
             disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
             className={`text-2xl transition-all duration-300 ease-in-out ${
@@ -110,6 +155,32 @@ const MoviePoster = ({ imageSrc, name, url, score, id, watched, watched_id, refe
               <MdDelete />
             ) : (
               <AiOutlineCheckCircle />
+            )}
+          </button>
+
+          <button
+            disabled={addToWatchlist.isLoading || deleteFromWatchlist.isLoading}
+            className={`text-xl transition-all duration-300 ease-in-out ${
+              watched ? "hover:text-red-500" : "hover:text-white"
+            }`}
+            onClick={() => {
+              if (watchlist && watchlist_id) {
+                deleteFromWatchlist.mutate({
+                  id: watchlist_id,
+                });
+              } else if (!watchlist) {
+                addToWatchlist.mutate({
+                  movie_id: id,
+                });
+              }
+            }}
+          >
+            {(addToWatchlist.isLoading || deleteFromWatchlist.isLoading || fetchStatus) && id === currentLoadingID ? (
+              <ImSpinner2 className="w-6 h-6 animate-spin" />
+            ) : watchlist ? (
+              <BsFillBookmarkDashFill />
+            ) : (
+              <BsBookmarkCheck />
             )}
           </button>
         </div>
