@@ -80,8 +80,8 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
               a: { release_date: number; first_air_date: number },
               b: { release_date: number; first_air_date: number }
             ) =>
-              new Date(b.release_date || b.first_air_date).setHours(0, 0, 0, 0) -
-              new Date(a.release_date || a.first_air_date).setHours(0, 0, 0, 0)
+              new Date(b.release_date || b.first_air_date || 0).setHours(0, 0, 0, 0) -
+              new Date(a.release_date || a.first_air_date || 0).setHours(0, 0, 0, 0)
           )
           .map((cast: any, index: any) => (
             <Link href={`/${type}/${cast.id}`} key={index} className="flex justify-between px-4">
