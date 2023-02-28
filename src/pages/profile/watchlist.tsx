@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
-import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { BsFillBookmarkDashFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
@@ -249,7 +250,7 @@ const WatchlistPage = () => {
                             </span>
                           </div>
                         </Link>
-                        <div className="flex pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+                        <div className="flex gap-2 pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
                           {item.movie_id ? (
                             (markMovieAsWatched.isLoading || deleteMovieFromWatched.isLoading || isRefetching) &&
                             item.movies.id === currentLoadingID ? (
@@ -309,12 +310,15 @@ const WatchlistPage = () => {
                             </button>
                           )}
 
-                          {(deleteItem.isLoading || markMovieAsWatched.isLoading || markSeriesAsWatched.isLoading) &&
+                          {(deleteItem.isLoading ||
+                            markMovieAsWatched.isLoading ||
+                            markSeriesAsWatched.isLoading ||
+                            isRefetching) &&
                           item.id === currentLoadingID ? (
                             <ImSpinner2 className="w-6 h-6 animate-spin" />
                           ) : (
                             <button
-                              className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                              className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -322,7 +326,7 @@ const WatchlistPage = () => {
                               }}
                               title="Remove from watchlist"
                             >
-                              <AiOutlineCloseCircle className="text-2xl" />
+                              <BsFillBookmarkDashFill className="text-xl" />
                             </button>
                           )}
                         </div>
