@@ -5,10 +5,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 import { motion } from "framer-motion";
 
-interface CreditsBlockProps {
-  credits: any;
-}
-
 function groupBy<T extends Record<string, any>, K extends keyof T>(
   array: T[],
   key: K | { (obj: T): string }
@@ -112,5 +108,72 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
     </div>
   );
 };
+
+interface Cast {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+  character: string;
+  credit_id: string;
+}
+
+interface Crew {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  vote_average: number;
+  vote_count: number;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
+interface CreditsBlockProps {
+  credits: {
+    movie: {
+      cast: Cast[] & {
+        original_title: string;
+        release_date: string;
+        title: string;
+        video: boolean;
+        order: number;
+      };
+      crew: Crew[] & {
+        original_title: string;
+        release_date: string;
+        title: string;
+        video: boolean;
+      };
+    };
+    tv: {
+      cast: Cast[] & {
+        origin_country: string[];
+        original_name: string;
+        first_air_date: string;
+        name: string;
+        episode_count: number;
+      };
+      crew: Crew[] & {
+        origin_country: string[];
+        original_name: string;
+        first_air_date: string;
+        name: string;
+        episode_count: number;
+      };
+    };
+  };
+}
 
 export default CreditsBlock;
