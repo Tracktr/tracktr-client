@@ -115,7 +115,7 @@ const MoviePoster = ({
               src={PosterImage({ path: imageSrc, size: "sm" })}
               width={170}
               height={240}
-              className="rounded"
+              className="rounded w-[170px] h-[240px]"
             />
             <div className="absolute bottom-0 left-0 z-10 flex items-center justify-center w-full max-w-[170px] transition-all duration-300 ease-in-out opacity-0 select-none group-hover:opacity-100 bg-gradient-to-t from-primaryBackground">
               {score !== undefined && (

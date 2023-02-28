@@ -242,7 +242,7 @@ const WatchlistPage = () => {
                             })}
                             width={170}
                             height={240}
-                            className="rounded"
+                            className="rounded w-[170px] h-[240px]"
                           />
                           <div>
                             <span className="w-full text-xs truncate line-clamp-2">

@@ -16,7 +16,7 @@ const PersonPoster = ({ imageSrc, name, url, job }: IPoster) => (
       width={170}
       height={240}
       alt={`Photo of ${name}`}
-      className="rounded"
+      className="rounded w-[170px] h-[240px]"
     />
     <div className="text-xs max-w-[170px] px-1 truncate">
       {name}

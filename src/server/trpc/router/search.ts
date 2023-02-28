@@ -44,12 +44,26 @@ export const searchRouter = publicProcedure
                 movie_id: item.id,
               },
             });
+            const watchlist = await ctx.prisma.watchlist.findFirst({
+              where: {
+                user_id: ctx.session?.user?.profile.userId,
+              },
+              include: {
+                WatchlistItem: {
+                  where: {
+                    movie_id: item.id,
+                  },
+                },
+              },
+            });
 
-            if (watched) {
-              return { ...item, watched: true, watched_id: watched.id };
-            } else {
-              return { ...item, watched: false, watched_id: null };
-            }
+            return {
+              ...item,
+              watched: Boolean(watched),
+              watched_id: watched?.id || null,
+              watchlist: Boolean(watchlist?.WatchlistItem && watchlist.WatchlistItem.length > 0),
+              watchlist_id: watchlist?.WatchlistItem[0]?.id || null,
+            };
           } else if (item.name) {
             const watched = await ctx.prisma.episodesHistory.findFirst({
               where: {
@@ -63,12 +77,26 @@ export const searchRouter = publicProcedure
               },
               distinct: ["episode_id"],
             });
+            const watchlist = await ctx.prisma.watchlist.findFirst({
+              where: {
+                user_id: ctx.session?.user?.profile.userId,
+              },
+              include: {
+                WatchlistItem: {
+                  where: {
+                    series_id: item.id,
+                  },
+                },
+              },
+            });
 
-            if (watched) {
-              return { ...item, watched: true };
-            } else {
-              return { ...item, watched: false };
-            }
+            return {
+              ...item,
+              watched: Boolean(watched),
+              watched_id: watched?.id || null,
+              watchlist: Boolean(watchlist?.WatchlistItem && watchlist.WatchlistItem.length > 0),
+              watchlist_id: watchlist?.WatchlistItem[0]?.id || null,
+            };
           } else {
             return item;
           }

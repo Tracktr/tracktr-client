@@ -178,11 +178,26 @@ export const tvRouter = router({
               distinct: ["episode_id"],
             });
 
-            if (watched) {
-              return { ...series, watched: true };
-            } else {
-              return { ...series, watched: false };
-            }
+            const watchlist = await ctx.prisma.watchlist.findFirst({
+              where: {
+                user_id: ctx.session?.user?.profile.userId,
+              },
+              include: {
+                WatchlistItem: {
+                  where: {
+                    series_id: series.id,
+                  },
+                },
+              },
+            });
+
+            return {
+              ...series,
+              watched: Boolean(watched),
+              watched_id: watched?.id || null,
+              watchlist: Boolean(watchlist?.WatchlistItem && watchlist.WatchlistItem.length > 0),
+              watchlist_id: watchlist?.WatchlistItem[0]?.id || null,
+            };
           })
         );
       } else {

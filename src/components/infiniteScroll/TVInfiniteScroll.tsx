@@ -21,6 +21,8 @@ export interface InfiniteShow {
   vote_average: number;
   vote_count: number;
   watched: boolean;
+  watchlist: boolean;
+  watchlist_id: string | null;
 }
 
 const TVInfiniteScroll = () => {
@@ -80,6 +82,8 @@ const TVInfiniteScroll = () => {
                       watched={content.watched}
                       refetch={refetch}
                       fetchStatus={isRefetching}
+                      watchlist={content.watchlist}
+                      watchlist_id={content.watchlist_id}
                     />
                   );
                 })
