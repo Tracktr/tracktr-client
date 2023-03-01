@@ -39,7 +39,6 @@ const CalendarPage = () => {
         center: "",
         end: "dayGridMonth listMonth today prev,next",
       });
-      calendar.setOption("aspectRatio", 1.5);
     } else {
       calendar.changeView("listMonth");
       calendar.setOption("headerToolbar", {
@@ -47,7 +46,6 @@ const CalendarPage = () => {
         center: "",
         end: "prev,next",
       });
-      calendar.setOption("aspectRatio", undefined);
     }
   };
 
