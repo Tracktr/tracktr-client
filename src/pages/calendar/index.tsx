@@ -73,7 +73,10 @@ const CalendarPage = () => {
                 headerToolbar={{
                   start: "title",
                   center: "",
-                  end: `${windowSize?.width && windowSize.width >= 1024 && "dayGridMonth listMonth today "}prev,next`,
+                  end:
+                    windowSize?.width && windowSize.width >= 1024
+                      ? "dayGridMonth listMonth today prev,next"
+                      : "prev,next",
                 }}
                 buttonText={{
                   today: "Today",
