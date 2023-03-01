@@ -43,9 +43,10 @@ export const calendarRouter = router({
           episodesThisMonth.map((episode) => {
             return {
               title: `${episode.Seasons?.Series?.name} ${episode.season_number}x${episode.episode_number}`,
-              start: episode.air_date,
-              end: episode.air_date,
+              start: episode.air_date as Date,
+              end: episode.air_date as Date,
               url: `/tv/${episode.Seasons?.series_id}/season/${episode.season_number}/episode/${episode.episode_number}`,
+              color: "#FAC42C",
             };
           })
         );

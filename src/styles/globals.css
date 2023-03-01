@@ -36,18 +36,10 @@
 }
 
 /* Changes to Calendar Styling */
-.rbc-header {
-  padding: 0.5rem 0.75rem !important;
-  font-weight: bold;
-  line-height: 1.25rem;
+.fc-theme-standard .fc-list-day-cushion {
+  background-color: #343434 !important;
 }
 
-.rbc-month-view,
-.rbc-off-range-bg,
-.rbc-header,
-.rbc-row,
-.rbc-day-bg,
-.rbc-row-bg,
-.rbc-month-row {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+:root {
+  --fc-list-event-hover-bg-color: #343434 !important;
 }
