@@ -48,7 +48,6 @@ export const calendarRouter = router({
                 start: episode.air_date as Date,
                 end: episode.air_date as Date,
                 url: `/tv/${episode.Seasons?.series_id}/season/${episode.season_number}/episode/${episode.episode_number}`,
-                color: "#FAC42C",
               };
             })
           );

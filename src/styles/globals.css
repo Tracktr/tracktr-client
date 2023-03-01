@@ -47,3 +47,12 @@
 .fc .fc-more-popover {
   background-color: #343434 !important;
 }
+
+.fc-daygrid-event {
+  color: black;
+  background-color: #fac42c !important;
+}
+
+.fc-daygrid-event-dot {
+  display: none !important;
+}
