@@ -44,7 +44,7 @@ export const calendarRouter = router({
           const formatted = await Promise.all(
             episodesThisMonth.map((episode) => {
               return {
-                title: `${episode.Seasons?.Series?.name} ${episode.season_number}x${episode.episode_number}`,
+                title: `${episode.season_number}x${episode.episode_number} ${episode.Seasons?.Series?.name}`,
                 start: episode.air_date as Date,
                 end: episode.air_date as Date,
                 url: `/tv/${episode.Seasons?.series_id}/season/${episode.season_number}/episode/${episode.episode_number}`,
