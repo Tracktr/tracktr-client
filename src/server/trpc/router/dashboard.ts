@@ -104,9 +104,16 @@ export const dashboardRouter = router({
           season: true,
           episode: true,
         },
-        orderBy: {
-          datetime: "desc",
-        },
+        orderBy: [
+          {
+            datetime: "desc",
+          },
+          {
+            episode: {
+              episode_number: "desc",
+            },
+          },
+        ],
         distinct: ["series_id"],
       });
 

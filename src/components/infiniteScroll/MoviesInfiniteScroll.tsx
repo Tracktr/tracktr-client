@@ -24,6 +24,8 @@ export interface InfiniteMovie {
   vote_count: number;
   watched: boolean;
   watched_id: string | null;
+  watchlist: boolean;
+  watchlist_id: string | null;
 }
 
 const MoviesInfiniteScroll = () => {
@@ -83,6 +85,8 @@ const MoviesInfiniteScroll = () => {
                       score={content.vote_average}
                       watched={content.watched}
                       watched_id={content.watched_id}
+                      watchlist={content.watchlist}
+                      watchlist_id={content.watchlist_id}
                       refetch={refetch}
                       fetchStatus={isRefetching}
                     />

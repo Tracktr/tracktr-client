@@ -62,6 +62,8 @@ const SearchPage = () => {
                             watched={content.watched}
                             refetch={refetch}
                             fetchStatus={isRefetching}
+                            watchlist={content.watchlist}
+                            watchlist_id={content.watchlist_id}
                           />
                         );
                       }
@@ -79,6 +81,8 @@ const SearchPage = () => {
                             refetch={refetch}
                             watched_id={content.watched_id}
                             fetchStatus={isRefetching}
+                            watchlist={content.watchlist}
+                            watchlist_id={content.watchlist_id}
                           />
                         );
                       }

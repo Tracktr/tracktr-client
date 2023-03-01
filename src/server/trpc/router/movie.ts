@@ -109,21 +109,35 @@ export const movieRouter = router({
         });
       }
 
-      if (ctx?.session?.user) {
+      if (ctx.session?.user) {
         json.results = await Promise.all(
           json.results.map(async (movie: IMovie) => {
             const watched = await ctx.prisma.moviesHistory.findFirst({
               where: {
-                user_id: ctx?.session?.user?.id as string,
+                user_id: ctx.session?.user?.id,
                 movie_id: movie.id,
               },
             });
+            const watchlist = await ctx.prisma.watchlist.findFirst({
+              where: {
+                user_id: ctx.session?.user?.profile.userId,
+              },
+              include: {
+                WatchlistItem: {
+                  where: {
+                    movie_id: movie.id,
+                  },
+                },
+              },
+            });
 
-            if (watched) {
-              return { ...movie, watched: true, watched_id: watched.id };
-            } else {
-              return { ...movie, watched: false, watched_id: null };
-            }
+            return {
+              ...movie,
+              watched: Boolean(watched),
+              watched_id: watched?.id || null,
+              watchlist: Boolean(watchlist?.WatchlistItem && watchlist.WatchlistItem.length > 0),
+              watchlist_id: watchlist?.WatchlistItem[0]?.id || null,
+            };
           })
         );
       } else {

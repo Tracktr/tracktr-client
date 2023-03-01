@@ -6,6 +6,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import ReviewButton from "../common/buttons/ReviewButton";
+import ShareButton from "../common/buttons/ShareButton";
 import WatchlistButton from "../common/buttons/WatchlistButton";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import EpisodeWatchButton from "../watchButton/EpisodeWatchButton";
@@ -148,29 +149,36 @@ const ContentPoster = ({
                     refetchReviews={refetchReviews}
                   />
                 )}
+                <ShareButton
+                  themeColor={theme_color}
+                  title="Track the best movies and shows using Tracktr"
+                  text={`I'm watching ${title}!`}
+                />
               </div>
             )}
           </>
         ) : (
-          <div className="hidden text-white rounded-md md:block">
-            <ul className="pl-2 text-left">
-              <li className="flex items-center mb-4">
-                <AiFillCheckCircle className="flex-shrink-0 w-5 h-5 text-primary" />
-                <span className="ml-3 font-medium">Keep track of your watched tv and movies.</span>
-              </li>
+          session.status !== "loading" && (
+            <div className="hidden text-white rounded-md md:block">
+              <ul className="pl-2 text-left">
+                <li className="flex items-center mb-4">
+                  <AiFillCheckCircle className="flex-shrink-0 w-5 h-5 text-primary" />
+                  <span className="ml-3 font-medium">Keep track of your watched tv and movies.</span>
+                </li>
 
-              <li className="flex items-center mb-4">
-                <AiFillCheckCircle className="flex-shrink-0 w-5 h-5 text-primary" />
-                <span className="ml-3 font-medium">Personalize your experience.</span>
-              </li>
-            </ul>
-            <button
-              className="flex items-center justify-center w-1/2 px-4 py-2 m-auto font-bold rounded-md text-md text-primaryBackground bg-primary"
-              onClick={() => signIn("google")}
-            >
-              Sign in
-            </button>
-          </div>
+                <li className="flex items-center mb-4">
+                  <AiFillCheckCircle className="flex-shrink-0 w-5 h-5 text-primary" />
+                  <span className="ml-3 font-medium">Personalize your experience.</span>
+                </li>
+              </ul>
+              <button
+                className="flex items-center justify-center w-1/2 px-4 py-2 m-auto font-bold rounded-md text-md text-primaryBackground bg-primary"
+                onClick={() => signIn("google")}
+              >
+                Sign in
+              </button>
+            </div>
+          )
         )}
       </div>
     </div>

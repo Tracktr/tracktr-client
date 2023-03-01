@@ -57,6 +57,8 @@ const SearchPage = () => {
                         refetch={refetch}
                         watched_id={content.watched_id}
                         fetchStatus={isRefetching}
+                        watchlist={content.watchlist}
+                        watchlist_id={content.watchlist_id}
                       />
                     );
                   })
@@ -117,6 +119,8 @@ interface Result {
   known_for: KnownFor[];
   known_for_department: string;
   profile_path: string;
+  watchlist: boolean;
+  watchlist_id: string;
 }
 
 export interface IPage {

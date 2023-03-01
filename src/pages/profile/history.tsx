@@ -172,7 +172,7 @@ const HistoryPage = () => {
             <div className="p-4">
               <HistoryGrid
                 history={history?.history || []}
-                status={isRefetching ? "loading" : historyStatus}
+                status={historyStatus}
                 refetch={refetch}
                 isRefetching={isRefetching}
               />

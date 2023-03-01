@@ -96,33 +96,34 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
       {data && (
         <div className="absolute grid w-full grid-cols-4 py-4 bg-white shadow-lg rounded-b-md text-primaryBackground">
           {data.results.slice(0, 4).map((item: any) => (
-            <Link
-              key={item.id}
-              href={
-                url({
-                  id: item.id,
-                  media_type: item.media_type,
-                }) || ""
-              }
-              className="w-full text-center group"
-            >
-              <div className="relative flex justify-center group">
-                <Image
-                  alt={"Poster for " + item.original_title || item.original_name || item.name}
-                  src={
-                    (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||
-                    (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
-                    "/noimage.png"
-                  }
-                  width={85}
-                  height={120}
-                  className="rounded"
-                />
-              </div>
-              <div className="h-8 px-2 text-xs line-clamp-2">
-                {item.original_title || item.original_name || item.name}
-              </div>
-            </Link>
+            <div onClick={() => hideNav && hideNav()} key={item.id} role="none">
+              <Link
+                href={
+                  url({
+                    id: item.id,
+                    media_type: item.media_type,
+                  }) || ""
+                }
+                className="w-full text-center group"
+              >
+                <div className="relative flex justify-center group">
+                  <Image
+                    alt={"Poster for " + item.original_title || item.original_name || item.name}
+                    src={
+                      (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||
+                      (item.profile_path && PersonImage({ path: item.profile_path, size: "sm" })) ||
+                      "/noimage.png"
+                    }
+                    width={85}
+                    height={120}
+                    className="rounded"
+                  />
+                </div>
+                <div className="h-8 px-2 text-xs line-clamp-2">
+                  {item.original_title || item.original_name || item.name}
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       )}

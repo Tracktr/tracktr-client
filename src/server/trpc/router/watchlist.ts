@@ -293,6 +293,7 @@ export const watchlistRouter = router({
         }
       }
     }),
+
   addMovie: protectedProcedure
     .input(
       z.object({
