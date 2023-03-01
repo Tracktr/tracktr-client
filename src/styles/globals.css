@@ -43,3 +43,7 @@
 :root {
   --fc-list-event-hover-bg-color: #343434 !important;
 }
+
+.fc .fc-more-popover {
+  background-color: #343434 !important;
+}
