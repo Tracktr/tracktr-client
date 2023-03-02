@@ -28,7 +28,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const {
     data: seriesData,
     status,
-    refetch,
+    refetch: seriesRefetch,
     isRefetching,
   } = trpc.tv.seriesById.useQuery({ seriesID: Number(props.seriesID) });
 
@@ -40,6 +40,11 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       enabled: session.status !== "loading",
     }
   );
+
+  const refetch = () => {
+    seriesRefetch()
+    watchHistory.refetch()
+  }
 
   const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
 
