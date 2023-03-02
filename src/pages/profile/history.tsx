@@ -58,11 +58,13 @@ const HistoryPage = () => {
   const handleOrderInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setOrderInput(value);
+    setPage(1);
   };
 
   const handleFilterInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setFilterInput(value);
+    setPage(1);
   };
 
   if (session.status === "loading") {

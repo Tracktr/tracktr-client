@@ -63,6 +63,7 @@ const ProgressPage = () => {
   const handleOrderInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setOrderInput(value);
+    setPage(1);
   };
 
   if (sessionStatus === "loading") {

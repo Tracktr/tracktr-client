@@ -10,7 +10,6 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { BsFillBookmarkDashFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
-import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { PosterImage } from "../../utils/generateImages";
@@ -98,11 +97,13 @@ const WatchlistPage = () => {
   const handleOrderInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setOrderInput(value);
+    setPage(1);
   };
 
   const handleFilterInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setFilterInput(value);
+    setPage(1);
   };
 
   if (session.status === "loading") {
