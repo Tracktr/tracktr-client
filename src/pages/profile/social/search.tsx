@@ -69,7 +69,7 @@ const FollowersPage = () => {
         <ProfileHeader
           image={String(session.data?.user?.image)}
           currentPage="Social"
-          name={String(session.data?.user?.name)}
+          name={String(session.data?.user?.profile.username)}
         />
         <div className="mx-4 md:mx-0">
           <div className="my-10">

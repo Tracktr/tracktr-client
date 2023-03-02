@@ -66,7 +66,7 @@ const HistoryPage = () => {
           </Head>
 
           <div className="max-w-6xl m-auto">
-            <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="History" />
+            <ProfileHeader image={String(data?.image)} name={String(data?.profile?.username)} currentPage="History" />
 
             <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
               <h1 className="text-3xl">History</h1>

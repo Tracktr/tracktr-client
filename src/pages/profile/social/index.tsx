@@ -30,7 +30,7 @@ const FollowersPage = () => {
         <ProfileHeader
           image={String(session.data?.user?.image)}
           currentPage="Social"
-          name={String(session.data?.user?.name)}
+          name={String(session.data?.user?.profile.username)}
         />
         <LoadingPageComponents status={status}>
           {() => {

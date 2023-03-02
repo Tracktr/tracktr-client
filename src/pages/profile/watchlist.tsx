@@ -111,7 +111,7 @@ const WatchlistPage = () => {
           </Head>
 
           <div className="max-w-6xl pb-4 m-auto">
-            <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Watchlist" />
+            <ProfileHeader image={String(data?.image)} name={String(data?.profile?.username)} currentPage="Watchlist" />
 
             <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
               <h1 className="text-3xl">Watchlist</h1>
