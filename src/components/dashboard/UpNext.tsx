@@ -14,7 +14,9 @@ import { toast } from "react-toastify";
 interface Series {
   id: number;
   name: string;
-  poster: string;
+  poster_path: string;
+  number_of_episodes: number;
+  episodes_watched: number;
 }
 
 interface IEpisode {
@@ -77,7 +79,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                     <Image
                       alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
                       src={PosterImage({
-                        path: item.series.poster,
+                        path: item.series.poster_path,
                         size: "sm",
                       })}
                       width={170}
@@ -85,6 +87,14 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                       className="rounded"
                     />
                   </Link>
+                  <div className="flex bg-black rounded-b-full">
+                    <span
+                      className="h-2 transition-all duration-300 ease-in-out rounded-b-full bg-primary"
+                      style={{
+                        width: `${Math.ceil((item.series.episodes_watched / item.series.number_of_episodes) * 100)}%`,
+                      }}
+                    />
+                  </div>
                   <div className="h-4 pb-2 text-xs line-clamp-1">
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.name}
