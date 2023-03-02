@@ -1,8 +1,11 @@
+import { TRPCError } from "@trpc/server";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { z } from "zod";
+import convertImageToPrimaryColor from "../../../utils/colors";
 import { getDateXDaysAgo } from "../../../utils/getDate";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
+import { ISeason } from "./tv";
 
 export interface IStatItem {
   date: string;
@@ -130,6 +133,44 @@ export const dashboardRouter = router({
             },
           });
 
+          const url = new URL(`tv/${lastEpisode.series_id}`, process.env.NEXT_PUBLIC_TMDB_API);
+          url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+          if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+          const res = await fetch(url);
+          const tmdb = await res.json();
+
+          if (tmdb?.status_code) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: tmdb.status_message,
+              cause: tmdb.status_code,
+            });
+          }
+
+          const color = await convertImageToPrimaryColor({ image: tmdb.poster_path, fallback: tmdb.backdrop_path });
+
+          tmdb.number_of_episodes = 0;
+          tmdb.seasons.map(async (season: ISeason) => {
+            if (new Date(season.air_date) <= new Date()) {
+              tmdb.number_of_episodes += season.episode_count;
+            }
+          });
+
+          const watched = await ctx.prisma.episodesHistory.findMany({
+            where: {
+              user_id: ctx?.session?.user?.id,
+              series_id: tmdb.id,
+              NOT: {
+                season: {
+                  season_number: 0,
+                },
+              },
+            },
+            distinct: ["episode_id"],
+          });
+          tmdb.episodes_watched = watched.length || 0;
+
           // Removes all episodes that don't have a next episode
           const nextEpisode = season?.episodes.filter((ep) => {
             if (
@@ -147,7 +188,8 @@ export const dashboardRouter = router({
           if (nextEpisode !== undefined && nextEpisode?.length > 0) {
             return {
               ...nextEpisode[0],
-              series: season?.Series,
+              series: tmdb,
+              color: color,
             };
           } else {
             const nextSeason = await ctx.prisma.seasons.findFirst({
@@ -177,7 +219,8 @@ export const dashboardRouter = router({
             if (nextEpisode !== undefined && nextEpisode?.length > 0) {
               return {
                 ...nextEpisode[0],
-                series: season?.Series,
+                series: tmdb,
+                color: color,
               };
             }
           }

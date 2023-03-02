@@ -90,11 +90,17 @@ const DashboardPage = () => {
             <div className="max-w-6xl px-4 m-auto">
               <div className="mt-6 mb-12">
                 <div className="items-center align-middle md:flex">
-                  <div className="flex flex-wrap gap-4 mb-5">
-                    <div className="flex items-center text-xl align-middle md:text-3xl">
-                      <MdQueuePlayNext className="mr-4" />
+                  <div className="flex items-center justify-between w-full gap-4 mb-5">
+                    <div className="flex items-center justify-center text-xl md:text-3xl">
+                      <MdOutlineWrapText className="mr-4" />
                       Up next
                     </div>
+                    <Link
+                      href="/profile/progress"
+                      className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground"
+                    >
+                      Progress
+                    </Link>
                   </div>
                 </div>
                 <UpNext
