@@ -45,7 +45,7 @@ const ImportPage = () => {
   }, [session, router]);
 
   useEffect(() => {
-    if (currentPercentage >= 100) router.push("/profile");
+    if (currentPercentage >= 100) router.push("/welcome/end");
   }, [currentPercentage, router]);
 
   const importRoute = trpc.import.trakt.useMutation();

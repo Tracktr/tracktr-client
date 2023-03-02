@@ -14,7 +14,9 @@ import { toast } from "react-toastify";
 interface Series {
   id: number;
   name: string;
-  poster: string;
+  poster_path: string;
+  number_of_episodes: number;
+  episodes_watched: number;
 }
 
 interface IEpisode {
@@ -65,7 +67,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
             {episodes.map((item) => {
               return (
                 <motion.div
-                  className="relative w-[170px] group"
+                  className="relative w-[170px]"
                   key={item.id}
                   layout
                   initial={{ opacity: 0 }}
@@ -77,14 +79,22 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                     <Image
                       alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
                       src={PosterImage({
-                        path: item.series.poster,
+                        path: item.series.poster_path,
                         size: "sm",
                       })}
                       width={170}
                       height={240}
-                      className="rounded"
+                      className="rounded-t w-[170px] h-[240px]"
                     />
                   </Link>
+                  <div className="flex bg-[#343434] rounded-b-full">
+                    <span
+                      className="h-2 transition-all duration-300 ease-in-out rounded-b-full bg-primary"
+                      style={{
+                        width: `${Math.ceil((item.series.episodes_watched / item.series.number_of_episodes) * 100)}%`,
+                      }}
+                    />
+                  </div>
                   <div className="h-4 pb-2 text-xs line-clamp-1">
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.name}

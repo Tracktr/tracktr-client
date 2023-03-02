@@ -7,7 +7,7 @@ import Link from "next/link";
 import SearchHeader from "../../components/search/SearchHeader";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import UpNext from "../../components/dashboard/UpNext";
-import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline, MdQueuePlayNext } from "react-icons/md";
+import { MdOutlineNextWeek, MdOutlineWrapText, MdPeopleOutline } from "react-icons/md";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Review, { LoadingReview } from "../../components/common/Review";
@@ -42,6 +42,10 @@ const DashboardPage = () => {
     {
       page: 1,
       pageSize: 6,
+      orderBy: {
+        field: "datetime",
+        order: "desc",
+      },
     },
     { enabled: sessionStatus === "authenticated" }
   );
@@ -90,11 +94,17 @@ const DashboardPage = () => {
             <div className="max-w-6xl px-4 m-auto">
               <div className="mt-6 mb-12">
                 <div className="items-center align-middle md:flex">
-                  <div className="flex flex-wrap gap-4 mb-5">
-                    <div className="flex items-center text-xl align-middle md:text-3xl">
-                      <MdQueuePlayNext className="mr-4" />
+                  <div className="flex items-center justify-between w-full gap-4 mb-5">
+                    <div className="flex items-center justify-center text-xl md:text-3xl">
+                      <MdOutlineWrapText className="mr-4" />
                       Up next
                     </div>
+                    <Link
+                      href="/profile/progress"
+                      className="items-center px-3 py-1 text-xs text-center rounded-full bg-primary text-primaryBackground"
+                    >
+                      See Progress
+                    </Link>
                   </div>
                 </div>
                 <UpNext

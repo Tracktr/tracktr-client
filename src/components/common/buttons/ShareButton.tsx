@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { IoMdInformation } from "react-icons/io";
 import { MdShare } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import { IThemeColor } from "../../watchButton/BaseWatchButton";
@@ -15,7 +14,7 @@ const ShareButton = ({ themeColor, title, text }: { themeColor: IThemeColor; tit
         url: router.asPath,
       });
     } catch (err) {
-      console.log("Failed to share ", err);
+      console.error("Failed to share ", err);
     }
   };
 

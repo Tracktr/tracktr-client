@@ -1,8 +1,11 @@
+import { TRPCError } from "@trpc/server";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { z } from "zod";
+import convertImageToPrimaryColor from "../../../utils/colors";
 import { getDateXDaysAgo } from "../../../utils/getDate";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
+import { ISeason } from "./tv";
 
 export interface IStatItem {
   date: string;
@@ -94,6 +97,10 @@ export const dashboardRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
+        orderBy: z.object({
+          field: z.string(),
+          order: z.string(),
+        }),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -130,6 +137,47 @@ export const dashboardRouter = router({
             },
           });
 
+          const url = new URL(`tv/${lastEpisode.series_id}`, process.env.NEXT_PUBLIC_TMDB_API);
+          url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+          if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
+
+          const res = await fetch(url);
+          const tmdb = await res.json();
+
+          if (tmdb?.status_code) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: tmdb.status_message,
+              cause: tmdb.status_code,
+            });
+          }
+
+          const color = await convertImageToPrimaryColor({ image: tmdb.poster_path, fallback: tmdb.backdrop_path });
+
+          tmdb.number_of_episodes = 0;
+          tmdb.seasons.map(async (season: ISeason) => {
+            if (new Date(season.air_date) <= new Date()) {
+              tmdb.number_of_episodes += season.episode_count;
+            }
+          });
+
+          const watched = await ctx.prisma.episodesHistory.findMany({
+            where: {
+              user_id: ctx?.session?.user?.id,
+              series_id: tmdb.id,
+              NOT: {
+                season: {
+                  season_number: 0,
+                },
+              },
+            },
+            distinct: ["episode_id"],
+            orderBy: {
+              datetime: "desc",
+            },
+          });
+          tmdb.episodes_watched = watched.length || 0;
+
           // Removes all episodes that don't have a next episode
           const nextEpisode = season?.episodes.filter((ep) => {
             if (
@@ -147,7 +195,9 @@ export const dashboardRouter = router({
           if (nextEpisode !== undefined && nextEpisode?.length > 0) {
             return {
               ...nextEpisode[0],
-              series: season?.Series,
+              series: tmdb,
+              color: color,
+              datetime: watched[0]?.datetime,
             };
           } else {
             const nextSeason = await ctx.prisma.seasons.findFirst({
@@ -177,23 +227,60 @@ export const dashboardRouter = router({
             if (nextEpisode !== undefined && nextEpisode?.length > 0) {
               return {
                 ...nextEpisode[0],
-                series: season?.Series,
+                series: tmdb,
+                color: color,
+                datetime: watched[0]?.datetime,
               };
             }
           }
         })
       );
+      const filteredResult: any = result
+        .filter((el) => {
+          if (el !== undefined) {
+            return true;
+          }
+        })
+        .sort((a: any, b: any) => {
+          if (input.orderBy.field === "title") {
+            return a.series.name.localeCompare(b.series.name);
+          }
+
+          if (input.orderBy.field === "date") {
+            if (input.orderBy.order === "asc") {
+              if (a.series.first_air_date > b.series.first_air_date) {
+                return 1;
+              } else {
+                return -1;
+              }
+            } else if (input.orderBy.order === "desc") {
+              if (a.series.first_air_date < b.series.first_air_date) {
+                return 1;
+              } else {
+                return -1;
+              }
+            }
+          }
+
+          if (input.orderBy.order === "asc") {
+            if (a[input.orderBy.field] > b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          } else if (input.orderBy.order === "desc") {
+            if (a[input.orderBy.field] < b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+          return 0;
+        });
 
       return {
-        result: paginate(
-          result.filter((el) => {
-            if (el !== undefined) {
-              return true;
-            }
-          }),
-          input.pageSize,
-          input.page
-        ),
+        result: paginate(filteredResult, input.pageSize, input.page),
+        pagesAmount: Math.ceil(filteredResult.length / input.pageSize),
       };
     }),
 

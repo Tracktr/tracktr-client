@@ -3,7 +3,7 @@ import ImageWithFallback from "../common/ImageWithFallback";
 
 const ProfileHeader = ({ image, name, currentPage }: { image: string; name: string; currentPage?: string }) => (
   <div className="max-w-6xl pt-24 m-auto">
-    <div className="flex items-center">
+    <Link href={`/profile/${name}`} className="flex items-center">
       <ImageWithFallback
         src={image}
         fallbackSrc="/placeholder_profile.png"
@@ -13,12 +13,13 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
         className="rounded-full"
       />
       <p className="ml-6 text-4xl font-bold">{name}</p>
-    </div>
+    </Link>
 
     {currentPage && (
       <div className="flex flex-wrap gap-2 mx-5 my-10">
         <Button name="Settings" currentPage={currentPage} link="/profile/settings" />
         <Button name="History" currentPage={currentPage} link="/profile/history" />
+        <Button name="Progress" currentPage={currentPage} link="/profile/progress" />
         <Button name="Watchlist" currentPage={currentPage} link="/profile/watchlist" />
         <Button name="Social" currentPage={currentPage} link="/profile/social" />
       </div>

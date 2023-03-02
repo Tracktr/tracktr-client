@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
@@ -7,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import ImageWithFallback from "../common/ImageWithFallback";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
 export interface IEpisodePoster {
@@ -65,7 +65,7 @@ const EpisodePoster = ({
     <div className="md:flex group">
       <div className="relative flex flex-wrap justify-center flex-shrink-0">
         <ConditionalLink condition={Boolean(url)} href={url}>
-          <Image
+          <ImageWithFallback
             alt={"Still image for" + name}
             src={PosterImage({ path: imageSrc, size: "md" })}
             width={300}

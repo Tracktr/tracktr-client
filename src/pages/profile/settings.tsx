@@ -106,7 +106,11 @@ const ProfilePage = () => {
             </Head>
 
             <div className="max-w-6xl m-auto">
-              <ProfileHeader image={String(data?.image)} name={String(data?.name)} currentPage="Settings" />
+              <ProfileHeader
+                image={String(data?.image)}
+                name={String(data?.profile?.username)}
+                currentPage="Settings"
+              />
 
               <div className="p-4 my-5">
                 <h1 className="mb-2 text-3xl">Settings</h1>

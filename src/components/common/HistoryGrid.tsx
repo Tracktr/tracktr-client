@@ -2,7 +2,6 @@ import { EpisodesHistory, MoviesHistory } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
-import LoadingPageComponents from "./LoadingPageComponents";
 import { PosterGrid } from "./PosterGrid";
 import { MdDelete } from "react-icons/md";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,6 +11,7 @@ import { useState } from "react";
 import { IoIosRemove, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
 import ImageWithFallback from "./ImageWithFallback";
+import LoadingPosters from "../posters/LoadingPoster";
 
 const HistoryGrid = ({
   history,
@@ -65,105 +65,103 @@ const HistoryGrid = ({
     }
   };
 
-  if (history.length < 1 && status !== "loading") {
+  if (status === "loading") {
+    return <LoadingPosters />;
+  } else if (history.length < 1) {
     return <div>No items found</div>;
   }
 
   return (
-    <LoadingPageComponents status={status} posters>
-      {() => (
-        <PosterGrid hasScrollContainer={hasScrollContainer}>
-          <AnimatePresence mode="popLayout" initial={false}>
-            {history.map((item: IHistoryItem, i) => {
-              const date = new Date(item.datetime).toLocaleString("en-UK", {
-                dateStyle: "medium",
-                timeStyle: "short",
-              });
+    <PosterGrid hasScrollContainer={hasScrollContainer}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        {history.map((item: IHistoryItem, i) => {
+          const date = new Date(item.datetime).toLocaleString("en-UK", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
 
-              return (
-                <motion.div
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -150, opacity: 0 }}
-                  transition={{ type: "spring" }}
-                  className="relative w-[170px] group"
-                  key={item.id}
-                >
-                  {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
-                    <Link href={`/profile/${item?.friend?.name}`} className="flex h-6">
-                      <ImageWithFallback
-                        unoptimized
-                        src={item?.friend?.image ? item?.friend?.image : ""}
-                        fallbackSrc="/placeholder_profile.png"
-                        width={16}
-                        height={16}
-                        className="rounded-full"
-                        alt="User profile image"
-                      />
-                      <p className="ml-2 text-sm">{item?.friend?.name}</p>
-                    </Link>
+          return (
+            <motion.div
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -150, opacity: 0 }}
+              transition={{ type: "spring" }}
+              className="relative w-[170px] group"
+              key={item.id}
+            >
+              {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
+                <Link href={`/profile/${item?.friend?.name}`} className="flex h-6">
+                  <ImageWithFallback
+                    unoptimized
+                    src={item?.friend?.image ? item?.friend?.image : ""}
+                    fallbackSrc="/placeholder_profile.png"
+                    width={16}
+                    height={16}
+                    className="rounded-full"
+                    alt="User profile image"
+                  />
+                  <p className="ml-2 text-sm">{item?.friend?.name}</p>
+                </Link>
+              ) : (
+                <div className="h-6" />
+              )}
+              <Link
+                href={
+                  item?.movie_id
+                    ? `/movies/${item.movie?.id}`
+                    : `/tv/${item.series_id}/season/${item?.season?.season_number}/episode/${item?.episode?.episode_number}`
+                }
+                className="relative w-[170px] group"
+              >
+                <Image
+                  alt={`Poster image for ${
+                    item?.movie_id
+                      ? item.movie?.title
+                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
+                  }`}
+                  src={PosterImage({
+                    path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
+                    size: "sm",
+                  })}
+                  width={170}
+                  height={240}
+                  className="rounded"
+                />
+                <div>
+                  <span className="w-full text-xs truncate line-clamp-2">
+                    {item?.season && item?.episode
+                      ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
+                      : `${item?.movie?.title}`}
+                  </span>
+                  <div className="text-xs opacity-50 line-clamp-1">{date}</div>
+                </div>
+              </Link>
+              {!inPublic && (
+                <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
+                  {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
+                  ((deleteMovieFromHistory.isLoading || isRefetching) && item.id === currentLoadingID) ? (
+                    <ImSpinner2 className="w-6 h-6 animate-spin" />
                   ) : (
-                    <div className="h-6" />
+                    <button
+                      className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDelete(item.id, item.movie_id ? "movie" : "episode");
+                      }}
+                      aria-label="Remove item"
+                    >
+                      <MdDelete className="text-2xl" />
+                    </button>
                   )}
-                  <Link
-                    href={
-                      item?.movie_id
-                        ? `/movies/${item.movie?.id}`
-                        : `/tv/${item.series_id}/season/${item?.season?.season_number}/episode/${item?.episode?.episode_number}`
-                    }
-                    className="relative w-[170px] group"
-                  >
-                    <Image
-                      alt={`Poster image for ${
-                        item?.movie_id
-                          ? item.movie?.title
-                          : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
-                      }`}
-                      src={PosterImage({
-                        path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
-                        size: "sm",
-                      })}
-                      width={170}
-                      height={240}
-                      className="rounded"
-                    />
-                    <div>
-                      <span className="w-full text-xs truncate line-clamp-2">
-                        {item?.season && item?.episode
-                          ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
-                          : `${item?.movie?.title}`}
-                      </span>
-                      <div className="text-xs opacity-50 line-clamp-1">{date}</div>
-                    </div>
-                  </Link>
-                  {!inPublic && (
-                    <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                      {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
-                      ((deleteMovieFromHistory.isLoading || isRefetching) && item.id === currentLoadingID) ? (
-                        <ImSpinner2 className="w-6 h-6 animate-spin" />
-                      ) : (
-                        <button
-                          className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleDelete(item.id, item.movie_id ? "movie" : "episode");
-                          }}
-                          aria-label="Remove item"
-                        >
-                          <MdDelete className="text-2xl" />
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </PosterGrid>
-      )}
-    </LoadingPageComponents>
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+    </PosterGrid>
   );
 };
 

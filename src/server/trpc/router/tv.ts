@@ -21,7 +21,7 @@ export interface ISeries {
   vote_count: number;
 }
 
-interface ISeason {
+export interface ISeason {
   air_date: string;
   episode_count: number;
   id: number;
