@@ -83,7 +83,7 @@ export const tvRouter = router({
         // Check if user has watched an episode of a season
         json.seasons = await Promise.all(
           json.seasons.map(async (season: ISeason) => {
-            if (new Date(season.air_date) <= new Date()) {
+            if (new Date(season.air_date) <= new Date() && season.season_number > 0) {
               json.number_of_episodes += season.episode_count;
             }
 
@@ -327,7 +327,7 @@ export const tvRouter = router({
 
       show.number_of_episodes = 0;
       show.seasons.map((season: ISeason) => {
-        if (new Date(season.air_date) <= new Date()) {
+        if (new Date(season.air_date) <= new Date() && season.season_number > 0) {
           show.number_of_episodes += season.episode_count;
         }
       });
