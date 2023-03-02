@@ -97,6 +97,11 @@ export const dashboardRouter = router({
       z.object({
         pageSize: z.number(),
         page: z.number(),
+        orderBy: z.object({
+          field: z.string(),
+          order: z.string(),
+        }),
+        filter: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -226,17 +231,15 @@ export const dashboardRouter = router({
           }
         })
       );
+      const filteredResult: any = result.filter((el) => {
+        if (el !== undefined) {
+          return true;
+        }
+      });
 
       return {
-        result: paginate(
-          result.filter((el) => {
-            if (el !== undefined) {
-              return true;
-            }
-          }),
-          input.pageSize,
-          input.page
-        ),
+        result: paginate(filteredResult, input.pageSize, input.page),
+        pagesAmount: Math.ceil(filteredResult.length / input.pageSize),
       };
     }),
 

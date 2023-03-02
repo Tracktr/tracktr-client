@@ -67,7 +67,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
             {episodes.map((item) => {
               return (
                 <motion.div
-                  className="relative w-[170px] group"
+                  className="relative w-[170px]"
                   key={item.id}
                   layout
                   initial={{ opacity: 0 }}

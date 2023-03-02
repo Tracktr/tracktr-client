@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";

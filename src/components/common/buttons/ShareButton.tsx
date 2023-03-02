@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { IoMdInformation } from "react-icons/io";
 import { MdShare } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import { IThemeColor } from "../../watchButton/BaseWatchButton";

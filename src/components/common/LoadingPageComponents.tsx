@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-useless-fragment */
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingPosters from "../posters/LoadingPoster";
