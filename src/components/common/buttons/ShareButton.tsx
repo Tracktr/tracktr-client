@@ -14,7 +14,7 @@ const ShareButton = ({ themeColor, title, text }: { themeColor: IThemeColor; tit
         url: router.asPath,
       });
     } catch (err) {
-      console.log("Failed to share ", err);
+      console.error("Failed to share ", err);
     }
   };
 

@@ -25,7 +25,6 @@ const ProgressPage = () => {
       order: "desc",
     })
   );
-  const [filterInput, setFilterInput] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const { data: sessionData, status: sessionStatus } = useSession();
 
@@ -36,7 +35,7 @@ const ProgressPage = () => {
   }, [sessionStatus, router]);
 
   const { data, status, refetch, isFetching } = trpc.dashboard.upNext.useQuery(
-    { page, pageSize: 25, orderBy: JSON.parse(orderInput), filter: filterInput },
+    { page, pageSize: 25, orderBy: JSON.parse(orderInput) },
     {
       enabled: sessionStatus === "authenticated",
       keepPreviousData: true,
@@ -64,11 +63,6 @@ const ProgressPage = () => {
   const handleOrderInput = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.currentTarget;
     setOrderInput(value);
-  };
-
-  const handleFilterInput = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.currentTarget;
-    setFilterInput(value);
   };
 
   if (sessionStatus === "loading") {
@@ -118,14 +112,7 @@ const ProgressPage = () => {
           </div>
         </div>
 
-        {showFilters && (
-          <Filters
-            filterInput={filterInput}
-            handleFilterInput={handleFilterInput}
-            handleOrderInput={handleOrderInput}
-            orderInput={orderInput}
-          />
-        )}
+        {showFilters && <Filters handleOrderInput={handleOrderInput} orderInput={orderInput} />}
 
         <div className="flex flex-col gap-8">
           <AnimatePresence mode="popLayout" initial={false}>
@@ -145,6 +132,7 @@ const ProgressPage = () => {
                       episode_number: s.episode_number,
                       season_number: s.season_number,
                       seasons_id: s.seasons_id,
+                      datetime: s.datetime,
                     }}
                     themeColor={s.color}
                     seriesID={s.series.id}
@@ -206,12 +194,20 @@ const SeriesProgress = ({
   url: string;
   number_of_episodes: number;
   episodes_watched: number;
-  nextEpisode: { id: number; name: string; episode_number: number; season_number: number; seasons_id: number };
+  nextEpisode: {
+    id: number;
+    name: string;
+    episode_number: number;
+    season_number: number;
+    seasons_id: number;
+    datetime: Date;
+  };
   themeColor: IThemeColor;
   seriesID: number;
   episodeID: number;
   refetch: () => void;
 }) => {
+  const percent = Math.ceil((episodes_watched / number_of_episodes) * 100);
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
     onSuccess: () => {
       toast(`Marked ${name} episode ${nextEpisode.episode_number} as watched`, {
@@ -233,33 +229,55 @@ const SeriesProgress = ({
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: -150, opacity: 0 }}
       transition={{ type: "spring" }}
-      className="flex gap-2 group"
+      className="flex flex-col gap-2 mx-4 md:flex-row group"
     >
-      <Link href={url}>
+      <Link href={url} className="flex justify-center md:block">
         <ImageWithFallback
           alt={"Still image for" + name}
           src={PosterImage({ path: imageSrc, size: "md" })}
           width={300}
           height={168}
-          className="rounded-t w-[300px] h-[168px]"
+          className="rounded-t rounded-b md:rounded-b-none w-[300px] h-[168px]"
         />
-        <div className="flex bg-[#343434] rounded-b-full">
+        <div className="hidden md:flex bg-[#343434] rounded-b-full">
           <span
-            className="h-2 transition-all duration-300 ease-in-out rounded-b-full bg-primary"
+            className="h-4 duration-300 ease-in-out rounded-b-full tra8sition-all bg-primary"
             style={{
-              width: `${Math.ceil((episodes_watched / number_of_episodes) * 100)}%`,
+              width: `${percent}%`,
             }}
           />
         </div>
       </Link>
+
+      <div className="md:hidden flex bg-[#343434] rounded-full">
+        <span
+          className={`h-6 ${
+            percent > 10 ? "text-black" : "text-white"
+          } transition-all duration-300 ease-in-out rounded-full bg-primary`}
+          style={{
+            width: `${Math.ceil((episodes_watched / number_of_episodes) * 100)}%`,
+          }}
+        >
+          <span className="pl-4">{percent}%</span>
+        </span>
+      </div>
+
       <div>
         <Link href={url} className="text-xl font-bold">
           {name}
         </Link>
         <div>
           Watched <span className="font-bold">{episodes_watched}</span> of{" "}
-          <span className="font-bold">{number_of_episodes}</span> episodes, leaving{" "}
-          <span className="font-bold">{number_of_episodes - episodes_watched}</span> episodes left to watch.
+          <span className="font-bold">{number_of_episodes}</span> episodes{" "}
+          <span className="hidden md:inline-block">({percent}%)</span>, leaving{" "}
+          <span className="font-bold">{number_of_episodes - episodes_watched}</span> episodes left to watch. Last
+          episode watched on{" "}
+          {nextEpisode.datetime &&
+            nextEpisode.datetime.toLocaleString("en-UK", {
+              dateStyle: "long",
+              timeStyle: "medium",
+            })}
+          .
         </div>
         <div className="mt-4">
           <div>Up next:</div>
@@ -306,15 +324,11 @@ const SeriesProgress = ({
 };
 
 const Filters = ({
-  handleFilterInput,
   handleOrderInput,
   orderInput,
-  filterInput,
 }: {
-  handleFilterInput: (e: ChangeEvent<HTMLSelectElement>) => void;
   handleOrderInput: (e: ChangeEvent<HTMLSelectElement>) => void;
   orderInput: string;
-  filterInput: string;
 }) => {
   return (
     <motion.div
@@ -361,7 +375,7 @@ const Filters = ({
           </option>
           <option
             value={JSON.stringify({
-              field: "date",
+              field: "air_date",
               order: "desc",
             })}
           >
@@ -369,28 +383,12 @@ const Filters = ({
           </option>
           <option
             value={JSON.stringify({
-              field: "date",
+              field: "air_date",
               order: "asc",
             })}
           >
             Previously aired
           </option>
-        </select>
-      </div>
-
-      <div className="w-full">
-        <label htmlFor="Filter" className="block mb-2 text-sm font-medium text-white">
-          Filter
-        </label>
-        <select
-          onChange={handleFilterInput}
-          value={filterInput}
-          id="filter"
-          className="border  text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value="">No filter</option>
-          <option value="movies">Hide Episodes</option>
-          <option value="episodes">Hide Movies</option>
         </select>
       </div>
     </motion.div>

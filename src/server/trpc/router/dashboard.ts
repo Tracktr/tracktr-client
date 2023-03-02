@@ -101,7 +101,6 @@ export const dashboardRouter = router({
           field: z.string(),
           order: z.string(),
         }),
-        filter: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -173,6 +172,9 @@ export const dashboardRouter = router({
               },
             },
             distinct: ["episode_id"],
+            orderBy: {
+              datetime: "desc",
+            },
           });
           tmdb.episodes_watched = watched.length || 0;
 
@@ -195,6 +197,7 @@ export const dashboardRouter = router({
               ...nextEpisode[0],
               series: tmdb,
               color: color,
+              datetime: watched[0]?.datetime,
             };
           } else {
             const nextSeason = await ctx.prisma.seasons.findFirst({
@@ -226,16 +229,54 @@ export const dashboardRouter = router({
                 ...nextEpisode[0],
                 series: tmdb,
                 color: color,
+                datetime: watched[0]?.datetime,
               };
             }
           }
         })
       );
-      const filteredResult: any = result.filter((el) => {
-        if (el !== undefined) {
-          return true;
-        }
-      });
+      const filteredResult: any = result
+        .filter((el) => {
+          if (el !== undefined) {
+            return true;
+          }
+        })
+        .sort((a: any, b: any) => {
+          if (input.orderBy.field === "title") {
+            return a.series.name.localeCompare(b.series.name);
+          }
+
+          if (input.orderBy.field === "date") {
+            if (input.orderBy.order === "asc") {
+              if (a.series.first_air_date > b.series.first_air_date) {
+                return 1;
+              } else {
+                return -1;
+              }
+            } else if (input.orderBy.order === "desc") {
+              if (a.series.first_air_date < b.series.first_air_date) {
+                return 1;
+              } else {
+                return -1;
+              }
+            }
+          }
+
+          if (input.orderBy.order === "asc") {
+            if (a[input.orderBy.field] > b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          } else if (input.orderBy.order === "desc") {
+            if (a[input.orderBy.field] < b[input.orderBy.field]) {
+              return 1;
+            } else {
+              return -1;
+            }
+          }
+          return 0;
+        });
 
       return {
         result: paginate(filteredResult, input.pageSize, input.page),
