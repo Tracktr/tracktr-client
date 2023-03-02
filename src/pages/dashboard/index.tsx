@@ -46,7 +46,6 @@ const DashboardPage = () => {
         field: "datetime",
         order: "desc",
       },
-      filter: "",
     },
     { enabled: sessionStatus === "authenticated" }
   );
