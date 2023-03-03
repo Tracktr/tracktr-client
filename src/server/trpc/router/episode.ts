@@ -43,7 +43,7 @@ export const episodeRouter = router({
                 },
               },
             },
-            take: 10,
+            take: 3,
             orderBy: {
               created: "desc",
             },

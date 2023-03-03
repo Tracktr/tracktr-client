@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
@@ -11,8 +12,9 @@ import Modal from "../modal/Modal";
 import ModalTitle from "../modal/ModalTitle";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 
-const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IReviewsBlock) => {
+const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, reviewPage }: IReviewsBlock) => {
   const session = useSession();
+  const router = useRouter();
   const MAX_MESSAGE_SIZE = 512;
   const [currentID, setCurrentID] = useState<number>(0);
   const [modalOpen, setModalOpen] = useState(false);
@@ -156,7 +158,6 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
   };
 
   const onSubmit = () => {
-    console.log(typeof reviews[0]);
     if (reviews[0]?.movie_id) {
       editMovieReview.mutate({ movieID: currentID, content: input });
     } else if (reviews[0]?.series_id) {
@@ -169,8 +170,16 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
   };
 
   return (
-    <div className="relative mx-1 mb-8 md:mx-0" id="reviews">
-      <h2 className="pb-4 text-4xl font-bold">Reviews</h2>
+    <div className={`relative mx-1 mb-8 md:mx-0 ${reviewPage && "mt-10"}`}>
+      <div className="flex items-center justify-between gap-4 pb-4 text-4xl font-bold">
+        <h2>Reviews</h2>
+        <Link
+          href={reviewPage ? router.asPath.substring(0, router.asPath.length - 8) : `${router.asPath}/reviews`}
+          className="items-center px-3 py-1 text-xs text-center rounded-full cursor-pointer bg-primary text-primaryBackground"
+        >
+          {reviewPage ? <>Back to detail page</> : <>Show all reviews</>}
+        </Link>
+      </div>
       <div className="flex flex-col gap-6">
         {isRefetching ? (
           <div>
@@ -185,7 +194,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
           </div>
         ) : reviews.length > 0 ? (
           reviews.map((review) => (
-            <div key={review.id}>
+            <div key={review.id} className="group">
               <div className="flex items-center gap-2 mb-4">
                 <Link href={`/profile/${review.user.profile.username}`} className="flex items-center gap-2">
                   <ImageWithFallback
@@ -199,9 +208,9 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
                   <p className="text-xl">{review.user.profile.username}</p>
                 </Link>
                 {session?.data?.user?.id === review.user_id && (
-                  <>
+                  <div className="flex gap-2 ml-auto opacity-25 group-hover:opacity-80">
                     <button
-                      className="ml-auto text-3xl transition-all duration-300 ease-in-out hover:opacity-75"
+                      className="text-3xl transition-all duration-300 ease-in-out hover:text-green-700"
                       onClick={() => {
                         setCurrentID(review.movie_id || review.seasons_id || review.episodes_id || review.series_id);
                         setModalOpen(!modalOpen);
@@ -217,7 +226,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
                     >
                       <MdDelete className="text-xl" />
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
               <div className="whitespace-pre-wrap">{review.content}</div>
@@ -243,6 +252,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
           <div>No reviews found</div>
         )}
       </div>
+
       {modalOpen && (
         <Modal handleClose={() => setModalOpen(!modalOpen)}>
           <div className="px-4 pb-4">
@@ -309,6 +319,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
 };
 
 interface IReviewsBlock {
+  reviewPage?: boolean;
   refetchReviews: () => void;
   isRefetching: boolean;
   themeColor: IThemeColor;

@@ -23,7 +23,7 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
   return (
     <div className="flex items-center w-full gap-2 mb-4">
       {!hideImage && (
-        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`}>
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews`}>
           <Image
             alt={`Poster image for: ${item.name || item.title}`}
             width={100}
@@ -46,7 +46,7 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
             <p className="text-sm">{friend.name}</p>
           </Link>
         )}
-        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`} className="text-xl">
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews`} className="text-xl">
           {item.name || item.title}
         </Link>
         <div className="mb-4 text-sm">

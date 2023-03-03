@@ -1,11 +1,7 @@
 import LoadingPageComponents from "../../../../../components/common/LoadingPageComponents";
-import CastBlock from "../../../../../components/pageBlocks/CastBlock";
-import CrewBlock from "../../../../../components/pageBlocks/CrewBlock";
-import EpisodesBlock from "../../../../../components/pageBlocks/EpisodesBlock";
 import { trpc } from "../../../../../utils/trpc";
 import ContentBackdrop from "../../../../../components/pageBlocks/ContentBackdrop";
 import ContentPoster from "../../../../../components/pageBlocks/ContentPoster";
-import ContentOverview from "../../../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../../../components/pageBlocks/ContentMain";
@@ -18,10 +14,11 @@ import { appRouter } from "../../../../../server/trpc/router/_app";
 import { createContext } from "../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import SeenByBlock from "../../../../../components/pageBlocks/SeenByBlock";
+import { useState } from "react";
 
-const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const [page, setPage] = useState(1);
 
   const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
@@ -36,11 +33,6 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
     seriesID: Number(props.seriesID),
     seasonNumber: Number(props.seasonNumber),
   });
-
-  const { data: seenBy } = trpc.season.seenBy.useQuery(
-    { id: Number(seasonData.id) },
-    { enabled: seasonStatus === "success" }
-  );
 
   const watchHistory = trpc.season.watchHistoryByID.useQuery(
     {
@@ -58,13 +50,28 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
     seasonRefetch();
     watchHistory.refetch();
   };
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isReviewsRefetching,
+  } = trpc.review.getSeasonReview.useQuery({ seasonID: Number(seasonData.id), page, pageSize: 25 });
+
+  const nextPage = () => {
+    setPage(page + 1);
+    refetch();
+  };
+
+  const previousPage = () => {
+    setPage(page - 1);
+    refetch();
+  };
 
   return (
     <LoadingPageComponents status={seasonStatus} notFound>
       {() => (
         <>
           <Head>
-            <title>{`${seriesData.name} ${seasonData.name} - Tracktr.`}</title>
+            <title>{`${seriesData.name} ${seasonData.name} Reviews - Tracktr.`}</title>
             <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
             <meta
               name="description"
@@ -99,28 +106,38 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
                 title={seasonData.name}
                 score={seasonData.vote_average}
               />
-              <ContentOverview
-                name={seasonData.name}
-                overview={seasonData.overview}
-                theme_color={seriesData.theme_color}
-                videos={seriesData.videos}
-                justwatch={seriesData["watch/providers"]}
-              />
-              <EpisodesBlock
-                episodes={seasonData.episodes}
-                refetch={refetch}
-                fetchStatus={seasonIsRefetching}
-                themeColor={seriesData.theme_color}
-              />
-              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
-              <CastBlock cast={seasonData.credits.cast} />
-              <CrewBlock crew={seasonData.credits.crew} />
               <ReviewsBlock
-                reviews={seasonData.reviews}
-                refetchReviews={seasonRefetch}
-                isRefetching={seasonIsRefetching}
+                reviewPage
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
+                isRefetching={isReviewsRefetching || seasonIsRefetching}
                 themeColor={seriesData.theme_color}
               />
+              {(reviews?.reviews || [])?.length > 0 ? (
+                <div className="flex items-center justify-center gap-4 m-5 align-middle">
+                  <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                    Previous page
+                  </button>
+                  <div className="flex items-center gap-4 mx-6">
+                    <button onClick={previousPage} className="p-2 text-xs text-gray-200">
+                      {page > 1 && page - 1}
+                    </button>
+                    <div>{page}</div>
+                    <button onClick={nextPage} className="p-2 text-xs text-gray-200">
+                      {page < Number(reviews?.pagesAmount) && page + 1}
+                    </button>
+                  </div>
+                  <button
+                    className="text-sm disabled:text-gray-500"
+                    onClick={nextPage}
+                    disabled={page >= Number(reviews?.pagesAmount)}
+                  >
+                    Next page
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </ContentMain>
           </ContentGrid>
         </>
@@ -150,4 +167,4 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   };
 };
 
-export default SeasonPage;
+export default SeasonReviewsPage;

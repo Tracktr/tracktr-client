@@ -1,7 +1,145 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import paginate from "../../../utils/paginate";
 
 export const reviewRouter = router({
+  getMovieReview: protectedProcedure
+    .input(
+      z.object({
+        movieID: z.number(),
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const reviews = await ctx.prisma.moviesReviews.findMany({
+        where: {
+          movie_id: input.movieID,
+        },
+        include: {
+          Movies: true,
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          created: "desc",
+        },
+      });
+
+      return {
+        reviews: paginate(reviews, input.pageSize, input.page),
+        pagesAmount: Math.ceil(reviews.length / input.pageSize),
+      };
+    }),
+  getSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        seriesID: z.number(),
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const reviews = await ctx.prisma.seriesReviews.findMany({
+        where: {
+          series_id: input.seriesID,
+        },
+        include: {
+          Series: true,
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          created: "desc",
+        },
+      });
+
+      return {
+        reviews: paginate(reviews, input.pageSize, input.page),
+        pagesAmount: Math.ceil(reviews.length / input.pageSize),
+      };
+    }),
+  getSeasonReview: protectedProcedure
+    .input(
+      z.object({
+        seasonID: z.number(),
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const reviews = await ctx.prisma.seasonsReviews.findMany({
+        where: {
+          seasons_id: input.seasonID,
+        },
+        include: {
+          Seasons: {
+            include: {
+              Series: true,
+            },
+          },
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          created: "desc",
+        },
+      });
+
+      return {
+        reviews: paginate(reviews, input.pageSize, input.page),
+        pagesAmount: Math.ceil(reviews.length / input.pageSize),
+      };
+    }),
+  getEpisodeReview: protectedProcedure
+    .input(
+      z.object({
+        episodeID: z.number(),
+        pageSize: z.number(),
+        page: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const reviews = await ctx.prisma.episodesReviews.findMany({
+        where: {
+          episodes_id: input.episodeID,
+        },
+        include: {
+          Episodes: {
+            include: {
+              Seasons: {
+                include: {
+                  Series: true,
+                },
+              },
+            },
+          },
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+        orderBy: {
+          created: "desc",
+        },
+      });
+
+      return {
+        reviews: paginate(reviews, input.pageSize, input.page),
+        pagesAmount: Math.ceil(reviews.length / input.pageSize),
+      };
+    }),
+
   addMovieReview: protectedProcedure
     .input(
       z.object({

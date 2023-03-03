@@ -69,7 +69,7 @@ export const tvRouter = router({
                 },
               },
             },
-            take: 10,
+            take: 3,
             orderBy: {
               created: "desc",
             },

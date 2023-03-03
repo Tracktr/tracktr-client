@@ -39,7 +39,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
-      router.push("#reviews");
+      router.push(`${router.asPath}/reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
@@ -54,7 +54,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
-      router.push("#reviews");
+      router.push(`${router.asPath}/reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
@@ -69,7 +69,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
-      router.push("#reviews");
+      router.push(`${router.asPath}/reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
@@ -84,7 +84,7 @@ const ReviewButton = ({
       });
       setModalOpen(!modalOpen);
       refetchReviews();
-      router.push("#reviews");
+      router.push(`${router.asPath}/reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
