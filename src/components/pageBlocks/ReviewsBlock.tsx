@@ -154,7 +154,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
         </Link>
       </div>
       <div className="flex flex-col gap-6">
-        {isRefetching ? (
+        {isRefetching && reviews.length < 1 ? (
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="animate-pulse w-[32px] h-[28px] rounded-full bg-[#343434]" />
