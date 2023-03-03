@@ -22,48 +22,9 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
   const [inputSize, setInputSize] = useState(0);
   const [inputError, setInputError] = useState("");
 
-  const removeMovieReview = trpc.review.removeMovieReview.useMutation({
+  const removeReview = trpc.review.removeReview.useMutation({
     onSuccess: () => {
-      toast("Review Removed", {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-    },
-    onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const removeSeriesReview = trpc.review.removeSeriesReview.useMutation({
-    onSuccess: () => {
-      toast("Review Removed", {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-    },
-    onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const removeSeasonReview = trpc.review.removeSeasonReview.useMutation({
-    onSuccess: () => {
-      toast("Review Removed", {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-    },
-    onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const removeEpisodeReview = trpc.review.removeEpisodeReview.useMutation({
-    onSuccess: () => {
-      toast("Review Removed", {
+      toast("Review removed", {
         icon: <IoIosRemove className="text-3xl text-red-500" />,
       });
       refetchReviews();
@@ -75,7 +36,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
     },
   });
 
-  const editMovieReview = trpc.review.updateMovieReview.useMutation({
+  const editReview = trpc.review.updateReview.useMutation({
     onSuccess: () => {
       toast("Review updated", {
         icon: <IoIosAdd className="text-3xl text-red-500" />,
@@ -84,49 +45,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
       setModalOpen(false);
     },
     onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const editSeriesReview = trpc.review.updateSeriesReview.useMutation({
-    onSuccess: () => {
-      toast("Review updated", {
-        icon: <IoIosAdd className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-      setModalOpen(false);
-    },
-    onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const editSeasonReview = trpc.review.updateSeasonsReview.useMutation({
-    onSuccess: () => {
-      toast("Review updated", {
-        icon: <IoIosAdd className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-      setModalOpen(false);
-    },
-    onError: () => {
-      toast("Failed to remove review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const editEpisodeReview = trpc.review.updateEpisodeReview.useMutation({
-    onSuccess: () => {
-      toast("Review updated", {
-        icon: <IoIosAdd className="text-3xl text-red-500" />,
-      });
-      refetchReviews();
-      setModalOpen(false);
-    },
-    onError: () => {
-      toast("Failed to remove review", {
+      toast("Failed to update review", {
         icon: <IoMdInformation className="text-3xl text-blue-500" />,
       });
     },
@@ -134,13 +53,13 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
 
   const handleDelete = (e: any) => {
     if (e.seasons_id) {
-      removeSeasonReview.mutate({ seasonID: e.seasons_id });
+      removeReview.mutate({ seasonID: e.seasons_id });
     } else if (e.episodes_id) {
-      removeEpisodeReview.mutate({ episodeID: e.episodes_id });
+      removeReview.mutate({ episodeID: e.episodes_id });
     } else if (e.series_id) {
-      removeSeriesReview.mutate({ seriesID: e.series_id });
+      removeReview.mutate({ seriesID: e.series_id });
     } else if (e.movie_id) {
-      removeMovieReview.mutate({ movieID: e.movie_id });
+      removeReview.mutate({ movieID: e.movie_id });
     }
   };
 
@@ -159,13 +78,13 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
 
   const onSubmit = () => {
     if (reviews[0]?.movie_id) {
-      editMovieReview.mutate({ movieID: currentID, content: input });
+      editReview.mutate({ movieID: currentID, content: input });
     } else if (reviews[0]?.series_id) {
-      editSeriesReview.mutate({ seriesID: currentID, content: input });
+      editReview.mutate({ seriesID: currentID, content: input });
     } else if (reviews[0]?.seasons_id) {
-      editSeasonReview.mutate({ seasonID: currentID, content: input });
+      editReview.mutate({ seasonID: currentID, content: input });
     } else if (reviews[0]?.episodes_id) {
-      editEpisodeReview.mutate({ episodeID: currentID, content: input });
+      editReview.mutate({ episodeID: currentID, content: input });
     }
   };
 
@@ -269,12 +188,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
                 }`}
                 placeholder="Leave a comment..."
                 onChange={handleInput}
-                disabled={
-                  editMovieReview.isLoading ||
-                  editSeriesReview.isLoading ||
-                  editSeasonReview.isLoading ||
-                  editEpisodeReview.isLoading
-                }
+                disabled={editReview.isLoading}
                 aria-describedby="review-helper"
               ></textarea>
               <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
@@ -283,13 +197,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
 
               <button
                 onClick={onSubmit}
-                disabled={
-                  editMovieReview.isLoading ||
-                  editSeriesReview.isLoading ||
-                  editSeasonReview.isLoading ||
-                  editEpisodeReview.isLoading ||
-                  Boolean(inputError)
-                }
+                disabled={editReview.isLoading || Boolean(inputError)}
                 style={{
                   backgroundColor: themeColor.hex,
                 }}
@@ -298,10 +206,7 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
                 } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
                 aria-label="Submit review"
               >
-                {editMovieReview.isLoading ||
-                editSeriesReview.isLoading ||
-                editSeasonReview.isLoading ||
-                editEpisodeReview.isLoading ? (
+                {editReview.isLoading ? (
                   <div className="flex items-center gap-3">
                     <ImSpinner2 className="animate-spin" />
                     <div>Loading</div>

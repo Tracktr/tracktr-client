@@ -54,7 +54,7 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
     data: reviews,
     refetch: reviewsRefetch,
     isRefetching: isReviewsRefetching,
-  } = trpc.review.getSeasonReview.useQuery({ seasonID: Number(seasonData.id), page, pageSize: 25 });
+  } = trpc.review.getReview.useQuery({ seasonID: Number(seasonData.id), page, pageSize: 25 });
 
   const nextPage = () => {
     setPage(page + 1);

@@ -16,14 +16,12 @@ const ReviewButton = ({
   seriesID,
   seasonID,
   episodeID,
-  refetchReviews,
 }: {
   themeColor: IThemeColor;
   movieID?: number | undefined;
   seriesID?: number | undefined;
   seasonID?: number | undefined;
   episodeID?: number | undefined;
-  refetchReviews: () => void;
 }) => {
   const router = useRouter();
   const MAX_MESSAGE_SIZE = 512;
@@ -32,59 +30,12 @@ const ReviewButton = ({
   const [inputSize, setInputSize] = useState(0);
   const [inputError, setInputError] = useState("");
 
-  const addMovieReview = trpc.review.addMovieReview.useMutation({
+  const addReview = trpc.review.addReview.useMutation({
     onSuccess: () => {
       toast("Review Added", {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
-      setModalOpen(!modalOpen);
-      refetchReviews();
-      router.push(`${router.asPath}/reviews`);
-    },
-    onError: () => {
-      toast("Failed to add review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const addSeriesReview = trpc.review.addSeriesReview.useMutation({
-    onSuccess: () => {
-      toast("Review Added", {
-        icon: <IoIosAdd className="text-3xl text-green-500" />,
-      });
-      setModalOpen(!modalOpen);
-      refetchReviews();
-      router.push(`${router.asPath}/reviews`);
-    },
-    onError: () => {
-      toast("Failed to add review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const addSeasonReview = trpc.review.addSeasonReview.useMutation({
-    onSuccess: () => {
-      toast("Review Added", {
-        icon: <IoIosAdd className="text-3xl text-green-500" />,
-      });
-      setModalOpen(!modalOpen);
-      refetchReviews();
-      router.push(`${router.asPath}/reviews`);
-    },
-    onError: () => {
-      toast("Failed to add review", {
-        icon: <IoMdInformation className="text-3xl text-blue-500" />,
-      });
-    },
-  });
-  const addEpisodesReview = trpc.review.addEpisodeReview.useMutation({
-    onSuccess: () => {
-      toast("Review Added", {
-        icon: <IoIosAdd className="text-3xl text-green-500" />,
-      });
-      setModalOpen(!modalOpen);
-      refetchReviews();
-      router.push(`${router.asPath}/reviews`);
+      router.asPath.includes("/reviews") ? router.reload() : router.push(`${router.asPath}/reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
@@ -108,22 +59,22 @@ const ReviewButton = ({
 
   const onSubmit = () => {
     if (episodeID !== undefined) {
-      addEpisodesReview.mutate({
+      addReview.mutate({
         episodeID,
         content: input,
       });
     } else if (seasonID !== undefined) {
-      addSeasonReview.mutate({
+      addReview.mutate({
         seasonID,
         content: input,
       });
     } else if (seriesID !== undefined) {
-      addSeriesReview.mutate({
+      addReview.mutate({
         seriesID,
         content: input,
       });
     } else if (movieID !== undefined) {
-      addMovieReview.mutate({
+      addReview.mutate({
         movieID,
         content: input,
       });
@@ -165,7 +116,7 @@ const ReviewButton = ({
                 }`}
                 placeholder="Leave a comment..."
                 onChange={handleInput}
-                disabled={addSeasonReview.isLoading || addMovieReview.isLoading}
+                disabled={addReview.isLoading}
                 aria-describedby="review-helper"
               ></textarea>
               <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
@@ -174,7 +125,7 @@ const ReviewButton = ({
 
               <button
                 onClick={onSubmit}
-                disabled={addSeriesReview.isLoading || addMovieReview.isLoading || Boolean(inputError)}
+                disabled={addReview.isLoading || Boolean(inputError)}
                 style={{
                   backgroundColor: themeColor.hex,
                 }}
@@ -183,7 +134,7 @@ const ReviewButton = ({
                 } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
                 aria-label="Submit review"
               >
-                {addSeriesReview.isLoading || addMovieReview.isLoading ? (
+                {addReview.isLoading ? (
                   <div className="flex items-center gap-3">
                     <ImSpinner2 className="animate-spin" />
                     <div>Loading</div>

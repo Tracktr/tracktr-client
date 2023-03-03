@@ -40,7 +40,7 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
     data: reviews,
     refetch: reviewsRefetch,
     isRefetching: isReviewsRefetching,
-  } = trpc.review.getSeriesReview.useQuery({ seriesID: Number(props.seriesID), page, pageSize: 25 });
+  } = trpc.review.getReview.useQuery({ seriesID: Number(props.seriesID), page, pageSize: 25 });
 
   const refetch = () => {
     seriesRefetch();
