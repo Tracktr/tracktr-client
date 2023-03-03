@@ -14,8 +14,6 @@ import { createContext } from "../../../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
-import { ImSpinner2 } from "react-icons/im";
-import Link from "next/link";
 
 const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [page, setPage] = useState(1);
