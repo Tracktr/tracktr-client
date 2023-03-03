@@ -151,4 +151,104 @@ export const reviewRouter = router({
 
       return review;
     }),
+
+  updateMovieReview: protectedProcedure
+    .input(
+      z.object({
+        movieID: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.moviesReviews.update({
+        where: {
+          user_id_movie_id: {
+            movie_id: input.movieID,
+            user_id: ctx.session.user.id,
+          },
+        },
+        data: {
+          content: input.content,
+          updated: new Date(),
+          approved: false,
+        },
+      });
+
+      return review;
+    }),
+
+  updateSeriesReview: protectedProcedure
+    .input(
+      z.object({
+        seriesID: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.seriesReviews.update({
+        where: {
+          user_id_series_id: {
+            series_id: input.seriesID,
+            user_id: ctx.session.user.id,
+          },
+        },
+        data: {
+          content: input.content,
+          updated: new Date(),
+          approved: false,
+        },
+      });
+
+      return review;
+    }),
+
+  updateSeasonsReview: protectedProcedure
+    .input(
+      z.object({
+        seasonID: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.seasonsReviews.update({
+        where: {
+          user_id_seasons_id: {
+            seasons_id: input.seasonID,
+            user_id: ctx.session.user.id,
+          },
+        },
+        data: {
+          content: input.content,
+          updated: new Date(),
+          approved: false,
+        },
+      });
+
+      return review;
+    }),
+
+  updateEpisodeReview: protectedProcedure
+    .input(
+      z.object({
+        episodeID: z.number(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const review = ctx.prisma.episodesReviews.update({
+        where: {
+          user_id_episodes_id: {
+            episodes_id: input.episodeID,
+            user_id: ctx.session.user.id,
+          },
+        },
+        data: {
+          content: input.content,
+          updated: new Date(),
+          approved: false,
+        },
+      });
+
+      return review;
+    }),
 });

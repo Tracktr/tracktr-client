@@ -74,7 +74,12 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
               {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
+              <ReviewsBlock
+                reviews={data.reviews}
+                refetchReviews={refetch}
+                isRefetching={isRefetching}
+                themeColor={data.theme_color}
+              />
             </ContentMain>
           </ContentGrid>
           <RecommendationsBlock type="movies" recommendations={data.recommendations} />

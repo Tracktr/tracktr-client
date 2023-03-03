@@ -42,9 +42,9 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   );
 
   const refetch = () => {
-    seriesRefetch()
-    watchHistory.refetch()
-  }
+    seriesRefetch();
+    watchHistory.refetch();
+  };
 
   const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
 
@@ -103,7 +103,12 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
               <CastBlock cast={seriesData.credits.cast} />
               <CrewBlock crew={seriesData.credits.crew} />
-              <ReviewsBlock reviews={seriesData.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
+              <ReviewsBlock
+                reviews={seriesData.reviews}
+                refetchReviews={refetch}
+                isRefetching={isRefetching}
+                themeColor={seriesData.theme_color}
+              />
             </ContentMain>
           </ContentGrid>
           <RecommendationsBlock type="tv" recommendations={seriesData.recommendations} />

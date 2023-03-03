@@ -111,14 +111,15 @@ model MoviesHistory {
 }
 
 model MoviesReviews {
-  id       String   @id @default(cuid())
-  content  String   @db.VarChar(512)
-  created  DateTime @default(now())
-  approved Boolean  @default(false)
+  id       String    @id @default(cuid())
+  content  String    @db.VarChar(512)
+  created  DateTime  @default(now())
+  updated  DateTime?
+  approved Boolean   @default(false)
   user_id  String
   movie_id Int
-  Movies   Movies   @relation(fields: [movie_id], references: [id])
-  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Movies   Movies    @relation(fields: [movie_id], references: [id])
+  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, movie_id])
   @@index([movie_id])
@@ -136,14 +137,15 @@ model Series {
 }
 
 model SeriesReviews {
-  id        String   @id @default(cuid())
-  content   String   @db.VarChar(512)
-  created   DateTime @default(now())
-  approved  Boolean  @default(false)
+  id        String    @id @default(cuid())
+  content   String    @db.VarChar(512)
+  created   DateTime  @default(now())
+  updated   DateTime?
+  approved  Boolean   @default(false)
   user_id   String
   series_id Int
-  Series    Series   @relation(fields: [series_id], references: [id])
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Series    Series    @relation(fields: [series_id], references: [id])
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, series_id])
   @@index([series_id])
@@ -166,14 +168,15 @@ model Seasons {
 }
 
 model SeasonsReviews {
-  id         String   @id @default(cuid())
-  content    String   @db.VarChar(512)
-  created    DateTime @default(now())
-  approved   Boolean  @default(false)
+  id         String    @id @default(cuid())
+  content    String    @db.VarChar(512)
+  created    DateTime  @default(now())
+  updated    DateTime?
+  approved   Boolean   @default(false)
   user_id    String
   seasons_id Int
-  Seasons    Seasons  @relation(fields: [seasons_id], references: [id])
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Seasons    Seasons   @relation(fields: [seasons_id], references: [id])
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, seasons_id])
   @@index([seasons_id])
@@ -195,14 +198,15 @@ model Episodes {
 }
 
 model EpisodesReviews {
-  id          String   @id @default(cuid())
-  content     String   @db.VarChar(512)
-  created     DateTime @default(now())
-  approved    Boolean  @default(false)
+  id          String    @id @default(cuid())
+  content     String    @db.VarChar(512)
+  created     DateTime  @default(now())
+  updated     DateTime?
+  approved    Boolean   @default(false)
   user_id     String
   episodes_id Int
-  Episodes    Episodes @relation(fields: [episodes_id], references: [id])
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Episodes    Episodes  @relation(fields: [episodes_id], references: [id])
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, episodes_id])
   @@index([episodes_id])

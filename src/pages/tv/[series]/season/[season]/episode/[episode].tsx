@@ -103,7 +103,12 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
               {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={episodeData.credits.cast} guestStars={episodeData.guest_stars} />
               <CrewBlock crew={episodeData.credits.crew} />
-              <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
+              <ReviewsBlock
+                reviews={episodeData.reviews}
+                refetchReviews={episodeRefetch}
+                isRefetching={isRefetching}
+                themeColor={seriesData.theme_color}
+              />
               <EpisodeSwitcherBlock seasons={seriesData.seasons} />
             </ContentMain>
           </ContentGrid>

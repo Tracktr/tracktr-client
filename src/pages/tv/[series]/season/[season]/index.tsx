@@ -119,6 +119,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 reviews={seasonData.reviews}
                 refetchReviews={seasonRefetch}
                 isRefetching={seasonIsRefetching}
+                themeColor={seriesData.theme_color}
               />
             </ContentMain>
           </ContentGrid>
