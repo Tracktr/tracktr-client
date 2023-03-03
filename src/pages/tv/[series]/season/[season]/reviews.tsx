@@ -28,7 +28,6 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
     data: seasonData,
     status: seasonStatus,
     refetch: seasonRefetch,
-    isRefetching: seasonIsRefetching,
   } = trpc.season.seasonByID.useQuery({
     seriesID: Number(props.seriesID),
     seasonNumber: Number(props.seasonNumber),
@@ -110,7 +109,7 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
                 reviewPage
                 reviews={reviews?.reviews || []}
                 refetchReviews={reviewsRefetch}
-                isRefetching={isReviewsRefetching || seasonIsRefetching}
+                isRefetching={isReviewsRefetching}
                 themeColor={seriesData.theme_color}
               />
               {(reviews?.reviews || [])?.length > 0 ? (

@@ -33,11 +33,11 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
     episodeNumber: Number(props.episodeNumber),
   });
 
-  const {
-    data: reviews,
-    refetch: reviewsRefetch,
-    isRefetching: isReviewsRefetching,
-  } = trpc.review.getReviews.useQuery({ episodeID: Number(episodeData.id), page, pageSize: 25 });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
+    episodeID: Number(episodeData.id),
+    page,
+    pageSize: 25,
+  });
 
   const nextPage = () => {
     setPage(page + 1);
@@ -101,7 +101,7 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
                 reviewPage
                 reviews={reviews?.reviews || []}
                 refetchReviews={reviewsRefetch}
-                isRefetching={isRefetching || isReviewsRefetching}
+                isRefetching={isRefetching}
                 themeColor={seriesData.theme_color}
               />
               {(reviews?.reviews || [])?.length > 0 ? (

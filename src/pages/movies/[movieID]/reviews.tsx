@@ -19,11 +19,11 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
   const [page, setPage] = useState(1);
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
 
-  const {
-    data: reviews,
-    refetch: reviewsRefetch,
-    isRefetching: isReviewsRefetching,
-  } = trpc.review.getReviews.useQuery({ movieID: Number(props.movieID), page, pageSize: 25 });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
+    movieID: Number(props.movieID),
+    page,
+    pageSize: 25,
+  });
 
   const nextPage = () => {
     setPage(page + 1);
@@ -69,7 +69,7 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
                 reviewPage
                 reviews={reviews?.reviews || []}
                 refetchReviews={reviewsRefetch}
-                isRefetching={isRefetching || isReviewsRefetching}
+                isRefetching={isRefetching}
                 themeColor={data.theme_color}
               />
               {(reviews?.reviews || [])?.length > 0 ? (
