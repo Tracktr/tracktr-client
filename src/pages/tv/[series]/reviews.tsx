@@ -36,11 +36,11 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
     }
   );
 
-  const {
-    data: reviews,
-    refetch: reviewsRefetch,
-    isRefetching: isReviewsRefetching,
-  } = trpc.review.getReview.useQuery({ seriesID: Number(props.seriesID), page, pageSize: 25 });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
+    seriesID: Number(props.seriesID),
+    page,
+    pageSize: 25,
+  });
 
   const refetch = () => {
     seriesRefetch();
@@ -99,7 +99,7 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 reviewPage
                 reviews={reviews?.reviews || []}
                 refetchReviews={reviewsRefetch}
-                isRefetching={isReviewsRefetching || isRefetching}
+                isRefetching={isRefetching}
                 themeColor={seriesData.theme_color}
               />
               {(reviews?.reviews || [])?.length > 0 ? (

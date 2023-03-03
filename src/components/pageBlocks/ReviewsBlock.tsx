@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
+import { AiOutlineLike, AiTwotoneLike } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -39,13 +40,43 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
   const editReview = trpc.review.updateReview.useMutation({
     onSuccess: () => {
       toast("Review updated", {
-        icon: <IoIosAdd className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
       setModalOpen(false);
     },
     onError: () => {
       toast("Failed to update review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
+  const addLike = trpc.review.addLikeReview.useMutation({
+    onSuccess: () => {
+      toast("Liked review", {
+        icon: <IoMdInformation className="text-3xl text-green-500" />,
+      });
+      refetchReviews();
+      setModalOpen(false);
+    },
+    onError: () => {
+      toast("Failed to like review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
+  const removeLike = trpc.review.deleteLikeReview.useMutation({
+    onSuccess: () => {
+      toast("Removed like", {
+        icon: <IoMdInformation className="text-3xl text-red-500" />,
+      });
+      refetchReviews();
+      setModalOpen(false);
+    },
+    onError: () => {
+      toast("Failed to like review", {
         icon: <IoMdInformation className="text-3xl text-blue-500" />,
       });
     },
@@ -60,6 +91,29 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
       removeReview.mutate({ seriesID: e.series_id });
     } else if (e.movie_id) {
       removeReview.mutate({ movieID: e.movie_id });
+    }
+  };
+
+  const handleLike = (e: any) => {
+    if (e.seasons_id) {
+      addLike.mutate({ id: e.id, type: "season" });
+    } else if (e.episodes_id) {
+      addLike.mutate({ id: e.id, type: "episode" });
+    } else if (e.series_id) {
+      addLike.mutate({ id: e.id, type: "series" });
+    } else if (e.movie_id) {
+      addLike.mutate({ id: e.id, type: "movie" });
+    }
+  };
+  const handleDeleteLike = (e: any) => {
+    if (e.seasons_id) {
+      removeLike.mutate({ id: e.id, type: "season" });
+    } else if (e.episodes_id) {
+      removeLike.mutate({ id: e.id, type: "episode" });
+    } else if (e.series_id) {
+      removeLike.mutate({ id: e.id, type: "series" });
+    } else if (e.movie_id) {
+      removeLike.mutate({ id: e.id, type: "movie" });
     }
   };
 
@@ -112,61 +166,114 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor, revie
             <div className="animate-pulse w-full h-[24px] rounded bg-[#343434]" />
           </div>
         ) : reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div key={review.id} className="group">
-              <div className="flex items-center gap-2 mb-4">
-                <Link href={`/profile/${review.user.profile.username}`} className="flex items-center gap-2">
-                  <ImageWithFallback
-                    src={review.user.image}
-                    fallbackSrc="/placeholder_profile.png"
-                    width={32}
-                    height={32}
-                    alt="Profile picture"
-                    className="rounded-full"
-                  />
-                  <p className="text-xl">{review.user.profile.username}</p>
-                </Link>
-                {session?.data?.user?.id === review.user_id && (
-                  <div className="flex gap-2 ml-auto opacity-25 group-hover:opacity-80">
-                    <button
-                      className="text-3xl transition-all duration-300 ease-in-out hover:text-green-700"
-                      onClick={() => {
-                        setCurrentID(review.movie_id || review.seasons_id || review.episodes_id || review.series_id);
-                        setModalOpen(!modalOpen);
-                        setInput(review.content);
-                        setInputSize(review.content.length);
-                      }}
-                    >
-                      <MdEdit className="text-xl" />
-                    </button>
-                    <button
-                      className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
-                      onClick={() => handleDelete(review)}
-                    >
-                      <MdDelete className="text-xl" />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="whitespace-pre-wrap">{review.content}</div>
+          reviews.map((review) => {
+            const userLikes =
+              review.SeriesReviewsLikes ||
+              review.SeasonsReviewsLikes ||
+              review.EpisodesReviewsLikes ||
+              review.MoviesReviewsLikes;
+            const likesCount =
+              review._count.SeriesReviewsLikes ||
+              review._count.SeasonsReviewsLikes ||
+              review._count.EpisodesReviewsLikes ||
+              review._count.MoviesReviewsLikes;
 
-              <div className="mt-2 text-xs italic">
-                Created{" "}
-                {review.created.toLocaleString("en-UK", {
-                  dateStyle: review.updated ? "short" : "long",
-                  timeStyle: "short",
-                })}
-                {review.updated && (
-                  <>
-                    , updated{" "}
-                    {review.updated.toLocaleString("en-UK", {
-                      dateStyle: "short",
-                    })}
-                  </>
-                )}
+            return (
+              <div key={review.id} className="group">
+                <div className="flex items-center gap-2 mb-4">
+                  <Link href={`/profile/${review.user.profile.username}`} className="flex items-center gap-2">
+                    <ImageWithFallback
+                      src={review.user.image}
+                      fallbackSrc="/placeholder_profile.png"
+                      width={32}
+                      height={32}
+                      alt="Profile picture"
+                      className="rounded-full"
+                    />
+                    <p className="text-xl">{review.user.profile.username}</p>
+                  </Link>
+
+                  <div className="flex gap-2 ml-auto opacity-25 group-hover:opacity-80">
+                    {session.status === "authenticated" ? (
+                      <>
+                        {session?.data?.user?.id === review.user_id ? (
+                          <>
+                            <button
+                              className="text-3xl transition-all duration-300 ease-in-out hover:text-green-700"
+                              onClick={() => {
+                                setCurrentID(
+                                  review.movie_id || review.seasons_id || review.episodes_id || review.series_id
+                                );
+                                setModalOpen(!modalOpen);
+                                setInput(review.content);
+                                setInputSize(review.content.length);
+                              }}
+                            >
+                              <MdEdit className="text-xl" />
+                            </button>
+                            <button
+                              className="text-3xl transition-all duration-300 ease-in-out hover:text-red-700"
+                              onClick={() => handleDelete(review)}
+                            >
+                              <MdDelete className="text-xl" />
+                            </button>
+                            <div className={`flex items-center gap-1 transition-all duration-300 ease-in-out`}>
+                              <AiOutlineLike className="text-xl" />
+                              <span className="text-xs">{likesCount}</span>
+                            </div>
+                          </>
+                        ) : (
+                          <button
+                            className={`flex items-center gap-1 transition-all duration-300 ease-in-out ${
+                              userLikes?.length < 1 ? "hover:text-green-700" : "hover:text-red-700"
+                            }`}
+                            onClick={() => {
+                              if (userLikes?.length > 0) handleDeleteLike(review);
+                              else handleLike(review);
+                            }}
+                          >
+                            {userLikes?.length > 0 ? (
+                              <>
+                                <AiTwotoneLike className="text-xl" />
+                                <span className="text-xs">{likesCount}</span>
+                              </>
+                            ) : (
+                              <>
+                                <AiOutlineLike className="text-xl" />
+                                <span className="text-xs">{likesCount}</span>
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <div className={`flex items-center gap-1 transition-all duration-300 ease-in-out`}>
+                        <AiOutlineLike className="text-xl" />
+                        <span className="text-xs">{likesCount}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="whitespace-pre-wrap">{review.content}</div>
+
+                <div className="mt-2 text-xs italic">
+                  Created{" "}
+                  {review.created.toLocaleString("en-UK", {
+                    dateStyle: review.updated ? "short" : "long",
+                    timeStyle: "short",
+                  })}
+                  {review.updated && (
+                    <>
+                      , updated{" "}
+                      {review.updated.toLocaleString("en-UK", {
+                        dateStyle: "short",
+                      })}
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div>No reviews found</div>
         )}

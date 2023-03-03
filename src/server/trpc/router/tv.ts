@@ -68,6 +68,18 @@ export const tvRouter = router({
                   profile: true,
                 },
               },
+              SeriesReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  SeriesReviewsLikes: true,
+                },
+              },
             },
             take: 3,
             orderBy: {

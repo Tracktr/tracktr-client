@@ -1,9 +1,10 @@
-import { router, protectedProcedure } from "../trpc";
+import { router, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
+import { TRPCError } from "@trpc/server";
 
 export const reviewRouter = router({
-  getReview: protectedProcedure
+  getReviews: publicProcedure
     .input(
       z.object({
         movieID: z.number().optional(),
@@ -29,6 +30,18 @@ export const reviewRouter = router({
                 profile: true,
               },
             },
+            MoviesReviewsLikes: {
+              where: {
+                likedBy: {
+                  id: ctx.session ? ctx?.session?.user?.id : undefined,
+                },
+              },
+            },
+            _count: {
+              select: {
+                MoviesReviewsLikes: true,
+              },
+            },
           },
           orderBy: {
             created: "desc",
@@ -44,6 +57,18 @@ export const reviewRouter = router({
             user: {
               include: {
                 profile: true,
+              },
+            },
+            SeriesReviewsLikes: {
+              where: {
+                likedBy: {
+                  id: ctx.session ? ctx?.session?.user?.id : undefined,
+                },
+              },
+            },
+            _count: {
+              select: {
+                SeriesReviewsLikes: true,
               },
             },
           },
@@ -65,6 +90,18 @@ export const reviewRouter = router({
             user: {
               include: {
                 profile: true,
+              },
+            },
+            SeasonsReviewsLikes: {
+              where: {
+                likedBy: {
+                  id: ctx.session ? ctx?.session?.user?.id : undefined,
+                },
+              },
+            },
+            _count: {
+              select: {
+                SeasonsReviewsLikes: true,
               },
             },
           },
@@ -90,6 +127,18 @@ export const reviewRouter = router({
             user: {
               include: {
                 profile: true,
+              },
+            },
+            EpisodesReviewsLikes: {
+              where: {
+                likedBy: {
+                  id: ctx.session ? ctx?.session?.user?.id : undefined,
+                },
+              },
+            },
+            _count: {
+              select: {
+                EpisodesReviewsLikes: true,
               },
             },
           },
@@ -269,6 +318,144 @@ export const reviewRouter = router({
             approved: false,
           },
         });
+      }
+    }),
+
+  addLikeReview: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        type: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      switch (input.type) {
+        case "movie":
+          return await ctx.prisma.moviesReviewsLikes.create({
+            data: {
+              likedBy: {
+                connect: {
+                  id: ctx.session.user.id,
+                },
+              },
+              review: {
+                connect: {
+                  id: input.id,
+                },
+              },
+            },
+          });
+        case "series":
+          return await ctx.prisma.seriesReviewsLikes.create({
+            data: {
+              likedBy: {
+                connect: {
+                  id: ctx.session.user.id,
+                },
+              },
+              review: {
+                connect: {
+                  id: input.id,
+                },
+              },
+            },
+          });
+
+        case "season":
+          return await ctx.prisma.seasonsReviewsLikes.create({
+            data: {
+              likedBy: {
+                connect: {
+                  id: ctx.session.user.id,
+                },
+              },
+              review: {
+                connect: {
+                  id: input.id,
+                },
+              },
+            },
+          });
+
+        case "episode":
+          return await ctx.prisma.episodesReviewsLikes.create({
+            data: {
+              likedBy: {
+                connect: {
+                  id: ctx.session.user.id,
+                },
+              },
+              review: {
+                connect: {
+                  id: input.id,
+                },
+              },
+            },
+          });
+
+        default:
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Incorrect type, please try with a valid type",
+          });
+          break;
+      }
+    }),
+
+  deleteLikeReview: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        type: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      switch (input.type) {
+        case "movie":
+          return await ctx.prisma.moviesReviewsLikes.deleteMany({
+            where: {
+              moviesReviewsId: input.id,
+              likedBy: {
+                id: ctx.session.user.id,
+              },
+            },
+          });
+        case "series":
+          return await ctx.prisma.seriesReviewsLikes.deleteMany({
+            where: {
+              seriesReviewsId: input.id,
+              likedBy: {
+                id: ctx.session.user.id,
+              },
+            },
+          });
+
+        case "season":
+          return await ctx.prisma.seasonsReviewsLikes.deleteMany({
+            where: {
+              seasonsReviewsId: input.id,
+              likedBy: {
+                id: ctx.session.user.id,
+              },
+            },
+          });
+
+        case "episode":
+          return await ctx.prisma.episodesReviewsLikes.deleteMany({
+            where: {
+              episodesReviewsId: input.id,
+              likedBy: {
+                id: ctx.session.user.id,
+              },
+            },
+          });
+
+        default:
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Incorrect type, please try with a valid type",
+          });
+          break;
       }
     }),
 });

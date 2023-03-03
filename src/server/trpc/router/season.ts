@@ -39,6 +39,18 @@ export const seasonRouter = router({
                   profile: true,
                 },
               },
+              SeasonsReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  SeasonsReviewsLikes: true,
+                },
+              },
             },
             take: 3,
             orderBy: {
