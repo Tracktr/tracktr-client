@@ -219,23 +219,24 @@ const ReviewsBlock = ({ reviews, refetchReviews, isRefetching, themeColor }: IRe
                     </button>
                   </>
                 )}
-                <div className={`${session?.data?.user?.id !== review.user_id && "ml-auto"} text-sm`}>
-                  {review.created.toLocaleString("en-UK", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                </div>
               </div>
               <div className="whitespace-pre-wrap">{review.content}</div>
-              {review.updated && (
-                <div className="mt-2 text-xs italic">
-                  Edited{" "}
-                  {review.updated.toLocaleString("en-UK", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                </div>
-              )}
+
+              <div className="mt-2 text-xs italic">
+                Created{" "}
+                {review.created.toLocaleString("en-UK", {
+                  dateStyle: review.updated ? "short" : "long",
+                  timeStyle: "short",
+                })}
+                {review.updated && (
+                  <>
+                    , updated{" "}
+                    {review.updated.toLocaleString("en-UK", {
+                      dateStyle: "short",
+                    })}
+                  </>
+                )}
+              </div>
             </div>
           ))
         ) : (

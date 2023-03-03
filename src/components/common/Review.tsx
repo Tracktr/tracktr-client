@@ -46,7 +46,9 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
             <p className="text-sm">{friend.name}</p>
           </Link>
         )}
-        <p className="text-xl">{item.name || item.title}</p>
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}#reviews`} className="text-xl">
+          {item.name || item.title}
+        </Link>
         <div className="mb-4 text-sm">
           {created.toLocaleString("en-UK", {
             dateStyle: "medium",
