@@ -116,10 +116,10 @@ const ProgressPage = () => {
         {showFilters && <Filters handleOrderInput={handleOrderInput} orderInput={orderInput} />}
 
         <div className="flex flex-col gap-8">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {status !== "loading" ? (
-              data && data.result.length > 0 ? (
-                data.result.map((s) => (
+          {status !== "loading" ? (
+            data && data.result.length > 0 ? (
+              <AnimatePresence mode="popLayout" initial={false}>
+                {data.result.map((s) => (
                   <SeriesProgress
                     key={s.series.id}
                     name={s.series.name}
@@ -140,14 +140,14 @@ const ProgressPage = () => {
                     episodeID={s.id}
                     refetch={refetch}
                   />
-                ))
-              ) : (
-                <div>You&apos;ve finished all series!</div>
-              )
+                ))}
+              </AnimatePresence>
             ) : (
-              <LoadingPosters />
-            )}
-          </AnimatePresence>
+              <div>You&apos;ve finished all series!</div>
+            )
+          ) : (
+            <LoadingPosters />
+          )}
         </div>
 
         {(data?.result || [])?.length >= 4 && status === "success" && (
