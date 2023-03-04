@@ -57,8 +57,20 @@ export const movieRouter = router({
                   profile: true,
                 },
               },
+              MoviesReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  MoviesReviewsLikes: true,
+                },
+              },
             },
-            take: 10,
+            take: 3,
             orderBy: {
               created: "desc",
             },

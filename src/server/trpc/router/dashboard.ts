@@ -152,6 +152,7 @@ export const dashboardRouter = router({
               }
             });
 
+            // Has a next episode in this season
             if (nextEpisode !== undefined && nextEpisode?.length > 0) {
               const url = new URL(`tv/${lastEpisode.series_id}`, process.env.NEXT_PUBLIC_TMDB_API);
               url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
@@ -172,7 +173,7 @@ export const dashboardRouter = router({
 
               tmdb.number_of_episodes = 0;
               tmdb.seasons.map(async (season: ISeason) => {
-                if (new Date(season.air_date) <= new Date()) {
+                if (new Date(season.air_date) <= new Date() && season.season_number > 0) {
                   tmdb.number_of_episodes += season.episode_count;
                 }
               });
@@ -193,6 +194,8 @@ export const dashboardRouter = router({
                 },
               });
               tmdb.episodes_watched = watched.length || 0;
+
+              if (tmdb.episodes_watched === tmdb.number_of_episodes) return undefined;
 
               return {
                 ...nextEpisode[0],
@@ -248,7 +251,7 @@ export const dashboardRouter = router({
 
                 tmdb.number_of_episodes = 0;
                 tmdb.seasons.map(async (season: ISeason) => {
-                  if (new Date(season.air_date) <= new Date()) {
+                  if (new Date(season.air_date) <= new Date() && season.season_number > 0) {
                     tmdb.number_of_episodes += season.episode_count;
                   }
                 });
@@ -269,6 +272,8 @@ export const dashboardRouter = router({
                   },
                 });
                 tmdb.episodes_watched = watched.length || 0;
+
+                if (tmdb.episodes_watched === tmdb.number_of_episodes) return undefined;
 
                 return {
                   ...nextEpisode[0],

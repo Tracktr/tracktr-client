@@ -52,7 +52,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
             <meta name="description" content={`${profile?.profile?.username} uses Tracktr to track movies and shows`} />
           </Head>
 
-          <div className="max-w-6xl m-auto">
+          <div className="max-w-6xl mx-2 md:m-auto">
             <ProfileHeader image={String(profile?.image)} name={String(profile?.profile?.username)} />
 
             {session.status === "authenticated" && session?.data?.user?.id !== profile?.id && profile?.followers && (

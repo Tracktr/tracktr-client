@@ -1,24 +1,24 @@
-import LoadingPageComponents from "../../components/common/LoadingPageComponents";
-import CastBlock from "../../components/pageBlocks/CastBlock";
-import CrewBlock from "../../components/pageBlocks/CrewBlock";
-import DetailsBlock from "../../components/pageBlocks/DetailsBlock";
-import { trpc } from "../../utils/trpc";
-import ContentBackdrop from "../../components/pageBlocks/ContentBackdrop";
-import ContentPoster from "../../components/pageBlocks/ContentPoster";
-import ContentOverview from "../../components/pageBlocks/ContentOverview";
-import ContentTitle from "../../components/pageBlocks/ContentTitle";
-import ContentGrid from "../../components/pageBlocks/ContentGrid";
-import ContentMain from "../../components/pageBlocks/ContentMain";
-import ReviewsBlock from "../../components/pageBlocks/ReviewsBlock";
+import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
+import CastBlock from "../../../components/pageBlocks/CastBlock";
+import CrewBlock from "../../../components/pageBlocks/CrewBlock";
+import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
+import { trpc } from "../../../utils/trpc";
+import ContentBackdrop from "../../../components/pageBlocks/ContentBackdrop";
+import ContentPoster from "../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
-import RecommendationsBlock from "../../components/pageBlocks/RecommendationsBlock";
-import { PosterImage } from "../../utils/generateImages";
+import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
+import { PosterImage } from "../../../utils/generateImages";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../server/trpc/router/_app";
-import { createContext } from "../../server/trpc/context";
+import { appRouter } from "../../../server/trpc/router/_app";
+import { createContext } from "../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import SeenByBlock from "../../components/pageBlocks/SeenByBlock";
+import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
 
 const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -46,6 +46,10 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
               id={data.id}
               theme_color={data.theme_color}
               refetchReviews={refetch}
+              userReview={
+                data.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                data.reviews[0].content
+              }
             />
 
             <ContentMain>
@@ -74,7 +78,12 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
               {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock reviews={data.reviews} refetchReviews={refetch} isRefetching={isRefetching} />
+              <ReviewsBlock
+                reviews={data.reviews}
+                refetchReviews={refetch}
+                isRefetching={isRefetching}
+                themeColor={data.theme_color}
+              />
             </ContentMain>
           </ContentGrid>
           <RecommendationsBlock type="movies" recommendations={data.recommendations} />

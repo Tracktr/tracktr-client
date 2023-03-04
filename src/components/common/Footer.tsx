@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="max-w-xl px-4 m-auto lg:w-6/12">
             <div className="mb-6 lg:mb-0">
               <Link href="https://www.themoviedb.org/" target="_blank">
-                <Image src="/tmdb_logo.svg" width={128} height={64} alt="TMDB Logo" />
+                <Image src="/tmdb_logo.svg" width={128} height={64} alt="TMDB Logo" className="w-[128px] h-[64px]" />
               </Link>
             </div>
           </div>

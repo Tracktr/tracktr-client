@@ -1,29 +1,26 @@
 import LoadingPageComponents from "../../../components/common/LoadingPageComponents";
 import ContentBackdrop from "../../../components/pageBlocks/ContentBackdrop";
-import CastBlock from "../../../components/pageBlocks/CastBlock";
-import CrewBlock from "../../../components/pageBlocks/CrewBlock";
-import DetailsBlock from "../../../components/pageBlocks/DetailsBlock";
 import PosterButton from "../../../components/pageBlocks/ContentPoster";
-import SeasonsBlock from "../../../components/pageBlocks/SeasonsBlock";
 import { trpc } from "../../../utils/trpc";
-import ContentOverview from "../../../components/pageBlocks/ContentOverview";
 import ContentTitle from "../../../components/pageBlocks/ContentTitle";
 import ContentGrid from "../../../components/pageBlocks/ContentGrid";
 import ContentMain from "../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
 import { PosterImage } from "../../../utils/generateImages";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { createContext } from "../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
-const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
+  const [page, setPage] = useState(1);
 
   const {
     data: seriesData,
@@ -41,19 +38,38 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     }
   );
 
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery(
+    {
+      seriesID: Number(props.seriesID),
+      page,
+      pageSize: 25,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
+
   const refetch = () => {
     seriesRefetch();
+    reviewsRefetch();
     watchHistory.refetch();
   };
 
-  const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
+  const nextPage = () => {
+    setPage(page + 1);
+    refetch();
+  };
+
+  const previousPage = () => {
+    setPage(page - 1);
+    refetch();
+  };
 
   return (
     <LoadingPageComponents status={status} notFound>
       {() => (
         <>
           <Head>
-            <title>{`${seriesData.name} - Tracktr.`}</title>
+            <title>{`${seriesData.name} Reviews - Tracktr.`}</title>
             <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
             <meta name="description" content={`Track ${seriesData.name} and other series & movies with Tracktr.`} />
           </Head>
@@ -90,32 +106,41 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 air_date={seriesData.air_date}
                 genres={seriesData.genres}
               />
-              <ContentOverview
-                name={seriesData.name}
-                overview={seriesData.overview}
-                theme_color={seriesData.theme_color}
-                videos={seriesData.videos}
-                justwatch={seriesData["watch/providers"]}
-              />
-
-              <DetailsBlock
-                status={seriesData.status}
-                numberOfEpisodes={seriesData.number_of_episodes}
-                numberOfSeasons={seriesData.number_of_seasons}
-              />
-              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
-              <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
-              <CastBlock cast={seriesData.credits.cast} />
-              <CrewBlock crew={seriesData.credits.crew} />
               <ReviewsBlock
-                reviews={seriesData.reviews}
-                refetchReviews={refetch}
+                reviewPage
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
                 isRefetching={isRefetching}
                 themeColor={seriesData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
+              {(reviews?.reviews || [])?.length > 0 ? (
+                <div className="flex items-center justify-center gap-4 m-5 align-middle">
+                  <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                    Previous page
+                  </button>
+                  <div className="flex items-center gap-4 mx-6">
+                    <button onClick={previousPage} className="p-2 text-xs text-gray-200">
+                      {page > 1 && page - 1}
+                    </button>
+                    <div>{page}</div>
+                    <button onClick={nextPage} className="p-2 text-xs text-gray-200">
+                      {page < Number(reviews?.pagesAmount) && page + 1}
+                    </button>
+                  </div>
+                  <button
+                    className="text-sm disabled:text-gray-500"
+                    onClick={nextPage}
+                    disabled={page >= Number(reviews?.pagesAmount)}
+                  >
+                    Next page
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
             </ContentMain>
           </ContentGrid>
-          <RecommendationsBlock type="tv" recommendations={seriesData.recommendations} />
         </>
       )}
     </LoadingPageComponents>
@@ -138,4 +163,4 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   };
 };
 
-export default TVPage;
+export default TVReviewsPage;

@@ -1,29 +1,29 @@
-import LoadingPageComponents from "../../../../../../components/common/LoadingPageComponents";
-import CastBlock from "../../../../../../components/pageBlocks/CastBlock";
-import CrewBlock from "../../../../../../components/pageBlocks/CrewBlock";
-import EpisodeSwitcherBlock from "../../../../../../components/pageBlocks/EpisodeSwitcherBlock";
-import { trpc } from "../../../../../../utils/trpc";
-import ContentBackdrop from "../../../../../../components/pageBlocks/ContentBackdrop";
-import ContentPoster from "../../../../../../components/pageBlocks/ContentPoster";
-import ContentOverview from "../../../../../../components/pageBlocks/ContentOverview";
-import ContentTitle from "../../../../../../components/pageBlocks/ContentTitle";
-import ContentGrid from "../../../../../../components/pageBlocks/ContentGrid";
-import ContentMain from "../../../../../../components/pageBlocks/ContentMain";
-import ReviewsBlock from "../../../../../../components/pageBlocks/ReviewsBlock";
+import LoadingPageComponents from "../../../../../../../components/common/LoadingPageComponents";
+import CastBlock from "../../../../../../../components/pageBlocks/CastBlock";
+import CrewBlock from "../../../../../../../components/pageBlocks/CrewBlock";
+import EpisodeSwitcherBlock from "../../../../../../../components/pageBlocks/EpisodeSwitcherBlock";
+import { trpc } from "../../../../../../../utils/trpc";
+import ContentBackdrop from "../../../../../../../components/pageBlocks/ContentBackdrop";
+import ContentPoster from "../../../../../../../components/pageBlocks/ContentPoster";
+import ContentOverview from "../../../../../../../components/pageBlocks/ContentOverview";
+import ContentTitle from "../../../../../../../components/pageBlocks/ContentTitle";
+import ContentGrid from "../../../../../../../components/pageBlocks/ContentGrid";
+import ContentMain from "../../../../../../../components/pageBlocks/ContentMain";
+import ReviewsBlock from "../../../../../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
-import DetailsBlock from "../../../../../../components/pageBlocks/DetailsBlock";
-import { PosterImage } from "../../../../../../utils/generateImages";
+import DetailsBlock from "../../../../../../../components/pageBlocks/DetailsBlock";
+import { PosterImage } from "../../../../../../../utils/generateImages";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../../../../server/trpc/router/_app";
-import { createContext } from "../../../../../../server/trpc/context";
+import { appRouter } from "../../../../../../../server/trpc/router/_app";
+import { createContext } from "../../../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import SeenByBlock from "../../../../../../components/pageBlocks/SeenByBlock";
+import SeenByBlock from "../../../../../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
 
 const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
-  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
+  const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
   });
 
@@ -42,6 +42,11 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     { id: Number(episodeData.id) },
     { enabled: episodeStatus === "success" }
   );
+
+  const refetch = () => {
+    seriesRefetch();
+    episodeRefetch();
+  };
 
   return (
     <LoadingPageComponents status={episodeStatus} notFound>
@@ -76,7 +81,11 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
-              refetchReviews={episodeRefetch}
+              refetchReviews={refetch}
+              userReview={
+                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                episodeData.reviews[0].content
+              }
             />
 
             <ContentMain>
@@ -103,7 +112,12 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
               {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
               <CastBlock cast={episodeData.credits.cast} guestStars={episodeData.guest_stars} />
               <CrewBlock crew={episodeData.credits.crew} />
-              <ReviewsBlock reviews={episodeData.reviews} refetchReviews={episodeRefetch} isRefetching={isRefetching} />
+              <ReviewsBlock
+                reviews={episodeData.reviews}
+                refetchReviews={episodeRefetch}
+                isRefetching={isRefetching}
+                themeColor={seriesData.theme_color}
+              />
               <EpisodeSwitcherBlock seasons={seriesData.seasons} />
             </ContentMain>
           </ContentGrid>

@@ -42,23 +42,27 @@ model Session {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  name            String?
-  email           String?           @unique
-  emailVerified   DateTime?
-  image           String?
-  accounts        Account[]
-  sessions        Session[]
-  profile         Profile?
-  MoviesHistory   MoviesHistory[]
-  EpisodesHistory EpisodesHistory[]
-  Watchlist       Watchlist[]
-  following       User[]            @relation("UserFollowers")
-  followers       User[]            @relation("UserFollowers")
-  MoviesReviews   MoviesReviews[]
-  SeriesReviews   SeriesReviews[]
-  SeasonsReviews  SeasonsReviews[]
-  EpisodesReviews EpisodesReviews[]
+  id                   String                 @id @default(cuid())
+  name                 String?
+  email                String?                @unique
+  emailVerified        DateTime?
+  image                String?
+  accounts             Account[]
+  sessions             Session[]
+  profile              Profile?
+  MoviesHistory        MoviesHistory[]
+  EpisodesHistory      EpisodesHistory[]
+  Watchlist            Watchlist[]
+  following            User[]                 @relation("UserFollowers")
+  followers            User[]                 @relation("UserFollowers")
+  MoviesReviews        MoviesReviews[]
+  SeriesReviews        SeriesReviews[]
+  SeasonsReviews       SeasonsReviews[]
+  EpisodesReviews      EpisodesReviews[]
+  MoviesReviewsLikes   MoviesReviewsLikes[]
+  SeriesReviewsLikes   SeriesReviewsLikes[]
+  SeasonsReviewsLikes  SeasonsReviewsLikes[]
+  EpisodesReviewsLikes EpisodesReviewsLikes[]
 }
 
 model VerificationToken {
@@ -111,18 +115,32 @@ model MoviesHistory {
 }
 
 model MoviesReviews {
-  id       String   @id @default(cuid())
-  content  String   @db.VarChar(512)
-  created  DateTime @default(now())
-  approved Boolean  @default(false)
-  user_id  String
-  movie_id Int
-  Movies   Movies   @relation(fields: [movie_id], references: [id])
-  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                 String               @id @default(cuid())
+  content            String               @db.VarChar(512)
+  created            DateTime             @default(now())
+  updated            DateTime?
+  approved           Boolean              @default(false)
+  user_id            String
+  movie_id           Int
+  Movies             Movies               @relation(fields: [movie_id], references: [id])
+  user               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  MoviesReviewsLikes MoviesReviewsLikes[]
 
   @@unique([user_id, movie_id])
   @@index([movie_id])
   @@index([user_id])
+}
+
+model MoviesReviewsLikes {
+  id              String        @id @default(cuid())
+  review          MoviesReviews @relation(fields: [moviesReviewsId], references: [id])
+  likedBy         User          @relation(fields: [userId], references: [id])
+  moviesReviewsId String
+  userId          String
+
+  @@unique([moviesReviewsId, userId])
+  @@index([moviesReviewsId])
+  @@index([userId])
 }
 
 model Series {
@@ -136,18 +154,32 @@ model Series {
 }
 
 model SeriesReviews {
-  id        String   @id @default(cuid())
-  content   String   @db.VarChar(512)
-  created   DateTime @default(now())
-  approved  Boolean  @default(false)
-  user_id   String
-  series_id Int
-  Series    Series   @relation(fields: [series_id], references: [id])
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                 String               @id @default(cuid())
+  content            String               @db.VarChar(512)
+  created            DateTime             @default(now())
+  updated            DateTime?
+  approved           Boolean              @default(false)
+  user_id            String
+  series_id          Int
+  Series             Series               @relation(fields: [series_id], references: [id])
+  user               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  SeriesReviewsLikes SeriesReviewsLikes[]
 
   @@unique([user_id, series_id])
   @@index([series_id])
   @@index([user_id])
+}
+
+model SeriesReviewsLikes {
+  id              String        @id @default(cuid())
+  review          SeriesReviews @relation(fields: [seriesReviewsId], references: [id])
+  likedBy         User          @relation(fields: [userId], references: [id])
+  seriesReviewsId String
+  userId          String
+
+  @@unique([seriesReviewsId, userId])
+  @@index([seriesReviewsId])
+  @@index([userId])
 }
 
 model Seasons {
@@ -166,18 +198,32 @@ model Seasons {
 }
 
 model SeasonsReviews {
-  id         String   @id @default(cuid())
-  content    String   @db.VarChar(512)
-  created    DateTime @default(now())
-  approved   Boolean  @default(false)
-  user_id    String
-  seasons_id Int
-  Seasons    Seasons  @relation(fields: [seasons_id], references: [id])
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                  String                @id @default(cuid())
+  content             String                @db.VarChar(512)
+  created             DateTime              @default(now())
+  updated             DateTime?
+  approved            Boolean               @default(false)
+  user_id             String
+  seasons_id          Int
+  Seasons             Seasons               @relation(fields: [seasons_id], references: [id])
+  user                User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  SeasonsReviewsLikes SeasonsReviewsLikes[]
 
   @@unique([user_id, seasons_id])
   @@index([seasons_id])
   @@index([user_id])
+}
+
+model SeasonsReviewsLikes {
+  id               String         @id @default(cuid())
+  review           SeasonsReviews @relation(fields: [seasonsReviewsId], references: [id])
+  likedBy          User           @relation(fields: [userId], references: [id])
+  seasonsReviewsId String
+  userId           String
+
+  @@unique([seasonsReviewsId, userId])
+  @@index([seasonsReviewsId])
+  @@index([userId])
 }
 
 model Episodes {
@@ -195,18 +241,32 @@ model Episodes {
 }
 
 model EpisodesReviews {
-  id          String   @id @default(cuid())
-  content     String   @db.VarChar(512)
-  created     DateTime @default(now())
-  approved    Boolean  @default(false)
-  user_id     String
-  episodes_id Int
-  Episodes    Episodes @relation(fields: [episodes_id], references: [id])
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                   String                 @id @default(cuid())
+  content              String                 @db.VarChar(512)
+  created              DateTime               @default(now())
+  updated              DateTime?
+  approved             Boolean                @default(false)
+  user_id              String
+  episodes_id          Int
+  Episodes             Episodes               @relation(fields: [episodes_id], references: [id])
+  user                 User                   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  EpisodesReviewsLikes EpisodesReviewsLikes[]
 
   @@unique([user_id, episodes_id])
   @@index([episodes_id])
   @@index([user_id])
+}
+
+model EpisodesReviewsLikes {
+  id                String          @id @default(cuid())
+  review            EpisodesReviews @relation(fields: [episodesReviewsId], references: [id])
+  likedBy           User            @relation(fields: [userId], references: [id])
+  episodesReviewsId String
+  userId            String
+
+  @@unique([episodesReviewsId, userId])
+  @@index([episodesReviewsId])
+  @@index([userId])
 }
 
 model EpisodesHistory {
