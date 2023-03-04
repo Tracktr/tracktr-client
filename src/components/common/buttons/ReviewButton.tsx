@@ -16,6 +16,7 @@ const ReviewButton = ({
   seriesID,
   seasonID,
   episodeID,
+  userReview,
   refetchReviews,
 }: {
   themeColor: IThemeColor;
@@ -23,13 +24,14 @@ const ReviewButton = ({
   seriesID?: number | undefined;
   seasonID?: number | undefined;
   episodeID?: number | undefined;
+  userReview?: string;
   refetchReviews: () => void;
 }) => {
   const router = useRouter();
   const MAX_MESSAGE_SIZE = 512;
   const [modalOpen, setModalOpen] = useState(false);
-  const [input, setInput] = useState("");
-  const [inputSize, setInputSize] = useState(0);
+  const [input, setInput] = useState(userReview || "");
+  const [inputSize, setInputSize] = useState(userReview?.length || 0);
   const [inputError, setInputError] = useState("");
   const [link, setLink] = useState("");
 
@@ -50,11 +52,32 @@ const ReviewButton = ({
       toast("Review Added", {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
-      router.push(`${link}/reviews?review=${data?.id}`);
+      setInput("");
+      setInputSize(0);
       refetchReviews();
+      setModalOpen(false);
+      router.push(`${link}/reviews?review=${data?.id}`);
     },
     onError: () => {
       toast("Failed to add review", {
+        icon: <IoMdInformation className="text-3xl text-blue-500" />,
+      });
+    },
+  });
+
+  const editReview = trpc.review.updateReview.useMutation({
+    onSuccess: (data) => {
+      toast("Review updated", {
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
+      });
+      setInput("");
+      setInputSize(0);
+      refetchReviews();
+      setModalOpen(false);
+      router.push(`${link}/reviews?review=${data?.id}`);
+    },
+    onError: () => {
+      toast("Failed to update review", {
         icon: <IoMdInformation className="text-3xl text-blue-500" />,
       });
     },
@@ -75,25 +98,33 @@ const ReviewButton = ({
 
   const onSubmit = () => {
     if (episodeID !== undefined) {
-      addReview.mutate({
-        episodeID,
-        content: input,
-      });
+      if (userReview) editReview.mutate({ episodeID, content: input });
+      else
+        addReview.mutate({
+          episodeID,
+          content: input,
+        });
     } else if (seasonID !== undefined) {
-      addReview.mutate({
-        seasonID,
-        content: input,
-      });
+      if (userReview) editReview.mutate({ seasonID, content: input });
+      else
+        addReview.mutate({
+          seasonID,
+          content: input,
+        });
     } else if (seriesID !== undefined) {
-      addReview.mutate({
-        seriesID,
-        content: input,
-      });
+      if (userReview) editReview.mutate({ seriesID, content: input });
+      else
+        addReview.mutate({
+          seriesID,
+          content: input,
+        });
     } else if (movieID !== undefined) {
-      addReview.mutate({
-        movieID,
-        content: input,
-      });
+      if (userReview) editReview.mutate({ movieID, content: input });
+      else
+        addReview.mutate({
+          movieID,
+          content: input,
+        });
     }
   };
 
@@ -102,14 +133,14 @@ const ReviewButton = ({
       <button
         onClick={() => setModalOpen(!modalOpen)}
         data-tooltip-id="review"
-        data-tooltip-content="Create a review"
+        data-tooltip-content={userReview ? "Edit your review" : "Create a review"}
         className={`flex items-center justify-between mt-2 rounded-md          
           ${themeColor.isDark && "text-white"}
           ${themeColor.isLight && "text-primaryBackground"}`}
         style={{
           backgroundColor: themeColor.hex,
         }}
-        aria-label="Create a review"
+        aria-label={userReview ? "Edit your review" : "Create a review"}
       >
         <span className="px-3 py-2">
           <MdOutlineReviews className="text-2xl" />
@@ -120,19 +151,20 @@ const ReviewButton = ({
       {modalOpen && (
         <Modal handleClose={() => setModalOpen(!modalOpen)}>
           <div className="px-4 pb-4">
-            <ModalTitle title="Write a review" onExit={() => setModalOpen(!modalOpen)} />
+            <ModalTitle title={userReview ? "Edit review" : "Write a review"} onExit={() => setModalOpen(!modalOpen)} />
             <div className="mt-2">
               <textarea
                 id="review"
                 rows={4}
+                value={input}
                 className={`block p-2.5 w-full text-sm rounded-lg border disabled:cursor-not-allowed ${
                   inputError
                     ? "text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 bg-red-100 border-red-400"
                     : "text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600"
                 }`}
-                placeholder="Leave a comment..."
+                placeholder="Leave a review..."
                 onChange={handleInput}
-                disabled={addReview.isLoading}
+                disabled={addReview.isLoading || editReview.isLoading}
                 aria-describedby="review-helper"
               ></textarea>
               <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
@@ -141,7 +173,7 @@ const ReviewButton = ({
 
               <button
                 onClick={onSubmit}
-                disabled={addReview.isLoading || Boolean(inputError)}
+                disabled={addReview.isLoading || editReview.isLoading || Boolean(inputError)}
                 style={{
                   backgroundColor: themeColor.hex,
                 }}
@@ -150,11 +182,13 @@ const ReviewButton = ({
                 } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
                 aria-label="Submit review"
               >
-                {addReview.isLoading ? (
+                {addReview.isLoading || editReview.isLoading ? (
                   <div className="flex items-center gap-3">
                     <ImSpinner2 className="animate-spin" />
                     <div>Loading</div>
                   </div>
+                ) : userReview ? (
+                  <div>Edit</div>
                 ) : (
                   <div>Submit</div>
                 )}

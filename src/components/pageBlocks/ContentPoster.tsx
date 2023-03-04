@@ -24,6 +24,7 @@ const ContentPoster = ({
   theme_color,
   progression,
   episode,
+  userReview,
   refetchReviews,
   season,
   series,
@@ -54,6 +55,7 @@ const ContentPoster = ({
     watchHistory: any;
     refetch: () => void;
   };
+  userReview?: string;
   refetchReviews?: () => void;
 }) => {
   const session = useSession();
@@ -146,6 +148,7 @@ const ContentPoster = ({
                   seasonID={season ? season.seasonID : undefined}
                   seriesID={progression ? id : undefined}
                   refetchReviews={refetchReviews}
+                  userReview={userReview}
                 />
               )}
               <ShareButton

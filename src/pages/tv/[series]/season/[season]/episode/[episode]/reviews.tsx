@@ -22,7 +22,7 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
   const router = useRouter();
   const [page, setPage] = useState(1);
 
-  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
+  const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
   });
 
@@ -46,6 +46,13 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
     },
     { enabled: router.isReady }
   );
+
+  const refetch = () => {
+    console.log("HI MOM");
+    episodeRefetch();
+    seriesRefetch();
+    reviewsRefetch();
+  };
 
   const nextPage = () => {
     setPage(page + 1);
@@ -90,10 +97,10 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
-              refetchReviews={
-                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length < 1
-                  ? episodeRefetch
-                  : undefined
+              refetchReviews={refetch}
+              userReview={
+                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                episodeData.reviews[0].content
               }
             />
 
@@ -112,7 +119,7 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
               <ReviewsBlock
                 reviewPage
                 reviews={reviews?.reviews || []}
-                refetchReviews={reviewsRefetch}
+                refetchReviews={refetch}
                 isRefetching={isRefetching}
                 themeColor={seriesData.theme_color}
                 linkedReview={reviews?.linkedReview}

@@ -23,7 +23,7 @@ import { useSession } from "next-auth/react";
 
 const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
-  const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
+  const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
   });
 
@@ -42,6 +42,11 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     { id: Number(episodeData.id) },
     { enabled: episodeStatus === "success" }
   );
+
+  const refetch = () => {
+    seriesRefetch();
+    episodeRefetch();
+  };
 
   return (
     <LoadingPageComponents status={episodeStatus} notFound>
@@ -76,10 +81,10 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
-              refetchReviews={
-                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length < 1
-                  ? episodeRefetch
-                  : undefined
+              refetchReviews={refetch}
+              userReview={
+                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                episodeData.reviews[0].content
               }
             />
 

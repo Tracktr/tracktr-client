@@ -71,10 +71,10 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 number_of_episodes: seriesData.number_of_episodes,
                 number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
-              refetchReviews={
-                seriesData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length < 1
-                  ? refetch
-                  : undefined
+              refetchReviews={refetch}
+              userReview={
+                seriesData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                seriesData.reviews[0].content
               }
               series={{
                 refetch: refetch,
