@@ -14,8 +14,10 @@ import { createContext } from "../../../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const session = useSession();
   const [page, setPage] = useState(1);
 
   const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
@@ -82,7 +84,11 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
-              refetchReviews={episodeRefetch}
+              refetchReviews={
+                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length < 1
+                  ? episodeRefetch
+                  : undefined
+              }
             />
 
             <ContentMain>

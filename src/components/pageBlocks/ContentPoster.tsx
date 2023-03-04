@@ -129,32 +129,30 @@ const ContentPoster = ({
               ) : (
                 <MovieWatchButton name={title} itemID={id} themeColor={theme_color} />
               ))}
-            {(showWatchlistButton || refetchReviews) && (
-              <div className="grid grid-cols-4">
-                {showWatchlistButton && (
-                  <WatchlistButton
-                    themeColor={theme_color}
-                    movieID={!progression ? id : undefined}
-                    seriesID={progression ? id : undefined}
-                    name={title}
-                  />
-                )}
-                {refetchReviews && (
-                  <ReviewButton
-                    themeColor={theme_color}
-                    movieID={!progression ? id : undefined}
-                    episodeID={episode ? episode.episodeID : undefined}
-                    seasonID={season ? season.seasonID : undefined}
-                    seriesID={progression ? id : undefined}
-                  />
-                )}
-                <ShareButton
+            <div className="grid grid-cols-4">
+              {showWatchlistButton && (
+                <WatchlistButton
                   themeColor={theme_color}
-                  title="Track the best movies and shows using Tracktr"
-                  text={`I'm watching ${title}!`}
+                  movieID={!progression ? id : undefined}
+                  seriesID={progression ? id : undefined}
+                  name={title}
                 />
-              </div>
-            )}
+              )}
+              {refetchReviews && (
+                <ReviewButton
+                  themeColor={theme_color}
+                  movieID={!progression ? id : undefined}
+                  episodeID={episode ? episode.episodeID : undefined}
+                  seasonID={season ? season.seasonID : undefined}
+                  seriesID={progression ? id : undefined}
+                />
+              )}
+              <ShareButton
+                themeColor={theme_color}
+                title="Track the best movies and shows using Tracktr"
+                text={`I'm watching ${title}!`}
+              />
+            </div>
           </>
         ) : (
           session.status !== "loading" && (

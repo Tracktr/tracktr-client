@@ -14,8 +14,10 @@ import { createContext } from "../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const session = useSession();
   const [page, setPage] = useState(1);
   const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
 
@@ -54,7 +56,9 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
-              refetchReviews={refetch}
+              refetchReviews={
+                data.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length < 1 ? refetch : undefined
+              }
             />
 
             <ContentMain>
