@@ -59,7 +59,7 @@ const CrewBlock = ({ crew }: ICrew) => {
             <Modal handleClose={() => setModalOpen(!modalOpen)}>
               <div className="px-4 pb-4">
                 <ModalTitle title="Cast" onExit={() => setModalOpen(!modalOpen)} />
-                <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3 md:grid-cols-4">
+                <div className="grid justify-start grid-cols-2 gap-4 px-4 sm:grid-cols-3">
                   {crew.map((item, i) => (
                     <div key={"cast" + item.id + i} className="flex-shrink-0">
                       <PersonPoster
