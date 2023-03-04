@@ -41,9 +41,11 @@ const Modal = ({ handleClose, children }: { handleClose: () => void; children: J
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
+    document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", escFunction, false);
+      document.body.style.overflow = "visible";
     };
   }, [escFunction]);
 
