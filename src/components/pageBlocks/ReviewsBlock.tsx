@@ -209,7 +209,7 @@ const ReviewsBlock = ({
             )}
             {reviews.length > 0 ? (
               reviews
-                .filter((e: any) => e.id !== linkedReview.id)
+                .filter((e: any) => e.id !== linkedReview?.id)
                 .map((review) => (
                   <Review
                     key={review.id}
