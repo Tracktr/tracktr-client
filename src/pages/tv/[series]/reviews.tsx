@@ -50,6 +50,7 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
 
   const refetch = () => {
     seriesRefetch();
+    reviewsRefetch();
     watchHistory.refetch();
   };
 

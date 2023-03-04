@@ -145,6 +145,7 @@ const ContentPoster = ({
                   episodeID={episode ? episode.episodeID : undefined}
                   seasonID={season ? season.seasonID : undefined}
                   seriesID={progression ? id : undefined}
+                  refetchReviews={refetchReviews}
                 />
               )}
               <ShareButton

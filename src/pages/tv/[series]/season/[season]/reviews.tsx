@@ -15,9 +15,11 @@ import { createContext } from "../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
   const [page, setPage] = useState(1);
 
   const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
@@ -53,7 +55,15 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
     data: reviews,
     refetch: reviewsRefetch,
     isRefetching: isReviewsRefetching,
-  } = trpc.review.getReviews.useQuery({ seasonID: Number(seasonData.id), page, pageSize: 25 });
+  } = trpc.review.getReviews.useQuery(
+    {
+      seasonID: Number(seasonData.id),
+      page,
+      pageSize: 25,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
 
   const nextPage = () => {
     setPage(page + 1);

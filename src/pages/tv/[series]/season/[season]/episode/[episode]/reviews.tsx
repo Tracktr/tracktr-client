@@ -15,9 +15,11 @@ import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
   const [page, setPage] = useState(1);
 
   const { data: seriesData, refetch } = trpc.tv.seriesById.useQuery({
@@ -35,11 +37,15 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
     episodeNumber: Number(props.episodeNumber),
   });
 
-  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
-    episodeID: Number(episodeData.id),
-    page,
-    pageSize: 25,
-  });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery(
+    {
+      episodeID: Number(episodeData.id),
+      page,
+      pageSize: 25,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
 
   const nextPage = () => {
     setPage(page + 1);

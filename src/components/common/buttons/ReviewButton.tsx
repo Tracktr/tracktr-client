@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { MdOutlineReviews } from "react-icons/md";
@@ -16,12 +16,14 @@ const ReviewButton = ({
   seriesID,
   seasonID,
   episodeID,
+  refetchReviews,
 }: {
   themeColor: IThemeColor;
   movieID?: number | undefined;
   seriesID?: number | undefined;
   seasonID?: number | undefined;
   episodeID?: number | undefined;
+  refetchReviews: () => void;
 }) => {
   const router = useRouter();
   const MAX_MESSAGE_SIZE = 512;
@@ -29,13 +31,27 @@ const ReviewButton = ({
   const [input, setInput] = useState("");
   const [inputSize, setInputSize] = useState(0);
   const [inputError, setInputError] = useState("");
+  const [link, setLink] = useState("");
+
+  useEffect(() => {
+    if (router.query.movieID) {
+      setLink(`/movies/${router.query.movieID}`);
+    } else if (router.query.episode) {
+      setLink(`/tv/${router.query.series}/season/${router.query.season}/episode/${router.query.episode}`);
+    } else if (router.query.season) {
+      setLink(`/tv/${router.query.series}/season/${router.query.season}`);
+    } else if (router.query.series) {
+      setLink(`/tv/${router.query.series}`);
+    }
+  }, [router.query]);
 
   const addReview = trpc.review.addReview.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast("Review Added", {
         icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
-      router.asPath.includes("/reviews") ? router.reload() : router.push(`${router.asPath}/reviews`);
+      router.push(`${link}/reviews?review=${data?.id}`);
+      refetchReviews();
     },
     onError: () => {
       toast("Failed to add review", {

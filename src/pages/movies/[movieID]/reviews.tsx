@@ -15,17 +15,29 @@ import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
   const [page, setPage] = useState(1);
-  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
+  const { data, status, refetch: movieRefetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
 
-  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
-    movieID: Number(props.movieID),
-    page,
-    pageSize: 25,
-  });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery(
+    {
+      movieID: Number(props.movieID),
+      page,
+      pageSize: 25,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
+
+  const refetch = () => {
+    console.log("HI");
+    movieRefetch();
+    reviewsRefetch();
+  };
 
   const nextPage = () => {
     setPage(page + 1);
@@ -72,9 +84,10 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
               <ReviewsBlock
                 reviewPage
                 reviews={reviews?.reviews || []}
-                refetchReviews={reviewsRefetch}
+                refetchReviews={refetch}
                 isRefetching={isRefetching}
                 themeColor={data.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
               {(reviews?.reviews || [])?.length > 0 ? (
                 <div className="flex items-center justify-center gap-4 m-5 align-middle">
