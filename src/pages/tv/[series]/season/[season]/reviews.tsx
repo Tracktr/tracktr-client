@@ -115,6 +115,7 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
                 refetchReviews={reviewsRefetch}
                 isRefetching={isReviewsRefetching}
                 themeColor={seriesData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
               {(reviews?.reviews || [])?.length > 0 ? (
                 <div className="flex items-center justify-center gap-4 m-5 align-middle">

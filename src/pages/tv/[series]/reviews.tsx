@@ -15,9 +15,11 @@ import { createContext } from "../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
   const [page, setPage] = useState(1);
 
   const {
@@ -36,11 +38,15 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
     }
   );
 
-  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery({
-    seriesID: Number(props.seriesID),
-    page,
-    pageSize: 25,
-  });
+  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery(
+    {
+      seriesID: Number(props.seriesID),
+      page,
+      pageSize: 25,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
 
   const refetch = () => {
     seriesRefetch();
@@ -105,6 +111,7 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 refetchReviews={reviewsRefetch}
                 isRefetching={isRefetching}
                 themeColor={seriesData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
               {(reviews?.reviews || [])?.length > 0 ? (
                 <div className="flex items-center justify-center gap-4 m-5 align-middle">

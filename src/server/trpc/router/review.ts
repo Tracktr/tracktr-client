@@ -13,12 +13,42 @@ export const reviewRouter = router({
         episodeID: z.number().optional(),
         pageSize: z.number(),
         page: z.number(),
+        linkedReview: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       let reviews;
+      let linkedReview;
 
       if (input.movieID) {
+        if (input.linkedReview) {
+          linkedReview = await ctx.prisma.moviesReviews.findFirst({
+            where: {
+              id: input.linkedReview,
+            },
+            include: {
+              Movies: true,
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+              MoviesReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  MoviesReviewsLikes: true,
+                },
+              },
+            },
+          });
+        }
+
         reviews = await ctx.prisma.moviesReviews.findMany({
           where: {
             movie_id: input.movieID,
@@ -48,6 +78,34 @@ export const reviewRouter = router({
           },
         });
       } else if (input.seriesID) {
+        if (input.linkedReview) {
+          linkedReview = await ctx.prisma.seriesReviews.findFirst({
+            where: {
+              id: input.linkedReview,
+            },
+            include: {
+              Series: true,
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+              SeriesReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  SeriesReviewsLikes: true,
+                },
+              },
+            },
+          });
+        }
+
         reviews = await ctx.prisma.seriesReviews.findMany({
           where: {
             series_id: input.seriesID,
@@ -77,6 +135,38 @@ export const reviewRouter = router({
           },
         });
       } else if (input.seasonID) {
+        if (input.linkedReview) {
+          linkedReview = await ctx.prisma.seasonsReviews.findFirst({
+            where: {
+              id: input.linkedReview,
+            },
+            include: {
+              Seasons: {
+                include: {
+                  Series: true,
+                },
+              },
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+              SeasonsReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  SeasonsReviewsLikes: true,
+                },
+              },
+            },
+          });
+        }
+
         reviews = await ctx.prisma.seasonsReviews.findMany({
           where: {
             seasons_id: input.seasonID,
@@ -110,6 +200,42 @@ export const reviewRouter = router({
           },
         });
       } else if (input.episodeID) {
+        if (input.linkedReview) {
+          linkedReview = await ctx.prisma.episodesReviews.findFirst({
+            where: {
+              id: input.linkedReview,
+            },
+            include: {
+              Episodes: {
+                include: {
+                  Seasons: {
+                    include: {
+                      Series: true,
+                    },
+                  },
+                },
+              },
+              user: {
+                include: {
+                  profile: true,
+                },
+              },
+              EpisodesReviewsLikes: {
+                where: {
+                  likedBy: {
+                    id: ctx.session ? ctx?.session?.user?.id : undefined,
+                  },
+                },
+              },
+              _count: {
+                select: {
+                  EpisodesReviewsLikes: true,
+                },
+              },
+            },
+          });
+        }
+
         reviews = await ctx.prisma.episodesReviews.findMany({
           where: {
             episodes_id: input.episodeID,
@@ -152,6 +278,7 @@ export const reviewRouter = router({
         return {
           reviews: paginate(reviews, input.pageSize, input.page),
           pagesAmount: Math.ceil(reviews.length / input.pageSize),
+          linkedReview,
         };
       }
     }),
