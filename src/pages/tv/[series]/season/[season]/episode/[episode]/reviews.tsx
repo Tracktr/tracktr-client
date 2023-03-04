@@ -48,7 +48,6 @@ const EpisodeReviewsPage = (props: InferGetServerSidePropsType<typeof getServerS
   );
 
   const refetch = () => {
-    console.log("HI MOM");
     episodeRefetch();
     seriesRefetch();
     reviewsRefetch();

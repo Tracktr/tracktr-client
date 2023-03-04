@@ -34,7 +34,6 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
   );
 
   const refetch = () => {
-    console.log("HI");
     movieRefetch();
     reviewsRefetch();
   };
