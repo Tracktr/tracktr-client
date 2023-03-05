@@ -3,7 +3,6 @@ import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
 import Papa from "papaparse";
-import { Episodes, Movies, Seasons, Series } from "@prisma/client";
 
 export const profileRouter = router({
   profileBySession: protectedProcedure.query(async ({ ctx }) => {
