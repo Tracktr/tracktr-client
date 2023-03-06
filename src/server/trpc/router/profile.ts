@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure, publicProcedure } from "../trpc";
+import Papa from "papaparse";
 
 export const profileRouter = router({
   profileBySession: protectedProcedure.query(async ({ ctx }) => {
@@ -309,4 +310,40 @@ export const profileRouter = router({
         pagesAmount: Math.ceil(sortedHistory.length / input.pageSize),
       };
     }),
+  export: protectedProcedure.query(async ({ ctx }) => {
+    const episodes = await ctx.prisma.episodesHistory.findMany({
+      where: { user_id: ctx.session.user.id },
+    });
+
+    const movies = await ctx.prisma.moviesHistory.findMany({
+      where: { user_id: ctx.session.user.id },
+    });
+
+    const mergedHistory = [...movies, ...episodes]
+      .sort((a: any, b: any) => {
+        if (a.datetime < b.datetime) return 1;
+        else return -1;
+      })
+      .map(
+        (item: {
+          id: string;
+          datetime: Date;
+          user_id: string;
+          series_id?: number;
+          season_id?: number;
+          episode_id?: number;
+          movie_id?: number;
+        }) => {
+          return {
+            id: item?.movie_id || item?.episode_id,
+            watched_at: item?.datetime,
+            type: item?.movie_id ? "movie" : "episode",
+          };
+        }
+      );
+
+    const csv = Papa.unparse(mergedHistory);
+
+    return csv;
+  }),
 });

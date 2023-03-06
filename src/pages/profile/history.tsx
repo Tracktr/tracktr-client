@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import nProgress from "nprogress";
 import { ChangeEvent, useEffect, useState } from "react";
+import ExportButton from "../../components/common/buttons/ExportButton";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
@@ -86,9 +87,11 @@ const HistoryPage = () => {
           currentPage="History"
         />
 
-        <div className="flex flex-col p-4 my-5 align-middle md:flex-row md:items-center">
+        <div className="flex flex-col gap-2 p-4 my-5 align-middle md:flex-row md:items-center">
           <h1 className="text-3xl">History</h1>
-          <button onClick={() => setShowFilters(!showFilters)} className="my-2 md:mr-4 md:ml-auto">
+
+          <ExportButton />
+          <button onClick={() => setShowFilters(!showFilters)} className="my-2">
             Show filters
           </button>
           <div className="flex items-center justify-center gap-4 mx-5 align-middle">

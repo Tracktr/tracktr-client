@@ -29,7 +29,7 @@ const ShareButton = ({ themeColor, title, text }: { themeColor: IThemeColor; tit
         style={{
           backgroundColor: themeColor.hex,
         }}
-        aria-label="Create a share"
+        aria-label="Share item"
         onClick={handleClick}
       >
         <span className="px-3 py-2">
