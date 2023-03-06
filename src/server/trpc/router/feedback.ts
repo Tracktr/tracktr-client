@@ -6,7 +6,7 @@ export const feedbackRouter = router({
   add: publicProcedure
     .input(
       z.object({
-        email: z.string(),
+        email: z.string().email(),
         message: z.string(),
       })
     )

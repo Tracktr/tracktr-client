@@ -4,6 +4,7 @@ import { ChangeEvent, useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
+import { z } from "zod";
 import { trpc } from "../../utils/trpc";
 
 const FeedbackPage = () => {
@@ -17,7 +18,7 @@ const FeedbackPage = () => {
   const MAX_MESSAGE_SIZE = 512;
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.currentTarget.value)) {
+    if (z.string().email().safeParse(e.currentTarget.value).success) {
       setEmailError("");
     } else {
       setEmailError("Incorrect email");
