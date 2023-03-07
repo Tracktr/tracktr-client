@@ -168,6 +168,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 <div>
                   {profile?.SeriesReviews[0] && (
                     <Review
+                      id={profile.SeriesReviews[0].id}
                       content={profile.SeriesReviews[0].content}
                       created={profile.SeriesReviews[0].created}
                       item={profile?.SeriesReviews[0]?.Series}
@@ -175,6 +176,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                   )}
                   {profile?.MoviesReviews[0] && (
                     <Review
+                      id={profile.MoviesReviews[0].id}
                       content={profile.MoviesReviews[0].content}
                       created={profile.MoviesReviews[0].created}
                       item={profile?.MoviesReviews[0]?.Movies}

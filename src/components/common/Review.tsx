@@ -4,6 +4,7 @@ import { PosterImage } from "../../utils/generateImages";
 import ImageWithFallback from "../common/ImageWithFallback";
 
 interface IReview {
+  id: string;
   content: string;
   created: Date;
   item: {
@@ -19,11 +20,11 @@ interface IReview {
   hideImage?: boolean;
 }
 
-const Review = ({ content, created, item, friend, hideImage }: IReview) => {
+const Review = ({ content, created, item, friend, hideImage, id }: IReview) => {
   return (
     <div className="flex items-center w-full gap-2 mb-4">
       {!hideImage && (
-        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews`}>
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews?review=${id}`}>
           <Image
             alt={`Poster image for: ${item.name || item.title}`}
             width={100}
@@ -46,7 +47,7 @@ const Review = ({ content, created, item, friend, hideImage }: IReview) => {
             <p className="text-sm">{friend.name}</p>
           </Link>
         )}
-        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews`} className="text-xl">
+        <Link href={`/${item.name ? "tv" : "movies"}/${item.id}/reviews?review=${id}`} className="text-xl">
           {item.name || item.title}
         </Link>
         <div className="mb-4 text-sm">

@@ -41,6 +41,7 @@ const ApproveReview = ({ reviews, type, approveItem, removeItem }: IApproveRevie
             return (
               <div key={review.id}>
                 <Review
+                  id={review.id}
                   content={review.content}
                   created={review.created}
                   friend={{
