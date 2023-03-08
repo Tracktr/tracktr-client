@@ -26,7 +26,6 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
     data: seriesData,
     status,
     refetch: seriesRefetch,
-    isRefetching,
   } = trpc.tv.seriesById.useQuery({ seriesID: Number(props.seriesID) });
 
   const watchHistory = trpc.tv.watchHistoryByID.useQuery(
@@ -38,7 +37,11 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
     }
   );
 
-  const { data: reviews, refetch: reviewsRefetch } = trpc.review.getReviews.useQuery(
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isRefetchingReviews,
+  } = trpc.review.getReviews.useQuery(
     {
       seriesID: Number(props.seriesID),
       page,
@@ -87,10 +90,10 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 number_of_episodes: seriesData.number_of_episodes,
                 number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                seriesData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                seriesData.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
               series={{
                 refetch: refetch,
@@ -110,7 +113,7 @@ const TVReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSidePr
                 reviewPage
                 reviews={reviews?.reviews || []}
                 refetchReviews={reviewsRefetch}
-                isRefetching={isRefetching}
+                isRefetching={isRefetchingReviews}
                 themeColor={seriesData.theme_color}
                 linkedReview={reviews?.linkedReview}
               />

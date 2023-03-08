@@ -106,10 +106,10 @@ const SeasonReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSi
                 seasonNumber: Number(props.seasonNumber),
                 watchHistory,
               }}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                seasonData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                seasonData.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
             />
 

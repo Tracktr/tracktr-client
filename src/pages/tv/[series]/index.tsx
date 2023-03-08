@@ -21,9 +21,11 @@ import { createContext } from "../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
+import { useRouter } from "next/router";
 
 const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
+  const router = useRouter();
 
   const {
     data: seriesData,
@@ -39,6 +41,20 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     {
       enabled: session.status !== "loading",
     }
+  );
+
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isRefetchingReviews,
+  } = trpc.review.getReviews.useQuery(
+    {
+      seriesID: Number(props.seriesID),
+      page: 1,
+      pageSize: 3,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
   );
 
   const refetch = () => {
@@ -71,10 +87,10 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
                 number_of_episodes: seriesData.number_of_episodes,
                 number_of_episodes_watched: seriesData.number_of_episodes_watched,
               }}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                seriesData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                seriesData.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
               series={{
                 refetch: refetch,
@@ -108,10 +124,11 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
               <CastBlock cast={seriesData.credits.cast} />
               <CrewBlock crew={seriesData.credits.crew} />
               <ReviewsBlock
-                reviews={seriesData.reviews}
-                refetchReviews={refetch}
-                isRefetching={isRefetching}
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
+                isRefetching={isRefetchingReviews}
                 themeColor={seriesData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
             </ContentMain>
           </ContentGrid>

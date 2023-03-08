@@ -20,8 +20,10 @@ import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../../../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
   const session = useSession();
   const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
     seriesID: Number(props.seriesID),
@@ -31,12 +33,25 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     data: episodeData,
     status: episodeStatus,
     refetch: episodeRefetch,
-    isRefetching,
   } = trpc.episode.episodeByID.useQuery({
     seriesID: Number(props.seriesID),
     seasonNumber: Number(props.seasonNumber),
     episodeNumber: Number(props.episodeNumber),
   });
+
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isRefetchingReviews,
+  } = trpc.review.getReviews.useQuery(
+    {
+      episodeID: episodeData.id,
+      page: 1,
+      pageSize: 3,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady && Boolean(episodeData?.id) }
+  );
 
   const { data: seenBy } = trpc.episode.seenBy.useQuery(
     { id: Number(episodeData.id) },
@@ -81,10 +96,10 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
                 episodeID: Number(episodeData.id),
                 refetch,
               }}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                episodeData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                episodeData.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
             />
 
@@ -113,10 +128,11 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
               <CastBlock cast={episodeData.credits.cast} guestStars={episodeData.guest_stars} />
               <CrewBlock crew={episodeData.credits.crew} />
               <ReviewsBlock
-                reviews={episodeData.reviews}
-                refetchReviews={episodeRefetch}
-                isRefetching={isRefetching}
-                themeColor={seriesData.theme_color}
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
+                isRefetching={isRefetchingReviews}
+                themeColor={episodeData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
               <EpisodeSwitcherBlock seasons={seriesData.seasons} />
             </ContentMain>

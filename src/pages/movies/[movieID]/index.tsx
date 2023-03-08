@@ -20,11 +20,26 @@ import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
-  const { data, status, refetch, isRefetching } = trpc.movie.movieById.useQuery({ slug: props.movieID });
+  const router = useRouter();
+  const { data, status } = trpc.movie.movieById.useQuery({ slug: props.movieID });
   const { data: seenBy } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) });
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isRefetchingReviews,
+  } = trpc.review.getReviews.useQuery(
+    {
+      movieID: Number(props.movieID),
+      page: 1,
+      pageSize: 3,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady }
+  );
 
   return (
     <LoadingPageComponents status={status} notFound>
@@ -45,10 +60,10 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                data.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                data.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
             />
 
@@ -79,10 +94,11 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
               <CastBlock cast={data.credits.cast} />
               <CrewBlock crew={data.credits.crew} />
               <ReviewsBlock
-                reviews={data.reviews}
-                refetchReviews={refetch}
-                isRefetching={isRefetching}
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
+                isRefetching={isRefetchingReviews}
                 themeColor={data.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
             </ContentMain>
           </ContentGrid>

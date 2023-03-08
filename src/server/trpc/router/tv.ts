@@ -60,33 +60,6 @@ export const tvRouter = router({
       // Get Reviews
       const databaseSeries = await ctx.prisma.series.findFirst({
         where: { id: json.id },
-        include: {
-          SeriesReviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-              SeriesReviewsLikes: {
-                where: {
-                  likedBy: {
-                    id: ctx.session ? ctx?.session?.user?.id : undefined,
-                  },
-                },
-              },
-              _count: {
-                select: {
-                  SeriesReviewsLikes: true,
-                },
-              },
-            },
-            take: 3,
-            orderBy: {
-              created: "desc",
-            },
-          },
-        },
       });
 
       if (ctx.session?.user) {
@@ -135,7 +108,6 @@ export const tvRouter = router({
             ...json,
             number_of_episodes_watched: [{ count: episodesWatched.length }],
             theme_color: color,
-            reviews: databaseSeries?.SeriesReviews || [],
           };
         }
       } else {
@@ -144,7 +116,6 @@ export const tvRouter = router({
             return { ...season, watched: false };
           }),
           theme_color: color,
-          reviews: databaseSeries?.SeriesReviews || [],
         };
       }
     }),

@@ -36,6 +36,10 @@ const ReviewButton = ({
   const [link, setLink] = useState("");
 
   useEffect(() => {
+    if (userReview) setInput(userReview);
+  }, [userReview]);
+
+  useEffect(() => {
     if (router.query.movieID) {
       setLink(`/movies/${router.query.movieID}`);
     } else if (router.query.episode) {
@@ -56,7 +60,7 @@ const ReviewButton = ({
       setInputSize(0);
       refetchReviews();
       setModalOpen(false);
-      router.push(`${link}/reviews?review=${data?.id}`);
+      router.push(`${link}?review=${data?.id}#reviews`);
     },
     onError: () => {
       toast("Failed to add review", {
@@ -74,7 +78,7 @@ const ReviewButton = ({
       setInputSize(0);
       refetchReviews();
       setModalOpen(false);
-      router.push(`${link}/reviews?review=${data?.id}`);
+      router.push(`${link}?review=${data?.id}#reviews`);
     },
     onError: () => {
       toast("Failed to update review", {

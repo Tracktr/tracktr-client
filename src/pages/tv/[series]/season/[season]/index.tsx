@@ -19,8 +19,10 @@ import { createContext } from "../../../../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../../../components/pageBlocks/SeenByBlock";
+import { useRouter } from "next/router";
 
 const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
   const session = useSession();
 
   const { data: seriesData, refetch: seriesRefetch } = trpc.tv.seriesById.useQuery({
@@ -51,6 +53,20 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
       enabled: session.status !== "loading" && seasonData?.id !== undefined,
       refetchOnWindowFocus: false,
     }
+  );
+
+  const {
+    data: reviews,
+    refetch: reviewsRefetch,
+    isRefetching: isRefetchingReviews,
+  } = trpc.review.getReviews.useQuery(
+    {
+      seasonID: Number(seasonData?.id),
+      page: 1,
+      pageSize: 3,
+      linkedReview: router.query.review && String(router.query.review),
+    },
+    { enabled: router.isReady && Boolean(seasonData?.id) }
   );
 
   const refetch = () => {
@@ -90,10 +106,10 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
                 seasonNumber: Number(props.seasonNumber),
                 watchHistory,
               }}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                seasonData.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                seasonData.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
             />
 
@@ -120,10 +136,11 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
               <CastBlock cast={seasonData.credits.cast} />
               <CrewBlock crew={seasonData.credits.crew} />
               <ReviewsBlock
-                reviews={seasonData.reviews}
-                refetchReviews={seasonRefetch}
-                isRefetching={seasonIsRefetching}
-                themeColor={seriesData.theme_color}
+                reviews={reviews?.reviews || []}
+                refetchReviews={reviewsRefetch}
+                isRefetching={isRefetchingReviews}
+                themeColor={seasonData.theme_color}
+                linkedReview={reviews?.linkedReview}
               />
             </ContentMain>
           </ContentGrid>

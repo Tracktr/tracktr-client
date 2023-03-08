@@ -49,33 +49,6 @@ export const movieRouter = router({
 
       const databaseMovie = await ctx.prisma.movies.findFirst({
         where: { id: json.id },
-        include: {
-          Reviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-              MoviesReviewsLikes: {
-                where: {
-                  likedBy: {
-                    id: ctx.session ? ctx?.session?.user?.id : undefined,
-                  },
-                },
-              },
-              _count: {
-                select: {
-                  MoviesReviewsLikes: true,
-                },
-              },
-            },
-            take: 3,
-            orderBy: {
-              created: "desc",
-            },
-          },
-        },
       });
 
       if (!databaseMovie) {
@@ -92,7 +65,6 @@ export const movieRouter = router({
       return {
         ...json,
         theme_color: color,
-        reviews: databaseMovie?.Reviews || [],
       };
     }),
 

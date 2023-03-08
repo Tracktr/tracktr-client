@@ -67,10 +67,10 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
               poster={data.poster_path}
               id={data.id}
               theme_color={data.theme_color}
-              refetchReviews={refetch}
+              refetchReviews={reviewsRefetch}
               userReview={
-                data.reviews.filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                data.reviews[0].content
+                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                reviews?.reviews[0].content
               }
             />
 

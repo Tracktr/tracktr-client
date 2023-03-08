@@ -52,6 +52,11 @@ export const reviewRouter = router({
         reviews = await ctx.prisma.moviesReviews.findMany({
           where: {
             movie_id: input.movieID,
+            NOT: [
+              {
+                id: input.linkedReview,
+              },
+            ],
           },
           include: {
             Movies: true,
@@ -109,6 +114,11 @@ export const reviewRouter = router({
         reviews = await ctx.prisma.seriesReviews.findMany({
           where: {
             series_id: input.seriesID,
+            NOT: [
+              {
+                id: input.linkedReview,
+              },
+            ],
           },
           include: {
             Series: true,
@@ -165,11 +175,18 @@ export const reviewRouter = router({
               },
             },
           });
+
+          console.log(linkedReview);
         }
 
         reviews = await ctx.prisma.seasonsReviews.findMany({
           where: {
             seasons_id: input.seasonID,
+            NOT: [
+              {
+                id: input.linkedReview,
+              },
+            ],
           },
           include: {
             Seasons: {
@@ -239,6 +256,11 @@ export const reviewRouter = router({
         reviews = await ctx.prisma.episodesReviews.findMany({
           where: {
             episodes_id: input.episodeID,
+            NOT: [
+              {
+                id: input.linkedReview,
+              },
+            ],
           },
           include: {
             Episodes: {

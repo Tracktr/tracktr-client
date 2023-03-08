@@ -32,45 +32,8 @@ export const episodeRouter = router({
         });
       }
 
-      const databaseEpisodes = await ctx.prisma.episodes.findFirst({
-        where: { id: episode.id },
-        include: {
-          EpisodesReviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-              EpisodesReviewsLikes: {
-                where: {
-                  likedBy: {
-                    id: ctx.session ? ctx?.session?.user?.id : undefined,
-                  },
-                },
-              },
-              _count: {
-                select: {
-                  EpisodesReviewsLikes: true,
-                },
-              },
-            },
-            take: 3,
-            orderBy: {
-              created: "desc",
-            },
-          },
-          Seasons: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      });
-
       return {
         ...episode,
-        reviews: databaseEpisodes?.EpisodesReviews || [],
       };
     }),
 

@@ -170,7 +170,7 @@ const ReviewsBlock = ({
   }, [router.query]);
 
   return (
-    <div className={`relative mx-1 mb-8 md:mx-0 ${reviewPage && "mt-10"}`}>
+    <div className={`relative mx-1 mb-8 md:mx-0 ${reviewPage && "mt-10"}`} id="reviews">
       <div className="flex items-center justify-between gap-4 pb-4 text-4xl font-bold">
         <h2>Reviews</h2>
         <Link
@@ -207,24 +207,22 @@ const ReviewsBlock = ({
                 linkedReview
               />
             )}
-            {reviews.length > 0 ? (
-              reviews
-                .filter((e: any) => e.id !== linkedReview?.id)
-                .map((review) => (
-                  <Review
-                    key={review.id}
-                    review={review}
-                    session={session}
-                    link={link}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                    handleLike={handleLike}
-                    handleDeleteLike={handleDeleteLike}
-                  />
-                ))
-            ) : (
-              <div>No reviews found</div>
-            )}
+            {reviews.length > 0
+              ? reviews
+                  .filter((e: any) => e.id !== linkedReview?.id)
+                  .map((review) => (
+                    <Review
+                      key={review.id}
+                      review={review}
+                      session={session}
+                      link={link}
+                      handleEdit={handleEdit}
+                      handleDelete={handleDelete}
+                      handleLike={handleLike}
+                      handleDeleteLike={handleDeleteLike}
+                    />
+                  ))
+              : !linkedReview && <div>No reviews found</div>}
           </>
         )}
       </div>
