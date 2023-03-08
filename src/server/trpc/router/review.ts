@@ -175,8 +175,6 @@ export const reviewRouter = router({
               },
             },
           });
-
-          console.log(linkedReview);
         }
 
         reviews = await ctx.prisma.seasonsReviews.findMany({

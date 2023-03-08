@@ -133,8 +133,8 @@ model MoviesReviews {
 
 model MoviesReviewsLikes {
   id              String        @id @default(cuid())
-  review          MoviesReviews @relation(fields: [moviesReviewsId], references: [id])
-  likedBy         User          @relation(fields: [userId], references: [id])
+  review          MoviesReviews @relation(fields: [moviesReviewsId], references: [id], onDelete: Cascade)
+  likedBy         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   moviesReviewsId String
   userId          String
 
@@ -172,8 +172,8 @@ model SeriesReviews {
 
 model SeriesReviewsLikes {
   id              String        @id @default(cuid())
-  review          SeriesReviews @relation(fields: [seriesReviewsId], references: [id])
-  likedBy         User          @relation(fields: [userId], references: [id])
+  review          SeriesReviews @relation(fields: [seriesReviewsId], references: [id], onDelete: Cascade)
+  likedBy         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   seriesReviewsId String
   userId          String
 
@@ -216,8 +216,8 @@ model SeasonsReviews {
 
 model SeasonsReviewsLikes {
   id               String         @id @default(cuid())
-  review           SeasonsReviews @relation(fields: [seasonsReviewsId], references: [id])
-  likedBy          User           @relation(fields: [userId], references: [id])
+  review           SeasonsReviews @relation(fields: [seasonsReviewsId], references: [id], onDelete: Cascade)
+  likedBy          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   seasonsReviewsId String
   userId           String
 
@@ -259,8 +259,8 @@ model EpisodesReviews {
 
 model EpisodesReviewsLikes {
   id                String          @id @default(cuid())
-  review            EpisodesReviews @relation(fields: [episodesReviewsId], references: [id])
-  likedBy           User            @relation(fields: [userId], references: [id])
+  review            EpisodesReviews @relation(fields: [episodesReviewsId], references: [id], onDelete: Cascade)
+  likedBy           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   episodesReviewsId String
   userId            String
 
