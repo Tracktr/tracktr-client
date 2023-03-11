@@ -121,7 +121,7 @@ const SeriesWatchButton = ({ itemID, themeColor, refetchProgression, watchHistor
     `}
       >
         <div className="absolute top-0 w-full h-full px-3 py-2">
-          <div className="text-sm font-bold line-clamp-1">
+          <div className="text-sm font-bold truncate line-clamp-1">
             Watched {plays > 0 && `${plays}/${watchHistory?.data?.episodeAmount} episodes`}
           </div>
           <div className="text-xs italic normal-case">Last on {date}</div>
