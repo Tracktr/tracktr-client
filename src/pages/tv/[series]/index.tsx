@@ -15,10 +15,6 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
 import { PosterImage } from "../../../utils/generateImages";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../server/trpc/router/_app";
-import { createContext } from "../../../server/trpc/context";
-import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
 import { useRouter } from "next/router";
@@ -69,7 +65,7 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
       {() => (
         <>
           <Head>
-            <title>{`${seriesData.name} - Tracktr.`}</title>
+            <title>{`${props.seriesName} - Tracktr.`}</title>
             <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
             <meta name="description" content={`Track ${seriesData.name} and other series & movies with Tracktr.`} />
           </Head>
@@ -140,17 +136,20 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
-    transformer: SuperJSON,
-  });
-  await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
+  const url = new URL(`tv/${Number(context.query.series)}`, process.env.NEXT_PUBLIC_TMDB_API);
+  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const res = await fetch(url);
+  const json = await res.json();
+
+  if (json?.status_code) {
+    throw new Error("Not FOund");
+  }
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
-      seriesID: context.query.series,
+      seriesID: json.id,
+      seriesName: json.name,
     },
   };
 };

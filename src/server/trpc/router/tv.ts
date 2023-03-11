@@ -57,11 +57,6 @@ export const tvRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
-      // Get Reviews
-      const databaseSeries = await ctx.prisma.series.findFirst({
-        where: { id: json.id },
-      });
-
       if (ctx.session?.user) {
         json.number_of_episodes = 0;
 
