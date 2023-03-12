@@ -13,10 +13,6 @@ import ReviewsBlock from "../../../../../../../components/pageBlocks/ReviewsBloc
 import Head from "next/head";
 import DetailsBlock from "../../../../../../../components/pageBlocks/DetailsBlock";
 import { PosterImage } from "../../../../../../../utils/generateImages";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../../../../../server/trpc/router/_app";
-import { createContext } from "../../../../../../../server/trpc/context";
-import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../../../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
@@ -45,7 +41,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
     isRefetching: isRefetchingReviews,
   } = trpc.review.getReviews.useQuery(
     {
-      episodeID: episodeData.id,
+      episodeID: episodeData?.id,
       page: 1,
       pageSize: 3,
       linkedReview: router.query.review && String(router.query.review),
@@ -54,7 +50,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
   );
 
   const { data: seenBy } = trpc.episode.seenBy.useQuery(
-    { id: Number(episodeData.id) },
+    { id: Number(episodeData?.id) },
     { enabled: episodeStatus === "success" }
   );
 
@@ -64,104 +60,110 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
   };
 
   return (
-    <LoadingPageComponents status={episodeStatus} notFound>
-      {() => (
-        <>
-          <Head>
-            <title>
-              {`${seriesData.name} ${episodeData.season_number}x${episodeData.episode_number} - ${episodeData.name} - Tracktr.`}
-            </title>
-            <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
-            <meta
-              name="description"
-              content={`Track ${seriesData.name} Season ${episodeData.season_number}, Episode ${episodeData.episode_number} - ${episodeData.name} and other series & movies with Tracktr.`}
-            />
-          </Head>
+    <>
+      <Head>
+        <title>
+          {`${props.seriesName} ${props.seasonNumber}x${props.episodeNumber} - ${props.episodeName} - Tracktr.`}
+        </title>
+        <meta property="og:image" content={PosterImage({ path: props.episodePoster, size: "md" })} />
+        <meta
+          name="description"
+          content={`Track ${props.seriesName} Season ${props.seasonNumber}, Episode ${props.episodeName} - ${props.episodeName} and other series & movies with Tracktr.`}
+        />
+      </Head>
+      <LoadingPageComponents status={episodeStatus} notFound>
+        {() => (
+          <>
+            <ContentBackdrop path={seriesData.backdrop_path} />
 
-          <ContentBackdrop path={seriesData.backdrop_path} />
-
-          <ContentGrid>
-            <ContentPoster
-              title={episodeData.name}
-              poster={seriesData.poster_path}
-              id={Number(props.seriesID)}
-              theme_color={seriesData.theme_color}
-              progression={{
-                number_of_episodes: seriesData.number_of_episodes,
-                number_of_episodes_watched: seriesData.number_of_episodes_watched,
-              }}
-              episode={{
-                seasonNumber: Number(props.seasonNumber),
-                episodeNumber: Number(props.episodeNumber),
-                episodeID: Number(episodeData.id),
-                refetch,
-              }}
-              refetchReviews={reviewsRefetch}
-              userReview={
-                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                reviews?.reviews[0].content
-              }
-            />
-
-            <ContentMain>
-              <ContentTitle
-                theme_color={seriesData.theme_color}
+            <ContentGrid>
+              <ContentPoster
                 title={episodeData.name}
-                score={episodeData.vote_average}
-                air_date={episodeData.air_date}
-                episode={{
-                  base_url: `/tv/${props.seriesID}`,
-                  season_number: episodeData.season_number,
-                  episode_number: episodeData.episode_number,
-                }}
-              />
-              <ContentOverview
-                name={episodeData.name}
-                overview={episodeData.overview}
+                poster={seriesData.poster_path}
+                id={Number(props.seriesID)}
                 theme_color={seriesData.theme_color}
-                videos={seriesData.videos}
-                justwatch={seriesData["watch/providers"]}
+                progression={{
+                  number_of_episodes: seriesData.number_of_episodes,
+                  number_of_episodes_watched: seriesData.number_of_episodes_watched,
+                }}
+                episode={{
+                  seasonNumber: Number(props.seasonNumber),
+                  episodeNumber: Number(props.episodeNumber),
+                  episodeID: Number(episodeData.id),
+                  refetch,
+                }}
+                refetchReviews={reviewsRefetch}
+                userReview={
+                  (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                  reviews?.reviews[0].content
+                }
               />
 
-              <DetailsBlock releaseDate={episodeData.air_date} runtime={episodeData.runtime} />
-              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
-              <CastBlock cast={episodeData.credits.cast} guestStars={episodeData.guest_stars} />
-              <CrewBlock crew={episodeData.credits.crew} />
-              <ReviewsBlock
-                reviews={reviews?.reviews || []}
-                refetchReviews={reviewsRefetch}
-                isRefetching={isRefetchingReviews}
-                themeColor={episodeData.theme_color}
-                linkedReview={reviews?.linkedReview}
-              />
-              <EpisodeSwitcherBlock seasons={seriesData.seasons} />
-            </ContentMain>
-          </ContentGrid>
-        </>
-      )}
-    </LoadingPageComponents>
+              <ContentMain>
+                <ContentTitle
+                  theme_color={seriesData.theme_color}
+                  title={episodeData.name}
+                  score={episodeData.vote_average}
+                  air_date={episodeData.air_date}
+                  episode={{
+                    base_url: `/tv/${props.seriesID}`,
+                    season_number: episodeData.season_number,
+                    episode_number: episodeData.episode_number,
+                  }}
+                />
+                <ContentOverview
+                  name={episodeData.name}
+                  overview={episodeData.overview}
+                  theme_color={seriesData.theme_color}
+                  videos={seriesData.videos}
+                  justwatch={seriesData["watch/providers"]}
+                />
+
+                <DetailsBlock releaseDate={episodeData.air_date} runtime={episodeData.runtime} />
+                {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
+                <CastBlock cast={episodeData.credits.cast} guestStars={episodeData.guest_stars} />
+                <CrewBlock crew={episodeData.credits.crew} />
+                <ReviewsBlock
+                  reviews={reviews?.reviews || []}
+                  refetchReviews={reviewsRefetch}
+                  isRefetching={isRefetchingReviews}
+                  themeColor={episodeData.theme_color}
+                  linkedReview={reviews?.linkedReview}
+                />
+                <EpisodeSwitcherBlock seasons={seriesData.seasons} />
+              </ContentMain>
+            </ContentGrid>
+          </>
+        )}
+      </LoadingPageComponents>
+    </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
-    transformer: SuperJSON,
-  });
-  await ssg.tv.seriesById.prefetch({ seriesID: Number(context.query.series) });
-  await ssg.episode.episodeByID.prefetch({
-    seriesID: Number(context.query.series),
-    seasonNumber: Number(context.query.season),
-    episodeNumber: Number(context.query.episode),
-  });
+  const seasonEpisode = `season/${context.query.season}/episode/${context.query.episode}`;
+
+  const seriesUrl = new URL(`tv/${Number(context.query.series)}`, process.env.NEXT_PUBLIC_TMDB_API);
+  seriesUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+  seriesUrl.searchParams.append("append_to_response", seasonEpisode);
+
+  const series = await fetch(seriesUrl).then((res) => res.json());
+
+  if (series?.status_code) {
+    throw new Error("Not Found");
+  }
+
+  const season = series.seasons.filter((s: any) => s.season_number === Number(context.query.season));
+  const episode = series[seasonEpisode];
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
-      seriesID: context.query.series,
-      seasonNumber: context.query.season,
-      episodeNumber: context.query.episode,
+      seriesID: series.id,
+      seriesName: series.name,
+      seasonNumber: season[0].season_number,
+      episodeNumber: episode.episode_number,
+      episodePoster: episode.still_path,
+      episodeName: episode.name,
     },
   };
 };

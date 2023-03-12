@@ -8,10 +8,6 @@ import ContentMain from "../../../components/pageBlocks/ContentMain";
 import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import { PosterImage } from "../../../utils/generateImages";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../server/trpc/router/_app";
-import { createContext } from "../../../server/trpc/context";
-import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -49,92 +45,97 @@ const MovieReviewsPage = (props: InferGetServerSidePropsType<typeof getServerSid
   };
 
   return (
-    <LoadingPageComponents status={status} notFound>
-      {() => (
-        <>
-          <Head>
-            <title>{`${data.title} Reviews - Tracktr.`}</title>
-            <meta property="og:image" content={PosterImage({ path: data.poster_path, size: "lg" })} />
-            <meta name="description" content={`Track ${data.title} and other movies & series with Tracktr.`} />
-          </Head>
+    <>
+      <Head>
+        <title>{`${props.title} - Tracktr.`}</title>
+        <meta property="og:image" content={PosterImage({ path: props.poster, size: "lg" })} />
+        <meta name="description" content={`Track ${props.title} and other movies & series with Tracktr.`} />
+      </Head>
 
-          <ContentBackdrop path={data.backdrop_path} />
+      <LoadingPageComponents status={status} notFound>
+        {() => (
+          <>
+            <ContentBackdrop path={data.backdrop_path} />
 
-          <ContentGrid>
-            <ContentPoster
-              showWatchlistButton
-              title={data.title}
-              poster={data.poster_path}
-              id={data.id}
-              theme_color={data.theme_color}
-              refetchReviews={reviewsRefetch}
-              userReview={
-                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                reviews?.reviews[0].content
-              }
-            />
-
-            <ContentMain>
-              <ContentTitle
-                theme_color={data.theme_color}
+            <ContentGrid>
+              <ContentPoster
+                showWatchlistButton
                 title={data.title}
-                score={data.vote_average}
-                air_date={data.release_date}
-                genres={data.genres}
+                poster={data.poster_path}
+                id={data.id}
+                theme_color={data.theme_color}
+                refetchReviews={reviewsRefetch}
+                userReview={
+                  (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                  reviews?.reviews[0].content
+                }
               />
-              <ReviewsBlock
-                reviewPage
-                reviews={reviews?.reviews || []}
-                refetchReviews={refetch}
-                isRefetching={isRefetching}
-                themeColor={data.theme_color}
-                linkedReview={reviews?.linkedReview}
-              />
-              {(reviews?.reviews || [])?.length > 0 ? (
-                <div className="flex items-center justify-center gap-4 m-5 align-middle">
-                  <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
-                    Previous page
-                  </button>
-                  <div className="flex items-center gap-4 mx-6">
-                    <button onClick={previousPage} className="p-2 text-xs text-gray-200">
-                      {page > 1 && page - 1}
+
+              <ContentMain>
+                <ContentTitle
+                  theme_color={data.theme_color}
+                  title={data.title}
+                  score={data.vote_average}
+                  air_date={data.release_date}
+                  genres={data.genres}
+                />
+                <ReviewsBlock
+                  reviewPage
+                  reviews={reviews?.reviews || []}
+                  refetchReviews={refetch}
+                  isRefetching={isRefetching}
+                  themeColor={data.theme_color}
+                  linkedReview={reviews?.linkedReview}
+                />
+                {(reviews?.reviews || [])?.length > 0 ? (
+                  <div className="flex items-center justify-center gap-4 m-5 align-middle">
+                    <button className="text-sm disabled:text-gray-500" onClick={previousPage} disabled={page < 2}>
+                      Previous page
                     </button>
-                    <div>{page}</div>
-                    <button onClick={nextPage} className="p-2 text-xs text-gray-200">
-                      {page < Number(reviews?.pagesAmount) && page + 1}
+                    <div className="flex items-center gap-4 mx-6">
+                      <button onClick={previousPage} className="p-2 text-xs text-gray-200">
+                        {page > 1 && page - 1}
+                      </button>
+                      <div>{page}</div>
+                      <button onClick={nextPage} className="p-2 text-xs text-gray-200">
+                        {page < Number(reviews?.pagesAmount) && page + 1}
+                      </button>
+                    </div>
+                    <button
+                      className="text-sm disabled:text-gray-500"
+                      onClick={nextPage}
+                      disabled={page >= Number(reviews?.pagesAmount)}
+                    >
+                      Next page
                     </button>
                   </div>
-                  <button
-                    className="text-sm disabled:text-gray-500"
-                    onClick={nextPage}
-                    disabled={page >= Number(reviews?.pagesAmount)}
-                  >
-                    Next page
-                  </button>
-                </div>
-              ) : (
-                <></>
-              )}
-            </ContentMain>
-          </ContentGrid>
-        </>
-      )}
-    </LoadingPageComponents>
+                ) : (
+                  <></>
+                )}
+              </ContentMain>
+            </ContentGrid>
+          </>
+        )}
+      </LoadingPageComponents>
+    </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
-    transformer: SuperJSON,
-  });
-  await ssg.movie.movieById.prefetch({ slug: String(context.query.movieID) });
+  const movieUrl = new URL(`movie/${context.query.movieID}`, process.env.NEXT_PUBLIC_TMDB_API);
+  movieUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const movie = await fetch(movieUrl).then((res) => res.json());
+
+  if (movie?.status_code) {
+    throw new Error("Not Found");
+  }
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
-      movieID: context.query.movieID,
+      movieID: movie.id,
+      title: movie.title,
+      poster: movie.poster_path,
     },
   };
 };

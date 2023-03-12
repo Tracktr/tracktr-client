@@ -13,10 +13,6 @@ import ReviewsBlock from "../../../components/pageBlocks/ReviewsBlock";
 import Head from "next/head";
 import RecommendationsBlock from "../../../components/pageBlocks/RecommendationsBlock";
 import { PosterImage } from "../../../utils/generateImages";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../../server/trpc/router/_app";
-import { createContext } from "../../../server/trpc/context";
-import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import SeenByBlock from "../../../components/pageBlocks/SeenByBlock";
 import { useSession } from "next-auth/react";
@@ -42,85 +38,89 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
   );
 
   return (
-    <LoadingPageComponents status={status} notFound>
-      {() => (
-        <>
-          <Head>
-            <title>{`${data.title} - Tracktr.`}</title>
-            <meta property="og:image" content={PosterImage({ path: data.poster_path, size: "lg" })} />
-            <meta name="description" content={`Track ${data.title} and other movies & series with Tracktr.`} />
-          </Head>
+    <>
+      <Head>
+        <title>{`${props.title} - Tracktr.`}</title>
+        <meta property="og:image" content={PosterImage({ path: props.poster, size: "lg" })} />
+        <meta name="description" content={`Track ${props.title} and other movies & series with Tracktr.`} />
+      </Head>
+      <LoadingPageComponents status={status} notFound>
+        {() => (
+          <>
+            <ContentBackdrop path={data.backdrop_path} />
 
-          <ContentBackdrop path={data.backdrop_path} />
-
-          <ContentGrid>
-            <ContentPoster
-              showWatchlistButton
-              title={data.title}
-              poster={data.poster_path}
-              id={data.id}
-              theme_color={data.theme_color}
-              refetchReviews={reviewsRefetch}
-              userReview={
-                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                reviews?.reviews[0].content
-              }
-            />
-
-            <ContentMain>
-              <ContentTitle
-                theme_color={data.theme_color}
+            <ContentGrid>
+              <ContentPoster
+                showWatchlistButton
                 title={data.title}
-                score={data.vote_average}
-                air_date={data.release_date}
-                genres={data.genres}
-              />
-              <ContentOverview
-                name={data.title}
-                overview={data.overview}
+                poster={data.poster_path}
+                id={data.id}
                 theme_color={data.theme_color}
-                videos={data.videos}
-                justwatch={data["watch/providers"]}
+                refetchReviews={reviewsRefetch}
+                userReview={
+                  (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                  reviews?.reviews[0].content
+                }
               />
 
-              <DetailsBlock
-                budget={data.budget}
-                releaseDate={data.release_date}
-                revenue={data.revenue}
-                runtime={data.runtime}
-                status={data.status}
-              />
-              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
-              <CastBlock cast={data.credits.cast} />
-              <CrewBlock crew={data.credits.crew} />
-              <ReviewsBlock
-                reviews={reviews?.reviews || []}
-                refetchReviews={reviewsRefetch}
-                isRefetching={isRefetchingReviews}
-                themeColor={data.theme_color}
-                linkedReview={reviews?.linkedReview}
-              />
-            </ContentMain>
-          </ContentGrid>
-          <RecommendationsBlock type="movies" recommendations={data.recommendations} />
-        </>
-      )}
-    </LoadingPageComponents>
+              <ContentMain>
+                <ContentTitle
+                  theme_color={data.theme_color}
+                  title={data.title}
+                  score={data.vote_average}
+                  air_date={data.release_date}
+                  genres={data.genres}
+                />
+                <ContentOverview
+                  name={data.title}
+                  overview={data.overview}
+                  theme_color={data.theme_color}
+                  videos={data.videos}
+                  justwatch={data["watch/providers"]}
+                />
+
+                <DetailsBlock
+                  budget={data.budget}
+                  releaseDate={data.release_date}
+                  revenue={data.revenue}
+                  runtime={data.runtime}
+                  status={data.status}
+                />
+                {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
+                <CastBlock cast={data.credits.cast} />
+                <CrewBlock crew={data.credits.crew} />
+                <ReviewsBlock
+                  reviews={reviews?.reviews || []}
+                  refetchReviews={reviewsRefetch}
+                  isRefetching={isRefetchingReviews}
+                  themeColor={data.theme_color}
+                  linkedReview={reviews?.linkedReview}
+                />
+              </ContentMain>
+            </ContentGrid>
+            <RecommendationsBlock type="movies" recommendations={data.recommendations} />
+          </>
+        )}
+      </LoadingPageComponents>
+    </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
-    transformer: SuperJSON,
-  });
-  await ssg.movie.movieById.prefetch({ slug: String(context.query.movieID) });
+  const movieUrl = new URL(`movie/${context.query.movieID}`, process.env.NEXT_PUBLIC_TMDB_API);
+  movieUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+
+  const movie = await fetch(movieUrl).then((res) => res.json());
+
+  if (movie?.status_code) {
+    throw new Error("Not Found");
+  }
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
-      movieID: context.query.movieID,
+      movieID: movie.id,
+      title: movie.title,
+      poster: movie.poster_path,
     },
   };
 };

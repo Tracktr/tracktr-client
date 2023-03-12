@@ -25,7 +25,7 @@ export const movieRouter = router({
   movieById: publicProcedure
     .input(
       z.object({
-        slug: z.string().nullish(),
+        slug: z.number(),
       })
     )
     .query(async ({ ctx, input }) => {

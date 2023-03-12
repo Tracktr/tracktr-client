@@ -61,95 +61,96 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
   const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
 
   return (
-    <LoadingPageComponents status={status} notFound>
-      {() => (
-        <>
-          <Head>
-            <title>{`${props.seriesName} - Tracktr.`}</title>
-            <meta property="og:image" content={PosterImage({ path: seriesData.poster_path, size: "lg" })} />
-            <meta name="description" content={`Track ${seriesData.name} and other series & movies with Tracktr.`} />
-          </Head>
+    <>
+      <Head>
+        <title>{`${props.seriesName} - Tracktr.`}</title>
+        <meta property="og:image" content={PosterImage({ path: props.seriesPoster, size: "lg" })} />
+        <meta name="description" content={`Track ${props.seriesName} and other series & movies with Tracktr.`} />
+      </Head>
+      <LoadingPageComponents status={status} notFound>
+        {() => (
+          <>
+            <ContentBackdrop path={seriesData.backdrop_path} />
 
-          <ContentBackdrop path={seriesData.backdrop_path} />
-
-          <ContentGrid>
-            <PosterButton
-              showWatchlistButton
-              title={seriesData.name}
-              poster={seriesData.poster_path}
-              id={seriesData.id}
-              theme_color={seriesData.theme_color}
-              progression={{
-                number_of_episodes: seriesData.number_of_episodes,
-                number_of_episodes_watched: seriesData.number_of_episodes_watched,
-              }}
-              refetchReviews={reviewsRefetch}
-              userReview={
-                (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
-                reviews?.reviews[0].content
-              }
-              series={{
-                refetch: refetch,
-                watchHistory,
-              }}
-            />
-
-            <ContentMain>
-              <ContentTitle
-                theme_color={seriesData.theme_color}
+            <ContentGrid>
+              <PosterButton
+                showWatchlistButton
                 title={seriesData.name}
-                score={seriesData.vote_average}
-                air_date={seriesData.air_date}
-                genres={seriesData.genres}
-              />
-              <ContentOverview
-                name={seriesData.name}
-                overview={seriesData.overview}
+                poster={seriesData.poster_path}
+                id={seriesData.id}
                 theme_color={seriesData.theme_color}
-                videos={seriesData.videos}
-                justwatch={seriesData["watch/providers"]}
+                progression={{
+                  number_of_episodes: seriesData.number_of_episodes,
+                  number_of_episodes_watched: seriesData.number_of_episodes_watched,
+                }}
+                refetchReviews={reviewsRefetch}
+                userReview={
+                  (reviews?.reviews || []).filter((e: any) => e.user_id === session.data?.user?.id).length > 0 &&
+                  reviews?.reviews[0].content
+                }
+                series={{
+                  refetch: refetch,
+                  watchHistory,
+                }}
               />
 
-              <DetailsBlock
-                status={seriesData.status}
-                numberOfEpisodes={seriesData.number_of_episodes}
-                numberOfSeasons={seriesData.number_of_seasons}
-              />
-              {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
-              <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
-              <CastBlock cast={seriesData.credits.cast} />
-              <CrewBlock crew={seriesData.credits.crew} />
-              <ReviewsBlock
-                reviews={reviews?.reviews || []}
-                refetchReviews={reviewsRefetch}
-                isRefetching={isRefetchingReviews}
-                themeColor={seriesData.theme_color}
-                linkedReview={reviews?.linkedReview}
-              />
-            </ContentMain>
-          </ContentGrid>
-          <RecommendationsBlock type="tv" recommendations={seriesData.recommendations} />
-        </>
-      )}
-    </LoadingPageComponents>
+              <ContentMain>
+                <ContentTitle
+                  theme_color={seriesData.theme_color}
+                  title={seriesData.name}
+                  score={seriesData.vote_average}
+                  air_date={seriesData.air_date}
+                  genres={seriesData.genres}
+                />
+                <ContentOverview
+                  name={seriesData.name}
+                  overview={seriesData.overview}
+                  theme_color={seriesData.theme_color}
+                  videos={seriesData.videos}
+                  justwatch={seriesData["watch/providers"]}
+                />
+
+                <DetailsBlock
+                  status={seriesData.status}
+                  numberOfEpisodes={seriesData.number_of_episodes}
+                  numberOfSeasons={seriesData.number_of_seasons}
+                />
+                {session.status === "authenticated" ? <SeenByBlock data={seenBy} /> : <></>}
+                <SeasonsBlock seasons={seriesData.seasons} refetch={refetch} isRefetching={isRefetching} />
+                <CastBlock cast={seriesData.credits.cast} />
+                <CrewBlock crew={seriesData.credits.crew} />
+                <ReviewsBlock
+                  reviews={reviews?.reviews || []}
+                  refetchReviews={reviewsRefetch}
+                  isRefetching={isRefetchingReviews}
+                  themeColor={seriesData.theme_color}
+                  linkedReview={reviews?.linkedReview}
+                />
+              </ContentMain>
+            </ContentGrid>
+            <RecommendationsBlock type="tv" recommendations={seriesData.recommendations} />
+          </>
+        )}
+      </LoadingPageComponents>
+    </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const url = new URL(`tv/${Number(context.query.series)}`, process.env.NEXT_PUBLIC_TMDB_API);
-  url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
+  const seriesUrl = new URL(`tv/${Number(context.query.series)}`, process.env.NEXT_PUBLIC_TMDB_API);
+  seriesUrl.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
 
-  const res = await fetch(url);
-  const json = await res.json();
+  const series = await fetch(seriesUrl).then((res) => res.json());
 
-  if (json?.status_code) {
+  if (series?.status_code) {
     throw new Error("Not FOund");
   }
 
   return {
     props: {
-      seriesID: json.id,
-      seriesName: json.name,
+      seriesID: series.id,
+      seriesName: series.name,
+      seriesPoster: series.poster_path,
     },
   };
 };
