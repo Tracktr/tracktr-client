@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Simple bar changes */
 .simplebar-scrollbar::before {
   background-color: #444 !important;

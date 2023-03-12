@@ -180,6 +180,7 @@ const DashboardPage = () => {
                   ) : (
                     friendsData?.seriesReviews[0] && (
                       <Review
+                        id={friendsData?.seriesReviews[0].id}
                         content={friendsData?.seriesReviews[0].content}
                         created={friendsData?.seriesReviews[0].created}
                         item={friendsData?.seriesReviews[0].Series}
@@ -192,6 +193,7 @@ const DashboardPage = () => {
                   ) : (
                     friendsData?.movieReviews[0] && (
                       <Review
+                        id={friendsData?.movieReviews[0].id}
                         content={friendsData?.movieReviews[0].content}
                         created={friendsData?.movieReviews[0].created}
                         item={friendsData?.movieReviews[0].Movies}

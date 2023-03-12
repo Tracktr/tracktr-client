@@ -131,7 +131,7 @@ const SeasonWatchButton = ({
     `}
       >
         <div className="absolute top-0 w-full h-full px-3 py-2">
-          <div className="text-sm font-bold">
+          <div className="text-sm font-bold truncate">
             Watched {plays > 0 && `${plays}/${watchHistory?.data?.episodeAmount} episodes`}
           </div>
           <div className="text-xs italic normal-case">Last on {date}</div>

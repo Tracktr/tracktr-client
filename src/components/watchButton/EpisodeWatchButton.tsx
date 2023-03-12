@@ -144,7 +144,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
     `}
           >
             <div className="absolute top-0 w-full h-full px-3 py-2">
-              <div className="text-sm font-bold">Watched {plays > 0 && `${plays} times`}</div>
+              <div className="text-sm font-bold truncate">Watched {plays > 0 && `${plays} times`}</div>
               <div className="text-xs italic normal-case">Last on {date}</div>
             </div>
             <div className="absolute top-0 flex items-center w-full h-full px-3 py-2 transition-all duration-300 ease-in-out opacity-0 justify-evenly grow group-hover:opacity-100 backdrop-blur ">

@@ -57,38 +57,6 @@ export const tvRouter = router({
 
       const color = await convertImageToPrimaryColor({ image: json.poster_path, fallback: json.backdrop_path });
 
-      // Get Reviews
-      const databaseSeries = await ctx.prisma.series.findFirst({
-        where: { id: json.id },
-        include: {
-          SeriesReviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-              SeriesReviewsLikes: {
-                where: {
-                  likedBy: {
-                    id: ctx.session ? ctx?.session?.user?.id : undefined,
-                  },
-                },
-              },
-              _count: {
-                select: {
-                  SeriesReviewsLikes: true,
-                },
-              },
-            },
-            take: 3,
-            orderBy: {
-              created: "desc",
-            },
-          },
-        },
-      });
-
       if (ctx.session?.user) {
         json.number_of_episodes = 0;
 
@@ -135,7 +103,6 @@ export const tvRouter = router({
             ...json,
             number_of_episodes_watched: [{ count: episodesWatched.length }],
             theme_color: color,
-            reviews: databaseSeries?.SeriesReviews || [],
           };
         }
       } else {
@@ -144,7 +111,6 @@ export const tvRouter = router({
             return { ...season, watched: false };
           }),
           theme_color: color,
-          reviews: databaseSeries?.SeriesReviews || [],
         };
       }
     }),

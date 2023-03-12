@@ -29,37 +29,6 @@ export const seasonRouter = router({
         });
       }
 
-      const databaseSeason = await ctx.prisma.seasons.findFirst({
-        where: { id: season.id },
-        include: {
-          SeasonsReviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-              SeasonsReviewsLikes: {
-                where: {
-                  likedBy: {
-                    id: ctx.session ? ctx?.session?.user?.id : undefined,
-                  },
-                },
-              },
-              _count: {
-                select: {
-                  SeasonsReviewsLikes: true,
-                },
-              },
-            },
-            take: 3,
-            orderBy: {
-              created: "desc",
-            },
-          },
-        },
-      });
-
       if (ctx?.session?.user) {
         season.episodes = await Promise.all(
           season.episodes.map(async (episode: TmdbEpisode) => {
@@ -86,7 +55,6 @@ export const seasonRouter = router({
 
       return {
         ...season,
-        reviews: databaseSeason?.SeasonsReviews || [],
       };
     }),
 

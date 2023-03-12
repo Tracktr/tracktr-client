@@ -62,12 +62,14 @@ const EpisodeSwitcherBlock = ({ seasons }: EpisodeSwitcherBlockProps) => {
   };
 
   const hasNextEpisode = () => {
-    const currentSeason = seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0];
+    if (seasons) {
+      const currentSeason = seasons.filter((season: any) => season.season_number == Number(seasonNumber))[0];
 
-    if (Number(currentSeason?.episode_count) > Number(episodeNumber)) {
-      return true;
-    } else if (nextSeason) {
-      return true;
+      if (Number(currentSeason?.episode_count) > Number(episodeNumber)) {
+        return true;
+      } else if (nextSeason) {
+        return true;
+      }
     }
   };
 

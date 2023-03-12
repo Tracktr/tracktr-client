@@ -151,11 +151,13 @@ const ContentPoster = ({
                   userReview={userReview}
                 />
               )}
-              <ShareButton
-                themeColor={theme_color}
-                title="Track the best movies and shows using Tracktr"
-                text={`I'm watching ${title}!`}
-              />
+              {!hideWatchButton && (
+                <ShareButton
+                  themeColor={theme_color}
+                  title="Track the best movies and shows using Tracktr"
+                  text={`I'm watching ${title}!`}
+                />
+              )}
             </div>
           </>
         ) : (

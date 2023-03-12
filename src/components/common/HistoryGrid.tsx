@@ -98,7 +98,7 @@ const HistoryGrid = ({
                     fallbackSrc="/placeholder_profile.png"
                     width={16}
                     height={16}
-                    className="rounded-full"
+                    className="rounded-full w-[16px] h-[16px]"
                     alt="User profile image"
                   />
                   <p className="ml-2 text-sm">{item?.friend?.name}</p>
@@ -126,7 +126,7 @@ const HistoryGrid = ({
                   })}
                   width={170}
                   height={240}
-                  className="rounded"
+                  className="rounded w-[170px] h-[240px]"
                 />
                 <div>
                   <span className="w-full text-xs truncate line-clamp-2">
