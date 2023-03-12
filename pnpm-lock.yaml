@@ -55,7 +55,7 @@ specifiers:
   react-player: ^2.12.0
   react-query: ^3.39.3
   react-toastify: ^9.1.1
-  react-tooltip: ^5.9.1
+  react-tooltip: 5.8.3
   recharts: ^2.4.3
   simplebar-react: ^3.2.1
   slugify: ^1.6.5
@@ -96,7 +96,7 @@ dependencies:
   react-player: 2.12.0_react@18.2.0
   react-query: 3.39.3_biqbaboplfbrettd7655fr4n2y
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
-  react-tooltip: 5.9.1_biqbaboplfbrettd7655fr4n2y
+  react-tooltip: 5.8.3_biqbaboplfbrettd7655fr4n2y
   recharts: 2.4.3_v2m5e27vhdewzwhryxwfaorcca
   simplebar-react: 3.2.1_react@18.2.0
   slugify: 1.6.5
@@ -182,8 +182,8 @@ packages:
     resolution: {integrity: sha512-FaO9KVLFnxknZaGWGmNtjD2CVFuc0u4yeGEofoyXO2wgRA7fLtkngT6UB0vtWQWuhH3iMTZZ/Y89CMeyGfn8pA==}
     dev: false
 
-  /@floating-ui/dom/1.2.3:
-    resolution: {integrity: sha512-lK9cZUrHSJLMVAdCvDqs6Ug8gr0wmqksYiaoj/bxj2gweRQkSuhg2/V6Jswz2KiQ0RAULbqw1oQDJIMpQ5GfGA==}
+  /@floating-ui/dom/1.1.1:
+    resolution: {integrity: sha512-TpIO93+DIujg3g7SykEAGZMDtbJRrmnYRCNYSjJlvIbGhBjRSNTLVbNeDQBrzy9qDgUbiWdc7KA0uZHZ2tJmiw==}
     dependencies:
       '@floating-ui/core': 1.2.2
     dev: false
@@ -3224,13 +3224,13 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-tooltip/5.9.1_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-/lt6ZOr6MI2D/TqTq6Obd3/1LqQ10Ifxw90HLnH8reGoqQKMICe0QRyWhxjxMfRqjsH5TVQulb33ZbrjohZnuw==}
+  /react-tooltip/5.8.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-h7maAlm2Xeymc14gWKhhrzsENeB83N65EzZ+AcQIGrOpNE0yefVRJIHhNcWHEJ0FEtf7VZXxtsj5glVXKxEtvA==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
     dependencies:
-      '@floating-ui/dom': 1.2.3
+      '@floating-ui/dom': 1.1.1
       classnames: 2.3.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
