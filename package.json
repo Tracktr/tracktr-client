@@ -42,7 +42,7 @@
     "react-player": "^2.12.0",
     "react-query": "^3.39.3",
     "react-toastify": "^9.1.1",
-    "react-tooltip": "^5.9.1",
+    "react-tooltip": "5.8.3",
     "recharts": "^2.4.3",
     "simplebar-react": "^3.2.1",
     "slugify": "^1.6.5",
