@@ -326,22 +326,26 @@ const Review = ({
         </Link>
 
         <div className="flex gap-2 ml-auto opacity-25 group-hover:opacity-80">
-          <button
-            className={`flex items-center gap-1 transition-all duration-300 ease-in-out hover:text-blue-700`}
-            onClick={async () => {
-              try {
-                await navigator.share({
-                  title: "Track the best movies and shows using Tracktr",
-                  text: "See my review on Tracktr!",
-                  url: `${link}/reviews?review=${review.id}`,
-                });
-              } catch (err) {
-                console.error("Failed to share ", err);
-              }
-            }}
-          >
-            <MdShare className="text-xl" />
-          </button>
+          {!navigator.canShare ? (
+            <></>
+          ) : (
+            <button
+              className={`flex items-center gap-1 transition-all duration-300 ease-in-out hover:text-blue-700`}
+              onClick={async () => {
+                try {
+                  await navigator.share({
+                    title: "Track the best movies and shows using Tracktr",
+                    text: "See my review on Tracktr!",
+                    url: `${link}?review=${review.id}`,
+                  });
+                } catch (err) {
+                  console.error("Failed to share ", err);
+                }
+              }}
+            >
+              <MdShare className="text-xl" />
+            </button>
+          )}
           {session.status === "authenticated" ? (
             <>
               {session?.data?.user?.id === review.user_id ? (
