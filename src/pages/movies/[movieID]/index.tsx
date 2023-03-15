@@ -22,7 +22,7 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
   const session = useSession();
   const router = useRouter();
   const { data, status } = trpc.movie.movieById.useQuery({ slug: props.movieID });
-  const { data: seenBy } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) });
+  const { data: seenBy } = trpc.movie.seenBy.useQuery({ id: Number(props.movieID) }, { enabled: session.status === "authenticated" });
   const {
     data: reviews,
     refetch: reviewsRefetch,
@@ -44,6 +44,7 @@ const MoviePage = (props: InferGetServerSidePropsType<typeof getServerSideProps>
         <meta property="og:image" content={PosterImage({ path: props.poster, size: "lg" })} />
         <meta name="description" content={`Track ${props.title} and other movies & series with Tracktr.`} />
       </Head>
+      
       <LoadingPageComponents status={status} notFound>
         {() => (
           <>

@@ -51,7 +51,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
 
   const { data: seenBy } = trpc.episode.seenBy.useQuery(
     { id: Number(episodeData?.id) },
-    { enabled: episodeStatus === "success" }
+    { enabled: episodeStatus === "success" && session.status === "authenticated" }
   );
 
   const refetch = () => {
@@ -130,7 +130,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
                   themeColor={episodeData.theme_color}
                   linkedReview={reviews?.linkedReview}
                 />
-                <EpisodeSwitcherBlock seasons={seriesData.seasons} />
+                <EpisodeSwitcherBlock seasons={seriesData.seasons || []} />
               </ContentMain>
             </ContentGrid>
           </>

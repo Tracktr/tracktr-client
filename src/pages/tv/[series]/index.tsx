@@ -58,7 +58,10 @@ const TVPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) =
     watchHistory.refetch();
   };
 
-  const { data: seenBy } = trpc.tv.seenBy.useQuery({ id: Number(props.seriesID) }, { enabled: status === "success" });
+  const { data: seenBy } = trpc.tv.seenBy.useQuery(
+    { id: Number(props.seriesID) },
+    { enabled: status === "success" && session.status === "authenticated" }
+  );
 
   return (
     <>

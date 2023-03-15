@@ -1,13 +1,13 @@
-import Head from "next/head";
 import { createRef, useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import listPlugin from "@fullcalendar/list";
 import useWindowSize from "../../utils/useWindowSize";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
 const CalendarPage = () => {
   const windowSize = useWindowSize();
@@ -20,6 +20,7 @@ const CalendarPage = () => {
   const { data } = trpc.calendar.get.useQuery({
     start: date?.start,
     end: date?.end,
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   });
   const calendarComponentRef: any = createRef<FullCalendar>();
 

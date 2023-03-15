@@ -18,6 +18,10 @@ const ShareButton = ({ themeColor, title, text }: { themeColor: IThemeColor; tit
     }
   };
 
+  if (!navigator.canShare) {
+    return <></>;
+  }
+
   return (
     <div>
       <button

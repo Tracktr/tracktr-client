@@ -106,10 +106,13 @@ export const tvRouter = router({
           };
         }
       } else {
+        json.seasons = json.seasons.map((season: ISeries) => {
+          return { ...season, watched: false };
+        });
+
         return {
-          ...json.seasons.map((season: ISeries) => {
-            return { ...season, watched: false };
-          }),
+          ...json,
+          number_of_episodes_watched: 0,
           theme_color: color,
         };
       }
