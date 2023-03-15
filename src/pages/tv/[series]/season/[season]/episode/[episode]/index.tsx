@@ -130,7 +130,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
                   themeColor={episodeData.theme_color}
                   linkedReview={reviews?.linkedReview}
                 />
-                <EpisodeSwitcherBlock seasons={seriesData.seasons} />
+                <EpisodeSwitcherBlock seasons={seriesData.seasons || []} />
               </ContentMain>
             </ContentGrid>
           </>
