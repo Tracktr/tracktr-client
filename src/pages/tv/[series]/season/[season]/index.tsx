@@ -37,7 +37,7 @@ const SeasonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
 
   const { data: seenBy } = trpc.season.seenBy.useQuery(
     { id: Number(seasonData?.id) },
-    { enabled: seasonStatus === "success" }
+    { enabled: seasonStatus === "success" && session.status === "authenticated" }
   );
 
   const watchHistory = trpc.season.watchHistoryByID.useQuery(

@@ -51,7 +51,7 @@ const EpisodePage = (props: InferGetServerSidePropsType<typeof getServerSideProp
 
   const { data: seenBy } = trpc.episode.seenBy.useQuery(
     { id: Number(episodeData?.id) },
-    { enabled: episodeStatus === "success" }
+    { enabled: episodeStatus === "success" && session.status === "authenticated" }
   );
 
   const refetch = () => {
