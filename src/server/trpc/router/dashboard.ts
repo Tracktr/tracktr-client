@@ -289,7 +289,10 @@ export const dashboardRouter = router({
             });
             tmdb.episodes_watched = watched.length || 0;
 
-            if (tmdb.episodes_watched === tmdb.number_of_episodes) return undefined;
+            // TODO: Watched amount of episode equal to number of episodes
+            // If we return undefined, there will be pageSize -1
+            // Could do this before paginating, but that will take way too long
+            // if (tmdb.episodes_watched === tmdb.number_of_episodes) return undefined;
 
             return { ...item, color: color, series: tmdb };
           })
