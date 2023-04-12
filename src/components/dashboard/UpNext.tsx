@@ -10,14 +10,7 @@ import { ImSpinner2 } from "react-icons/im";
 import { useState } from "react";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
-
-interface Series {
-  id: number;
-  name: string;
-  poster_path: string;
-  number_of_episodes: number;
-  episodes_watched: number;
-}
+import { Seasons, Series } from "@prisma/client";
 
 interface IEpisode {
   id: number;
@@ -25,7 +18,11 @@ interface IEpisode {
   episode_number: number;
   season_number: number;
   seasons_id: number;
-  series: Series;
+  Seasons: Seasons & {
+    Series: Series;
+  };
+  episodes_watched: number;
+  number_of_episodes: number;
 }
 
 interface IEpisodesGrid {
@@ -75,11 +72,13 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                   exit={{ y: -150, opacity: 0 }}
                   transition={{ type: "spring" }}
                 >
-                  <Link href={`/tv/${item.series.id}/season/${item.season_number}/episode/${item.episode_number}`}>
+                  <Link
+                    href={`/tv/${item.Seasons.Series.id}/season/${item.season_number}/episode/${item.episode_number}`}
+                  >
                     <Image
                       alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
                       src={PosterImage({
-                        path: item.series.poster_path,
+                        path: item.Seasons.Series.poster,
                         size: "sm",
                       })}
                       width={170}
@@ -91,7 +90,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                     <span
                       className="h-2 transition-all duration-300 ease-in-out rounded-b-full bg-primary"
                       style={{
-                        width: `${Math.ceil((item.series.episodes_watched / item.series.number_of_episodes) * 100)}%`,
+                        width: `${Math.ceil((item.episodes_watched / item.number_of_episodes) * 100)}%`,
                       }}
                     />
                   </div>
@@ -99,7 +98,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.name}
                   </div>
-                  {(markAsWatched.isLoading || isRefetching) && item.series.id === currentLoadingID ? (
+                  {(markAsWatched.isLoading || isRefetching) && item.Seasons.Series.id === currentLoadingID ? (
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                   ) : (
                     <button
@@ -108,7 +107,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                       onClick={() =>
                         markAsWatched.mutate({
                           episodeID: item.id,
-                          seriesID: item.series.id,
+                          seriesID: item.Seasons.Series.id,
                         })
                       }
                       aria-label="Mark as watched"

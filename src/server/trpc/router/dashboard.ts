@@ -105,8 +105,15 @@ export const dashboardRouter = router({
     )
     .query(async ({ ctx, input }) => {
       try {
-        const episodes = await ctx.prisma.episodesHistory.findMany({
-          where: { user_id: ctx.session.user.profile.userId },
+        const userHistory = await ctx.prisma.episodesHistory.findMany({
+          where: {
+            user_id: ctx.session.user.id,
+            NOT: {
+              season: {
+                season_number: 0,
+              },
+            },
+          },
           include: {
             series: true,
             season: true,
@@ -125,96 +132,165 @@ export const dashboardRouter = router({
           distinct: ["series_id"],
         });
 
-        const result = await Promise.all(
-          episodes.flatMap(async (lastEpisode) => {
-            const season = await ctx.prisma.seasons.findFirst({
+        const nextEpisodes = await Promise.all(
+          userHistory.map(async (historyItem) => {
+            const nextEpisode = await ctx.prisma.episodes.findFirst({
               where: {
-                series_id: lastEpisode.series_id,
-                season_number: lastEpisode.season.season_number,
+                seasons_id: historyItem.episode.seasons_id,
+                episode_number: historyItem.episode.episode_number + 1,
               },
               include: {
-                episodes: true,
-                Series: true,
+                Seasons: {
+                  include: {
+                    Series: true,
+                  },
+                },
               },
             });
 
-            // Removes all episodes that don't have a next episode
-            const nextEpisode = season?.episodes.filter((ep) => {
-              if (
-                ep.episode_number === lastEpisode.episode.episode_number + 1 &&
-                ep.season_number === lastEpisode.season.season_number &&
-                ep?.air_date !== null &&
-                ep?.air_date <= new Date()
-              ) {
-                return true;
-              } else {
-                return false;
-              }
-            });
+            if (nextEpisode !== null) {
+              if (nextEpisode.air_date !== null && nextEpisode.air_date <= new Date()) {
+                const totalEpisodes = await ctx.prisma.seasons.findMany({
+                  where: {
+                    series_id: historyItem.series_id,
+                    NOT: {
+                      season_number: 0,
+                    },
+                  },
+                  select: {
+                    _count: {
+                      select: {
+                        episodes: true,
+                        EpisodesHistory: {
+                          where: { user_id: ctx.session.user.id },
+                        },
+                      },
+                    },
+                  },
+                });
 
-            // Has a next episode in this season
-            if (nextEpisode !== undefined && nextEpisode?.length > 0) {
-              return {
-                ...nextEpisode[0],
-                series_id: season?.Series?.id,
-                datetime: lastEpisode.datetime,
-              };
+                let number_of_episodes = 0;
+                let episodes_watched = 0;
+
+                totalEpisodes.forEach((item) => {
+                  number_of_episodes += item._count.episodes;
+                  episodes_watched += item._count.EpisodesHistory;
+                });
+
+                if (number_of_episodes === episodes_watched) {
+                  return null;
+                }
+
+                const color = await convertImageToPrimaryColor({
+                  image: historyItem.series.poster,
+                });
+
+                return {
+                  ...nextEpisode,
+                  datetime: historyItem.datetime,
+                  number_of_episodes,
+                  episodes_watched,
+                  color,
+                };
+              } else {
+                return null;
+              }
             } else {
               const nextSeason = await ctx.prisma.seasons.findFirst({
                 where: {
-                  series_id: lastEpisode.series_id,
-                  season_number: lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1,
+                  series_id: historyItem.series_id,
+                  season_number: (historyItem.season.season_number || 0) + 1,
                 },
                 include: {
-                  episodes: true,
-                  Series: true,
+                  episodes: {
+                    where: {
+                      episode_number: 1,
+                    },
+                    include: {
+                      Seasons: {
+                        include: {
+                          Series: true,
+                        },
+                      },
+                    },
+                  },
                 },
               });
 
-              const nextEpisode = nextSeason?.episodes.filter((ep) => {
+              if (nextSeason !== null) {
                 if (
-                  ep.episode_number === 1 &&
-                  ep.season_number === (lastEpisode?.season?.season_number && lastEpisode.season.season_number + 1) &&
-                  ep?.air_date !== null &&
-                  ep?.air_date <= new Date()
+                  nextSeason.episodes[0] &&
+                  nextSeason.episodes[0].air_date !== null &&
+                  nextSeason.episodes[0].air_date <= new Date()
                 ) {
-                  return true;
-                } else {
-                  return false;
-                }
-              });
+                  const totalEpisodes = await ctx.prisma.seasons.findMany({
+                    where: {
+                      series_id: historyItem.series_id,
+                      NOT: {
+                        season_number: 0,
+                      },
+                    },
+                    select: {
+                      _count: {
+                        select: {
+                          episodes: true,
+                          EpisodesHistory: {
+                            where: { user_id: ctx.session.user.id },
+                          },
+                        },
+                      },
+                    },
+                  });
 
-              if (nextEpisode !== undefined && nextEpisode?.length > 0) {
-                return {
-                  ...nextEpisode[0],
-                  series_id: season?.Series?.id,
-                  datetime: lastEpisode.datetime,
-                };
+                  let number_of_episodes = 0;
+                  let episodes_watched = 0;
+
+                  totalEpisodes.forEach((item) => {
+                    number_of_episodes += item._count.episodes;
+                    episodes_watched += item._count.EpisodesHistory;
+                  });
+
+                  if (number_of_episodes === episodes_watched) {
+                    return null;
+                  }
+
+                  const color = await convertImageToPrimaryColor({
+                    image: historyItem.series.poster,
+                  });
+
+                  return {
+                    ...nextSeason.episodes[0],
+                    datetime: historyItem.datetime,
+                    number_of_episodes,
+                    episodes_watched,
+                    color,
+                  };
+                } else {
+                  return null;
+                }
+              } else {
+                return null;
               }
             }
           })
         );
 
-        const filteredResult: any = result
-          .filter((el) => {
-            if (el !== undefined) {
-              return true;
-            }
-          })
+        const filteredNextEpisodes = nextEpisodes
+          .filter((item) => item !== null)
           .sort((a: any, b: any) => {
             if (input.orderBy.field === "title") {
-              return a.series.name.localeCompare(b.series.name);
+              return a.Seasons.Series.name.localeCompare(b.Seasons.Series.name);
             }
 
             if (input.orderBy.field === "date") {
               if (input.orderBy.order === "asc") {
-                if (a.series.first_air_date > b.series.first_air_date) {
+                if (a.air_date > b.air_date) {
                   return 1;
                 } else {
                   return -1;
                 }
               } else if (input.orderBy.order === "desc") {
-                if (a.series.first_air_date < b.series.first_air_date) {
+                if (a.air_date < b.air_date) {
                   return 1;
                 } else {
                   return -1;
@@ -238,72 +314,12 @@ export const dashboardRouter = router({
             return 0;
           });
 
-        const paginated = paginate(filteredResult, input.pageSize, input.page);
-
-        const resultWithTMDB = await Promise.all(
-          paginated.map(async (item) => {
-            const url = new URL(`tv/${item.series_id}`, process.env.NEXT_PUBLIC_TMDB_API);
-            url.searchParams.append("api_key", process.env.NEXT_PUBLIC_TMDB_KEY || "");
-            if (ctx) url.searchParams.append("language", ctx.session?.user?.profile.language as string);
-
-            const res = await fetch(url);
-            const tmdb = await res.json();
-
-            if (tmdb?.status_code) {
-              throw new TRPCError({
-                code: "NOT_FOUND",
-                message: tmdb.status_message,
-                cause: tmdb.status_code,
-              });
-            }
-
-            const color = await convertImageToPrimaryColor({
-              image: tmdb.poster_path,
-              fallback: tmdb.backdrop_path,
-            });
-
-            tmdb.number_of_episodes = 0;
-            tmdb.seasons.map(async (season: ISeason) => {
-              if (new Date(season.air_date) <= new Date() && season.season_number > 0) {
-                tmdb.number_of_episodes += season.episode_count;
-              }
-            });
-
-            const watched = await ctx.prisma.episodesHistory.findMany({
-              where: {
-                user_id: ctx?.session?.user?.id,
-                series_id: tmdb.id,
-                NOT: {
-                  season: {
-                    season_number: 0,
-                  },
-                },
-              },
-              distinct: ["episode_id"],
-              include: {
-                series: true,
-              },
-              orderBy: {
-                datetime: "desc",
-              },
-            });
-            tmdb.episodes_watched = watched.length || 0;
-
-            // TODO: Watched amount of episode equal to number of episodes
-            // If we return undefined, there will be pageSize -1
-            // Could do this before paginating, but that will take way too long
-            // if (tmdb.episodes_watched === tmdb.number_of_episodes) return undefined;
-
-            return { ...item, color: color, series: tmdb };
-          })
-        );
-
         return {
-          result: resultWithTMDB,
-          pagesAmount: Math.ceil(filteredResult.length / input.pageSize),
+          result: paginate(filteredNextEpisodes, input.pageSize, input.page),
+          pagesAmount: Math.ceil(filteredNextEpisodes.length / input.pageSize),
         };
       } catch (error) {
-        console.error("something went wrong ", error);
+        console.error("something went wrong in the up next route ", error);
       }
     }),
 

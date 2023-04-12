@@ -114,12 +114,12 @@ const ProgressPage = () => {
               <AnimatePresence mode="popLayout" initial={false}>
                 {data.result.map((s) => (
                   <SeriesProgress
-                    key={s.series.id}
-                    name={s.series.name}
-                    imageSrc={s.series.backdrop_path}
-                    url={`/tv/${s.series.id}`}
-                    number_of_episodes={s.series.number_of_episodes}
-                    episodes_watched={s.series.episodes_watched}
+                    key={s.Seasons.Series.id}
+                    name={s.Seasons.Series.name}
+                    imageSrc={s.Seasons.Series.poster}
+                    url={`/tv/${s.Seasons.Series.id}`}
+                    number_of_episodes={s.number_of_episodes}
+                    episodes_watched={s.episodes_watched}
                     nextEpisode={{
                       id: s.id,
                       name: s.name,
@@ -129,7 +129,7 @@ const ProgressPage = () => {
                       datetime: s.datetime,
                     }}
                     themeColor={s.color}
-                    seriesID={s.series.id}
+                    seriesID={s.Seasons.Series.id}
                     episodeID={s.id}
                     refetch={refetch}
                   />
