@@ -100,7 +100,7 @@ const SeriesProgress = ({
         </Link>
         <div>
           Watched <span className="font-bold">{episodes_watched}</span> of{" "}
-          <span className="font-bold">{number_of_episodes}</span> episodes
+          <span className="font-bold">{number_of_episodes}</span> episodes{" "}
           <span className="hidden md:inline-block">({percent}%)</span>, leaving{" "}
           <span className="font-bold">{number_of_episodes - episodes_watched}</span> episodes left to watch. Last
           episode watched on{" "}
@@ -122,10 +122,10 @@ const SeriesProgress = ({
                 background: themeColor?.hex,
               }}
               className={`
-                    px-3 py-1 mr-2 rounded-full
-                    ${themeColor.isDark && "text-white"}
-                    ${themeColor.isLight && "text-primaryBackground"}
-                  `}
+                  px-3 py-1 mr-2 rounded-full
+                  ${themeColor.isDark && "text-white"}
+                  ${themeColor.isLight && "text-primaryBackground"}
+                `}
             >
               {nextEpisode.season_number}x{nextEpisode.episode_number}
             </span>
