@@ -10,6 +10,7 @@ import { trpc } from "../utils/trpc";
 import Layout from "../components/common/Layout";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ToastWrapper from "../components/common/ToastWrapper";
+import { Analytics } from "@vercel/analytics/react";
 
 import Router from "next/router";
 import NProgress from "nprogress";
@@ -25,6 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
       <ReactQueryDevtools />
       <Layout>
         <Component {...pageProps} />
+        <Analytics />
         <ToastWrapper />
       </Layout>
     </SessionProvider>
