@@ -118,7 +118,7 @@ const HistoryGrid = ({
                   alt={`Poster image for ${
                     item?.movie_id
                       ? item.movie?.title
-                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
+                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item?.episode?.name}`
                   }`}
                   src={PosterImage({
                     path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
@@ -129,9 +129,9 @@ const HistoryGrid = ({
                   className="rounded w-[170px] h-[240px]"
                 />
                 <div>
-                  <span className="w-full text-xs truncate line-clamp-2">
+                  <span className="w-full text-xs line-clamp-1">
                     {item?.season && item?.episode
-                      ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
+                      ? `${item.season.season_number}x${item.episode.episode_number} ${item?.episode?.name}`
                       : `${item?.movie?.title}`}
                   </span>
                   <div className="text-xs opacity-50 line-clamp-1">{date}</div>
