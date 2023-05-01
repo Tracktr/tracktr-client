@@ -83,7 +83,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                       })}
                       width={170}
                       height={240}
-                      className="rounded-t w-[170px] h-[240px]"
+                      className="rounded-t"
                     />
                   </Link>
                   <div className="flex bg-[#343434] rounded-b-full">

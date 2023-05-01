@@ -69,7 +69,7 @@ const SeriesProgress = ({
           src={PosterImage({ path: imageSrc, size: "md" })}
           width={300}
           height={168}
-          className="rounded-t rounded-b md:rounded-b-none w-[300px] h-[168px]"
+          className="rounded-t rounded-b md:rounded-b-none"
         />
         <div className="hidden md:flex bg-[#343434] rounded-b-full">
           <span
