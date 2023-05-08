@@ -98,7 +98,7 @@ const HistoryGrid = ({
                     fallbackSrc="/placeholder_profile.png"
                     width={16}
                     height={16}
-                    className="rounded-full w-[16px] h-[16px]"
+                    className="rounded-full"
                     alt="User profile image"
                   />
                   <p className="ml-2 text-sm">{item?.friend?.name}</p>
@@ -118,7 +118,7 @@ const HistoryGrid = ({
                   alt={`Poster image for ${
                     item?.movie_id
                       ? item.movie?.title
-                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item.series?.name}`
+                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item?.episode?.name}`
                   }`}
                   src={PosterImage({
                     path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
@@ -126,12 +126,12 @@ const HistoryGrid = ({
                   })}
                   width={170}
                   height={240}
-                  className="rounded w-[170px] h-[240px]"
+                  className="rounded"
                 />
                 <div>
-                  <span className="w-full text-xs truncate line-clamp-2">
+                  <span className="w-full text-xs line-clamp-1">
                     {item?.season && item?.episode
-                      ? `${item.season.season_number}x${item.episode.episode_number} ${item.series?.name}`
+                      ? `${item.season.season_number}x${item.episode.episode_number} ${item?.episode?.name}`
                       : `${item?.movie?.title}`}
                   </span>
                   <div className="text-xs opacity-50 line-clamp-1">{date}</div>

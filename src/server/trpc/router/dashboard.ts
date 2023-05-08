@@ -1,11 +1,9 @@
-import { TRPCError } from "@trpc/server";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { z } from "zod";
 import convertImageToPrimaryColor from "../../../utils/colors";
 import { getDateXDaysAgo } from "../../../utils/getDate";
 import paginate from "../../../utils/paginate";
 import { router, protectedProcedure } from "../trpc";
-import { ISeason } from "./tv";
 
 export interface IStatItem {
   date: string;

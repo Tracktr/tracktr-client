@@ -70,7 +70,7 @@ const EpisodePoster = ({
             src={PosterImage({ path: imageSrc, size: "md" })}
             width={300}
             height={168}
-            className="rounded w-[300px] h-[168px]"
+            className="rounded"
           />
         </ConditionalLink>
         <div className="absolute bottom-0 left-0 z-10 flex items-center w-full select-none bg-gradient-to-t from-primaryBackground"></div>

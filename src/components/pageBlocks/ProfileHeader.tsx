@@ -10,7 +10,7 @@ const ProfileHeader = ({ image, name, currentPage }: { image: string; name: stri
         width={128}
         height={128}
         alt="Profile picture"
-        className="rounded-full w-[64px] md:w-[128px] h-[74px] md:h-[128px]"
+        className="rounded-full"
       />
       <p className="ml-6 overflow-hidden text-3xl font-bold break-words md:text-4xl">{name}</p>
     </Link>
