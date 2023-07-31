@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { ImSpinner2 } from "react-icons/im";
 import { MdOutlineWrapText } from "react-icons/md";

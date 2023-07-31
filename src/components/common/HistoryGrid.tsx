@@ -1,5 +1,4 @@
 import { EpisodesHistory, MoviesHistory } from "@prisma/client";
-import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import { PosterGrid } from "./PosterGrid";

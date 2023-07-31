@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";

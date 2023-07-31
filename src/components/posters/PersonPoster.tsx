@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PersonImage } from "../../utils/generateImages";
 import ImageWithFallback from "../common/ImageWithFallback";

@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import HorizontalScrollContainer from "./HorizontalScrollContainer";
-import Image from "next/image";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import Modal from "../modal/Modal";
 import ModalTitle from "../modal/ModalTitle";

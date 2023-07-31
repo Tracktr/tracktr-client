@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { PosterImage } from "../../utils/generateImages";
 import ImageWithFallback from "../common/ImageWithFallback";

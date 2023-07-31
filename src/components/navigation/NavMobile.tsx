@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import Logo from "../common/Logo";
 import { IoMdClose } from "react-icons/io";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
