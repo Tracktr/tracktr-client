@@ -175,7 +175,7 @@ export const dashboardRouter = router({
                   episodes_watched += item._count.EpisodesHistory;
                 });
 
-                if (number_of_episodes === episodes_watched) {
+                if (number_of_episodes <= episodes_watched) {
                   return null;
                 }
 
@@ -248,7 +248,7 @@ export const dashboardRouter = router({
                     episodes_watched += item._count.EpisodesHistory;
                   });
 
-                  if (number_of_episodes === episodes_watched) {
+                  if (number_of_episodes <= episodes_watched) {
                     return null;
                   }
 

@@ -2,7 +2,7 @@ const LoadingSeriesProgress = () => {
   return (
     <div className="flex flex-col gap-2 mx-4 md:flex-row">
       <div className="flex justify-center md:block">
-        <div className="animate-pulse w-[270px] h-[168px] md:h-[184px] rounded bg-[#343434]" />
+        <div className="animate-pulse w-[150px] h-[250px] rounded bg-[#343434]" />
       </div>
       <div className="md:hidden animate-pulse w-full h-[24px] rounded-full bg-[#343434]" />
       <div className="w-full">
