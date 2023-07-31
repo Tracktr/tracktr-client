@@ -87,7 +87,7 @@ const HistoryGrid = ({
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -150, opacity: 0 }}
               transition={{ type: "spring" }}
-              className="relative w-[170px] group"
+              className={`relative ${hasScrollContainer && "w-[170px]"} group`}
               key={item.id}
             >
               {item?.friend && (history[i - 1] as IHistoryItem)?.friend?.name !== item?.friend?.name ? (
@@ -112,22 +112,24 @@ const HistoryGrid = ({
                     ? `/movies/${item.movie?.id}`
                     : `/tv/${item.series_id}/season/${item?.season?.season_number}/episode/${item?.episode?.episode_number}`
                 }
-                className="relative w-[170px] group"
+                className="relative group"
               >
-                <Image
-                  alt={`Poster image for ${
-                    item?.movie_id
-                      ? item.movie?.title
-                      : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item?.episode?.name}`
-                  }`}
-                  src={PosterImage({
-                    path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
-                    size: "sm",
-                  })}
-                  width={170}
-                  height={240}
-                  className="rounded"
-                />
+                <div className="flex justify-center">
+                  <Image
+                    alt={`Poster for ${
+                      item?.movie_id
+                        ? item.movie?.title
+                        : `${item?.season?.season_number}x${item?.episode?.episode_number} ${item?.episode?.name}`
+                    }`}
+                    src={PosterImage({
+                      path: item.movie_id ? String(item.movie?.poster) : String(item.series?.poster),
+                      size: "sm",
+                    })}
+                    width={300}
+                    height={200}
+                    className="rounded"
+                  />
+                </div>
                 <div>
                   <span className="w-full text-xs line-clamp-1">
                     {item?.season && item?.episode
