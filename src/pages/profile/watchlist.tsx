@@ -176,7 +176,7 @@ const WatchlistPage = () => {
                       href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}
                       className="relative w-[170px] group"
                     >
-                      <Image
+                      <ImageWithFallback
                         alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
                         src={PosterImage({
                           path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),

@@ -11,6 +11,7 @@ import { useState } from "react";
 import { IoIosAdd, IoMdInformation } from "react-icons/io";
 import { toast } from "react-toastify";
 import { Seasons, Series } from "@prisma/client";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 interface IEpisode {
   id: number;
@@ -75,7 +76,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                   <Link
                     href={`/tv/${item.Seasons.Series.id}/season/${item.season_number}/episode/${item.episode_number}`}
                   >
-                    <Image
+                    <ImageWithFallback
                       alt={`Poster image for ${`S${item.season_number} - E${item.episode_number}`}`}
                       src={PosterImage({
                         path: item.Seasons.Series.poster,

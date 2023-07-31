@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import ImageWithFallback from "./ImageWithFallback";
 
 const Footer = () => {
   const session = useSession();
@@ -12,7 +13,7 @@ const Footer = () => {
           <div className="max-w-xl px-4 m-auto lg:w-6/12">
             <div className="mb-6 lg:mb-0">
               <Link href="https://www.themoviedb.org/" target="_blank">
-                <Image src="/tmdb_logo.svg" width={128} height={64} alt="TMDB Logo" />
+                <ImageWithFallback src="/tmdb_logo.svg" width={128} height={64} alt="TMDB Logo" />
               </Link>
             </div>
           </div>

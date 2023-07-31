@@ -25,7 +25,7 @@ const Review = ({ content, created, item, friend, hideImage, id }: IReview) => {
     <div className="flex items-center w-full gap-2 mb-4">
       {!hideImage && (
         <Link href={`/${item.name ? "tv" : "movies"}/${item.id}?review=${id}`}>
-          <Image
+          <ImageWithFallback
             alt={`Poster image for: ${item.name || item.title}`}
             width={100}
             height={150}

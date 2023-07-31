@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { PosterImage } from "../../utils/generateImages";
 import { motion } from "framer-motion";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 function groupBy<T extends Record<string, any>, K extends keyof T>(
   array: T[],
@@ -87,7 +88,7 @@ const DetailsBlock = ({ data, type, name }: DetailsBlockProps) => {
             <Link href={`/${type}/${cast.id}`} key={index} className="flex justify-end px-4">
               <div className="flex py-2 mr-auto">
                 <div className="flex-shrink-0 pr-4">
-                  <Image
+                  <ImageWithFallback
                     alt={"Poster for: " + cast.title || cast.name}
                     src={PosterImage({ path: cast.poster_path, size: "sm" })}
                     width={50}

@@ -10,6 +10,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineLiveTv } from "react-icons/md";
 import LoadingPageComponents from "../components/common/LoadingPageComponents";
 import Head from "next/head";
+import ImageWithFallback from "../components/common/ImageWithFallback";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -68,7 +69,7 @@ const Home: NextPage = () => {
                   </div>
 
                   <div>
-                    <Image
+                    <ImageWithFallback
                       width={1278}
                       height={694}
                       src="/product_image.png"
@@ -122,7 +123,7 @@ const Home: NextPage = () => {
                 <div className="py-10 sm:py-16 lg:py-24 2xl:pl-24">
                   <div className="grid items-center grid-cols-1 gap-y-8 lg:grid-cols-2 lg:gap-x-8 2xl:gap-x-20">
                     <div className="relative lg:order-2 2xl:-mr-24">
-                      <Image
+                      <ImageWithFallback
                         className="w-full rounded-md"
                         alt="product image"
                         src="/product_image.png"

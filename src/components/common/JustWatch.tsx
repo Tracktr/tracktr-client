@@ -7,6 +7,7 @@ import Image from "next/image";
 import { IThemeColor } from "../watchButton/BaseWatchButton";
 import Modal from "../modal/Modal";
 import ModalTitle from "../modal/ModalTitle";
+import ImageWithFallback from "./ImageWithFallback";
 
 interface IProvider {
   name: string;
@@ -171,7 +172,7 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            <Image
+                            <ImageWithFallback
                               className="rounded-md"
                               alt={item.provider_name}
                               src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
@@ -199,7 +200,7 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            <Image
+                            <ImageWithFallback
                               className="rounded-md"
                               alt={item.provider_name}
                               src={`https://image.tmdb.org/t/p/original${item.logo_path}`}
@@ -227,7 +228,7 @@ const JustWatch = ({ justWatch, themeColor, name }: JustWatchProps) => {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            <Image
+                            <ImageWithFallback
                               className="rounded-md"
                               alt={item.provider_name}
                               src={`https://image.tmdb.org/t/p/original${item.logo_path}`}

@@ -10,6 +10,7 @@ import Image from "next/image";
 import { BiChevronDown } from "react-icons/bi";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 const NavMobile = ({
   toggleNavMobile,
@@ -74,7 +75,7 @@ const NavMobile = ({
               {session.status === "authenticated" ? (
                 <>
                   <div onClick={() => setSubMenu(!submenu)} className="flex items-center w-full pl-4" role="none">
-                    <Image
+                    <ImageWithFallback
                       unoptimized
                       src={session.data?.user?.image ? session.data?.user?.image : ""}
                       width={36}

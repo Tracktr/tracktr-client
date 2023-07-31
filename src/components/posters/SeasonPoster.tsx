@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 interface IPoster {
   imageSrc: string;
@@ -75,7 +76,7 @@ const SeasonPoster = ({
       <div className="relative">
         <ConditionalLink href={url} condition={Boolean(url)}>
           <div className={`relative ${url ? "" : "pointer-events-none"}`}>
-            <Image
+            <ImageWithFallback
               alt={"Poster image for" + name}
               src={PosterImage({ path: imageSrc, size: "sm" })}
               width={170}

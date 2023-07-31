@@ -17,6 +17,7 @@ import { createContext } from "../../server/trpc/context";
 import SuperJSON from "superjson";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Review from "../../components/common/Review";
+import ImageWithFallback from "../../components/common/ImageWithFallback";
 
 const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
@@ -132,7 +133,7 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                             href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}
                             className="relative w-[170px] group"
                           >
-                            <Image
+                            <ImageWithFallback
                               alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
                               src={PosterImage({
                                 path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),

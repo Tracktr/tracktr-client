@@ -115,7 +115,7 @@ const HistoryGrid = ({
                 className="relative group"
               >
                 <div className="flex justify-center">
-                  <Image
+                  <ImageWithFallback
                     alt={`Poster for ${
                       item?.movie_id
                         ? item.movie?.title
