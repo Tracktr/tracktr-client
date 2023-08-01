@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 import { BsBookmarkCheck, BsFillBookmarkDashFill } from "react-icons/bs";
@@ -10,6 +9,7 @@ import { toast } from "react-toastify";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 export interface IPoster {
   imageSrc: string;
@@ -108,7 +108,7 @@ const TVPoster = ({
       <div className="relative">
         <ConditionalLink href={url} condition={Boolean(url)}>
           <div className={`relative ${url ? "" : "pointer-events-none"}`}>
-            <Image
+            <ImageWithFallback
               alt={"Poster image for" + name}
               src={PosterImage({ path: imageSrc, size: "sm" })}
               width={170}

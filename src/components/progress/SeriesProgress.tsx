@@ -65,10 +65,10 @@ const SeriesProgress = ({
     >
       <Link href={url} className="flex justify-center md:block">
         <ImageWithFallback
-          alt={"Still image for" + name}
+          alt={"Poster for" + name}
           src={PosterImage({ path: imageSrc, size: "md" })}
-          width={300}
-          height={168}
+          width={150}
+          height={450}
           className="rounded-t rounded-b md:rounded-b-none"
         />
         <div className="hidden md:flex bg-[#343434] rounded-b-full">

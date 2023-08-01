@@ -1,6 +1,6 @@
-import Image from "next/image";
 import ConditionalLink from "../../utils/ConditionalLink";
 import { PersonImage } from "../../utils/generateImages";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 export interface IPoster {
   imageSrc: string;
@@ -11,7 +11,7 @@ export interface IPoster {
 
 const PersonPoster = ({ imageSrc, name, url, job }: IPoster) => (
   <ConditionalLink condition={Boolean(url)} href={url}>
-    <Image
+    <ImageWithFallback
       src={PersonImage({ path: imageSrc, size: "sm" })}
       width={170}
       height={240}

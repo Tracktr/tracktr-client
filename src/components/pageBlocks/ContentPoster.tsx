@@ -1,6 +1,5 @@
 import { useScroll, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import ConditionalLink from "../../utils/ConditionalLink";
@@ -14,6 +13,7 @@ import MovieWatchButton from "../watchButton/MovieWatchButton";
 import SeasonWatchButton from "../watchButton/SeasonWatchButton";
 import SeriesWatchButton from "../watchButton/SeriesWatchButton";
 import SeriesProgressionBlock from "./SeriesProgressionBlock";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 const ContentPoster = ({
   hideWatchButton,
@@ -83,7 +83,7 @@ const ContentPoster = ({
           className="m-auto border-4 rounded-md border-primaryBackground"
         >
           <ConditionalLink href={`/tv/${id}`} condition={Boolean(episode) || Boolean(season)}>
-            <Image
+            <ImageWithFallback
               alt={"Poster image for:" + title}
               width={208}
               height={311}

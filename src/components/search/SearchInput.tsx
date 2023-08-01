@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import { CgSearch } from "react-icons/cg";
 import { ImSpinner2 } from "react-icons/im";
 import { PosterImage, PersonImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import ImageWithFallback from "../common/ImageWithFallback";
 
 interface SearchInputProps {
   type: "multi" | "tv" | "movie" | "person";
@@ -107,7 +107,7 @@ const SearchInput = ({ type, hideNav }: SearchInputProps) => {
                 className="w-full text-center group"
               >
                 <div className="relative flex justify-center group">
-                  <Image
+                  <ImageWithFallback
                     alt={"Poster for " + item.original_title || item.original_name || item.name}
                     src={
                       (item.poster_path && PosterImage({ path: item.poster_path, size: "sm" })) ||

@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import nProgress from "nprogress";
@@ -14,6 +13,7 @@ import { PosterGrid } from "../../components/common/PosterGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
+import ImageWithFallback from "../../components/common/ImageWithFallback";
 
 const WatchlistPage = () => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
@@ -176,7 +176,7 @@ const WatchlistPage = () => {
                       href={item?.movie_id ? `/movies/${item.movie_id}` : `/tv/${item.series_id}`}
                       className="relative w-[170px] group"
                     >
-                      <Image
+                      <ImageWithFallback
                         alt={`Poster image for ${item?.movie_id ? item.movies?.title : item.series?.name}`}
                         src={PosterImage({
                           path: item.movie_id ? String(item.movies?.poster) : String(item.series?.poster),
