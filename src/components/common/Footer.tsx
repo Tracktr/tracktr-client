@@ -55,9 +55,11 @@ const Footer = () => {
                     <Link href="/tv" className="block pb-2 text-sm">
                       Series
                     </Link>
-                    <Link href="/calendar" className="block pb-2 text-sm">
-                      Release calendar
-                    </Link>
+                    {session.status === "authenticated" && (
+                      <Link href="/calendar" className="block pb-2 text-sm">
+                        Release calendar
+                      </Link>
+                    )}
                   </li>
                 </ul>
               </div>
