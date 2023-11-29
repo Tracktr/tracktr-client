@@ -49,8 +49,6 @@ const ReleaseCalendar = () => {
     }
   }, [data]);
 
-  console.log(groupedEvents);
-
   return (
     <div>
       <div className="text-xl font-bold text-center">
