@@ -99,7 +99,7 @@ const AdminPage = () => {
   const approveMoviesReview = trpc.admin.approveMoviesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -112,7 +112,7 @@ const AdminPage = () => {
   const approveSeriesReview = trpc.admin.approveSeriesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -125,7 +125,7 @@ const AdminPage = () => {
   const approveSeasonsReview = trpc.admin.approveSeasonsReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -138,7 +138,7 @@ const AdminPage = () => {
   const approveEpisodesReview = trpc.admin.approveEpisodesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
