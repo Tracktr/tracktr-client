@@ -31,7 +31,7 @@ const DashboardPage = () => {
         order: "desc",
       },
     },
-    { enabled: sessionStatus === "authenticated" }
+    { enabled: sessionStatus === "authenticated" },
   );
   const {
     data: upNext,
@@ -47,13 +47,13 @@ const DashboardPage = () => {
         order: "desc",
       },
     },
-    { enabled: sessionStatus === "authenticated" }
+    { enabled: sessionStatus === "authenticated" },
   );
   const { data: stats, refetch: refetchStats } = trpc.dashboard.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
     {
       enabled: sessionStatus === "authenticated",
-    }
+    },
   );
   const {
     data: friendsData,
@@ -62,7 +62,7 @@ const DashboardPage = () => {
     isRefetching: isRefetchingFriends,
   } = trpc.dashboard.friendsActivity.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-    { enabled: sessionStatus === "authenticated" }
+    { enabled: sessionStatus === "authenticated" },
   );
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const DashboardPage = () => {
         <title>Dashboard - Tracktr.</title>
       </Head>
 
-      <LoadingPageComponents status={sessionStatus === "authenticated" ? "success" : "loading"}>
+      <LoadingPageComponents status={sessionStatus === "authenticated" ? "success" : "pending"}>
         {() => (
           <div>
             <SearchHeader
@@ -171,11 +171,11 @@ const DashboardPage = () => {
 
                 <h2 className="mt-4 mb-2 text-xl">Reviews</h2>
 
-                {!friendsData?.seriesReviews[0] && !friendsData?.movieReviews[0] && friendsStatus !== "loading" && (
+                {!friendsData?.seriesReviews[0] && !friendsData?.movieReviews[0] && friendsStatus !== "pending" && (
                   <div>No reviews found</div>
                 )}
                 <div className="flex flex-col md:flex-row">
-                  {friendsStatus === "loading" ? (
+                  {friendsStatus === "pending" ? (
                     <LoadingReview />
                   ) : (
                     friendsData?.seriesReviews[0] && (
@@ -188,7 +188,7 @@ const DashboardPage = () => {
                       />
                     )
                   )}
-                  {friendsStatus === "loading" ? (
+                  {friendsStatus === "pending" ? (
                     <LoadingReview />
                   ) : (
                     friendsData?.movieReviews[0] && (

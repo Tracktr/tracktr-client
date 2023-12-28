@@ -243,7 +243,7 @@ const ReviewsBlock = ({
                 }`}
                 placeholder="Leave a review..."
                 onChange={handleInput}
-                disabled={editReview.isLoading}
+                disabled={editReview.isPending}
                 aria-describedby="review-helper"
               ></textarea>
               <p id="review-helper" className={`mt-2 mb-6 text-sm ${inputError ? "text-red-400" : "text-gray-400"}`}>
@@ -252,7 +252,7 @@ const ReviewsBlock = ({
 
               <button
                 onClick={onSubmit}
-                disabled={editReview.isLoading || Boolean(inputError)}
+                disabled={editReview.isPending || Boolean(inputError)}
                 style={{
                   backgroundColor: themeColor.hex,
                 }}
@@ -261,7 +261,7 @@ const ReviewsBlock = ({
                 } ${themeColor.isLight && "text-primaryBackground"} disabled:cursor-not-allowed`}
                 aria-label="Submit review"
               >
-                {editReview.isLoading ? (
+                {editReview.isPending ? (
                   <div className="flex items-center gap-3">
                     <ImSpinner2 className="animate-spin" />
                     <div>Loading</div>

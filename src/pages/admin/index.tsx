@@ -211,7 +211,7 @@ const AdminPage = () => {
         <title>Admin - Tracktr.</title>
       </Head>
 
-      <LoadingPageComponents status={isLoading ? "loading" : "success"}>
+      <LoadingPageComponents status={isLoading ? "pending" : "success"}>
         {() => (
           <div className="max-w-6xl px-4 pt-24 pb-4 m-auto">
             <div className="flex flex-col gap-4 md:flex-row">

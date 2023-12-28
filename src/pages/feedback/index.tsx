@@ -102,7 +102,7 @@ const FeedbackPage = () => {
                     required
                     aria-describedby="email-helper"
                     onChange={handleEmailChange}
-                    disabled={addFeedback.isLoading}
+                    disabled={addFeedback.isPending}
                   />
                   <p id="email-helper" className="mt-2 text-sm text-gray-400">
                     We&apos;ll only use this to contact you if we need more information.
@@ -122,7 +122,7 @@ const FeedbackPage = () => {
                   }`}
                   placeholder="Leave a comment..."
                   onChange={handleMessageChange}
-                  disabled={addFeedback.isLoading}
+                  disabled={addFeedback.isPending}
                   aria-describedby="message-helper"
                 ></textarea>
                 <p
@@ -136,9 +136,9 @@ const FeedbackPage = () => {
                   type="submit"
                   className="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                   onClick={handleSubmit}
-                  disabled={addFeedback.isLoading || Boolean(messageError) || Boolean(emailError)}
+                  disabled={addFeedback.isPending || Boolean(messageError) || Boolean(emailError)}
                 >
-                  {addFeedback.isLoading ? (
+                  {addFeedback.isPending ? (
                     <div className="flex items-center gap-2">
                       <ImSpinner2 className="animate-spin" />
                       <div>Saving...</div>

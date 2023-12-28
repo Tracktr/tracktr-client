@@ -31,7 +31,7 @@ const Home: NextPage = () => {
         <title>Tracktr. Track the best movies and shows.</title>
       </Head>
 
-      <LoadingPageComponents status={sessionStatus === "unauthenticated" ? "success" : "loading"}>
+      <LoadingPageComponents status={sessionStatus === "unauthenticated" ? "success" : "pending"}>
         {() => (
           <div>
             <section className="py-16 sm:py-16 lg:py-24">

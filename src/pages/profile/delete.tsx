@@ -13,7 +13,7 @@ const DeleteAccountPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading } = trpc.profile.deleteProfile.useMutation({
+  const { mutate, isPending } = trpc.profile.deleteProfile.useMutation({
     onSuccess: () => {
       toast("Account deleted", {
         icon: <IoIosRemove className="text-3xl text-green-500" />,
@@ -57,7 +57,7 @@ const DeleteAccountPage = () => {
             onClick={() => mutate()}
             className="px-8 py-3 text-2xl font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary"
           >
-            {isLoading ? (
+            {isPending ? (
               <div className="flex items-center gap-5">
                 <ImSpinner2 className="animate-spin" />
                 <div>Saving...</div>

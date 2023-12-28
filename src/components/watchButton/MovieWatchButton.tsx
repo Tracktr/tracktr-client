@@ -26,7 +26,7 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
     {
       enabled: sessionStatus !== "loading",
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const markAsWatched = trpc.movie.markMovieAsWatched.useMutation({
@@ -145,8 +145,8 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
                 removeFromHistory(
                   undefined,
                   String(
-                    Object.values(watchHistory.data as any[])[Object.values(watchHistory.data as any[]).length - 1].id
-                  )
+                    Object.values(watchHistory.data as any[])[Object.values(watchHistory.data as any[]).length - 1].id,
+                  ),
                 )
               }
             >
@@ -174,7 +174,7 @@ const MovieWatchButton = ({ itemID, themeColor, name }: IWatchButtonProps) => {
                   <div className="col-span-3">Date watched</div>
                   <div className="flex flex-col items-center">Remove</div>
                 </div>
-                {removeFromWatched.isLoading
+                {removeFromWatched.isPending
                   ? data.map((play) => {
                       return (
                         <div key={play.id} className="grid items-center grid-cols-4 gap-4 font-bold align-middle">

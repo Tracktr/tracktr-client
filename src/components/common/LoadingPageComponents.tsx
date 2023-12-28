@@ -5,7 +5,7 @@ import NProgress from "nprogress";
 import { useRouter } from "next/router";
 
 interface ILoadingPageComponents {
-  status: "loading" | "error" | "success" | "idle";
+  status: "error" | "success" | "idle" | "pending";
   children: () => any;
   posters?: boolean;
   notFound?: boolean;
@@ -25,7 +25,7 @@ const LoadingPageComponents = ({ status, children, posters, notFound }: ILoading
       else router.push("500");
     }
 
-    if (status === "loading") {
+    if (status === "pending") {
       typeof window !== "undefined" && NProgress.start();
       if (posters) {
         return <LoadingPosters />;

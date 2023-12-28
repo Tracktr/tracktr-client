@@ -27,7 +27,7 @@ interface IEpisode {
 
 interface IEpisodesGrid {
   episodes: IEpisode[];
-  status: "error" | "success" | "loading";
+  status: "error" | "success" | "pending";
   refetch: () => void;
   isRefetching: boolean;
 }
@@ -52,7 +52,7 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
     },
   });
 
-  if (episodes.length < 1 && status !== "loading") {
+  if (episodes.length < 1 && status !== "pending") {
     return <div>No up next episodes found</div>;
   }
 
@@ -98,11 +98,11 @@ const UpNext = ({ episodes, status, refetch, isRefetching }: IEpisodesGrid): JSX
                     {`${item.season_number}x${item.episode_number}`}&nbsp;
                     {item.name}
                   </div>
-                  {(markAsWatched.isLoading || isRefetching) && item.Seasons.Series.id === currentLoadingID ? (
+                  {(markAsWatched.isPending || isRefetching) && item.Seasons.Series.id === currentLoadingID ? (
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                   ) : (
                     <button
-                      disabled={markAsWatched.isLoading}
+                      disabled={markAsWatched.isPending}
                       className="flex text-gray-500 text-opacity-100 hover:text-green-500"
                       onClick={() =>
                         markAsWatched.mutate({

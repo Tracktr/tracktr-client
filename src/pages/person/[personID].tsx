@@ -9,11 +9,11 @@ import ContentMain from "../../components/pageBlocks/ContentMain";
 import CreditsBlock from "../../components/pageBlocks/CreditsBlock";
 import Head from "next/head";
 import { PersonImage } from "../../utils/generateImages";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContext } from "../../server/trpc/context";
 import SuperJSON from "superjson";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
+import { createServerSideHelpers } from "@trpc/react-query/server";
 
 const PersonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { data, status } = trpc.person.personById.useQuery({ slug: props.personID }, { enabled: false });
@@ -52,20 +52,20 @@ const PersonPage = (props: InferGetServerSidePropsType<typeof getServerSideProps
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
+export async function getServerSideProps(context: any) {
+  const helpers = createServerSideHelpers({
     router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
+    ctx: await createContext({ req: context.req, res: context.res, info: context.info }),
     transformer: SuperJSON,
   });
-  await ssg.person.personById.prefetch({ slug: String(context.query.personID) });
+  await helpers.person.personById.prefetch({ slug: String(context.query.personID) });
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
+      trpcState: helpers.dehydrate(),
       personID: context.query.personID,
     },
   };
-};
+}
 
 export default PersonPage;

@@ -21,9 +21,9 @@ const CalendarPage = () => {
         <title>Release Calendar - Tracktr.</title>
       </Head>
 
-      <LoadingPageComponents status={session.status === "authenticated" ? "success" : "loading"}>
+      <LoadingPageComponents status={session.status === "authenticated" ? "success" : "pending"}>
         {() => (
-          <div className="max-w-6xl pb-4 m-auto">
+          <div className="max-w-6xl pb-8 m-auto">
             <div className="px-4 pt-16">
               <h1 className="my-4 text-4xl">Release calendar</h1>
               <ReleaseCalendar />
