@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
-import ApproveReview from "../../components/admin/ApproveReview";
+import ApproveReview, { IReview, ReviewType } from "../../components/admin/ApproveReview";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { trpc } from "../../utils/trpc";
 
@@ -15,7 +15,7 @@ const AdminPage = () => {
 
   const { data: stats, isLoading } = trpc.admin.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-    { enabled: sessionStatus === "authenticated" }
+    { enabled: sessionStatus === "authenticated" },
   );
 
   const { data: feedback, refetch: refetchFeedback } = trpc.feedback.get.useQuery(undefined, {
@@ -35,7 +35,11 @@ const AdminPage = () => {
     },
   });
 
-  const { data: reviews, refetch: refetchReviews, isRefetching } = trpc.admin.getReviews.useQuery(undefined, {
+  const {
+    data: reviews,
+    refetch: refetchReviews,
+    isRefetching,
+  } = trpc.admin.getReviews.useQuery(undefined, {
     enabled: sessionStatus === "authenticated",
   });
 
@@ -151,6 +155,56 @@ const AdminPage = () => {
     }
   });
 
+  const approveItem = (type: ReviewType, id: string) => {
+    switch (type) {
+      case "movie":
+        approveMoviesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "series":
+        approveSeriesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "season":
+        approveSeasonsReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "episodes":
+        approveEpisodesReview.mutate({
+          reviewID: id,
+        });
+        break;
+    }
+  };
+
+  const removeItem = (type: ReviewType, id: string) => {
+    switch (type) {
+      case "movie":
+        removeMoviesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "series":
+        removeSeriesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "season":
+        removeSeasonsReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "episodes":
+        removeEpisodesReview.mutate({
+          reviewID: id,
+        });
+        break;
+    }
+  };
+
   return (
     <>
       <Head>
@@ -208,38 +262,17 @@ const AdminPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 mt-4 md:flex-row">
-              <ApproveReview
-                approveItem={approveMoviesReview}
-                removeItem={removeMoviesReview}
-                type="movie"
-                reviews={reviews?.movies}
-                isRefetching={isRefetching}
-              />
-              <ApproveReview
-                approveItem={approveSeriesReview}
-                removeItem={removeSeriesReview}
-                type="series"
-                reviews={reviews?.series}
-                isRefetching={isRefetching}
-              />
-            </div>
-
-            <div className="flex flex-col gap-4 mt-4 md:flex-row">
-              <ApproveReview
-                approveItem={approveSeasonsReview}
-                removeItem={removeSeasonsReview}
-                type="season"
-                reviews={reviews?.seasons}
-                isRefetching={isRefetching}
-              />
-              <ApproveReview
-                approveItem={approveEpisodesReview}
-                removeItem={removeEpisodesReview}
-                type="episodes"
-                reviews={reviews?.episodes}
-                isRefetching={isRefetching}
-              />
+            <div className="mt-4">
+              {reviews ? (
+                <ApproveReview
+                  approveItem={approveItem}
+                  removeItem={removeItem}
+                  reviews={reviews as IReview[]}
+                  isLoading={isRefetching || isLoading}
+                />
+              ) : (
+                <div>...</div>
+              )}
             </div>
           </div>
         )}

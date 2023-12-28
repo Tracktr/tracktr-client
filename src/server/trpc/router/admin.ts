@@ -8,7 +8,7 @@ export const adminRouter = router({
     .input(
       z.object({
         timeZone: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -211,12 +211,80 @@ export const adminRouter = router({
         },
       });
 
-      return {
-        movies: moviesReviews,
-        series: seriesReviews,
-        seasons: seasonsReviews,
-        episodes: episodesReviews,
-      };
+      return [
+        ...moviesReviews.map((review) => {
+          return {
+            type: "movie",
+            id: review.id,
+            title: review.Movies.title,
+            content: review.content,
+            created: review.created,
+            user: {
+              username: review.user.profile?.username,
+              image: review.user.image,
+            },
+            item: {
+              id: review.Movies.id,
+              title: review.Movies.title,
+              poster: review.Movies.poster,
+            },
+          };
+        }),
+        ...seriesReviews.map((review) => {
+          return {
+            type: "series",
+            id: review.id,
+            title: review.Series.name,
+            content: review.content,
+            created: review.created,
+            user: {
+              username: review.user.profile?.username,
+              image: review.user.image,
+            },
+            item: {
+              id: review.Series.id,
+              name: review.Series.name,
+              poster: review.Series.poster,
+            },
+          };
+        }),
+        ...seasonsReviews.map((review) => {
+          return {
+            type: "season",
+            id: review.id,
+            title: review.Seasons.Series?.name,
+            content: review.content,
+            created: review.created,
+            user: {
+              username: review.user.profile?.username,
+              image: review.user.image,
+            },
+            item: {
+              id: review.Seasons.id,
+              name: review.Seasons.Series?.name,
+              poster: review.Seasons.poster,
+            },
+          };
+        }),
+        ...episodesReviews.map((review) => {
+          return {
+            type: "episodes",
+            id: review.id,
+            title: review.Episodes.Seasons?.Series?.name,
+            content: review.content,
+            created: review.created,
+            user: {
+              username: review.user.profile?.username,
+              image: review.user.image,
+            },
+            item: {
+              id: review.Episodes.id,
+              name: review.Episodes.Seasons?.Series?.name,
+              poster: review.Episodes.Seasons?.poster,
+            },
+          };
+        }),
+      ];
     } else {
       throw new TRPCError({
         code: "UNAUTHORIZED",
@@ -230,7 +298,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -254,7 +322,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -278,7 +346,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -302,7 +370,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -326,7 +394,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -353,7 +421,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -380,7 +448,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
@@ -407,7 +475,7 @@ export const adminRouter = router({
     .input(
       z.object({
         reviewID: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       if (ctx.session.user.profile.role === "ADMIN") {
