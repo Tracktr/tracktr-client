@@ -14,6 +14,8 @@ import { ImSpinner2 } from "react-icons/im";
 import capitalizeFirstLetter from "../../utils/capitalize";
 import Review from "../common/Review";
 
+export type ReviewType = "movie" | "series" | "season" | "episodes";
+
 interface IApproveReview {
   reviews:
     | (MoviesReviews & { user: User & { profile: { username: string } | null }; Movies: Movies })[]
@@ -24,7 +26,7 @@ interface IApproveReview {
         Episodes: Episodes & { Seasons: (Seasons & { Series: Series | null }) | null };
       })[]
     | undefined;
-  type: "movie" | "series" | "season" | "episodes";
+  type: ReviewType;
   approveItem: any;
   removeItem: any;
   isRefetching: boolean;
