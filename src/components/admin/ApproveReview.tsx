@@ -27,16 +27,17 @@ interface IApproveReview {
   type: "movie" | "series" | "season" | "episodes";
   approveItem: any;
   removeItem: any;
+  isRefetching: boolean;
 }
 
-const ApproveReview = ({ reviews, type, approveItem, removeItem }: IApproveReview) => {
+const ApproveReview = ({ reviews, type, approveItem, removeItem, isRefetching }: IApproveReview) => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string>();
 
   return (
     <div className="md:w-[50%] bg-[#1A1A1A] p-4 rounded">
       <div className="text-xl font-bold">{capitalizeFirstLetter(type)} reviews</div>
       {reviews && reviews.length > 0 ? (
-        <div className="flex flex-col gap-6">
+        <div className={`flex flex-col gap-6 ${isRefetching && "opacity-50"}`}>
           {reviews.map((review: any) => {
             return (
               <div key={review.id}>

@@ -35,7 +35,7 @@ const AdminPage = () => {
     },
   });
 
-  const { data: reviews, refetch: refetchReviews } = trpc.admin.getReviews.useQuery(undefined, {
+  const { data: reviews, refetch: refetchReviews, isRefetching } = trpc.admin.getReviews.useQuery(undefined, {
     enabled: sessionStatus === "authenticated",
   });
 
@@ -214,12 +214,14 @@ const AdminPage = () => {
                 removeItem={removeMoviesReview}
                 type="movie"
                 reviews={reviews?.movies}
+                isRefetching={isRefetching}
               />
               <ApproveReview
                 approveItem={approveSeriesReview}
                 removeItem={removeSeriesReview}
                 type="series"
                 reviews={reviews?.series}
+                isRefetching={isRefetching}
               />
             </div>
 
@@ -229,12 +231,14 @@ const AdminPage = () => {
                 removeItem={removeSeasonsReview}
                 type="season"
                 reviews={reviews?.seasons}
+                isRefetching={isRefetching}
               />
               <ApproveReview
                 approveItem={approveEpisodesReview}
                 removeItem={removeEpisodesReview}
                 type="episodes"
                 reviews={reviews?.episodes}
+                isRefetching={isRefetching}
               />
             </div>
           </div>
