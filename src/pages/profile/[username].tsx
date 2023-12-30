@@ -10,13 +10,13 @@ import { trpc } from "../../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion";
 import { PosterGrid } from "../../components/common/PosterGrid";
 import Head from "next/head";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../server/trpc/router/_app";
-import { createContext } from "../../server/trpc/context";
 import SuperJSON from "superjson";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import Review from "../../components/common/Review";
 import ImageWithFallback from "../../components/common/ImageWithFallback";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import { createContext } from "../../server/trpc/context";
 
 const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const session = useSession();
@@ -64,9 +64,9 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
                   }
                   removeAsFollower.mutate({ follower: String(profile?.id) });
                 }}
-                disabled={addAsFollower.isLoading || removeAsFollower.isLoading}
+                disabled={addAsFollower.isPending || removeAsFollower.isPending}
               >
-                {addAsFollower.isLoading || removeAsFollower.isLoading || isRefetching ? (
+                {addAsFollower.isPending || removeAsFollower.isPending || isRefetching ? (
                   <div className="flex gap-4">
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                     Loading
@@ -194,20 +194,21 @@ const PublicProfile = (props: InferGetServerSidePropsType<typeof getServerSidePr
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const ssg = createProxySSGHelpers({
+export async function getServerSideProps(context: any) {
+  const helpers = createServerSideHelpers({
     router: appRouter,
-    ctx: await createContext({ req: context.req, res: context.res }),
+    ctx: await createContext({ req: context.req, res: context.res, info: context.info }),
     transformer: SuperJSON,
   });
-  await ssg.profile.profileByUsername.prefetch({ user: context.query.username });
+  await helpers.profile.profileByUsername.prefetch({ user: String(context.query.username) });
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
+      trpcState: helpers.dehydrate(),
+
       username: context.query.username,
     },
   };
-};
+}
 
 export default PublicProfile;

@@ -23,7 +23,7 @@ Router.events.on("routeChangeComplete", () => NProgress.done());
 const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <SessionProvider session={session}>
-      <ReactQueryDevtools />
+      <ReactQueryDevtools buttonPosition="bottom-left" />
       <Layout>
         <Component {...pageProps} />
         <Analytics />

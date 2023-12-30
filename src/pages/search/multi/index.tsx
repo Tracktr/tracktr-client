@@ -25,7 +25,7 @@ const SearchPage = () => {
           return lastPage.results.length !== 0 ? nextPage : undefined;
         },
         enabled: router.isReady,
-      }
+      },
     );
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const SearchPage = () => {
               <>
                 {data &&
                   data.pages.map((page: { results: any[] }) =>
-                    page.results.map((content) => {
+                    page.results.map((content: any) => {
                       if (content.media_type === "tv") {
                         return (
                           <TVPoster
@@ -99,7 +99,7 @@ const SearchPage = () => {
                       }
 
                       return <div key={content.id} />;
-                    })
+                    }),
                   )}
                 <div className="loader" ref={ref}>
                   {isFetchingNextPage && hasNextPage && <LoadingPoster />}

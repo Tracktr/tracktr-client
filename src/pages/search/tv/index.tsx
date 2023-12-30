@@ -22,7 +22,7 @@ const SearchPage = () => {
           const nextPage = allPages.length + 1;
           return lastPage.results.length !== 0 ? nextPage : undefined;
         },
-      }
+      },
     );
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const SearchPage = () => {
               <PosterGrid>
                 <>
                   {data?.pages.map((page) =>
-                    page.results.map((content) => {
+                    page.results.map((content: any) => {
                       return (
                         <TVPoster
                           id={content.id}
@@ -64,7 +64,7 @@ const SearchPage = () => {
                           watchlist_id={content.watchlist_id}
                         />
                       );
-                    })
+                    }),
                   )}
                   <div className="loader" ref={ref}>
                     {isFetchingNextPage && hasNextPage && <LoadingPoster />}

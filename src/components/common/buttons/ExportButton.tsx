@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsFiletypeCsv } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { Tooltip } from "react-tooltip";
@@ -7,12 +7,15 @@ import { trpc } from "../../../utils/trpc";
 const ExportButton = () => {
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
-  const { isFetching } = trpc.profile.export.useQuery(undefined, {
-    onSuccess: (data) => {
-      download("tracktr-export.csv", data);
-    },
+  const { data, isFetching } = trpc.profile.export.useQuery(undefined, {
     enabled: isEnabled,
   });
+
+  useEffect(() => {
+    if (data) {
+      download("tracktr-export.csv", data);
+    }
+  }, [data]);
 
   return (
     <button

@@ -7,6 +7,7 @@ import ExportButton from "../../components/common/buttons/ExportButton";
 import HistoryGrid from "../../components/common/HistoryGrid";
 import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../utils/trpc";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const HistoryPage = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const HistoryPage = () => {
     JSON.stringify({
       field: "datetime",
       order: "desc",
-    })
+    }),
   );
   const [filterInput, setFilterInput] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -29,7 +30,7 @@ const HistoryPage = () => {
     isFetching,
   } = trpc.profile.watchHistory.useQuery(
     { page, pageSize: 60, orderBy: JSON.parse(orderInput), filter: filterInput },
-    { enabled: session.status === "authenticated", keepPreviousData: true }
+    { enabled: session.status === "authenticated", placeholderData: keepPreviousData },
   );
 
   useEffect(() => {

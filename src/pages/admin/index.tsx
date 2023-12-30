@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { IoIosAdd, IoIosRemove, IoMdInformation } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
-import ApproveReview from "../../components/admin/ApproveReview";
+import ApproveReview, { IReview, ReviewType } from "../../components/admin/ApproveReview";
 import LoadingPageComponents from "../../components/common/LoadingPageComponents";
 import { trpc } from "../../utils/trpc";
 
@@ -15,7 +15,7 @@ const AdminPage = () => {
 
   const { data: stats, isLoading } = trpc.admin.stats.useQuery(
     { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-    { enabled: sessionStatus === "authenticated" }
+    { enabled: sessionStatus === "authenticated" },
   );
 
   const { data: feedback, refetch: refetchFeedback } = trpc.feedback.get.useQuery(undefined, {
@@ -35,7 +35,11 @@ const AdminPage = () => {
     },
   });
 
-  const { data: reviews, refetch: refetchReviews } = trpc.admin.getReviews.useQuery(undefined, {
+  const {
+    data: reviews,
+    refetch: refetchReviews,
+    isRefetching,
+  } = trpc.admin.getReviews.useQuery(undefined, {
     enabled: sessionStatus === "authenticated",
   });
 
@@ -95,7 +99,7 @@ const AdminPage = () => {
   const approveMoviesReview = trpc.admin.approveMoviesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -108,7 +112,7 @@ const AdminPage = () => {
   const approveSeriesReview = trpc.admin.approveSeriesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -121,7 +125,7 @@ const AdminPage = () => {
   const approveSeasonsReview = trpc.admin.approveSeasonsReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -134,7 +138,7 @@ const AdminPage = () => {
   const approveEpisodesReview = trpc.admin.approveEpisodesReview.useMutation({
     onSuccess: () => {
       toast(`Approved review`, {
-        icon: <IoIosRemove className="text-3xl text-red-500" />,
+        icon: <IoIosAdd className="text-3xl text-green-500" />,
       });
       refetchReviews();
     },
@@ -151,13 +155,63 @@ const AdminPage = () => {
     }
   });
 
+  const approveItem = (type: ReviewType, id: string) => {
+    switch (type) {
+      case "movie":
+        approveMoviesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "series":
+        approveSeriesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "season":
+        approveSeasonsReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "episodes":
+        approveEpisodesReview.mutate({
+          reviewID: id,
+        });
+        break;
+    }
+  };
+
+  const removeItem = (type: ReviewType, id: string) => {
+    switch (type) {
+      case "movie":
+        removeMoviesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "series":
+        removeSeriesReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "season":
+        removeSeasonsReview.mutate({
+          reviewID: id,
+        });
+        break;
+      case "episodes":
+        removeEpisodesReview.mutate({
+          reviewID: id,
+        });
+        break;
+    }
+  };
+
   return (
     <>
       <Head>
         <title>Admin - Tracktr.</title>
       </Head>
 
-      <LoadingPageComponents status={isLoading ? "loading" : "success"}>
+      <LoadingPageComponents status={isLoading ? "pending" : "success"}>
         {() => (
           <div className="max-w-6xl px-4 pt-24 pb-4 m-auto">
             <div className="flex flex-col gap-4 md:flex-row">
@@ -208,34 +262,17 @@ const AdminPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 mt-4 md:flex-row">
-              <ApproveReview
-                approveItem={approveMoviesReview}
-                removeItem={removeMoviesReview}
-                type="movie"
-                reviews={reviews?.movies}
-              />
-              <ApproveReview
-                approveItem={approveSeriesReview}
-                removeItem={removeSeriesReview}
-                type="series"
-                reviews={reviews?.series}
-              />
-            </div>
-
-            <div className="flex flex-col gap-4 mt-4 md:flex-row">
-              <ApproveReview
-                approveItem={approveSeasonsReview}
-                removeItem={removeSeasonsReview}
-                type="season"
-                reviews={reviews?.seasons}
-              />
-              <ApproveReview
-                approveItem={approveEpisodesReview}
-                removeItem={removeEpisodesReview}
-                type="episodes"
-                reviews={reviews?.episodes}
-              />
+            <div className="mt-4">
+              {reviews ? (
+                <ApproveReview
+                  approveItem={approveItem}
+                  removeItem={removeItem}
+                  reviews={reviews as IReview[]}
+                  isLoading={isRefetching || isLoading}
+                />
+              ) : (
+                <div>...</div>
+              )}
             </div>
           </div>
         )}

@@ -79,7 +79,7 @@ const WatchlistButton = ({ movieID, seriesID, themeColor, name }: IWatchlistButt
 
   return (
     <div>
-      {addToMovies.isLoading || addToSeries.isLoading || deleteFromWatchlist.isLoading || isRefetching ? (
+      {addToMovies.isPending || addToSeries.isPending || deleteFromWatchlist.isPending || isRefetching ? (
         <button
           disabled
           style={{

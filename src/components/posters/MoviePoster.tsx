@@ -135,7 +135,7 @@ const MoviePoster = ({
       {status === "authenticated" && watched !== null && (
         <div className="flex gap-2 pt-1 mt-auto mb-4 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
           <button
-            disabled={markAsWatched.isLoading || deleteFromWatched.isLoading}
+            disabled={markAsWatched.isPending || deleteFromWatched.isPending}
             className={`text-2xl transition-all duration-300 ease-in-out ${
               watched ? "hover:text-red-500" : "hover:text-white"
             }`}
@@ -150,7 +150,7 @@ const MoviePoster = ({
             }}
             title="Add to history"
           >
-            {(markAsWatched.isLoading || deleteFromWatched.isLoading || fetchStatus) && id === currentLoadingID ? (
+            {(markAsWatched.isPending || deleteFromWatched.isPending || fetchStatus) && id === currentLoadingID ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
             ) : watched ? (
               <MdDelete />
@@ -160,7 +160,7 @@ const MoviePoster = ({
           </button>
 
           <button
-            disabled={addToWatchlist.isLoading || deleteFromWatchlist.isLoading}
+            disabled={addToWatchlist.isPending || deleteFromWatchlist.isPending}
             className={`text-xl transition-all duration-300 ease-in-out ${
               watched ? "hover:text-red-500" : "hover:text-white"
             }`}
@@ -177,7 +177,7 @@ const MoviePoster = ({
             }}
             title="Add to watchlist"
           >
-            {(addToWatchlist.isLoading || deleteFromWatchlist.isLoading || fetchStatus) && id === currentLoadingID ? (
+            {(addToWatchlist.isPending || deleteFromWatchlist.isPending || fetchStatus) && id === currentLoadingID ? (
               <ImSpinner2 className="w-6 h-6 animate-spin" />
             ) : watchlist ? (
               <BsFillBookmarkDashFill />

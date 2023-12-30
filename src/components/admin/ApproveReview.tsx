@@ -1,68 +1,66 @@
-import {
-  Episodes,
-  EpisodesReviews,
-  Movies,
-  MoviesReviews,
-  Seasons,
-  SeasonsReviews,
-  Series,
-  SeriesReviews,
-  User,
-} from "@prisma/client";
 import { useState } from "react";
 import { ImSpinner2 } from "react-icons/im";
-import capitalizeFirstLetter from "../../utils/capitalize";
 import Review from "../common/Review";
+import capitalizeFirstLetter from "../../utils/capitalize";
 
-interface IApproveReview {
-  reviews:
-    | (MoviesReviews & { user: User & { profile: { username: string } | null }; Movies: Movies })[]
-    | (SeriesReviews & { user: User & { profile: { username: string } | null }; Series: Series })[]
-    | (SeasonsReviews & { user: User & { profile: { username: string } | null }; Seasons: Seasons & Series })[]
-    | (EpisodesReviews & {
-        user: User & { profile: { username: string } | null };
-        Episodes: Episodes & { Seasons: (Seasons & { Series: Series | null }) | null };
-      })[]
-    | undefined;
-  type: "movie" | "series" | "season" | "episodes";
-  approveItem: any;
-  removeItem: any;
+export type ReviewType = "movie" | "series" | "season" | "episodes";
+
+export interface IReview {
+  type: ReviewType;
+  id: string;
+  title: string;
+  content: string;
+  created: Date;
+  user: {
+    image: string;
+    username: string;
+  };
+  item: {
+    id: number;
+    title: string;
+    poster: string;
+  };
 }
 
-const ApproveReview = ({ reviews, type, approveItem, removeItem }: IApproveReview) => {
+export interface IApproveReview {
+  reviews: IReview[];
+  approveItem: (type: ReviewType, reviewID: string) => void;
+  removeItem: (type: ReviewType, reviewID: string) => void;
+  isLoading: boolean;
+}
+
+const ApproveReview = ({ reviews, approveItem, removeItem, isLoading }: IApproveReview) => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string>();
 
   return (
     <div className="md:w-[50%] bg-[#1A1A1A] p-4 rounded">
-      <div className="text-xl font-bold">{capitalizeFirstLetter(type)} reviews</div>
+      <div className="mb-2 text-xl font-bold">Reviews</div>
       {reviews && reviews.length > 0 ? (
-        <div className="flex flex-col gap-6">
-          {reviews.map((review: any) => {
+        <div className={`flex flex-col gap-6 ${isLoading && "opacity-50"}`}>
+          {reviews.map((review: IReview) => {
             return (
-              <div key={review.id}>
+              <div key={review.id} className="bg-[#343434] hover:bg-opacity-90 py-5 px-4 rounded">
+                <div className="mb-1 font-bold">{capitalizeFirstLetter(review.type)} review</div>
                 <Review
                   id={review.id}
                   content={review.content}
                   created={review.created}
                   friend={{
                     image: review.user.image,
-                    name: review.user.profile?.username,
+                    name: review.user.username,
                   }}
-                  item={review.Movies || review.Series || review.Episodes?.Seasons?.Series || review.Seasons.Series}
-                  hideImage
+                  item={review.item}
                 />
                 <button
-                  className="w-full px-2 py-1 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg md:mb-0 focus:ring-4 focus:outline-none sm:w-auto hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                  className="w-full p-2 mb-2 mr-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg focus:ring-4 focus:outline-none hover:bg-blue-700 focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                   onClick={() => {
                     setCurrentLoadingID(review.id);
-                    approveItem.mutate({
-                      reviewID: review.id,
-                    });
+                    approveItem(review.type, review.id);
                   }}
-                  disabled={approveItem.isLoading && currentLoadingID === review.id}
+                  disabled={isLoading && currentLoadingID === review.id}
                 >
-                  {approveItem.isLoading && currentLoadingID === review.id ? (
-                    <div className="flex items-center gap-2">
+                  {isLoading && currentLoadingID === review.id ? (
+                    <div className="flex items-center justify-center h-5 gap-2">
                       <ImSpinner2 className="animate-spin" />
                     </div>
                   ) : (
@@ -70,17 +68,15 @@ const ApproveReview = ({ reviews, type, approveItem, removeItem }: IApproveRevie
                   )}
                 </button>
                 <button
-                  className="w-full px-2 py-1 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none sm:w-auto hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
+                  className="w-full p-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg focus:ring-4 focus:outline-none hover:bg-red-700 focus:red-blue-800 disabled:cursor-not-allowed disabled:bg-gray-700"
                   onClick={() => {
                     setCurrentLoadingID(review.id);
-                    removeItem.mutate({
-                      reviewID: review.id,
-                    });
+                    removeItem(review.type, review.id);
                   }}
-                  disabled={removeItem.isLoading && currentLoadingID === review.id}
+                  disabled={isLoading && currentLoadingID === review.id}
                 >
-                  {removeItem.isLoading && currentLoadingID === review.id ? (
-                    <div className="flex items-center gap-2">
+                  {isLoading && currentLoadingID === review.id ? (
+                    <div className="flex items-center justify-center h-5 gap-2">
                       <ImSpinner2 className="animate-spin" />
                     </div>
                   ) : (
@@ -92,7 +88,7 @@ const ApproveReview = ({ reviews, type, approveItem, removeItem }: IApproveRevie
           })}
         </div>
       ) : (
-        <div>No (unapproved) {type} reviews</div>
+        <div>No (unapproved) reviews</div>
       )}
     </div>
   );

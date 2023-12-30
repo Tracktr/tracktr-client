@@ -38,11 +38,12 @@ const ProfilePage = () => {
     {
       username,
     },
-    { enabled: submitted, onSuccess: () => setSubmitted(false) }
+    { enabled: submitted },
   );
 
   useEffect(() => {
     if (checkUsernameUnique.status === "success") {
+      setSubmitted(false);
       if (
         !checkUsernameUnique.data.usernameUnique &&
         username.toLowerCase() !== session.data?.user?.profile.username.toLocaleLowerCase()
@@ -54,7 +55,7 @@ const ProfilePage = () => {
     }
   }, [checkUsernameUnique, session, username]);
 
-  const { mutate, isLoading } = trpc.profile.updateProfile.useMutation({
+  const { mutate, isPending } = trpc.profile.updateProfile.useMutation({
     onSuccess: () => {
       toast("Updated settings", {
         icon: <IoMdInformation className="text-3xl text-green-500" />,
@@ -190,7 +191,7 @@ const ProfilePage = () => {
                           : "text-black placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 border-gray-600"
                       }`}
                       required
-                      disabled={isLoading}
+                      disabled={isPending}
                       onChange={handleUsernameChange}
                       value={username}
                     />
@@ -201,10 +202,10 @@ const ProfilePage = () => {
                     <button
                       className="px-8 py-3 text-base font-semibold text-center rounded-md outline-none text-primaryBackground bg-primary disabled:bg-gray-700 disabled:cursor-not-allowed"
                       type="submit"
-                      disabled={isLoading || Boolean(usernameError)}
+                      disabled={isPending || Boolean(usernameError)}
                       onClick={handleSubmit}
                     >
-                      {isLoading ? (
+                      {isPending ? (
                         <div className="flex items-center gap-5">
                           <ImSpinner2 className="animate-spin" />
                           <div>Saving...</div>

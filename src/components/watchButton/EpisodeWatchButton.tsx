@@ -35,7 +35,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
     {
       enabled: sessionStatus !== "loading",
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const markAsWatched = trpc.episode.markEpisodeAsWatched.useMutation({
@@ -160,8 +160,9 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
                   removeFromHistory(
                     undefined,
                     String(
-                      Object.values(watchHistory.data as any[])[Object.values(watchHistory.data as any[]).length - 1].id
-                    )
+                      Object.values(watchHistory.data as any[])[Object.values(watchHistory.data as any[]).length - 1]
+                        .id,
+                    ),
                   )
                 }
               >
@@ -189,7 +190,7 @@ const EpisodeWatchButton = ({ itemID, episode, themeColor, refetchProgression }:
                     <div className="col-span-3">Date watched</div>
                     <div className="flex flex-col items-center">Remove</div>
                   </div>
-                  {removeFromWatched.isLoading
+                  {removeFromWatched.isPending
                     ? data.map((play) => {
                         return (
                           <div key={play.id} className="grid items-center grid-cols-4 gap-4 font-bold align-middle">

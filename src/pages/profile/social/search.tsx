@@ -9,6 +9,7 @@ import { useDebounce } from "use-debounce";
 import ImageWithFallback from "../../../components/common/ImageWithFallback";
 import ProfileHeader from "../../../components/pageBlocks/ProfileHeader";
 import { trpc } from "../../../utils/trpc";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const FollowersPage = () => {
   const router = useRouter();
@@ -26,8 +27,8 @@ const FollowersPage = () => {
     { query: searchInput },
     {
       enabled: debouncedValue.length >= 3 && searchInput.length > 0,
-      keepPreviousData: true,
-    }
+      placeholderData: keepPreviousData,
+    },
   );
 
   useEffect(() => {
@@ -118,7 +119,7 @@ const FollowersPage = () => {
                             removeAsFollower.mutate({ follower: String(profile?.user?.id) });
                           }}
                         >
-                          {addAsFollower.isLoading || removeAsFollower.isLoading || isRefetching ? (
+                          {addAsFollower.isPending || removeAsFollower.isPending || isRefetching ? (
                             <div className="flex items-center gap-2">
                               <ImSpinner2 className="animate-spin" />
                               Loading

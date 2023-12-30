@@ -133,7 +133,7 @@ const SeriesProgress = ({
           </Link>
           <div className="flex pt-1 mt-auto mb-4">
             <button
-              disabled={markAsWatched.isLoading}
+              disabled={markAsWatched.isPending}
               className="text-2xl transition-all duration-300 ease-in-out "
               onClick={() => {
                 markAsWatched.mutate({
@@ -142,7 +142,7 @@ const SeriesProgress = ({
                 });
               }}
             >
-              {markAsWatched.isLoading ? (
+              {markAsWatched.isPending ? (
                 <ImSpinner2 className="w-6 h-6 animate-spin" />
               ) : (
                 <AiOutlineCheckCircle className="text-gray-500 text-opacity-100 hover:text-green-500" />

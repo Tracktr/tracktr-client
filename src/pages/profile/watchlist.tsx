@@ -14,6 +14,7 @@ import ProfileHeader from "../../components/pageBlocks/ProfileHeader";
 import { PosterImage } from "../../utils/generateImages";
 import { trpc } from "../../utils/trpc";
 import ImageWithFallback from "../../components/common/ImageWithFallback";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const WatchlistPage = () => {
   const [currentLoadingID, setCurrentLoadingID] = useState<string | undefined>();
@@ -25,7 +26,7 @@ const WatchlistPage = () => {
     JSON.stringify({
       field: "created",
       order: "desc",
-    })
+    }),
   );
   const [filterInput, setFilterInput] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -38,7 +39,7 @@ const WatchlistPage = () => {
     isFetching,
   } = trpc.watchlist.getUserWatchlist.useQuery(
     { page, pageSize: 25, orderBy: JSON.parse(orderInput), filter: filterInput },
-    { keepPreviousData: true }
+    { placeholderData: keepPreviousData },
   );
 
   useEffect(() => {
@@ -194,12 +195,12 @@ const WatchlistPage = () => {
                     </Link>
                     <div className="flex gap-2 pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
                       {item.movie_id ? (
-                        (markMovieAsWatched.isLoading || deleteMovieFromWatched.isLoading || isRefetching) &&
+                        (markMovieAsWatched.isPending || deleteMovieFromWatched.isPending || isRefetching) &&
                         item.movies.id === currentLoadingID ? (
                           <ImSpinner2 className="w-6 h-6 animate-spin" />
                         ) : (
                           <button
-                            disabled={markMovieAsWatched.isLoading || deleteMovieFromWatched.isLoading}
+                            disabled={markMovieAsWatched.isPending || deleteMovieFromWatched.isPending}
                             className={`text-2xl transition-all duration-300 ease-in-out ${
                               item.watched ? "hover:text-red-500" : "hover:text-white"
                             }`}
@@ -223,12 +224,12 @@ const WatchlistPage = () => {
                           </button>
                         )
                       ) : item.series.id &&
-                        (markSeriesAsWatched.isLoading || deleteSeriesFromWatched.isLoading || isRefetching) &&
+                        (markSeriesAsWatched.isPending || deleteSeriesFromWatched.isPending || isRefetching) &&
                         item.series.id === currentLoadingID ? (
                         <ImSpinner2 className="w-6 h-6 animate-spin" />
                       ) : (
                         <button
-                          disabled={markSeriesAsWatched.isLoading || deleteSeriesFromWatched.isLoading}
+                          disabled={markSeriesAsWatched.isPending || deleteSeriesFromWatched.isPending}
                           className={`text-2xl transition-all duration-300 ease-in-out ${
                             item.watched ? "hover:text-red-500" : "hover:text-white"
                           }`}
@@ -252,9 +253,9 @@ const WatchlistPage = () => {
                         </button>
                       )}
 
-                      {(deleteItem.isLoading ||
-                        markMovieAsWatched.isLoading ||
-                        markSeriesAsWatched.isLoading ||
+                      {(deleteItem.isPending ||
+                        markMovieAsWatched.isPending ||
+                        markSeriesAsWatched.isPending ||
                         isRefetching) &&
                       item.id === currentLoadingID ? (
                         <ImSpinner2 className="w-6 h-6 animate-spin" />

@@ -8,6 +8,7 @@ import { trpc } from "../../utils/trpc";
 import { AnimatePresence, motion } from "framer-motion";
 import SeriesProgress from "../../components/progress/SeriesProgress";
 import LoadingSeriesProgress from "../../components/progress/LoadingSeriesProgress";
+import { keepPreviousData } from "@tanstack/react-query";
 
 const ProgressPage = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const ProgressPage = () => {
     JSON.stringify({
       field: "datetime",
       order: "desc",
-    })
+    }),
   );
   const [showFilters, setShowFilters] = useState(false);
   const { data: sessionData, status: sessionStatus } = useSession();
@@ -31,8 +32,8 @@ const ProgressPage = () => {
     { page, pageSize: 25, orderBy: JSON.parse(orderInput) },
     {
       enabled: sessionStatus === "authenticated",
-      keepPreviousData: true,
-    }
+      placeholderData: keepPreviousData,
+    },
   );
 
   useEffect(() => {
@@ -109,7 +110,7 @@ const ProgressPage = () => {
         {showFilters && <Filters handleOrderInput={handleOrderInput} orderInput={orderInput} />}
 
         <div className="flex flex-col gap-8">
-          {status !== "loading" ? (
+          {status !== "pending" ? (
             data && data.result.length > 0 ? (
               <AnimatePresence mode="popLayout" initial={false}>
                 {data.result.map((s) => (

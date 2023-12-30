@@ -33,7 +33,7 @@ const ReleaseCalendar = () => {
       start: startOfMonth(currentDate),
       end: endOfMonth(currentDate),
     },
-    { weekStartsOn: 1 }
+    { weekStartsOn: 1 },
   );
   const currentMonth = currentDate.getMonth() + 1;
 
@@ -58,7 +58,7 @@ const ReleaseCalendar = () => {
         <button
           disabled={isLoading}
           onClick={() => setCurrentDate(subMonths(currentDate, 1))}
-          className="px-2 py-1 text-black rounded bg-primary hover:bg-primary/90"
+          className="px-2 py-1 text-sm text-black rounded bg-primary hover:bg-primary/90"
         >
           Last month
         </button>
@@ -72,7 +72,7 @@ const ReleaseCalendar = () => {
         <button
           disabled={isLoading}
           onClick={() => setCurrentDate(addMonths(currentDate, 1))}
-          className="px-2 py-1 text-black rounded bg-primary hover:bg-primary/90"
+          className="px-2 py-1 text-sm text-black rounded bg-primary hover:bg-primary/90"
         >
           Next month
         </button>
@@ -117,7 +117,7 @@ const ReleaseCalendar = () => {
                     );
                   })}
             </div>
-          ))
+          )),
         )}
       </div>
 

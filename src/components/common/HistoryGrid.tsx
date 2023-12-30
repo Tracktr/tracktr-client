@@ -64,7 +64,7 @@ const HistoryGrid = ({
     }
   };
 
-  if (status === "loading") {
+  if (status === "pending") {
     return <LoadingPosters />;
   } else if (history.length < 1) {
     return <div>No items found</div>;
@@ -140,8 +140,8 @@ const HistoryGrid = ({
               </Link>
               {!inPublic && (
                 <div className="pt-1 text-gray-500 transition-all duration-300 ease-in-out opacity-25 group-hover:opacity-100">
-                  {(deleteEpisodeFromHistory.isLoading && item.id === currentLoadingID) ||
-                  ((deleteMovieFromHistory.isLoading || isRefetching) && item.id === currentLoadingID) ? (
+                  {(deleteEpisodeFromHistory.isPending && item.id === currentLoadingID) ||
+                  ((deleteMovieFromHistory.isPending || isRefetching) && item.id === currentLoadingID) ? (
                     <ImSpinner2 className="w-6 h-6 animate-spin" />
                   ) : (
                     <button
@@ -168,7 +168,7 @@ const HistoryGrid = ({
 
 interface IHistoryGrid {
   history: (MoviesHistory | EpisodesHistory)[];
-  status: "error" | "success" | "loading";
+  status: "error" | "success" | "pending";
   hasScrollContainer?: boolean;
   refetch: () => void;
   inPublic?: boolean;
